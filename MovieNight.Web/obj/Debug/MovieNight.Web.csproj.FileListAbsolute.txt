@@ -52,3 +52,10 @@ D:\web project\Movie\MovieNight\MovieNight.Web\obj\Debug\MovieNight.Web.csproj.C
 D:\web project\Movie\MovieNight\MovieNight.Web\obj\Debug\MovieNight.Web.csproj.CopyComplete
 D:\web project\Movie\MovieNight\MovieNight.Web\obj\Debug\MovieNight.Web.dll
 D:\web project\Movie\MovieNight\MovieNight.Web\obj\Debug\MovieNight.Web.pdb
+D:\web project\Movie\MovieNight\MovieNight.Web\bin\Antlr3.Runtime.dll
+D:\web project\Movie\MovieNight\MovieNight.Web\bin\Newtonsoft.Json.dll
+D:\web project\Movie\MovieNight\MovieNight.Web\bin\System.Web.Optimization.dll
+D:\web project\Movie\MovieNight\MovieNight.Web\bin\WebGrease.dll
+D:\web project\Movie\MovieNight\MovieNight.Web\bin\Antlr3.Runtime.pdb
+D:\web project\Movie\MovieNight\MovieNight.Web\bin\Newtonsoft.Json.xml
+D:\web project\Movie\MovieNight\MovieNight.Web\bin\System.Web.Optimization.xml
