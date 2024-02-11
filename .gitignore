@@ -1,1 +1,18 @@
 .vs/
+################################################################################
+# Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/MovieNight.Web/bin/MovieNight.Web.dll
+/MovieNight.Web/bin/MovieNight.Web.pdb
+/MovieNight.Web/MovieNight.Web.csproj.user
+*.force
+/MovieNight.Web/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/MovieNight.Web/obj/Debug/MovieNight.Web.csproj.AssemblyReference.cache
+/MovieNight.Web/obj/Debug/MovieNight.Web.csproj.CoreCompileInputs.cache
+/MovieNight.Web/obj/Debug/MovieNight.Web.csproj.FileListAbsolute.txt
+/MovieNight.Web/obj/Debug/MovieNight.Web.dll
+/MovieNight.Web/obj/Debug/MovieNight.Web.pdb
+*.cs
+*.cache
