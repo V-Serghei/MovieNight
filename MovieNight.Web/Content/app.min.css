@@ -539,7 +539,7 @@ body.enlarged {
         display: block;
         line-height: 70px;
         text-align: center;
-        max-height: 70px
+        max-height: 170px
     }
 
     .navbar-custom .dropdown.show .nav-link {
@@ -714,7 +714,7 @@ body.enlarged {
 }
 
     .topbar-light .navbar-custom .topnav-menu .nav-link {
-        color: #6c757d
+        color:chocolate
     }
 
     .topbar-light .navbar-custom .dropdown.show .nav-link {
@@ -736,8 +736,8 @@ body.enlarged {
     }
 
     .topbar-light .navbar-custom .app-search .btn {
-        background-color: #f6f6f6;
-        color: #ced4da
+        background-color: coral;
+        color: coral
     }
 
 .page-title-box {
