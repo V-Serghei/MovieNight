@@ -20,8 +20,6 @@ namespace MovieNight.Web
                 "~/scripts/vendor.min.js"));
             bundle.Add(new ScriptBundle("~/bundles/app/js").Include(
                 "~/scripts/app.min.js"));
-
-
         }
     }
 }

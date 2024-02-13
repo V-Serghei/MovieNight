@@ -13,16 +13,16 @@
 
     <!-- App css -->
    
-    @Styles.Render("~/bundles/bootstrap/css");
-    @Styles.Render("~/bundles/icons/css");
-    @Styles.Render("~/bundles/app/css");
+    @Styles.Render("~/bundles/bootstrap/css")
+    @Styles.Render("~/bundles/icons/css")
+    @Styles.Render("~/bundles/app/css")
 
     @if (IsSectionDefined("Styles"))
     {
         @RenderSection("Styles", required: false)
     }
 
-    @Styles.Render("~/bundles/main/css");
+    @*@Styles.Render("~/bundles/main/css");*@
 
 
 </head>
@@ -31,17 +31,17 @@
     
 <div id="wrapper">
     <div class="navbar-custom">
-        @Html.Partial("_Hbar");
+        @Html.Partial("_Hbar")
     </div>
     <div class="left-side-menu">
-        @Html.Partial("_Lbar");
+        @Html.Partial("_Lbar")
     </div>
     <div class="content-page">
-        @RenderBody();
+        @RenderBody()
         @Html.Partial("_Content")
     </div>
     <div class="right-bar">
-        @Html.Partial("_Rbar");
+        @Html.Partial("_Rbar")
     </div>
 
 
