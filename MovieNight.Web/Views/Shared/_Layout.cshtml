@@ -1,0 +1,59 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>MovieNight|@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="/images/logo.ico">
+
+    <!-- App css -->
+   
+    @Styles.Render("~/bundles/bootstrap/css");
+    @Styles.Render("~/bundles/icons/css");
+    @Styles.Render("~/bundles/app/css");
+
+    @if (IsSectionDefined("Styles"))
+    {
+        @RenderSection("Styles", required: false)
+    }
+
+    @Styles.Render("~/bundles/main/css");
+
+
+</head>
+
+<body>
+    
+<div id="wrapper">
+    <div class="navbar-custom">
+        @Html.Partial("_Hbar");
+    </div>
+    <div class="left-side-menu">
+        @Html.Partial("_Lbar");
+    </div>
+    <div class="content-page">
+        @RenderBody();
+        @Html.Partial("_Content")
+    </div>
+    <div class="right-bar">
+        @Html.Partial("_Rbar");
+    </div>
+
+
+    @Scripts.Render("~/bundles/vendor/js")
+    @Scripts.Render("~/bundles/app/js")
+
+    
+    @RenderSection("scripts",required:false)
+</div>
+
+
+
+</body>
+</html>
+

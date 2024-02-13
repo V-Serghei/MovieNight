@@ -239,6 +239,7 @@
     <Content Include="Content\libs\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="Content\libs\x-editable\bootstrap-editable.css" />
     <Content Include="Content\libs\x-editable\bootstrap-editable.min.js" />
+    <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -449,6 +450,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\MainPageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -535,6 +537,12 @@
     <Content Include="scripts\bootstrap.bundle.js.map" />
     <Content Include="scripts\jquery-3.7.1.slim.min.map" />
     <Content Include="scripts\jquery-3.7.1.min.map" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_Hbar.cshtml" />
+    <Content Include="Views\Shared\_Lbar.cshtml" />
+    <Content Include="Views\Shared\_Content.cshtml" />
+    <Content Include="Views\Shared\_Rbar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
