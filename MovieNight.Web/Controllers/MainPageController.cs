@@ -13,5 +13,11 @@ namespace MovieNight.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult Primary()
+        {
+
+            return View();
+        }
     }
 }

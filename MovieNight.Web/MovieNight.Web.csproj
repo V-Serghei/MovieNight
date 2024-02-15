@@ -359,6 +359,9 @@
     <Content Include="images\flags\russia.jpg" />
     <Content Include="images\flags\spain.jpg" />
     <Content Include="images\flags\us.jpg" />
+    <Content Include="images\index1.jpg" />
+    <Content Include="images\index2.jpg" />
+    <Content Include="images\index3.jpg" />
     <Content Include="images\logo-dark.png" />
     <Content Include="images\logo-light.png" />
     <Content Include="images\logo-sm-dark.png" />
@@ -366,7 +369,15 @@
     <Content Include="images\logo.ico" />
     <Content Include="images\logo.png" />
     <Content Include="images\logo_text.png" />
+    <Content Include="images\mainPage.jpg" />
+    <Content Include="images\mainPage4.jpg" />
+    <Content Include="images\mainPage5.jpg" />
+    <Content Include="images\mainPage6.jpg" />
     <Content Include="images\megamenu-bg.png" />
+    <Content Include="images\Movie\Blade2.jpg" />
+    <Content Include="images\Movie\Guillermo_del_Toros_Cabinet_of_Curiosities.jpg" />
+    <Content Include="images\Movie\Movie_Hobit_NP.jpg" />
+    <Content Include="images\Movie\Once_Upon_a_Time_in_Hollywood.jpg" />
     <Content Include="images\plugins\clear.png" />
     <Content Include="images\plugins\jstree.png" />
     <Content Include="images\plugins\loading.gif" />
@@ -447,6 +458,7 @@
     <Content Include="scripts\pages\widgets.init.js" />
     <Content Include="scripts\vendor.js" />
     <Content Include="scripts\vendor.min.js" />
+    <Content Include="vendor\myStyle.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -543,6 +555,7 @@
     <Content Include="Views\Shared\_Lbar.cshtml" />
     <Content Include="Views\Shared\_Content.cshtml" />
     <Content Include="Views\Shared\_Rbar.cshtml" />
+    <Content Include="Views\MainPage\Primary.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

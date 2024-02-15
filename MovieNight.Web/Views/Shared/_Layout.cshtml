@@ -12,45 +12,50 @@
     <link rel="shortcut icon" href="/images/logo.ico">
 
     <!-- App css -->
-   
-    @Styles.Render("~/bundles/bootstrap/css");
-    @Styles.Render("~/bundles/icons/css");
-    @Styles.Render("~/bundles/app/css");
+
+    @Styles.Render("~/bundles/bootstrap/css")
+    @Styles.Render("~/bundles/icons/css")
+    @Styles.Render("~/bundles/app/css")
+    @Styles.Render("~/bundles/slider/css")
+    @Styles.Render("~/bundles/mew/css")
+
+
 
     @if (IsSectionDefined("Styles"))
     {
         @RenderSection("Styles", required: false)
     }
 
-    @Styles.Render("~/bundles/main/css");
+
 
 
 </head>
 
 <body>
     
-<div id="wrapper">
-    <div class="navbar-custom">
-        @Html.Partial("_Hbar");
-    </div>
-    <div class="left-side-menu">
-        @Html.Partial("_Lbar");
-    </div>
-    <div class="content-page">
-        @RenderBody();
-        @Html.Partial("_Content")
-    </div>
-    <div class="right-bar">
-        @Html.Partial("_Rbar");
-    </div>
+    <div id="wrapper">
+        <div class="navbar-custom">
+            @Html.Partial("_Hbar")
+        </div>
+        <div class="left-side-menu">
+            @Html.Partial("_Lbar")
+        </div>
+        <div class="content-page">
+            @RenderBody()
+            @*@Html.Partial("_Content")*@
+        </div>
+        <div class="right-bar">
+            @Html.Partial("_Rbar")
+        </div>
 
 
-    @Scripts.Render("~/bundles/vendor/js")
-    @Scripts.Render("~/bundles/app/js")
+        @Scripts.Render("~/bundles/vendor/js")
+        @Scripts.Render("~/bundles/app/js")
+       
 
-    
-    @RenderSection("scripts",required:false)
-</div>
+
+        @RenderSection("scripts", required: false)
+    </div>
 
 
 

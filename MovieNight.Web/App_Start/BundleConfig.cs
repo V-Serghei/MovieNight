@@ -21,6 +21,11 @@ namespace MovieNight.Web
             bundle.Add(new ScriptBundle("~/bundles/app/js").Include(
                 "~/scripts/app.min.js"));
 
+            bundle.Add(new StyleBundle("~/bundles/slider/css").Include(
+                "~/vendor/myStyle.css", new CssRewriteUrlTransform()));
+            bundle.Add(new StyleBundle("~/bundles/mew/css").Include(
+                "~/vendor/NewsSlider.css", new CssRewriteUrlTransform()));
+
 
         }
     }
