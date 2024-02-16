@@ -458,6 +458,8 @@
     <Content Include="scripts\pages\widgets.init.js" />
     <Content Include="scripts\vendor.js" />
     <Content Include="scripts\vendor.min.js" />
+    <Content Include="vendor\custombox.min.css" />
+    <Content Include="vendor\custombox.min.js" />
     <Content Include="vendor\myStyle.css" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -465,6 +467,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\MainPageController.cs" />
+    <Compile Include="Controllers\SearchSortAddController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -556,6 +559,7 @@
     <Content Include="Views\Shared\_Content.cshtml" />
     <Content Include="Views\Shared\_Rbar.cshtml" />
     <Content Include="Views\MainPage\Primary.cshtml" />
+    <Content Include="Views\SearchSortAdd\FriendsPage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

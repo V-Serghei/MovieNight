@@ -18,7 +18,8 @@
     @Styles.Render("~/bundles/app/css")
     @Styles.Render("~/bundles/slider/css")
     @Styles.Render("~/bundles/mew/css")
-
+    @* friends styles *@
+    @Styles.Render("~/bundles/custombox/css")
 
 
     @if (IsSectionDefined("Styles"))
@@ -51,7 +52,8 @@
 
         @Scripts.Render("~/bundles/vendor/js")
         @Scripts.Render("~/bundles/app/js")
-       
+        @*friends scripts*@
+        @Scripts.Render("~/bundles/custombox/js")
 
 
         @RenderSection("scripts", required: false)

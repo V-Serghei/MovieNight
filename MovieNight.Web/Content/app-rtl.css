@@ -304,7 +304,7 @@ body.enlarged {
   .left-side-menu-sm .left-side-menu + .content-page .footer {
     left: 160px; }
   .left-side-menu-sm .left-side-menu .menu-title {
-    background-color: #f6f6f6; }
+    background-color: #1e5736; }
 
 .enlarged.left-side-menu-sm #wrapper .left-side-menu {
   text-align: left; }
@@ -629,7 +629,7 @@ body.enlarged {
     padding: 25.5px 25px;
     color: #fff; }
   .right-bar .right-bar-toggle {
-    background-color: #414b5b;
+    background-color: #db2c7b;
     height: 24px;
     width: 24px;
     line-height: 24px;
