@@ -353,6 +353,8 @@
     <Content Include="images\file-icons\xls.svg" />
     <Content Include="images\file-icons\xml.svg" />
     <Content Include="images\file-icons\zip.svg" />
+    <Content Include="images\film_news.jpg" />
+    <Content Include="images\film_nows.jpg" />
     <Content Include="images\flags\french.jpg" />
     <Content Include="images\flags\germany.jpg" />
     <Content Include="images\flags\italy.jpg" />
@@ -374,10 +376,19 @@
     <Content Include="images\mainPage5.jpg" />
     <Content Include="images\mainPage6.jpg" />
     <Content Include="images\megamenu-bg.png" />
+    <Content Include="images\Movie\avatar.png" />
     <Content Include="images\Movie\Blade2.jpg" />
+    <Content Include="images\Movie\fight_club.png" />
     <Content Include="images\Movie\Guillermo_del_Toros_Cabinet_of_Curiosities.jpg" />
+    <Content Include="images\Movie\hellraiser.png" />
     <Content Include="images\Movie\Movie_Hobit_NP.jpg" />
     <Content Include="images\Movie\Once_Upon_a_Time_in_Hollywood.jpg" />
+    <Content Include="images\Movie\scream.png" />
+    <Content Include="images\Movie\silent_hill.png" />
+    <Content Include="images\Movie\the_green_mie.png" />
+    <Content Include="images\Movie\the_ring.png" />
+    <Content Include="images\Movie\Titanic.jpg" />
+    <Content Include="images\openWorldMovie.jpg" />
     <Content Include="images\plugins\clear.png" />
     <Content Include="images\plugins\jstree.png" />
     <Content Include="images\plugins\loading.gif" />
@@ -399,6 +410,7 @@
     <Content Include="images\users\avatar-7.jpg" />
     <Content Include="images\users\avatar-8.jpg" />
     <Content Include="images\users\avatar-9.jpg" />
+    <Content Include="images\Zac_Efron.jpg" />
     <Content Include="scripts\app.js" />
     <Content Include="scripts\app.min.js" />
     <Content Include="scripts\bootstrap.bundle.js" />
@@ -407,6 +419,7 @@
     <Content Include="scripts\bootstrap.esm.min.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
+    <Content Include="images\Movie\outlander.webp" />
     <None Include="scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="scripts\jquery-3.7.1.js" />
     <Content Include="scripts\jquery-3.7.1.min.js" />
