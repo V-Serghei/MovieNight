@@ -33,8 +33,8 @@
                         <div class="card-body p-4">
 
                             <div class="text-center w-75 m-auto">
-                                <a href="index.html">
-                                    <span><img src="assets/images/logo-dark.png" alt="" height="22"></span>
+                                <a href=@Url.Action("Primary","MainPage")>
+                                    <span><img src="~/images/logo_text.png" alt="" height="44"></span>
                                 </a>
                                 <p class="text-muted mb-4 mt-3">Don't have an account? Create your own account, it takes less than a minute</p>
                             </div>
@@ -89,7 +89,7 @@
 
                     <div class="row mt-3">
                         <div class="col-12 text-center">
-                            <p class="text-muted">Already have account?  <a href="pages-login.html" class="text-muted font-weight-medium ml-1">Sign In</a></p>
+                            <p class="text-muted">Already have account?  <a href=@Url.Action("Login","Identification") class="text-warning font-weight-medium ml-1">Sign In</a></p>
                         </div> <!-- end col -->
                     </div>
                     <!-- end row -->
