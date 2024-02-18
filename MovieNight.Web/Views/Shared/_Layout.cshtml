@@ -33,23 +33,26 @@
             @Styles.Render("~/bundles/magnific_popup/css")
             @if (IsSectionDefined("Styles"))
             {
-                @RenderSection("Styles", required: false)
+            @RenderSection("Styles", required: false)
             }
-    @Styles.Render("~/bundles/bootstrap/css")
-    @Styles.Render("~/bundles/icons/css")
-    @Styles.Render("~/bundles/app/css")
-    @Styles.Render("~/bundles/slider/css")
-    @Styles.Render("~/bundles/mew/css")
-    @* friends styles *@
-    @Styles.Render("~/bundles/custombox/css")
+            @Styles.Render("~/bundles/bootstrap/css")
+            @Styles.Render("~/bundles/icons/css")
+            @Styles.Render("~/bundles/app/css")
+            @Styles.Render("~/bundles/slider/css")
+            @Styles.Render("~/bundles/mew/css")
+            @* friends styles *@
+            @Styles.Render("~/bundles/custombox/css")
 
-    @* calendar *@
-    @Styles.Render("~/bundles/fullcalendar/css")
+            @* calendar *@
+            @Styles.Render("~/bundles/fullcalendar/css")
+
+            @* email *@
+            @Styles.Render("~/bundles/summernote_bs4/css")
 
 
-    @if (IsSectionDefined("Styles"))
+            @if (IsSectionDefined("Styles"))
     {
-        @RenderSection("Styles", required: false)
+            @RenderSection("Styles", required: false)
     }
 
 
@@ -115,17 +118,30 @@
                 @* Are watching *@
                 @Scripts.Render("~/bundles/tablesaw/js")
                 @Scripts.Render("~/bundles/tablesaw_init/js")
-        @*calendar*@
-        @Scripts.Render("~/bundles/moment/js")
-        @Scripts.Render("~/bundles/jquery-ui/js")
-        @Scripts.Render("~/bundles/fullcalendar/js")
-        @Scripts.Render("~/bundles/calendar_init/js")
+                @*calendar*@
+                @Scripts.Render("~/bundles/moment/js")
+                @Scripts.Render("~/bundles/jquery-ui/js")
+                @Scripts.Render("~/bundles/fullcalendar/js")
+                @Scripts.Render("~/bundles/calendar_init/js")
+
+                @*Inbox*@
+                @Scripts.Render("~/bundles/inbox/js")
+                @Scripts.Render("~/bundles/summernote_bs4/js")
+
+                <script>
+                    jQuery(document).ready(function () {
+                        $('.summernote').summernote({
+                            height: 230,                 // set editor height
+                            minHeight: null,             // set minimum height of editor
+                            maxHeight: null,             // set maximum height of editor
+                            focus: false                 // set focus to editable area after initializing summernote
+                        });
+                    });
+                </script>
 
 
                 @RenderSection("scripts", required: false)
             </div>
-
-
 
         </body>
         </html>

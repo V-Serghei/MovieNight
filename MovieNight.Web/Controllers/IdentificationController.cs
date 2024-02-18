@@ -17,5 +17,9 @@ namespace MovieNight.Web.Controllers
         {
             return View();
         }
+        public ActionResult PagesRecoverpw()
+        {
+            return View();
+        }
     }
 }
