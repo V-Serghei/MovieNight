@@ -71,12 +71,14 @@
                         "<div class='col-12'><div class='form-group'><label class='control-label'>Category</label><select class='form-control' name='category'></select></div></div>",
                     )
                     .find("select[name='category']")
-                    .append("<option value='bg-danger'>Danger</option>")
-                    .append("<option value='bg-success'>Success</option>")
-                    .append("<option value='bg-primary'>pppppp</option>")
-                    .append("<option value='bg-info'>Info</option>")
-                    .append("<option value='bg-dark'>Dark</option>")
-                    .append("<option value='bg-warning'>Warning</option></div></div>"),
+                    
+                .append("<option value='bg-success'>I need to see it</option>")
+                    .append("<option value='bg-primary'>I want to see it</option>")
+                .append("<option value='bg-info'>Maybe</option>")
+                .append("<option value='bg-dark'>I really want to see it</option>")
+                    .append(
+                        "<option value='bg-warning'>I don't want to see it</option></div></div>",
+                    ),
                 l.$modal
                     .find(".delete-event")
                     .hide()

@@ -2337,7 +2337,7 @@ table.dataTable {
   table.dataTable tbody td:focus {
     outline: none !important; }
   table.dataTable tbody th.focus, table.dataTable tbody td.focus {
-    outline: 2px solid #3F51B5 !important;
+    outline: 2px solid #da45ed !important;
     outline-offset: -1px;
     color: #3F51B5;
     background-color: rgba(63, 81, 181, 0.15); }
@@ -2352,8 +2352,9 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role=row] > td:first-child:bef
   top: 0.85rem; }
 
 table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child:before {
-  background-color: #e74856;
-  top: 0.85rem; }
+    background-color: #18076e;
+    top: 0.85rem;
+}
 
 div.dt-button-info {
   background-color: #3F51B5;
@@ -2364,10 +2365,11 @@ div.dt-button-info {
   border-radius: 3px;
   text-align: center;
   z-index: 21; }
-  div.dt-button-info h2 {
-    border-bottom: none;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff; }
+    div.dt-button-info h2 {
+        border-bottom: none;
+        background-color: #3F51B5;
+        color: #fff;
+    }
 
 @media (max-width: 767.98px) {
   li.paginate_button.previous, li.paginate_button.next {
@@ -3110,9 +3112,10 @@ div.hopscotch-bubble {
     font-family: "Roboto", sans-serif; }
 
 body.authentication-bg {
-  background-image: url(../images/bg.png);
-  background-size: cover;
-  background-position: center; }
+    background-image: url(../images/index1.jpg);
+    background-size: cover;
+    background-position: center;
+}
 
 .authentication-bg.enlarged {
   min-height: 100px; }

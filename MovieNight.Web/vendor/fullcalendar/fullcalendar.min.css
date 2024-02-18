@@ -494,7 +494,7 @@ a.fc-more {
 }
 
 .fc-unthemed .fc-content, .fc-unthemed .fc-divider, .fc-unthemed .fc-list-heading td, .fc-unthemed .fc-list-view, .fc-unthemed .fc-popover, .fc-unthemed .fc-row, .fc-unthemed tbody, .fc-unthemed td, .fc-unthemed th, .fc-unthemed thead {
-    border-color: #ddd
+    border-color: darkslateblue
 }
 
 .fc-unthemed .fc-popover {
@@ -508,7 +508,7 @@ a.fc-more {
     }
 
 .fc-unthemed td.fc-today {
-    background: #fcf8e3
+    background: #cccffc
 }
 
 .fc-unthemed .fc-disabled-day {

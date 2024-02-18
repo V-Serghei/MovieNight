@@ -15,9 +15,9 @@
                     <div class="page-title-box">
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Minton</a></li>
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
-                                <li class="breadcrumb-item active">Calendar</li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Movie Night</a></li>
+                                
+                                <li class="breadcrumb-item active">Primary</li>
                             </ol>
                         </div>
                         <h4 class="page-title">Calendar</h4>
@@ -34,43 +34,37 @@
                             <div class="row">
                                 <div class="col-lg-3">
                                     <a href="#" data-toggle="modal" data-target="#add-category" class="btn btn-lg font-16 btn-primary btn-block  ">
-                                        <i class="mdi mdi-plus-circle-outline"></i> Create New Event
+                                        <i class="mdi mdi-plus-circle-outline"></i> Add a category
                                     </a>
                                     <div id="external-events" class="m-t-20">
                                         <br>
                                         <p class="text-muted">Drag and drop your event or click in the calendar</p>
                                         <div class="external-event bg-success" data-class="bg-success">
-                                            <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>New Theme Release
+                                            <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>Film
                                         </div>
                                         <div class="external-event bg-info" data-class="bg-info">
-                                            <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>My Event
+                                            <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>Serial
                                         </div>
                                         <div class="external-event bg-warning" data-class="bg-warning">
-                                            <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>Meet manager
+                                            <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>Cartoon
                                         </div>
-                                        <div class="external-event bg-danger" data-class="bg-danger">
-                                            <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>Create New theme
+                                        <div class="external-event bg-dark" data-class="bg-dark">
+                                            <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>Anime
                                         </div>
                                     </div>
 
                                     <!-- checkbox -->
                                     <div class="custom-control custom-checkbox mt-3">
                                         <input type="checkbox" class="custom-control-input" id="drop-remove">
-                                        <label class="custom-control-label" for="drop-remove">Remove after drop</label>
+                                        <label class="custom-control-label " for="drop-remove">Remove after drop</label>
                                     </div>
 
                                     <div class="mt-5 d-none d-xl-block">
-                                        <h5 class="text-center">How It Works ?</h5>
+                                        <h5 class="text-center">What to do?</h5>
 
                                         <ul class="pl-3">
                                             <li class="text-muted mb-3">
-                                                It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-                                            </li>
-                                            <li class="text-muted mb-3">
-                                                Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage.
-                                            </li>
-                                            <li class="text-muted mb-3">
-                                                It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                                                Schedule viewing for a day, a week, a month or the whole year!
                                             </li>
                                         </ul>
                                     </div>
@@ -89,14 +83,14 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Add New Event</h4>
+                                    <h4 class="modal-title">Schedule a viewing</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                 </div>
                                 <div class="modal-body p-3">
                                 </div>
                                 <div class="text-right p-3">
                                     <button type="button" class="btn btn-light " data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-success save-event  ">Create event</button>
+                                    <button type="button" class="btn btn-success save-event  ">Create</button>
                                     <button type="button" class="btn btn-danger delete-event  " data-dismiss="modal">Delete</button>
                                 </div>
                             </div> <!-- end modal-content-->
@@ -120,12 +114,11 @@
                                         <div class="form-group">
                                             <label class="control-label">Choose Category Color</label>
                                             <select class="form-control form-white" data-placeholder="Choose a color..." name="category-color">
-                                                <option value="primary">Primary</option>
-                                                <option value="success">Success</option>
-                                                <option value="danger">Danger</option>
-                                                <option value="info">Info</option>
-                                                <option value="warning">Warning</option>
-                                                <option value="dark">Dark</option>
+                                                <option value="primary">I want to see it</option>
+                                                <option value="success">I need to see it</option>
+                                                <option value="info">Maybe</option>
+                                                <option value="warning">I don't want to see it</option>
+                                                <option value="dark">I really want to see it</option>
                                             </select>
                                         </div>
 

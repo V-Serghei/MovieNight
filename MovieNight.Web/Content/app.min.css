@@ -3025,9 +3025,9 @@ table.dataTable {
     }
 
     table.dataTable tbody td.focus, table.dataTable tbody th.focus {
-        outline: 2px solid #3f51b5 !important;
+        outline: 2px solid #4c856e !important;
         outline-offset: -1px;
-        color: #3f51b5;
+        color: #4c856e;
         background-color: rgba(63,81,181,.15)
     }
 
@@ -3964,7 +3964,7 @@ div.hopscotch-bubble {
     }
 
 body.authentication-bg {
-    background-image: url(../images/bg.png);
+    background-image: url(../images/index1.jpg);
     background-size: cover;
     background-position: center
 }
