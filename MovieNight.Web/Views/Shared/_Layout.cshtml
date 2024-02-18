@@ -21,6 +21,9 @@
     @* friends styles *@
     @Styles.Render("~/bundles/custombox/css")
 
+    @* calendar *@
+    @Styles.Render("~/bundles/fullcalendar/css")
+
 
     @if (IsSectionDefined("Styles"))
     {
@@ -54,6 +57,12 @@
         @Scripts.Render("~/bundles/app/js")
         @*friends scripts*@
         @Scripts.Render("~/bundles/custombox/js")
+
+        @*calendar*@
+        @Scripts.Render("~/bundles/moment/js")
+        @Scripts.Render("~/bundles/jquery-ui/js")
+        @Scripts.Render("~/bundles/fullcalendar/js")
+        @Scripts.Render("~/bundles/calendar_init/js")
 
 
         @RenderSection("scripts", required: false)
