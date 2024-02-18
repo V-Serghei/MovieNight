@@ -19,5 +19,20 @@ namespace MovieNight.Web.Controllers
 
             return View();
         }
+
+        public ActionResult News()
+        {
+            return View();
+        }
+
+        public ActionResult Top()
+        {
+            return View();
+        }
+
+        public ActionResult AreWatching()
+        {
+            return View();
+        }
     }
 }

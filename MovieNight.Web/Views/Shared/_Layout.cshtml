@@ -1,66 +1,110 @@
-﻿@using System.Web.Optimization
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title>MovieNight|@ViewBag.Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
-    <meta content="Coderthemes" name="author" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="/images/logo.ico">
+﻿        @using System.Web.Optimization
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="utf-8" />
+            <title>MovieNight|@ViewBag.Title</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+            <meta content="Coderthemes" name="author" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <!-- App favicon -->
+            <link rel="shortcut icon" href="/images/logo.ico">
 
-    <!-- App css -->
+            <!-- App css -->
 
-    @Styles.Render("~/bundles/bootstrap/css")
-    @Styles.Render("~/bundles/icons/css")
-    @Styles.Render("~/bundles/app/css")
-    @Styles.Render("~/bundles/slider/css")
-    @Styles.Render("~/bundles/mew/css")
-    @* friends styles *@
-    @Styles.Render("~/bundles/custombox/css")
+            @Styles.Render("~/bundles/bootstrap/css")
+            @Styles.Render("~/bundles/icons/css")
+            @Styles.Render("~/bundles/app/css")
+            @Styles.Render("~/bundles/slider/css")
 
-
-    @if (IsSectionDefined("Styles"))
-    {
-        @RenderSection("Styles", required: false)
-    }
-
-
-
-
-</head>
-
-<body>
-    
-    <div id="wrapper">
-        <div class="navbar-custom">
-            @Html.Partial("_Hbar")
-        </div>
-        <div class="left-side-menu">
-            @Html.Partial("_Lbar")
-        </div>
-        <div class="content-page">
-            @RenderBody()
-            @*@Html.Partial("_Content")*@
-        </div>
-        <div class="right-bar">
-            @Html.Partial("_Rbar")
-        </div>
-
-
-        @Scripts.Render("~/bundles/vendor/js")
-        @Scripts.Render("~/bundles/app/js")
-        @*friends scripts*@
-        @Scripts.Render("~/bundles/custombox/js")
-
-
-        @RenderSection("scripts", required: false)
-    </div>
+            @* friends styles *@
+            @Styles.Render("~/bundles/custombox/css")
+            @* viewed list *@
+            @Styles.Render("~/bundles/dataTables_bootstrap4/css")
+            @Styles.Render("~/bundles/dataTables_responsive_bootstrap4/css")
+            @Styles.Render("~/bundles/dataTables_buttons_bootstrap4/css")
+            @Styles.Render("~/bundles/dataTables_select_bootstrap4/css")
+            @* STATISTIC *@
+            @Styles.Render("~/bundles/jquery_jvectormap_1_2_2/css")
+            @* News *@
+            @Styles.Render("~/bundles/magnific_popup/css")
+            @* Are watching *@
+            @Styles.Render("~/bundles/magnific_popup/css")
+            @if (IsSectionDefined("Styles"))
+            {
+                @RenderSection("Styles", required: false)
+            }
 
 
 
-</body>
-</html>
+
+
+        </head>
+
+        <body>
+
+            <div id="wrapper">
+                <div class="navbar-custom">
+                    @Html.Partial("_Hbar")
+                </div>
+                <div class="left-side-menu">
+                    @Html.Partial("_Lbar")
+                </div>
+                <div class="content-page">
+                    @RenderBody()
+
+                </div>
+                <footer class="footer">
+                    @Html.Partial("_Footer")
+                </footer>
+                <div class="right-bar">
+                    @Html.Partial("_Rbar")
+                </div>
+
+
+                @Scripts.Render("~/bundles/vendor/js")
+                @Scripts.Render("~/bundles/app/js")
+                @Scripts.Render("~/bundles/AdditionalScripts/js")
+                @*friends scripts*@
+                @Scripts.Render("~/bundles/custombox/js")
+                @* viewed list *@
+                @Scripts.Render("~/bundles/jquery_dataTables_min/js")
+                @Scripts.Render("~/bundles/dataTables_bootstrap4/js")
+                @Scripts.Render("~/bundles/dataTables_responsive/js")
+                @Scripts.Render("~/bundles/dataTables_bootstrap4_min/js")
+                @Scripts.Render("~/bundles/dataTables_buttons_min/js")
+                @Scripts.Render("~/bundles/buttons_bootstrap4_min/js")
+                @Scripts.Render("~/bundles/buttons_html5_min/js")
+                @Scripts.Render("~/bundles/buttons_flash_min/js")
+                @Scripts.Render("~/bundles/buttons_print_min/js")
+                @Scripts.Render("~/bundles/dataTables_keyTable_min/js")
+                @Scripts.Render("~/bundles/dataTables_select_min/js")
+                @Scripts.Render("~/bundles/pdfmake_min/js")
+                @Scripts.Render("~/bundles/vfs_fonts/js")
+                @Scripts.Render("~/bundles/datatables_init/js")
+
+                @* STATISTIC *@
+                @Scripts.Render("~/bundles/apexcharts_min/js")
+                @Scripts.Render("~/bundles/jquery_sparkline_min/js")
+                @Scripts.Render("~/bundles/jquery_jvectormap_1_2_2/js")
+                @Scripts.Render("~/bundles/jquery_jvectormap_world_mill_en/js")
+                @Scripts.Render("~/bundles/peity_min/js")
+                @Scripts.Render("~/bundles/dashboard_init/js")
+
+                @* News *@
+                @Scripts.Render("~/bundles/jquery.magnific_popup_min/js")
+                @Scripts.Render("~/bundles/gallery_init/js")
+
+                @* Are watching *@
+                @Scripts.Render("~/bundles/tablesaw/js")
+                @Scripts.Render("~/bundles/tablesaw_init/js")
+
+                @RenderSection("scripts", required: false)
+            </div>
+
+
+
+        </body>
+        </html>
 
