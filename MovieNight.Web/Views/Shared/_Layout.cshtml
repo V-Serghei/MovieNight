@@ -13,6 +13,22 @@
 
             <!-- App css -->
 
+    @Styles.Render("~/bundles/bootstrap/css")
+    @Styles.Render("~/bundles/icons/css")
+    @Styles.Render("~/bundles/app/css")
+    @Styles.Render("~/bundles/slider/css")
+    @Styles.Render("~/bundles/mew/css")
+    @* friends styles *@
+    @Styles.Render("~/bundles/custombox/css")
+
+    @* calendar *@
+    @Styles.Render("~/bundles/fullcalendar/css")
+
+
+    @if (IsSectionDefined("Styles"))
+    {
+        @RenderSection("Styles", required: false)
+    }
             @Styles.Render("~/bundles/bootstrap/css")
             @Styles.Render("~/bundles/icons/css")
             @Styles.Render("~/bundles/app/css")
@@ -95,6 +111,12 @@
                 @* News *@
                 @Scripts.Render("~/bundles/jquery.magnific_popup_min/js")
                 @Scripts.Render("~/bundles/gallery_init/js")
+
+        @*calendar*@
+        @Scripts.Render("~/bundles/moment/js")
+        @Scripts.Render("~/bundles/jquery-ui/js")
+        @Scripts.Render("~/bundles/fullcalendar/js")
+        @Scripts.Render("~/bundles/calendar_init/js")
 
                 @* Are watching *@
                 @Scripts.Render("~/bundles/tablesaw/js")

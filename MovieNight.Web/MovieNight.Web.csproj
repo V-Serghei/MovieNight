@@ -489,6 +489,10 @@
     <Content Include="vendor\jquery-vectormap\jquery-jvectormap-world-mill-en.js" />
     <Content Include="vendor\magnific-popup\jquery.magnific-popup.min.js" />
     <Content Include="vendor\magnific-popup\magnific-popup.css" />
+    <Content Include="vendor\fullcalendar\fullcalendar.min.css" />
+    <Content Include="vendor\fullcalendar\fullcalendar.min.js" />
+    <Content Include="vendor\jquery-ui\jquery-ui.min.js" />
+    <Content Include="vendor\moment\moment.min.js" />
     <Content Include="vendor\myStyle.css" />
     <Content Include="vendor\pdfmake\pdfmake.min.js" />
     <Content Include="vendor\pdfmake\vfs_fonts.js" />
@@ -499,7 +503,9 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\InformationSynchronizationController.cs" />
+    <Compile Include="Controllers\IdentificationController.cs" />
     <Compile Include="Controllers\MainPageController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\SearchSortAddController.cs" />
     <Compile Include="Controllers\SettingController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
@@ -609,6 +615,9 @@
     <Content Include="Views\SearchSortAdd\CartoonsSearch.cshtml" />
     <Content Include="Views\SearchSortAdd\AnimeSearch.cshtml" />
     <Content Include="Views\SearchSortAdd\RandomFilm.cshtml" />
+    <Content Include="Views\Identification\Login.cshtml" />
+    <Content Include="Views\Identification\Register.cshtml" />
+    <Content Include="Views\Notification\Calendar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
