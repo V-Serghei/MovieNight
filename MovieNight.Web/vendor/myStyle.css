@@ -9,6 +9,7 @@ html, body {
     padding: 0;
 }
 
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -56,7 +57,7 @@ body {
     background: #000;
     font-weight: 400;
     font-size: 15px;
-    color: #aa3e03;
+    color: red;
     overflow-y: scroll;
     overflow-x: hidden;
 }

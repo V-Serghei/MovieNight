@@ -16,73 +16,55 @@
                 <li class="menu-title">Navigation</li>
 
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
-                        <i class="mdi mdi-view-dashboard"></i>
+                    <a href=@Url.Action("Primary","MainPage") class="waves-effect">
+                        <i class="remixicon-home-4-fill"></i>
                         <span class="badge badge-success badge-pill float-right">2</span>
-                        <span> Dashboards </span>
+                        <span> Home </span>
                     </a>
-                    <ul class="nav-second-level" aria-expanded="false">
-                        <li>
-                            <a href=@Url.Action("Primary", "MainPage") >Dashboard 1</a>
-                        </li>
-                        <li>
-                            <a href="dashboard-2.html">Dashboard 2</a>
-                        </li>
-                    </ul>
                 </li>
 
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
-                        <i class="mdi mdi-layers"></i>
-                        <span> Apps </span>
+                        <i class="remixicon-dashboard-fill"></i>
+                        <span> Media </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li>
-                            <a href="apps-kanbanboard.html">Kanban Board</a>
+                            <a href=@Url.Action("News","MainPage")>o News</a>
                         </li>
                         <li>
-                            <a href="apps-companies.html">Companies</a>
+                            <a href=@Url.Action("Top","MainPage")>o	 Top</a>
                         </li>
                         <li>
-                            <a href="apps-calendar.html">Calendar</a>
+                            <a href=@Url.Action("AreWatching","MainPage")>o Are Watching</a>
                         </li>
-                        <li>
-                            <a href="apps-filemanager.html">File Manager</a>
-                        </li>
-                        <li>
-                            <a href="apps-tickets.html">Tickets</a>
-                        </li>
-                        <li>
-                            <a href="apps-team.html">Team Members</a>
-                        </li>
+                        
+                        
                     </ul>
                 </li>
 
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
-                        <i class="mdi mdi-page-layout-body"></i>
-                        <span class="badge badge-pink float-right">New</span>
-                        <span> Layouts </span>
+                        <i class=" remixicon-movie-2-fill"></i>
+                        <span> Movie </span>
+                        <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li>
-                            <a href="layouts-sidebar-sm.html">Small Sidebar</a>
+                            <a href=@Url.Action("MovieSearch", "SearchSortAdd")>Films</a>
                         </li>
                         <li>
-                            <a href="layouts-dark-sidebar.html">Dark Sidebar</a>
+                            <a href=@Url.Action("SerialsSearch","SearchSortAdd")>Serials</a>
                         </li>
                         <li>
-                            <a href="layouts-light-topbar.html">Light Topbar</a>
+                            <a href=@Url.Action("CartoonsSearch","SearchSortAdd")>Cartoons</a>
                         </li>
                         <li>
-                            <a href="layouts-preloader.html">Preloader</a>
+                            <a href=@Url.Action("AnimeSearch","SearchSortAdd")>Anime</a>
                         </li>
                         <li>
-                            <a href="layouts-sidebar-collapsed.html">Sidebar Collapsed</a>
-                        </li>
-                        <li>
-                            <a href="layouts-boxed.html">Boxed</a>
+                            <a href=@Url.Action("AnimeSearch","SearchSortAdd")>Random film</a>
                         </li>
                     </ul>
                 </li>
@@ -90,103 +72,52 @@
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
                         <i class="mdi mdi-email"></i>
-                        <span> Email </span>
+                        <span > Email </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li>
-                            <a href="email-inbox.html">Inbox</a>
+                            <a href="">Inbox</a>
                         </li>
                         <li>
-                            <a href="email-read.html">Read Email</a>
+                            <a href="">Read Email</a>
                         </li>
                         <li>
-                            <a href="email-compose.html">Compose Email</a>
+                            <a href="">Compose Email</a>
                         </li>
                         <li>
-                            <a href="email-templates.html">Email Templates</a>
+                            <a href="">Basket</a>
                         </li>
                     </ul>
                 </li>
 
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
-                        <i class="mdi mdi-google-pages"></i>
-                        <span> Pages </span>
+                        <i class="remixicon-user-smile-fill"></i>
+                        <span> Friends </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li>
-                            <a href="pages-starter.html">Starter</a>
+                            <a href=@Url.Action("FriendsPage","SearchSortAdd")>My friends</a>
                         </li>
                         <li>
-                            <a href="pages-login.html">Log In</a>
+                            <a href="">Feedback from friends</a>
                         </li>
                         <li>
-                            <a href="pages-register.html">Register</a>
+                            <a href="">Friend’s movie</a>
                         </li>
-                        <li>
-                            <a href="pages-recoverpw.html">Recover Password</a>
-                        </li>
-                        <li>
-                            <a href="pages-lock-screen.html">Lock Screen</a>
-                        </li>
-                        <li>
-                            <a href="pages-logout.html">Logout</a>
-                        </li>
-                        <li>
-                            <a href="pages-confirm-mail.html">Confirm Mail</a>
-                        </li>
-                        <li>
-                            <a href="pages-404.html">Error 404</a>
-                        </li>
-                        <li>
-                            <a href="pages-404-alt.html">Error 404-alt</a>
-                        </li>
-                        <li>
-                            <a href="pages-500.html">Error 500</a>
-                        </li>
+                        
                     </ul>
                 </li>
 
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
-                        <i class="mdi mdi-file-document-box-multiple"></i>
-                        <span> Extra Pages </span>
-                        <span class="menu-arrow"></span>
+                    <a href="" class="waves-effect">
+                        <i class="remixicon-calendar-todo-line"></i>
+                        <span> Сalendar </span>
                     </a>
-                    <ul class="nav-second-level" aria-expanded="false">
-                        <li>
-                            <a href="extras-profile.html">Profile</a>
-                        </li>
-                        <li>
-                            <a href="@Url.Action("FriendsPage", "SearchSortAdd")">Friends</a>
-                        </li>
-                        <li>
-                            <a href="extras-invoice.html">Invoice</a>
-                        </li>
-                        <li>
-                            <a href="extras-faqs.html">FAQs</a>
-                        </li>
-                        <li>
-                            <a href="extras-tour.html">Tour Page</a>
-                        </li>
-                        <li>
-                            <a href="extras-pricing.html">Pricing</a>
-                        </li>
-                        <li>
-                            <a href="extras-maintenance.html">Maintenance</a>
-                        </li>
-                        <li>
-                            <a href="extras-coming-soon.html">Coming Soon</a>
-                        </li>
-                        <li>
-                            <a href="extras-gallery.html">Gallery</a>
-                        </li>
-                    </ul>
                 </li>
-
-                <li class="menu-title mt-2">Components</li>
+                @*<li class="menu-title mt-2">Components</li>
 
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
