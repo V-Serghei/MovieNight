@@ -122,15 +122,15 @@ namespace MovieNight.Web
 
 
             //calendar
-            bundle.Add(new StyleBundle("~/bundles/fullcalendar/css").Include(
+            bundles.Add(new StyleBundle("~/bundles/fullcalendar/css").Include(
                 "~/vendor/fullcalendar/fullcalendar.min.css", new CssRewriteUrlTransform()));
-            bundle.Add(new ScriptBundle("~/bundles/moment/js").Include(
+            bundles.Add(new ScriptBundle("~/bundles/moment/js").Include(
                "~/vendor/moment/moment.min.js"));
-            bundle.Add(new ScriptBundle("~/bundles/jquery-ui/js").Include(
+            bundles.Add(new ScriptBundle("~/bundles/jquery-ui/js").Include(
                 "~/vendor/jquery-ui/jquery-ui.min.js"));
-            bundle.Add(new ScriptBundle("~/bundles/fullcalendar/js").Include(
+            bundles.Add(new ScriptBundle("~/bundles/fullcalendar/js").Include(
                 "~/vendor/fullcalendar/fullcalendar.min.js"));
-            bundle.Add(new ScriptBundle("~/bundles/calendar_init/js").Include(
+            bundles.Add(new ScriptBundle("~/bundles/calendar_init/js").Include(
                 "~/scripts/pages/calendar.init.js"));
 
         }

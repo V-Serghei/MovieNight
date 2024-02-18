@@ -122,7 +122,7 @@ a {
 
     .slideshow:after {
         content: '';
-        background: transparent url(~/images/index1.jpg) repeat top left;
+        background: transparent url(~/images/index2.jpg) repeat top left;
     }
 
     .slideshow li span {
