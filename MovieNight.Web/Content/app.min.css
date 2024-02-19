@@ -40,7 +40,7 @@
 
 .nav-second-level li a, .nav-thrid-level li a {
     padding: 8px 20px;
-    color: #6e768e;
+    color: black;
     display: block;
     position: relative;
     -webkit-transition: all .4s;
@@ -265,7 +265,7 @@
             left: 70px;
             position: absolute;
             width: 190px;
-            height: 100% !important;
+            height: auto !important;
             -webkit-box-shadow: 3px 5px 10px 0 rgba(154,161,171,.2);
             box-shadow: 3px 5px 10px 0 rgba(154,161,171,.2)
         }
@@ -298,7 +298,7 @@
         .enlarged .left-side-menu #sidebar-menu > ul ul li:hover > ul {
             display: block;
             left: 190px;
-            height: 100 !important;
+            height: auto !important;
             margin-top: -36px;
             position: absolute;
             width: 190px
@@ -455,7 +455,7 @@ body.enlarged {
     }
 
         .left-side-menu-dark .left-side-menu .nav-second-level li a:focus, .left-side-menu-dark .left-side-menu .nav-second-level li a:hover, .left-side-menu-dark .left-side-menu .nav-thrid-level li a:focus, .left-side-menu-dark .left-side-menu .nav-thrid-level li a:hover {
-            background-color: transparent;
+            background-color: aqua;
             color: #c8cddc
         }
 
@@ -534,7 +534,7 @@ body.enlarged {
         display: block;
         line-height: 70px;
         text-align: center;
-        max-height: 170 px
+        max-height: 1700px
     }
 
     .navbar-custom .dropdown.show .nav-link {
@@ -725,7 +725,7 @@ body.enlarged {
     }
 
     .topbar-light .navbar-custom .app-search .form-control {
-        color: #323a46;
+        color: RED;
         background-color: #f6f6f6;
         border-color: #f6f6f6
     }
@@ -832,7 +832,8 @@ body.enlarged {
 }
 
 .right-bar {
-    background-color: #5485ba;
+    background-color: rgb(136 64 190);
+   ;
     -webkit-box-shadow: 0 0 24px 0 rgba(0,0,0,.06),0 1px 0 0 rgba(0,0,0,.02);
     box-shadow: 0 0 24px 0 rgba(0,0,0,.06),0 1px 0 0 rgba(0,0,0,.02);
     display: block;
@@ -848,7 +849,8 @@ body.enlarged {
 }
 
     .right-bar .rightbar-title {
-        background-color: #576196;
+        background-color: rgb(136 20 190);
+        ;
         padding: 25.5px 25px;
         color: #fff
     }
