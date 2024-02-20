@@ -77,16 +77,13 @@
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li>
-                            <a href="">Inbox</a>
+                            <a href=@Url.Action("Inbox","DataTransfer")>Inbox</a>
                         </li>
                         <li>
-                            <a href="">Read Email</a>
+                            <a href=@Url.Action("Read","DataTransfer")>Read Email</a>
                         </li>
                         <li>
-                            <a href="">Compose Email</a>
-                        </li>
-                        <li>
-                            <a href="">Basket</a>
+                            <a href=@Url.Action("Compose","DataTransfer")>Compose Email</a>
                         </li>
                     </ul>
                 </li>
@@ -102,10 +99,7 @@
                             <a href=@Url.Action("FriendsPage","SearchSortAdd")>My friends</a>
                         </li>
                         <li>
-                            <a href="">Feedback from friends</a>
-                        </li>
-                        <li>
-                            <a href="">Friend’s movie</a>
+                            <a href=@Url.Action("FriendsMovies","SearchSortAdd")>Friend’s movie</a>
                         </li>
                         
                     </ul>

@@ -41,5 +41,9 @@ namespace MovieNight.Web.Controllers
         {
             return View();
         }
+        public ActionResult FriendsMovies()
+        {
+            return View();
+        }
     }
 }

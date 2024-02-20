@@ -20,38 +20,41 @@
     @* friends styles *@
     @Styles.Render("~/bundles/custombox/css")
 
-    @* friends styles *@
-    @Styles.Render("~/bundles/custombox/css")
-    @* viewed list *@
-    @Styles.Render("~/bundles/dataTables_bootstrap4/css")
-    @Styles.Render("~/bundles/dataTables_responsive_bootstrap4/css")
-    @Styles.Render("~/bundles/dataTables_buttons_bootstrap4/css")
-    @Styles.Render("~/bundles/dataTables_select_bootstrap4/css")
-    @* STATISTIC *@
-    @Styles.Render("~/bundles/jquery_jvectormap_1_2_2/css")
-    @* News *@
-    @Styles.Render("~/bundles/magnific_popup/css")
-    @* Are watching *@
-    @Styles.Render("~/bundles/magnific_popup/css")
-    @if (IsSectionDefined("Styles"))
+            @* friends styles *@
+            @Styles.Render("~/bundles/custombox/css")
+            @* viewed list *@
+            @Styles.Render("~/bundles/dataTables_bootstrap4/css")
+            @Styles.Render("~/bundles/dataTables_responsive_bootstrap4/css")
+            @Styles.Render("~/bundles/dataTables_buttons_bootstrap4/css")
+            @Styles.Render("~/bundles/dataTables_select_bootstrap4/css")
+            @* STATISTIC *@
+            @Styles.Render("~/bundles/jquery_jvectormap_1_2_2/css")
+            @* News *@
+            @Styles.Render("~/bundles/magnific_popup/css")
+            @* Are watching *@
+            @Styles.Render("~/bundles/magnific_popup/css")
+            @if (IsSectionDefined("Styles"))
+            {
+            @RenderSection("Styles", required: false)
+            }
+            @Styles.Render("~/bundles/bootstrap/css")
+            @Styles.Render("~/bundles/icons/css")
+            @Styles.Render("~/bundles/app/css")
+            @Styles.Render("~/bundles/slider/css")
+            @Styles.Render("~/bundles/mew/css")
+            @* friends styles *@
+            @Styles.Render("~/bundles/custombox/css")
+
+            @* calendar *@
+            @Styles.Render("~/bundles/fullcalendar/css")
+
+            @* email *@
+            @Styles.Render("~/bundles/summernote_bs4/css")
+
+
+            @if (IsSectionDefined("Styles"))
     {
-        @RenderSection("Styles", required: false)
-    }
-    @Styles.Render("~/bundles/bootstrap/css")
-    @Styles.Render("~/bundles/icons/css")
-    @Styles.Render("~/bundles/app/css")
-    @Styles.Render("~/bundles/slider/css")
-    @Styles.Render("~/bundles/mew/css")
-    @* friends styles *@
-    @Styles.Render("~/bundles/custombox/css")
-
-    @* calendar *@
-    @Styles.Render("~/bundles/fullcalendar/css")
-
-
-    @if (IsSectionDefined("Styles"))
-    {
-        @RenderSection("Styles", required: false)
+            @RenderSection("Styles", required: false)
     }
 
 
@@ -114,21 +117,34 @@
         @Scripts.Render("~/bundles/jquery.magnific_popup_min/js")
         @Scripts.Render("~/bundles/gallery_init/js")
 
-        @* Are watching *@
-        @Scripts.Render("~/bundles/tablesaw/js")
-        @Scripts.Render("~/bundles/tablesaw_init/js")
-        @*calendar*@
-        @Scripts.Render("~/bundles/moment/js")
-        @Scripts.Render("~/bundles/jquery-ui/js")
-        @Scripts.Render("~/bundles/fullcalendar/js")
-        @Scripts.Render("~/bundles/calendar_init/js")
+                @* Are watching *@
+                @Scripts.Render("~/bundles/tablesaw/js")
+                @Scripts.Render("~/bundles/tablesaw_init/js")
+                @*calendar*@
+                @Scripts.Render("~/bundles/moment/js")
+                @Scripts.Render("~/bundles/jquery-ui/js")
+                @Scripts.Render("~/bundles/fullcalendar/js")
+                @Scripts.Render("~/bundles/calendar_init/js")
+
+                @*Inbox*@
+                @Scripts.Render("~/bundles/inbox/js")
+                @Scripts.Render("~/bundles/summernote_bs4/js")
+
+                <script>
+                    jQuery(document).ready(function () {
+                        $('.summernote').summernote({
+                            height: 230,                 // set editor height
+                            minHeight: null,             // set minimum height of editor
+                            maxHeight: null,             // set maximum height of editor
+                            focus: false                 // set focus to editable area after initializing summernote
+                        });
+                    });
+                </script>
 
 
         @RenderSection("scripts", required: false)
     </div>
 
-
-
-</body>
-</html>
+        </body>
+        </html>
 

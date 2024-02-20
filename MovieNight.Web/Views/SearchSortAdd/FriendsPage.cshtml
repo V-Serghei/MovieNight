@@ -16,10 +16,11 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">MovieNight</a></li>
-                                <li class="breadcrumb-item active">Primary</li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Friends</a></li>
+                                <li class="breadcrumb-item active">My friends</li>
                             </ol>
                         </div>
-                        <h4 class="page-title">My friends</h4>
+                        <h4 class="page-title text-warning font-weight-bold">My friends</h4>
                     </div>
                 </div>
             </div>
@@ -35,14 +36,13 @@
                                         <label for="inputPassword2" class="sr-only">Search</label>
                                         <input type="search" class="form-control" id="inputPassword2" placeholder="Search...">
                                     </div>
-                                    <div class="form-group mx-sm-3"> 
+                                    <div class="form-group mx-sm-3">
                                     </div>
                                 </form>
                             </div>
                             <div class="col-lg-4">
                                 <div class="text-lg-right mt-3 mt-lg-0">
-                                     <button type="button" class="btn btn-outline-primary waves-effect waves-light mr-1"><i class="mdi mdi-settings"></i></button>
-                                    <a href="#custom-modal" class="btn btn-outline-primary waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlayColor="#38414a"><i class="mdi mdi-plus-circle mr-1"></i> Add New</a>
+                                    <a href="#custom-modal" class="btn btn-outline-primary waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlayColor="#38414a"><i class="mdi mdi-plus-circle mr-1"></i> Add friend </a>
                                 </div>
                             </div><!-- end col-->
                         </div> <!-- end row -->
@@ -56,7 +56,7 @@
                     <div class="text-center card-box ribbon-box">
                         <div class="clearfix"></div>
                         <div class="pt-2 pb-2">
-                            <img src="assets/images/users/avatar-3.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                            <img src="~/images/Nelea/Richi.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
 
                             <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">Richi</a></h4>
                             <p> <span> <a href="#" class="text-pink">richi.com</a> </span></p>
@@ -65,8 +65,16 @@
                                 Hi I'm Richi,do you want to be ny best friend?
                             </p>
 
-                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="mdi mdi-email mr-1"></i> Message</button>
-                            <button type="button" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-phone mr-1"></i> Go to profile</button>
+                            <a href=@Url.Action("Compose", "DataTransfer")>
+                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                    <i class="mdi mdi-email mr-1"></i> Message
+                                </button>
+                            </a>
+                            <a href=@Url.Action("PersonalProfile", "InformationSynchronization")>
+                                <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                    <i class="remixicon-account-pin-box-fill"></i> Go to profile
+                                </button>
+                            </a>
 
                             <ul class="social-list list-inline mt-3 mb-0">
                                 <li class="list-inline-item">
@@ -87,13 +95,21 @@
                 <div class="col-lg-4">
                     <div class="text-center card-box">
                         <div class="pt-2 pb-2">
-                            <img src="assets/images/users/avatar-4.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                            <img src="~/images/Nelea/Nelea.png" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
 
                             <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">Nelea</a></h4>
                             <p> <span> <a href="#" class="text-pink">nelea.com</a> </span></p>
 
-                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="mdi mdi-email mr-1"></i> Message</button>
-                            <button type="button" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-phone mr-1"></i> Go to profile</button>
+                            <a href=@Url.Action("Compose", "DataTransfer")>
+                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                    <i class="mdi mdi-email mr-1"></i> Message
+                                </button>
+                            </a>
+                            <a href=@Url.Action("PersonalProfile", "InformationSynchronization")>
+                                <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                    <i class="remixicon-account-pin-box-fill"></i> Go to profile
+                                </button>
+                            </a>
 
                             <ul class="social-list list-inline mt-3 mb-0">
                                 <li class="list-inline-item">
@@ -114,7 +130,7 @@
                 <div class="col-lg-4">
                     <div class="text-center card-box">
                         <div class="pt-2 pb-2">
-                            <img src="assets/images/users/avatar-5.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                            <img src="~/images/Nelea/Pooh.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
 
                             <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">Puh</a></h4>
                             <p> <span> <a href="#" class="text-pink">mywebs.com</a> </span></p>
@@ -123,8 +139,16 @@
                                 Hi I'm Puh, I love puppies.
                             </p>
 
-                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="mdi mdi-email mr-1"></i> Message</button>
-                            <button type="button" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-phone mr-1"></i> Go to profile</button>
+                            <a href=@Url.Action("Compose", "DataTransfer")>
+                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                    <i class="mdi mdi-email mr-1"></i> Message
+                                </button>
+                            </a>
+                            <a href=@Url.Action("PersonalProfile", "InformationSynchronization")>
+                                <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                    <i class="remixicon-account-pin-box-fill"></i> Go to profile
+                                </button>
+                            </a>
 
                             <ul class="social-list list-inline mt-3 mb-0">
                                 <li class="list-inline-item">
@@ -146,15 +170,28 @@
 
             <div class="row">
                 <div class="col-lg-4">
-                    <div class="text-center card-box">
+                    <div class="text-center card-box ribbon-box">
+                        <div class="clearfix"></div>
                         <div class="pt-2 pb-2">
-                            <img src="assets/images/users/avatar-6.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                            <img src="~/images/Nelea/Richi.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
 
-                            <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">Mark</a></h4>
-                            <p> <span> <a href="#" class="text-pink">profileq.com</a> </span></p>
+                            <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">Richi</a></h4>
+                            <p> <span> <a href="#" class="text-pink">richi.com</a> </span></p>
 
-                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="mdi mdi-email mr-1"></i> Message</button>
-                            <button type="button" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-phone mr-1"></i> Go to profile</button>
+                            <p class="text-muted font-13 mb-3">
+                                Hi I'm Richi,do you want to be ny best friend?
+                            </p>
+
+                            <a href=@Url.Action("Compose", "DataTransfer")>
+                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                    <i class="mdi mdi-email mr-1"></i> Message
+                                </button>
+                            </a>
+                            <a href=@Url.Action("PersonalProfile", "InformationSynchronization")>
+                                <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                    <i class="remixicon-account-pin-box-fill"></i> Go to profile
+                                </button>
+                            </a>
 
                             <ul class="social-list list-inline mt-3 mb-0">
                                 <li class="list-inline-item">
@@ -162,6 +199,38 @@
                                 </li>
                                 <li class="list-inline-item">
                                     <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github-circle"></i></a>
+                                </li>
+                            </ul>
+
+                        </div> <!-- end .padding -->
+                    </div> <!-- end card-box-->
+                </div> <!-- end col -->
+
+                <div class="col-lg-4">
+                    <div class="text-center card-box">
+                        <div class="pt-2 pb-2">
+                            <img src="~/images/Nelea/Nelea.png" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+
+                            <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">Nelea</a></h4>
+                            <p> <span> <a href="#" class="text-pink">nelea.com</a> </span></p>
+
+                            <a href=@Url.Action("Compose", "DataTransfer")>
+                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                    <i class="mdi mdi-email mr-1"></i> Message
+                                </button>
+                            </a>
+                            <a href=@Url.Action("PersonalProfile", "InformationSynchronization")>
+                                <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                    <i class="remixicon-account-pin-box-fill"></i> Go to profile
+                                </button>
+                            </a>
+
+                            <ul class="social-list list-inline mt-3 mb-0">
+                                <li class="list-inline-item">
+                                    <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a href="javascript: void(0);" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
@@ -178,50 +247,29 @@
                 <div class="col-lg-4">
                     <div class="text-center card-box">
                         <div class="pt-2 pb-2">
-                            <img src="assets/images/users/avatar-7.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                            <img src="~/images/Nelea/Pooh.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
 
-                            <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">James</a></h4>
-                            <p> <span> <a href="#" class="text-pink">coolweb.com</a> </span></p>
+                            <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">Puh</a></h4>
+                            <p> <span> <a href="#" class="text-pink">mywebs.com</a> </span></p>
 
                             <p class="text-muted font-13 mb-3">
-                                Hi I'm Johnathn Deo. </p>
+                                Hi I'm Puh, I love puppies.
+                            </p>
 
-                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="mdi mdi-email mr-1"></i> Message</button>
-                            <button type="button" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-phone mr-1"></i> Go to profile</button>
+                            <a href=@Url.Action("Compose", "DataTransfer")>
+                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                    <i class="mdi mdi-email mr-1"></i> Message
+                                </button>
+                            </a>
+                            <a href=@Url.Action("PersonalProfile", "InformationSynchronization")>
+                                <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                    <i class="remixicon-account-pin-box-fill"></i> Go to profile
+                                </button>
+                            </a>
 
                             <ul class="social-list list-inline mt-3 mb-0">
-                                <li class="list-inline-item">
-                                    <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>
-                                </li>
                                 <li class="list-inline-item">
                                     <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="javascript: void(0);" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
-                                </li>
-                            </ul>
-
-                        </div> <!-- end .padding -->
-                    </div> <!-- end card-box-->
-                </div> <!-- end col -->
-
-                <div class="col-lg-4">
-                    <div class="text-center card-box">
-                        <div class="pt-2 pb-2">
-                            <img src="assets/images/users/avatar-8.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
-
-                            <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">Jade </a></h4>
-                            <p> <span> <a href="#" class="text-pink">supported.com</a> </span></p>
-
-                            <p class="text-muted font-13 mb-3">
-                                Hi I'm Johnathn Deo.   </p>
-
-                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="mdi mdi-email mr-1"></i> Message</button>
-                            <button type="button" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-phone mr-1"></i> Go to profile</button>
-
-                            <ul class="social-list list-inline mt-3 mb-0">
-                                <li class="list-inline-item">
-                                    <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a href="javascript: void(0);" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
@@ -235,7 +283,6 @@
                     </div> <!-- end card-box-->
                 </div> <!-- end col -->
             </div>
-            <!-- end row -->
 
 
             <div class="row">
@@ -247,9 +294,16 @@
                             <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">Marie E. Tate</a></h4>
                             <p> <span> <a href="#" class="text-pink">website.com</a> </span></p>
 
-                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="mdi mdi-email mr-1"></i> Message</button>
-                            <button type="button" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-phone mr-1"></i> Go to profile</button>
-
+                            <a href=@Url.Action("Compose", "DataTransfer")>
+                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                    <i class="mdi mdi-email mr-1"></i> Message
+                                </button>
+                            </a>
+                            <a href=@Url.Action("PersonalProfile", "InformationSynchronization")>
+                                <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                    <i class="remixicon-account-pin-box-fill"></i> Go to profile
+                                </button>
+                            </a>
                             <ul class="social-list list-inline mt-3 mb-0">
                                 <li class="list-inline-item">
                                     <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>
@@ -274,9 +328,16 @@
                             <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">Elyse D. Davidson</a></h4>
                             <p> <span> <a href="#" class="text-pink">dumosite.com</a> </span></p>
 
-                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="mdi mdi-email mr-1"></i> Message</button>
-                            <button type="button" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-phone mr-1"></i> Go to profile</button>
-
+                            <a href=@Url.Action("Compose", "DataTransfer")>
+                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                    <i class="mdi mdi-email mr-1"></i> Message
+                                </button>
+                            </a>
+                            <a href=@Url.Action("PersonalProfile", "InformationSynchronization")>
+                                <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                    <i class="remixicon-account-pin-box-fill"></i> Go to profile
+                                </button>
+                            </a>
                             <ul class="social-list list-inline mt-3 mb-0">
                                 <li class="list-inline-item">
                                     <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>
@@ -298,9 +359,16 @@
                             <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">Sarah E. Goin</a></h4>
                             <p> <span> <a href="#" class="text-pink">webion.com</a> </span></p>
 
-                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light"><i class="mdi mdi-email mr-1"></i> Message</button>
-                            <button type="button" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-phone mr-1"></i> Go to profile</button>
-
+                            <a href=@Url.Action("Compose", "DataTransfer")>
+                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                    <i class="mdi mdi-email mr-1"></i> Message
+                                </button>
+                            </a>
+                            <a href=@Url.Action("PersonalProfile", "InformationSynchronization")>
+                                <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                    <i class="remixicon-account-pin-box-fill"></i> Go to profile
+                                </button>
+                            </a>
                             <ul class="social-list list-inline mt-3 mb-0">
                                 <li class="list-inline-item">
                                     <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>

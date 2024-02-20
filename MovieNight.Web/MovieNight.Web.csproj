@@ -388,6 +388,9 @@
     <Content Include="images\Movie\hellraiser.png" />
     <Content Include="images\Movie\Movie_Hobit_NP.jpg" />
     <Content Include="images\Movie\Once_Upon_a_Time_in_Hollywood.jpg" />
+    <Content Include="images\Nelea\Nelea.png" />
+    <Content Include="images\Nelea\Pooh.jpg" />
+    <Content Include="images\Nelea\Richi.jpg" />
     <Content Include="images\Movie\scream.png" />
     <Content Include="images\Movie\silent_hill.png" />
     <Content Include="images\Movie\the_green_mie.png" />
@@ -518,11 +521,14 @@
     <Content Include="vendor\pdfmake\pdfmake.min.js" />
     <Content Include="vendor\pdfmake\vfs_fonts.js" />
     <Content Include="vendor\peity\jquery.peity.min.js" />
+    <Content Include="vendor\summernote\summernote-bs4.css" />
+    <Content Include="vendor\summernote\summernote-bs4.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\DataTransferController.cs" />
     <Compile Include="Controllers\InformationSynchronizationController.cs" />
     <Compile Include="Controllers\IdentificationController.cs" />
     <Compile Include="Controllers\MainPageController.cs" />
@@ -639,6 +645,14 @@
     <Content Include="Views\Identification\Login.cshtml" />
     <Content Include="Views\Identification\Register.cshtml" />
     <Content Include="Views\Notification\Calendar.cshtml" />
+    <Content Include="Views\Identification\PagesRecoverpw.cshtml" />
+    <Content Include="Views\DataTransfer\Inbox.cshtml" />
+    <Content Include="Views\DataTransfer\Read.cshtml" />
+    <Content Include="Views\DataTransfer\Compose.cshtml" />
+    <Content Include="Views\DataTransfer\Starred.cshtml" />
+    <Content Include="Views\DataTransfer\SentMail.cshtml" />
+    <Content Include="Views\DataTransfer\Trash.cshtml" />
+    <Content Include="Views\SearchSortAdd\FriendsMovies.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -133,6 +133,13 @@ namespace MovieNight.Web
             bundles.Add(new ScriptBundle("~/bundles/calendar_init/js").Include(
                 "~/scripts/pages/calendar.init.js"));
 
+            //email
+            bundles.Add(new ScriptBundle("~/bundles/inbox/js").Include(
+               "~/scripts/pages/inbox.js"));
+            bundles.Add(new ScriptBundle("~/bundles/summernote_bs4/js").Include(
+               "~/vendor/summernote/summernote-bs4.min.js"));
+            bundles.Add(new StyleBundle("~/bundles/summernote_bs4/css").Include(
+               "~/vendor/summernote/summernote-bs4.css", new CssRewriteUrlTransform()));
         }
     }
 }
