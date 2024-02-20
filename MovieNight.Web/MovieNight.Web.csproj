@@ -378,6 +378,9 @@
     <Content Include="images\Movie\Guillermo_del_Toros_Cabinet_of_Curiosities.jpg" />
     <Content Include="images\Movie\Movie_Hobit_NP.jpg" />
     <Content Include="images\Movie\Once_Upon_a_Time_in_Hollywood.jpg" />
+    <Content Include="images\Nelea\Nelea.png" />
+    <Content Include="images\Nelea\Pooh.jpg" />
+    <Content Include="images\Nelea\Richi.jpg" />
     <Content Include="images\plugins\clear.png" />
     <Content Include="images\plugins\jstree.png" />
     <Content Include="images\plugins\loading.gif" />
@@ -628,6 +631,7 @@
     <Content Include="Views\DataTransfer\Starred.cshtml" />
     <Content Include="Views\DataTransfer\SentMail.cshtml" />
     <Content Include="Views\DataTransfer\Trash.cshtml" />
+    <Content Include="Views\SearchSortAdd\FriendsMovies.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
