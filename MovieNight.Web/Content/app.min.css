@@ -3067,6 +3067,8 @@ div.dt-button-info {
     li.paginate_button.next, li.paginate_button.previous {
         display: inline-block;
         font-size: 1.5rem
+       
+      
     }
 
     li.paginate_button {

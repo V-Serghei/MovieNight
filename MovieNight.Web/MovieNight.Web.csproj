@@ -302,6 +302,11 @@
     <Content Include="images\bg-pattern-2.png" />
     <Content Include="images\bg-pattern.png" />
     <Content Include="images\bg.png" />
+    <Content Include="images\cadr\cadr1.jpg" />
+    <Content Include="images\cadr\cadr2.jpg" />
+    <Content Include="images\cadr\cadr3.jpg" />
+    <Content Include="images\cadr\cadr5.jpg" />
+    <Content Include="images\cadr\card4.jpg" />
     <Content Include="images\companies\airbnb.png" />
     <Content Include="images\companies\amazon.png" />
     <Content Include="images\companies\apple.png" />
@@ -387,6 +392,7 @@
     <Content Include="images\Movie\silent_hill.png" />
     <Content Include="images\Movie\the_green_mie.png" />
     <Content Include="images\Movie\the_ring.png" />
+    <Content Include="images\Movie\the_shawshank_redemption.jpg" />
     <Content Include="images\Movie\Titanic.jpg" />
     <Content Include="images\openWorldMovie.jpg" />
     <Content Include="images\plugins\clear.png" />
@@ -421,6 +427,7 @@
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
     <Content Include="images\Movie\outlander.webp" />
+    <Content Include="images\cadr\card1.webp" />
     <None Include="scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="scripts\jquery-3.7.1.js" />
     <Content Include="scripts\jquery-3.7.1.min.js" />

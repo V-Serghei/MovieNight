@@ -2457,7 +2457,9 @@ div.dt-button-info {
 
 .responsive-table-plugin .table-responsive {
   border: none;
-  margin-bottom: 0; }
+  margin-bottom: 0;
+
+}
 
 .responsive-table-plugin .btn-toolbar {
   display: block; }
