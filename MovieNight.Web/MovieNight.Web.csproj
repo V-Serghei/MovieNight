@@ -539,6 +539,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\RegistViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -662,7 +664,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MovieNight.BusinessLogic\MovieNight.BusinessLogic.csproj">
+      <Project>{2df2e2dd-23f6-41fa-9e3e-38c9e4fbf263}</Project>
+      <Name>MovieNight.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MovieNight.Domain\MovieNight.Domain.csproj">
+      <Project>{98ab5b36-e39d-469b-bc7e-cc2f4af52c70}</Project>
+      <Name>MovieNight.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
