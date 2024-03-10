@@ -10,6 +10,7 @@ namespace MovieNight.BusinessLogic.Interface
     public interface ISession
     {
         UserVerification UserVerification(LogInData logInData);
-        
+        UserRegister UserAdd(RegData rData);
+        bool UserСreation(RegData rData);
     }
 }

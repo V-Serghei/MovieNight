@@ -30,5 +30,28 @@ namespace MovieNight.BusinessLogic.Core
             }
             return exUserAip;
         }
+
+        public UserRegister AddNewUserSuccess(RegData rData)
+        {
+            var exUserAip = new UserRegister();
+            //check the database for such a user
+            if (rData.FullName != "" && rData.Password != "" && rData.Email != "")
+            {
+                exUserAip.SuccessUniq = true;
+            }
+            else exUserAip.SuccessUniq = false;
+            return exUserAip;
+        }
+
+        public bool userAdding(RegData rData)
+        {
+            //add user to database
+
+            if (rData.FullName != null && rData.Password != null && rData.Email != null)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

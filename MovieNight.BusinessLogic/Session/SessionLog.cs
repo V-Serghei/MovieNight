@@ -17,5 +17,14 @@ namespace MovieNight.BusinessLogic.Session
             return GetUserVerification(logInData);
          }
 
+         public UserRegister UserAdd(RegData rData)
+         {
+             return AddNewUserSuccess(rData);
+         }
+
+         public bool UserСreation(RegData rData)
+         {
+             return userAdding(rData);
+         }
     }
 }

@@ -45,12 +45,25 @@ namespace MovieNight.Web.Controllers
         {
             RegData RegD = new RegData
             {
-                Username = model.Username,
-                Password = model.Password,
-                RememberMe = model.RememberMe,
+                FullName = rModel.FullName,
+                Password = rModel.Password,
+                Email = rModel.Email,
+                Checkbox = rModel.Checkbox
             };
 
+            UserRegister rUserVerification = SessionUser.UserAdd(RegD);
 
+            if (rUserVerification.SuccessUniq == true)
+            {
+                if(SessionUser.UserСreation(RegD)) return RedirectToAction("PersonalProfile", "InformationSynchronization");
+                //error reporting
+                else return View("Register");
+            }
+            else
+            {
+                //think about how to add an error message
+                return View("Register");
+            }
 
             return View("Register");
         }
