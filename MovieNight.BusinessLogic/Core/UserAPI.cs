@@ -23,6 +23,7 @@ namespace MovieNight.BusinessLogic.Core
                     Username = logInData.Username,
                     RememberMe = logInData.RememberMe
                 };
+
                 
             }else
             {
@@ -43,7 +44,7 @@ namespace MovieNight.BusinessLogic.Core
             return exUserAip;
         }
 
-        public bool userAdding(RegData rData)
+        public bool UserAdding(RegData rData)
         {
             //add user to database
 

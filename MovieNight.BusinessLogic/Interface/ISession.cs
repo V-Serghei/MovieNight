@@ -12,5 +12,6 @@ namespace MovieNight.BusinessLogic.Interface
         UserVerification UserVerification(LogInData logInData);
         UserRegister UserAdd(RegData rData);
         bool UserСreation(RegData rData);
+        void SetUserSession(int userId);
     }
 }

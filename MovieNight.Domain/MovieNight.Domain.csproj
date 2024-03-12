@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="enams\LevelOfAccess.cs" />
     <Compile Include="Entities\UserId\LogInData.cs" />
     <Compile Include="Entities\UserId\RegData.cs" />
     <Compile Include="Entities\UserId\UserVerification.cs" />
@@ -52,8 +53,6 @@
       <Name>MovieNight.Helpers</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="enams\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

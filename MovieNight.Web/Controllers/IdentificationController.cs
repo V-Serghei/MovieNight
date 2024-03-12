@@ -34,6 +34,7 @@ namespace MovieNight.Web.Controllers
             UserVerification verification =  SessionUser.UserVerification(logD);
             if (verification.IsVerified == true)
             {
+                SessionUser.SetUserSession(verification.UserId);
                 return RedirectToAction("PersonalProfile", "InformationSynchronization");
 
             }
@@ -55,8 +56,9 @@ namespace MovieNight.Web.Controllers
 
             if (rUserVerification.SuccessUniq == true)
             {
-                if(SessionUser.UserСreation(RegD)) return RedirectToAction("PersonalProfile", "InformationSynchronization");
-                //error reporting
+                SessionUser.SetUserSession(rUserVerification.UserId);
+                if (SessionUser.UserСreation(RegD)) return RedirectToAction("PersonalProfile", "InformationSynchronization");
+                //error reporting 
                 else return View("Register");
             }
             else
