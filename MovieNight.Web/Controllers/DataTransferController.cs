@@ -1,4 +1,10 @@
-﻿using System;
+﻿using MovieNight.BusinessLogic.Interface.IMail;
+using MovieNight.BusinessLogic.Session.MailS;
+using MovieNight.Domain.Entities;
+using MovieNight.Domain.Entities.MailE;
+using MovieNight.Web.Models;
+using MovieNight.Web.Models.Mail;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,10 +14,42 @@ namespace MovieNight.Web.Controllers
 {
     public class DataTransferController : Controller
     {
+        internal IInbox CompleteInbox;
+        public DataTransferController()
+        {
+            var MailBL = new BusinessLogic.BusinessLogic();
+            CompleteInbox = MailBL.GetInbox();
+        }
         // GET: DataTransfer
         public ActionResult Inbox()
         {
-            return View();
+            List<InboxModel> Message = new List<InboxModel>();
+            UserE userE = new UserE()
+            {
+                Id = 1,
+                Name = "Nelea",
+                Email = " ",
+                Password = " ",
+            };
+            List<InboxD> MessageD = CompleteInbox.InboxEquipment(userE);
+            foreach (var TMP in MessageD) 
+            {
+                Message.Add(new InboxModel
+                {
+                    IsChecked = TMP.IsChecked,
+                    SenderName = TMP.SenderName,
+                    Theme = TMP.Theme,
+                    Message = TMP.Message,
+                    Date = new TimeModel
+                    {
+                        Year = TMP.Date.Year,
+                        Month = TMP.Date.Month,
+                        Day = TMP.Date.Day, 
+                    },
+                }
+            );
+            }
+            return View(Message);
         }
         public ActionResult Read()
         {

@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Inbox";
 }
-
+@model List<MovieNight.Web.Models.Mail.InboxModel>
 <div>
     <div class="content">
 
@@ -43,7 +43,7 @@
                                 <a href=@Url.Action("Trash","DataTransfer") class="list-group-item border-0"><i class="mdi mdi-delete font-18 align-middle mr-2"></i>Trash</a>
                             </div>
                             <div class="list-group b-0 mail-list">
-                                
+
                             </div>
 
                         </div>
@@ -74,24 +74,47 @@
 
                             <div class="mt-3">
                                 <ul class="message-list">
-                                    <li class="unread">
+                                    @foreach (var MS in Model)
+                                    {
+                                        if(MS.IsChecked) {
+                                        <li class="unread">
                                         <div class="col-mail col-mail-1">
                                             <div class="checkbox-wrapper-mail">
                                                 <input type="checkbox" id="chk1">
                                                 <label for="chk1" class="toggle"></label>
                                             </div>
                                             <span class="star-toggle far fa-star text-warning"></span>
-                                            <a href=@Url.Action("Read","DataTransfer") class="title">Richi</a>
+                                            <a href=@Url.Action("Read","DataTransfer") class="title">@MS.SenderName</a>
                                         </div>
                                         <div class="col-mail col-mail-2">
                                             <a href=@Url.Action("Read","DataTransfer") class="subject">
-                                                    <span class="teaser">Yeah i'd like that!</span>
-                                                </a>
-                                            <div class="date">11:49 am</div>
+                                                <span class="teaser">@MS.Theme</span>
+                                            </a>
+                                            <div class="date">@MS.Date.Hour:@MS.Date.Day:@MS.Date.Month:@MS.Date.Year </div>
                                         </div>
-                                    </li>
+                                        </li>}
+                                        else{
+                                            <li>
+                                                <div class="col-mail col-mail-1">
+                                                    <div class="checkbox-wrapper-mail">
+                                                        <input type="checkbox" id="chk1">
+                                                        <label for="chk1" class="toggle"></label>
+                                                    </div>
+                                                    <span class="star-toggle far fa-star text-warning"></span>
+                                                    <a href=@Url.Action("Read","DataTransfer") class="title">@MS.SenderName</a>
+                                                </div>
+                                                <div class="col-mail col-mail-2">
+                                                    <a href=@Url.Action("Read","DataTransfer") class="subject">
+                                                        <span class="teaser">@MS.Theme</span>
+                                                    </a>
+                                                    <div class="date">@MS.Date.Hour:@MS.Date.Day:@MS.Date.Month:@MS.Date.Year </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
 
-                                    <li>
+
+                                    @*<li>
                                         <div class="col-mail col-mail-1">
                                             <div class="checkbox-wrapper-mail">
                                                 <input type="checkbox" id="chk3">
@@ -375,7 +398,7 @@
                                             </a>
                                             <div class="date">Mar. 6</div>
                                         </div>
-                                    </li>
+                                    </li>*@
                                 </ul>
                             </div>
                             <!-- end .mt-4 -->

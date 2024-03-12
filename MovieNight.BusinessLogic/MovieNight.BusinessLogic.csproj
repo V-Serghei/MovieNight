@@ -42,9 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic.cs" />
+    <Compile Include="Core\MailCore.cs" />
     <Compile Include="Core\UserAPI.cs" />
+    <Compile Include="Interface\IMail\IInbox.cs" />
     <Compile Include="Interface\ISession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Session\MailS\InboxS.cs" />
     <Compile Include="Session\SessionLog.cs" />
   </ItemGroup>
   <ItemGroup>
