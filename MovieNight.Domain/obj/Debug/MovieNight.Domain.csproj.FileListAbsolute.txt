@@ -7,3 +7,12 @@ D:\web project\Movie\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.cs
 D:\web project\Movie\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.csproj.CopyComplete
 D:\web project\Movie\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.dll
 D:\web project\Movie\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.pdb
+D:\Projects\MovieNight\MovieNight.Domain\bin\Debug\MovieNight.Domain.dll
+D:\Projects\MovieNight\MovieNight.Domain\bin\Debug\MovieNight.Domain.pdb
+D:\Projects\MovieNight\MovieNight.Domain\bin\Debug\MovieNight.Helpers.dll
+D:\Projects\MovieNight\MovieNight.Domain\bin\Debug\MovieNight.Helpers.pdb
+D:\Projects\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.csproj.AssemblyReference.cache
+D:\Projects\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.csproj.CoreCompileInputs.cache
+D:\Projects\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.csproj.CopyComplete
+D:\Projects\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.dll
+D:\Projects\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.pdb

@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="enams\LevelOfAccess.cs" />
+    <Compile Include="Entities\MailE\InboxD.cs" />
+    <Compile Include="Entities\TimeD.cs" />
+    <Compile Include="Entities\UserE.cs" />
     <Compile Include="Entities\UserId\LogInData.cs" />
     <Compile Include="Entities\UserId\RegData.cs" />
     <Compile Include="Entities\UserId\UserVerification.cs" />
