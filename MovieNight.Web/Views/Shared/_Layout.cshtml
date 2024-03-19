@@ -38,7 +38,7 @@
             @Styles.Render("~/bundles/icons/css")
             @Styles.Render("~/bundles/app/css")
             @Styles.Render("~/bundles/slider/css")
-            @Styles.Render("~/bundles/mew/css")
+           @* @Styles.Render("~/bundles/new/css")*@
             @* friends styles *@
             @Styles.Render("~/bundles/custombox/css")
 
@@ -71,11 +71,11 @@
         </div>
         <div class="content-page">
             @RenderBody()
-
+            <footer class="footer">
+                @Html.Partial("_Footer")
+            </footer>
         </div>
-        <footer class="footer">
-            @Html.Partial("_Footer")
-        </footer>
+        
         <div class="right-bar">
             @Html.Partial("_Rbar")
         </div>

@@ -7,6 +7,8 @@ using System.Web;
 using MovieNight.BusinessLogic.Core;
 using MovieNight.BusinessLogic.Interface;
 using MovieNight.Domain.enams;
+using MovieNight.Domain.Entities;
+using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Domain.Entities.UserId;
 
 namespace MovieNight.BusinessLogic.Session
@@ -32,11 +34,15 @@ namespace MovieNight.BusinessLogic.Session
          public void SetUserSession(int userId)
          {
              HttpContext.Current.Session["UserId"] = userId;
-
+             HttpContext.Current.Session["UserName"] = GetUserData(userId).Name;
          }
 
-        
-         public int? GetUserIdFromSession()
+         public UserE GetUserData(int? userId)
+         {
+             return GetUserDataFromDatabase(userId);
+         }
+
+        public int? GetUserIdFromSession()
          {
              if (HttpContext.Current?.Session != null)
              {
@@ -45,12 +51,18 @@ namespace MovieNight.BusinessLogic.Session
              return null;
          }
 
-         //public LevelOfAccess Role()
-         //{
-         //    LevelOfAccess role = LevelOfAccess.Guest;
+        public PersonalProfileM GetPersonalProfileM(int? userId)
+        {
+            return GetPersonalProfileDatabase(userId);
+        }
 
-            
-         //}
+
+        //public LevelOfAccess Role()
+        //{
+        //    LevelOfAccess role = LevelOfAccess.Guest;
+
+
+        //}
 
 
     }

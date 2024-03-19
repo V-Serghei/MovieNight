@@ -42,7 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="enams\LevelOfAccess.cs" />
+    <Compile Include="Entities\DifferentE\PhoneNumE.cs" />
+    <Compile Include="Entities\DifferentE\Tag.cs" />
     <Compile Include="Entities\MailE\InboxD.cs" />
+    <Compile Include="Entities\MovieM\ListOfFilms.cs" />
+    <Compile Include="Entities\MovieM\Poster.cs" />
+    <Compile Include="Entities\MovieM\ViewingHistoryM.cs" />
+    <Compile Include="Entities\PersonalP\PersonalProfileM.cs" />
     <Compile Include="Entities\TimeD.cs" />
     <Compile Include="Entities\UserE.cs" />
     <Compile Include="Entities\UserId\LogInData.cs" />
