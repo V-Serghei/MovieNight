@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,6 +55,7 @@
     <Compile Include="BusinessLogic.cs" />
     <Compile Include="Core\MailCore.cs" />
     <Compile Include="Core\UserAPI.cs" />
+    <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="Interface\IMail\IInbox.cs" />
     <Compile Include="Interface\ISession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,6 +73,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DBModel\Seed\" />
     <Folder Include="MainBL\" />
   </ItemGroup>
   <ItemGroup>
