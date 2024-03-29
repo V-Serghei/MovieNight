@@ -12,82 +12,177 @@ using MovieNight.Domain.Entities.DifferentE;
 
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.PersonalP;
+using System.Security.Cryptography;
+using System.Text.RegularExpressions;
+using System.Data.Entity;
+using System.Xml.Linq;
 
 namespace MovieNight.BusinessLogic.Core
 {
     public class UserApi
     {
-        public UserVerification GetUserVerification(LogInData logInData)
+        public string HashPassword(string password, string salt)
         {
+            var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, Encoding.UTF8.GetBytes(salt), 10000);
 
+            var hashedPassword = Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(24));
+            return hashedPassword;
+        }
+
+        public bool VerifyPassword(string providedPassword, string storedHash, string salt)
+        {
+            var newHash = HashPassword(providedPassword, salt);
+            return newHash == storedHash;
+        }
+
+        public async Task<UserVerification> GetUserVerification(LogInData logInData)
+        {
             //check if user exist
+            var userL = new UserVerification();
+
+            if (!IsValid(logInData))
+            {
+                userL.StatusMsg = "Invalid data";
+                userL.IsVerified = false;
+                return userL;
+            }
 
             using (var db = new UserContext())
             {
-                var user = db.UsersT.FirstOrDefault(u=> u.UserName == logInData.Username);
+                var userExists = await db.UsersT.FirstOrDefaultAsync(u => u.Email == logInData.Email);
+
+                if (userExists == null)
+                {
+                        userL.StatusMsg = "You have entered unrecorded mail";
+                        userL.IsVerified = false;
+                    return userL;
+                }else if (!VerifyPassword(logInData.Password, userExists.Password, userExists.Salt))
+                {
+                    userL.StatusMsg = "You entered the wrong password";
+                    userL.IsVerified = false;
+                    return userL;
+                }
+                else
+                {
+                    userL.StatusMsg = "Success";
+                    userL.IsVerified = true;
+                    userL.UserId = userExists.Id;
+                    userL.LogInData = logInData;
+                    return userL;
+                }
             }
-            object ss = null;
 
-
-
-            var exUserAip = new UserVerification();
-            //database search logic
-
-            if(logInData.Username == "vistovschii@gmail.com" && logInData.Password == "1111") 
-            {
-                exUserAip.IsVerified = true;
-                exUserAip.LogInData = logInData;
-            }else
-            {
-                exUserAip.IsVerified = false;
-            }
-            return exUserAip;
         }
 
-        public UserRegister AddNewUserSuccess(RegData rData)
+        public bool IsValid(RegData rData)
         {
-            var exUserAip = new UserRegister();
+            if (string.IsNullOrEmpty(rData.FullName) || string.IsNullOrEmpty(rData.Password) || string.IsNullOrEmpty(rData.Email))
+                return false;
 
-            //check the database for such a user
+            // Regex for email validation
+            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            if (!emailRegex.IsMatch(rData.Email))
+                return false;
 
-            if (rData.FullName != "" && rData.Password != "" && rData.Email != "")
-            {
-                exUserAip.SuccessUniq = true;
-            }
-            else exUserAip.SuccessUniq = false;
-            return exUserAip;
+            // Minimum password length
+            if (rData.Password.Length < 10)
+                return false;
+
+            return true;
         }
 
+        public bool IsValid(LogInData rData)
+        {
+            if (string.IsNullOrEmpty(rData.Password) || string.IsNullOrEmpty(rData.Email))
+                return false;
+
+            // Regex for email validation
+            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            if (!emailRegex.IsMatch(rData.Email))
+                return false;
+
+            // Minimum password length
+            if (rData.Password.Length < 10)
+                return false;
+
+            return true;
+        }
+
+
+
+        public async Task<UserRegister> AddNewUserSuccess(RegData rData)
+        {
+            var userRegister = new UserRegister();
+
+            if (!IsValid(rData))
+            {
+                userRegister.StatusMsg = "Invalid data";
+                userRegister.SuccessUniq = false;
+                return userRegister;
+            }
+
+            using (var db = new UserContext())
+            {
+                var userExists = await db.UsersT.FirstOrDefaultAsync(u => u.UserName == rData.FullName || u.Email == rData.Email);
+
+                if (userExists != null)
+                {
+                    if (userExists.UserName == rData.FullName)
+                        userRegister.StatusMsg = "Username already taken";
+                    else
+                        userRegister.StatusMsg = "Email already in use";
+
+                    return userRegister;
+                }
+            }
+
+            userRegister.SuccessUniq = true;
+            userRegister.StatusMsg = "Success";
+            return userRegister;
+        }
+
+        private string GetRandSalt()
+        {
+            var rng = new RNGCryptoServiceProvider();
+            var salt = new byte[16];
+            rng.GetBytes(salt);
+            return Convert.ToBase64String(salt);
+
+        }
         public bool UserAdding(RegData rData)
         {
             //add user to database
+
             var user = new UserDbTable()
             {
                 UserName = rData.FullName,
-                Password = rData.Password,
                 Email = rData.Email,
                 LastLoginDate = rData.RegDateTime,
                 LastIp = rData.Ip,
                 Role = LevelOfAccess.User,
-                Checkbox = rData.Checkbox
+                Checkbox = rData.Checkbox,
+                Salt = GetRandSalt()
 
             };
-            using (var db = new UserContext())
-            {
-                var us = db.UsersT.FirstOrDefault(u => u.UserName == rData.FullName);
-            }
+            user.Password = HashPassword(rData.Password, user.Salt);
+            //using (var db = new UserContext())
+            //{
+            //    var us = db.UsersT.FirstOrDefault(u => u.UserName == rData.FullName);
+            //}
 
             using (var db = new UserContext())
             {
-                db.UsersT.Add(user);
-                db.SaveChanges();
+                try
+                {
+                    db.UsersT.Add(user);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
             }
-
-            if (rData.FullName != null && rData.Password != null && rData.Email != null)
-            {
-                return true;
-            }
-            return false;
         }
         public UserE GetUserDataFromDatabase(int? userId)
         {

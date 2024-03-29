@@ -11,6 +11,7 @@ namespace MovieNight.Domain.Entities.UserId
         public bool IsVerified { get; set; } = false;
         public LogInData LogInData { get; set; }
         public int UserId { get; set; }
+        public string StatusMsg { get; set; }
     }
 
     public class UserRegister

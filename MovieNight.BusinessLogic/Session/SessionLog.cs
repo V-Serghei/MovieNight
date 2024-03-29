@@ -16,14 +16,14 @@ namespace MovieNight.BusinessLogic.Session
 
     public class SessionLog: UserApi, ISession 
     {
-         public UserVerification UserVerification(LogInData logInData)
+         public async Task<UserVerification> UserVerification(LogInData logInData)
          {
-            return GetUserVerification(logInData);
+            return await GetUserVerification(logInData);
          }
 
-         public UserRegister UserAdd(RegData rData)
+         public async Task<UserRegister> UserAdd(RegData rData)
          {
-             return AddNewUserSuccess(rData);
+             return await AddNewUserSuccess(rData);
          }
 
          public bool UserСreation(RegData rData)

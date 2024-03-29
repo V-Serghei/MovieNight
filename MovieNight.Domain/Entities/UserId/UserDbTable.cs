@@ -39,6 +39,7 @@ namespace MovieNight.Domain.Entities.UserId
 
         public bool Checkbox { get; set; }
 
+        public string Salt { get; set; }
 
 
 
