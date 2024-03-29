@@ -16,6 +16,7 @@ namespace MovieNight.Domain.Entities.UserId
     public class UserRegister
     {
         public bool SuccessUniq { get; set; } = false;
+        public string StatusMsg { get; set; }
         public int UserId { get; set; }
     }
 }

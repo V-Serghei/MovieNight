@@ -57,12 +57,6 @@ namespace MovieNight.BusinessLogic.Session
         }
 
 
-        //public LevelOfAccess Role()
-        //{
-        //    LevelOfAccess role = LevelOfAccess.Guest;
-
-
-        //}
 
 
     }

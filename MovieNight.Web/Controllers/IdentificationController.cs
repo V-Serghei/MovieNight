@@ -49,7 +49,10 @@ namespace MovieNight.Web.Controllers
                 FullName = rModel.FullName,
                 Password = rModel.Password,
                 Email = rModel.Email,
-                Checkbox = rModel.Checkbox
+                Checkbox = rModel.Checkbox,
+                RegDateTime = DateTime.Now,
+                Ip = Request.ServerVariables["REMOTE_ADDR"]
+
             };
 
             UserRegister rUserVerification = SessionUser.UserAdd(RegD);

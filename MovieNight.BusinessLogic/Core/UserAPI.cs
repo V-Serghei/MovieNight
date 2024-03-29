@@ -2,9 +2,12 @@
 using MovieNight.Domain.Entities.UserId;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MovieNight.BusinessLogic.DBModel;
+using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.DifferentE;
 
 using MovieNight.Domain.Entities.MovieM;
@@ -16,20 +19,24 @@ namespace MovieNight.BusinessLogic.Core
     {
         public UserVerification GetUserVerification(LogInData logInData)
         {
+
+            //check if user exist
+
+            using (var db = new UserContext())
+            {
+                var user = db.UsersT.FirstOrDefault(u=> u.UserName == logInData.Username);
+            }
+            object ss = null;
+
+
+
             var exUserAip = new UserVerification();
             //database search logic
 
             if(logInData.Username == "vistovschii@gmail.com" && logInData.Password == "1111") 
             {
                 exUserAip.IsVerified = true;
-                exUserAip.LogInData = new LogInData
-                {
-                    Password = logInData.Password,
-                    Username = logInData.Username,
-                    RememberMe = logInData.RememberMe
-                };
-
-                
+                exUserAip.LogInData = logInData;
             }else
             {
                 exUserAip.IsVerified = false;
@@ -40,7 +47,9 @@ namespace MovieNight.BusinessLogic.Core
         public UserRegister AddNewUserSuccess(RegData rData)
         {
             var exUserAip = new UserRegister();
+
             //check the database for such a user
+
             if (rData.FullName != "" && rData.Password != "" && rData.Email != "")
             {
                 exUserAip.SuccessUniq = true;
@@ -52,6 +61,27 @@ namespace MovieNight.BusinessLogic.Core
         public bool UserAdding(RegData rData)
         {
             //add user to database
+            var user = new UserDbTable()
+            {
+                UserName = rData.FullName,
+                Password = rData.Password,
+                Email = rData.Email,
+                LastLoginDate = rData.RegDateTime,
+                LastIp = rData.Ip,
+                Role = LevelOfAccess.User,
+                Checkbox = rData.Checkbox
+
+            };
+            using (var db = new UserContext())
+            {
+                var us = db.UsersT.FirstOrDefault(u => u.UserName == rData.FullName);
+            }
+
+            using (var db = new UserContext())
+            {
+                db.UsersT.Add(user);
+                db.SaveChanges();
+            }
 
             if (rData.FullName != null && rData.Password != null && rData.Email != null)
             {
