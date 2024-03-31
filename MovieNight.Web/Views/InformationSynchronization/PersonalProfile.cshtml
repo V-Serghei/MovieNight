@@ -81,7 +81,7 @@
                             <img src="@Url.Content(@Model.Avatar)" class="rounded-circle avatar-xl img-thumbnail"
                                  alt="profile-image">
 
-                            <h4 class="mb-0">@Model.BUserModel.Name'</h4>
+                            <h4 class="mb-0">@Model.BUserModel.Username'</h4>
                             <p class="text-muted">@Model.Quote</p>
                             <a href=@Url.Action("PersonalPromotionStatistics", "Statistic")>
                                 <button type="button" class="btn btn-dark btn-xs waves-effect mb-2 waves-light">Personal Statistic</button>
@@ -91,7 +91,7 @@
                                 <p class="text-muted font-13 mb-3">
                                     @Model.AboutMe
                                 </p>
-                                <p class="text-muted mb-2 font-13"><strong>Full Name :</strong> <span class="ml-2">@Model.BUserModel.Name</span></p>
+                                <p class="text-muted mb-2 font-13"><strong>Full Username :</strong> <span class="ml-2">@Model.BUserModel.Username</span></p>
 
                                 <p class="text-muted mb-2 font-13">
                                     <strong>Mobile :</strong>
@@ -314,13 +314,13 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="firstname">First Name</label>
+                                                    <label for="firstname">First Username</label>
                                                     <input type="text" class="form-control" id="firstname" placeholder="Enter first name">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="lastname">Last Name</label>
+                                                    <label for="lastname">Last Username</label>
                                                     <input type="text" class="form-control" id="lastname" placeholder="Enter last name">
                                                 </div>
                                             </div> <!-- end col -->
@@ -356,7 +356,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="companyname">Company Name</label>
+                                                    <label for="companyname">Company Username</label>
                                                     <input type="text" class="form-control" id="companyname" placeholder="Enter company name">
                                                 </div>
                                             </div>

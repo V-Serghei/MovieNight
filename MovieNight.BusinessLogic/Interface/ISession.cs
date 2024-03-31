@@ -14,7 +14,6 @@ namespace MovieNight.BusinessLogic.Interface
         Task<UserVerification> UserVerification(LogInData logInData);
         Task<UserRegister> UserAdd(RegData rData);
         bool UserСreation(RegData rData);
-        void SetUserSession(int userId);
         int? GetUserIdFromSession();
         UserE GetUserData(int? userId);
         PersonalProfileM GetPersonalProfileM(int? userId);

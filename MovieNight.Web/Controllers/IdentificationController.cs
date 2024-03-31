@@ -26,7 +26,7 @@ namespace MovieNight.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> LoginPost(LoginViewModel model)
         {
-            
+             
             LogInData logD = new LogInData
             {
                 Email = model.Username,
@@ -39,7 +39,6 @@ namespace MovieNight.Web.Controllers
             UserVerification verification = await SessionUser.UserVerification(logD);
             if (verification.IsVerified == true)
             {
-                SessionUser.SetUserSession(verification.UserId);
                 return RedirectToAction("PersonalProfile", "InformationSynchronization");
 
             }
@@ -51,7 +50,7 @@ namespace MovieNight.Web.Controllers
         {
             RegData RegD = new RegData
             {
-                FullName = rModel.FullName,
+                UserName = rModel.UserName,
                 Password = rModel.Password,
                 Email = rModel.Email,
                 Checkbox = rModel.Checkbox,
@@ -67,7 +66,6 @@ namespace MovieNight.Web.Controllers
                 
                 if (SessionUser.UserСreation(RegD))
                 {
-                    SessionUser.SetUserSession(rUserVerification.UserId);
                     return RedirectToAction("PersonalProfile", "InformationSynchronization");
                 }
                 else

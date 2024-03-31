@@ -16,11 +16,16 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Data.Entity;
 using System.Xml.Linq;
+using System.Web;
 
 namespace MovieNight.BusinessLogic.Core
 {
     public class UserApi
     {
+        // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        //  - > password-related methods     
+        //  |  |  |  |  |  |  |  |  |  |  |  |
+        // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
         public string HashPassword(string password, string salt)
         {
             var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, Encoding.UTF8.GetBytes(salt), 10000);
@@ -33,6 +38,38 @@ namespace MovieNight.BusinessLogic.Core
         {
             var newHash = HashPassword(providedPassword, salt);
             return newHash == storedHash;
+        }
+        
+        private string GetRandSalt()
+        {
+            var rng = new RNGCryptoServiceProvider();
+            var salt = new byte[16];
+            rng.GetBytes(salt);
+            return Convert.ToBase64String(salt);
+
+        }
+
+        // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        //
+        //           - > login  < -   
+        //  
+        // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
+
+        public bool IsValid(LogInData rData)
+        {
+            if (string.IsNullOrEmpty(rData.Password) || string.IsNullOrEmpty(rData.Email))
+                return false;
+
+            // Regex for email validation
+            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            if (!emailRegex.IsMatch(rData.Email))
+                return false;
+
+            // Minimum password length
+            if (rData.Password.Length < 10)
+                return false;
+
+            return true;
         }
 
         public async Task<UserVerification> GetUserVerification(LogInData logInData)
@@ -68,15 +105,23 @@ namespace MovieNight.BusinessLogic.Core
                     userL.IsVerified = true;
                     userL.UserId = userExists.Id;
                     userL.LogInData = logInData;
+                    HttpContext.Current.Session["UserId"] = userExists.Id;
+                    HttpContext.Current.Session["UserName"] = userExists.UserName;
                     return userL;
                 }
             }
 
         }
 
+
+        // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        //
+        //       - > registration  < -   
+        //  
+        // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
         public bool IsValid(RegData rData)
         {
-            if (string.IsNullOrEmpty(rData.FullName) || string.IsNullOrEmpty(rData.Password) || string.IsNullOrEmpty(rData.Email))
+            if (string.IsNullOrEmpty(rData.UserName) || string.IsNullOrEmpty(rData.Password) || string.IsNullOrEmpty(rData.Email))
                 return false;
 
             // Regex for email validation
@@ -90,25 +135,6 @@ namespace MovieNight.BusinessLogic.Core
 
             return true;
         }
-
-        public bool IsValid(LogInData rData)
-        {
-            if (string.IsNullOrEmpty(rData.Password) || string.IsNullOrEmpty(rData.Email))
-                return false;
-
-            // Regex for email validation
-            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-            if (!emailRegex.IsMatch(rData.Email))
-                return false;
-
-            // Minimum password length
-            if (rData.Password.Length < 10)
-                return false;
-
-            return true;
-        }
-
-
 
         public async Task<UserRegister> AddNewUserSuccess(RegData rData)
         {
@@ -123,11 +149,11 @@ namespace MovieNight.BusinessLogic.Core
 
             using (var db = new UserContext())
             {
-                var userExists = await db.UsersT.FirstOrDefaultAsync(u => u.UserName == rData.FullName || u.Email == rData.Email);
+                var userExists = await db.UsersT.FirstOrDefaultAsync(u => u.UserName == rData.UserName || u.Email == rData.Email);
 
                 if (userExists != null)
                 {
-                    if (userExists.UserName == rData.FullName)
+                    if (userExists.UserName == rData.UserName)
                         userRegister.StatusMsg = "Username already taken";
                     else
                         userRegister.StatusMsg = "Email already in use";
@@ -141,21 +167,13 @@ namespace MovieNight.BusinessLogic.Core
             return userRegister;
         }
 
-        private string GetRandSalt()
-        {
-            var rng = new RNGCryptoServiceProvider();
-            var salt = new byte[16];
-            rng.GetBytes(salt);
-            return Convert.ToBase64String(salt);
-
-        }
         public bool UserAdding(RegData rData)
         {
             //add user to database
 
             var user = new UserDbTable()
             {
-                UserName = rData.FullName,
+                UserName = rData.UserName,
                 Email = rData.Email,
                 LastLoginDate = rData.RegDateTime,
                 LastIp = rData.Ip,
@@ -167,7 +185,7 @@ namespace MovieNight.BusinessLogic.Core
             user.Password = HashPassword(rData.Password, user.Salt);
             //using (var db = new UserContext())
             //{
-            //    var us = db.UsersT.FirstOrDefault(u => u.UserName == rData.FullName);
+            //    var us = db.UsersT.FirstOrDefault(u => u.UserName == rData.UserName);
             //}
 
             using (var db = new UserContext())
@@ -184,21 +202,36 @@ namespace MovieNight.BusinessLogic.Core
                 }
             }
         }
+
+
+
+        // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        //
+        //        - > user read  < -   
+        //  
+        // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
+
         public UserE GetUserDataFromDatabase(int? userId)
         {
-            // Fetch user data from database 
-            UserE userE = null;
-            if (userId != null)
-            {
-                userE = new UserE
-                {
-                    Name = "Nelly",
-                    Email = "Nelly@gmail.com",
-                    //Id = userId,
-                    Password = "1111"
 
-                };
+
+            var userE = new UserE();
+            if (userId == null) return userE;
+
+            using (var db = new UserContext())
+            {
+                var userExists = db.UsersT.FirstOrDefault(u => u.Id == userId);
+
+                if (userExists != null)
+                {
+                    userE.Email = userExists.Email;
+                    userE.Password = userExists.Password;
+                    userE.Id = userExists.Id;
+                    userE.Username = userExists.UserName;
+                    return userE;
+                }
             }
+        
 
             return userE;
         }
@@ -207,13 +240,14 @@ namespace MovieNight.BusinessLogic.Core
         {
             //search the database
 
+
             PersonalProfileM personalProfileM = new PersonalProfileM
             {
                 Avatar = "~/images/users/photo_2023-03-30_21-08-09.jpg",
                 BUserE = new UserE
                 {
-                    Email = GetUserDataFromDatabase(userId).Email,
-                    Name = GetUserDataFromDatabase(userId).Name,
+                    Email = GetUserDataFromDatabase(userId).Email, 
+                    Username= GetUserDataFromDatabase(userId).Username,
                 },
                 Quote = "Movie fan",
                 AboutMe = "I’m Nelly and I love watching movies. Especially anime. For me, nothing is better than anime. Yes, and I’m also a cool IT girl and designer. And I’m also a master. I can do everything. " +
@@ -274,12 +308,8 @@ namespace MovieNight.BusinessLogic.Core
                         Path = "~/images/index2.jpg",
                     },
                     Star = i+4,
-                    ViewingTime = new TimeD
-                    {
-                        Day = 02+i,
-                        Month = 03+i,
-                        Year = 2024
-                    },
+                    ViewingTime = DateTime.Now
+                   
                 });
             }
 

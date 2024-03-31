@@ -71,11 +71,11 @@
                         "<div class='col-12'><div class='form-group'><label class='control-label'>Category</label><select class='form-control' name='category'></select></div></div>",
                     )
                     .find("select[name='category']")
-                    
-                .append("<option value='bg-success'>I need to see it</option>")
+
+                    .append("<option value='bg-success'>I need to see it</option>")
                     .append("<option value='bg-primary'>I want to see it</option>")
-                .append("<option value='bg-info'>Maybe</option>")
-                .append("<option value='bg-dark'>I really want to see it</option>")
+                    .append("<option value='bg-info'>Maybe</option>")
+                    .append("<option value='bg-dark'>I really want to see it</option>")
                     .append(
                         "<option value='bg-warning'>I don't want to see it</option></div></div>",
                     ),
@@ -94,6 +94,22 @@
                     .unbind("click")
                     .click(function () {
                         i.submit();
+                        var formData = i.serialize();
+                       
+                        $.ajax({
+                            url: '/Notification/EventSave',
+                            type: 'POST',
+                            data: formData,
+                            success: function (response) {
+                                // Handle success response
+                                console.log('Event saved successfully!');
+                            },
+                            error: function (xhr, status, error) {
+                                // Handle error response
+                                console.error('Error occurred while saving event:', error);
+                            }
+                        });
+                        l.$modal.modal("hide");
                     }),
                 l.$modal.find("form").on("submit", function () {
                     var e = i.find("input[name='title']").val(),
@@ -189,6 +205,7 @@
                             a.enableDrag());
                 });
         }),
+
         (o.CalendarApp = new e()),
         (o.CalendarApp.Constructor = e);
 })(window.jQuery),

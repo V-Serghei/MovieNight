@@ -60,7 +60,7 @@
     <Compile Include="Interface\ISession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session\MailS\InboxS.cs" />
-    <Compile Include="Session\SessionLog.cs" />
+    <Compile Include="Session\SessionBL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MovieNight.Domain\MovieNight.Domain.csproj">

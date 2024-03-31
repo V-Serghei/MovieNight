@@ -43,7 +43,7 @@ namespace MovieNight.Web.Controllers
                     BUserModel = new UserModel
                     {
                         Email = personalProfileM.BUserE.Email,
-                        Name = personalProfileM.BUserE.Name,
+                        Username = personalProfileM.BUserE.Username,
                     },
                     Location = personalProfileM.Location,
                     Quote = personalProfileM.Quote,
@@ -126,6 +126,24 @@ namespace MovieNight.Web.Controllers
         public ActionResult MovieTemplatePage()
         {
             return View();
+        }
+
+        public ActionResult ProfileEditing()
+        {
+
+            PEditingM edM = new PEditingM();
+
+
+            return View(edM);
+        }
+
+        [HttpPost]
+        public ActionResult ProfileEdit(PEditingM profEd)
+        {
+
+
+
+            return View("ProfileEditing");
         }
     }
 }

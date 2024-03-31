@@ -8,7 +8,7 @@ namespace MovieNight.Domain.Entities.MovieM
 {
     public class ViewingHistoryM
     {
-        public TimeD ViewingTime { get; set; }
+        public DateTime ViewingTime { get; set; }
         public string Description { get; set; }
         public string Title { get; set; }
         public int? Id { get; set; }
