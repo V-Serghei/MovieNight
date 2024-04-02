@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="enams\EventColor.cs" />
     <Compile Include="enams\LevelOfAccess.cs" />
     <Compile Include="Entities\DifferentE\PhoneNumE.cs" />
     <Compile Include="Entities\DifferentE\Tag.cs" />
@@ -49,6 +50,8 @@
     <Compile Include="Entities\MovieM\ListOfFilms.cs" />
     <Compile Include="Entities\MovieM\Poster.cs" />
     <Compile Include="Entities\MovieM\ViewingHistoryM.cs" />
+    <Compile Include="Entities\Notification\EventDbTable.cs" />
+    <Compile Include="Entities\Notification\EventE.cs" />
     <Compile Include="Entities\PersonalP\PersonalProfileM.cs" />
     <Compile Include="Entities\TimeD.cs" />
     <Compile Include="Entities\UserE.cs" />
