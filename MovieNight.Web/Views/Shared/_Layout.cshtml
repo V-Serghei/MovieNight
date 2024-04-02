@@ -91,11 +91,6 @@
         @Scripts.Render("~/bundles/vendor/js")
         @Scripts.Render("~/bundles/app/js")
 
-        @Scripts.Render("~/bundles/AdditionalScripts/js")
-        @*friends scripts*@
-
-        @Scripts.Render("~/bundles/custombox/js")
-        @* viewed list *@
         @Scripts.Render("~/bundles/jquery_dataTables_min/js")
         @Scripts.Render("~/bundles/dataTables_bootstrap4/js")
         @Scripts.Render("~/bundles/dataTables_responsive/js")
@@ -111,7 +106,6 @@
         @Scripts.Render("~/bundles/vfs_fonts/js")
         @Scripts.Render("~/bundles/datatables_init/js")
 
-        @* STATISTIC *@
         @Scripts.Render("~/bundles/apexcharts_min/js")
         @Scripts.Render("~/bundles/jquery_sparkline_min/js")
         @Scripts.Render("~/bundles/jquery_jvectormap_1_2_2/js")
@@ -119,42 +113,36 @@
         @Scripts.Render("~/bundles/peity_min/js")
         @Scripts.Render("~/bundles/dashboard_init/js")
 
-        @* News *@
         @Scripts.Render("~/bundles/jquery.magnific_popup_min/js")
         @Scripts.Render("~/bundles/gallery_init/js")
 
-        @* Are watching *@
         @Scripts.Render("~/bundles/tablesaw/js")
         @Scripts.Render("~/bundles/tablesaw_init/js")
-        @*calendar*@
+
         @Scripts.Render("~/bundles/moment/js")
         @Scripts.Render("~/bundles/jquery-ui/js")
         @Scripts.Render("~/bundles/fullcalendar/js")
         @Scripts.Render("~/bundles/calendar_init/js")
 
-        @*Inbox*@
         @Scripts.Render("~/bundles/inbox/js")
         @Scripts.Render("~/bundles/summernote_bs4/js")
-
-        <script>
-            jQuery(document).ready(function () {
-                $('.summernote').summernote({
-                    height: 230,                 // set editor height
-                    minHeight: null,             // set minimum height of editor
-                    maxHeight: null,             // set maximum height of editor
-                    focus: false                 // set focus to editable area after initializing summernote
-                });
-            });
-        </script>
 
         @Scripts.Render("~/bundles/dropzone/js")
         @Scripts.Render("~/bundles/fileuploads/js")
 
-
-        
-        
-
         @Scripts.Render("~/bundles/form-advanced/js")
+
+        <script>
+    jQuery(document).ready(function () {
+        $('.summernote').summernote({
+            height: 230,
+            minHeight: null,
+            maxHeight: null,
+            focus: false
+        });
+    });
+</script>
+
 
 
 

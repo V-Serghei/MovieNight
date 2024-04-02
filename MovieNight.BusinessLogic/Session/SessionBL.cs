@@ -43,11 +43,7 @@ namespace MovieNight.BusinessLogic.Session
 
         public int? GetUserIdFromSession()
         {
-            if (HttpContext.Current?.Session != null)
-            {
-                return (int?)HttpContext.Current.Session["UserId"];
-            }
-            return null;
+            return GetUserId();
         }
 
         public PersonalProfileM GetPersonalProfileM(int? userId)
@@ -56,7 +52,11 @@ namespace MovieNight.BusinessLogic.Session
         }
 
         //  - > change of user data
-        //....
+        public SuccessOfTheActivity EdProfInfo(ProfEditingE editing)
+        {
+            return EditingProfileData(editing);
+        }
+
 
         //  - > user data update
         //...

@@ -1685,7 +1685,7 @@
 				namespace = split.length > 0 ? split[ 1 ] : null;
 
 				if( evt === "click" ){
-					if( this.tagName === "INPUT" && this.type === "checkbox" && this.click ){
+					if (this.tagName === "INPUT" && this.type === "Checkbox" && this.click ){
 						this.click();
 						return false;
 					}
@@ -2520,7 +2520,7 @@ if (Tablesaw.mustard) {
 
 		var cfg = this.tablesaw.getConfig({
 			getColumnToggleLabelTemplate: function(text) {
-				return "<label><input type='checkbox' checked>" + text + "</label>";
+				return "<label><input type='Checkbox' checked>" + text + "</label>";
 			}
 		});
 
@@ -2556,7 +2556,7 @@ if (Tablesaw.mustard) {
 
 				$(cfg.getColumnToggleLabelTemplate($this.text()))
 					.appendTo($menu)
-					.find('input[type="checkbox"]')
+					.find('input[type="Checkbox"]')
 					.data("tablesaw-header", this);
 
 				hasNonPersistentHeaders = true;
@@ -2569,10 +2569,10 @@ if (Tablesaw.mustard) {
 
 		$menu.appendTo($popup);
 
-		function onToggleCheckboxChange(checkbox) {
-			var checked = checkbox.checked;
+		function onToggleCheckboxChange(Checkbox) {
+			var checked = Checkbox.checked;
 
-			var header = self.getHeaderFromCheckbox(checkbox);
+			var header = self.getHeaderFromCheckbox(Checkbox);
 			var $cells = self.tablesaw._$getCells(header);
 
 			$cells[!checked ? "addClass" : "removeClass"]("tablesaw-toggle-cellhidden");
@@ -2584,13 +2584,13 @@ if (Tablesaw.mustard) {
 		}
 
 		// bind change event listeners to inputs - TODO: move to a private method?
-		$menu.find('input[type="checkbox"]').on("change", function(e) {
+		$menu.find('input[type="Checkbox"]').on("change", function(e) {
 			onToggleCheckboxChange(e.target);
 
 			if (self.set.length) {
 				var index;
 				$(self.$popup)
-					.find("input[type='checkbox']")
+					.find("input[type='Checkbox']")
 					.each(function(j) {
 						if (this === e.target) {
 							index = j;
@@ -2599,13 +2599,13 @@ if (Tablesaw.mustard) {
 					});
 
 				$(self.set).each(function() {
-					var checkbox = $(this)
+					var Checkbox = $(this)
 						.data(data.key)
-						.$popup.find("input[type='checkbox']")
+						.$popup.find("input[type='Checkbox']")
 						.get(index);
-					if (checkbox) {
-						checkbox.checked = e.target.checked;
-						onToggleCheckboxChange(checkbox);
+					if (Checkbox) {
+						Checkbox.checked = e.target.checked;
+						onToggleCheckboxChange(Checkbox);
 					}
 				});
 			}
@@ -2679,8 +2679,8 @@ if (Tablesaw.mustard) {
 		this.refreshToggle();
 	};
 
-	ColumnToggle.prototype.getHeaderFromCheckbox = function(checkbox) {
-		return $(checkbox).data("tablesaw-header");
+	ColumnToggle.prototype.getHeaderFromCheckbox = function (Checkbox) {
+		return $(Checkbox).data("tablesaw-header");
 	};
 
 	ColumnToggle.prototype.refreshToggle = function() {
@@ -3668,7 +3668,7 @@ if (Tablesaw.mustard) {
 		this.checkAllSelector = "[" + this.attr + "]";
 		this.forceCheckedSelector = "[" + this.attr + "-checked]";
 		this.forceUncheckedSelector = "[" + this.attr + "-unchecked]";
-		this.checkboxSelector = 'input[type="checkbox"]';
+		this.checkboxSelector = 'input[type="Checkbox"]';
 
 		this.$triggers = null;
 		this.$checkboxes = null;
@@ -3696,8 +3696,8 @@ if (Tablesaw.mustard) {
 		return this._filterCells($($(button).attr(this.attr)));
 	};
 
-	CheckAll.prototype.getCheckboxesForCheckbox = function(checkbox) {
-		return this._filterCells($($(checkbox).closest("th")[0].cells));
+	CheckAll.prototype.getCheckboxesForCheckbox = function (Checkbox) {
+		return this._filterCells($($(Checkbox).closest("th")[0].cells));
 	};
 
 	CheckAll.prototype.init = function() {

@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using System.Data.Entity;
 using System.Xml.Linq;
 using System.Web;
+using AutoMapper;
 
 namespace MovieNight.BusinessLogic.Core
 {
@@ -180,20 +181,21 @@ namespace MovieNight.BusinessLogic.Core
                 Role = LevelOfAccess.User,
                 Checkbox = rData.Checkbox,
                 Salt = GetRandSalt()
+                
 
             };
             user.Password = HashPassword(rData.Password, user.Salt);
-            //using (var db = new UserContext())
-            //{
-            //    var us = db.UsersT.FirstOrDefault(u => u.UserName == rData.UserName);
-            //}
+           
 
             using (var db = new UserContext())
             {
                 try
                 {
+
                     db.UsersT.Add(user);
                     db.SaveChanges();
+                    HttpContext.Current.Session["UserId"] = user.Id;
+                    HttpContext.Current.Session["UserName"] = user.UserName;
                     return true;
                 }
                 catch (Exception ex)
@@ -315,5 +317,75 @@ namespace MovieNight.BusinessLogic.Core
 
             return personalProfileM;
         }
+        // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        //
+        //        - > user editing  < -   
+        //  
+        // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
+
+
+
+        public UserDbTable GetCurrentLoggedInUserDb()
+        {
+            var userId = GetUserId(); 
+
+            using (var db = new UserContext())
+            {
+                return db.UsersT.FirstOrDefault(u => u.Id == userId);
+            }
+        }
+
+        internal int? GetUserId()
+        {
+            if (HttpContext.Current?.Session != null)
+            {
+                return (int?)HttpContext.Current.Session["UserId"];
+            }
+            return null;
+        }
+
+        public SuccessOfTheActivity EditingProfileData(ProfEditingE editing)
+        {
+            var result = new SuccessOfTheActivity();
+            var currentUser = GetCurrentLoggedInUserDb();
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ProfEditingE, PEdBdTable>()
+                    .ForMember(dest => dest.Id, opt => opt.Ignore());
+            });
+
+            var mapper = config.CreateMapper();
+            using (var db = new UserContext())
+            {
+                try
+                {
+                    var existingProfile = db.PEdBdTables.FirstOrDefault(u => u.User.Id == currentUser.Id);
+
+                    if (existingProfile != null)
+                    {
+                        mapper.Map(editing, existingProfile);
+                    }
+                    else
+                    {
+                        var newProfile = new PEdBdTable { User = currentUser };
+                        mapper.Map(editing, newProfile);
+                        db.PEdBdTables.Add(newProfile);
+                    }
+
+                    db.SaveChanges();
+                    result.Successes = true;
+                    result.Msg = "Successful retention in the database!";
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    result.Successes = false;
+                    result.Msg = ex.Message;
+                    return result;
+                }
+            }
+        }
+
+
     }
 }

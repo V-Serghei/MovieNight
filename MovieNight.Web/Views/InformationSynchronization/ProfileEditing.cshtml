@@ -2,13 +2,13 @@
 @{
     ViewBag.Title = "ProfileEditing";
 }
-
+@model MovieNight.Domain.Entities.UserId.SuccessOfTheActivity
 
 <div>
     <div class="content">
 
         <!-- Start Content-->
-        @if (Model == null)
+        @if (HttpContext.Current.Session["UserId"] == null)
         {
             <div class="account-pages mt-5 mb-5">
                 <div class="container">
@@ -88,130 +88,139 @@
 
                         <div class="tab-pane" id="settings">
                         
-
-                <form>
-                        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i> Personal Info</h5>
+                 @using (Html.BeginForm("ProfileEdit", "InformationSynchronization", FormMethod.Post))
+                 {
+                     if (Model is { Successes: false })
+                     {
+                         <div class="alert alert-danger">
+                             @if (!Model.Successes)
+                             {
+                                 <p>@Model.Msg</p>
+                             }
+                         </div>
+                     }
+                <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i> Personal Info</h5>
+                <div class="form-group">
+                    <label for="Username">Username</label>
+                    <input type="text" name="Username" class="form-control" id="Username" placeholder="Enter Username" value="">
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label for="Username">Username</label>
-                            <input type="text" name="Username" class="form-control" id="Username" placeholder="Enter Username" value="">
+                            <label for="firstname">First Username</label>
+                            <input type="text" class="form-control" id="firstname" placeholder="Enter first name" name="FirstName" value="">
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="firstname">First Username</label>
-                                    <input type="text" class="form-control" id="firstname" placeholder="Enter first name" value="">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="lastname">Last Username</label>
-                                    <input type="text" class="form-control" id="lastname" placeholder="Enter last name">
-                                </div>
-                            </div> <!-- end col -->
-                        </div> <!-- end row -->
-
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="userbio">AboutMe</label>
-                                    <textarea class="form-control" id="userbio" rows="4" placeholder="Write something..."></textarea>
-                                </div>
-                            </div> <!-- end col -->
-                        </div> <!-- end row -->
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="useremail">Email Address</label>
-                                    <input type="email" class="form-control" id="useremail" placeholder="Enter email">
-                                    <span class="form-text text-muted"><small>If you want to change email please <a href="javascript: void(0);">click</a> here.</small></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="userpassword">Password</label>
-                                    <input type="password" class="form-control" id="userpassword" placeholder="Enter password">
-                                    <span class="form-text text-muted"><small>If you want to change password please <a href="javascript: void(0);">click</a> here.</small></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="cgender">Gender</label>
-                                    <select class="form-control" id="cgender" name="gender" required>
-                                        <option value="male">Non</option>
-                                        <option value="male">man</option>
-                                        <option value="female">woman</option>
-                                        <option value="other">another</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <div class="form-group">
-                                    <label for="example-fileinput"> Upload avatar</label>
-
-                                    <input type="file" class="form-control" id="example-fileinput">
-
-                                </div>
-                            </div>
-                        </div> <!-- end row -->
-
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="example-date">Date of birth</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="date" name="date" id="example-date">
-                            </div>
-                        </div>
-
-                        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-office-building mr-1"></i> Additional information</h5>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label for="phone_number">US Telephone</label>
-                            <input type="tel" id="phone_number" class="form-control"
-                                   maxlength="15"
-                                   pattern="^\d{3}-\d{3}-\d{4}$"
-                                   required>
-                            <span class="font-13 text-muted">e.g. (123) 456-7890</span>
+                            <label for="lastname">Last Username</label>
+                            <input type="text" class="form-control" id="lastname" placeholder="Enter last name" name="LastName" value="">
                         </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="userbio">AboutMe</label>
+                            <textarea class="form-control" id="userbio" rows="4"  placeholder="Write something..." name="AboutMe" ></textarea>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="useremail">Email Address</label>
+                            <input type="email" class="form-control" id="useremail" placeholder="Enter email" name="Email">
+                            <span class="form-text text-muted"><small>If you want to change email please <a href="javascript: void(0);">click</a> here.</small></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="userpassword">Password</label>
+                            <input type="password" class="form-control" id="userpassword" placeholder="Enter password" name="Password">
+                            <span class="form-text text-muted"><small>If you want to change password please <a href="javascript: void(0);">click</a> here.</small></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="cgender">Gender</label>
+                            <select class="form-control" id="cgender" name="Gender" required>
+                                <option value="male">Non</option>
+                                <option value="male">man</option>
+                                <option value="female">woman</option>
+                                <option value="other">another</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <div class="form-group">
+                            <label for="example-fileinput"> Upload avatar</label>
+
+                            <input type="file" class="form-control" id="example-fileinput" name="Avatar">
+
+                        </div>
+                    </div>
+                </div> <!-- end row -->
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="example-date">Date of birth</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" type="date" name="DataBirth" id="example-date">
+                    </div>
+                </div>
+
+                <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-office-building mr-1"></i> Additional information</h5>
+                <div class="form-group">
+                    <label for="phone_number">US Telephone</label>
+                    <input type="tel" id="phone_number" class="form-control"
+                           maxlength="15"
+                           pattern="^\+(\d{3}\) \d{3}-\d{4}$"
+                           name="PhoneNumber">
+                    <span class="font-13 text-muted">e.g. (123) 456-7890</span>
+                </div>
 
 
 
 
-                        <script>
+                <script>
                                     const phoneNumberInput = document.getElementById('phone_number');
 
                                     phoneNumberInput.addEventListener('input', function() {
                                       const formattedNumber = phoneNumberInput.value.replace(/\D/g, '');
-                                      phoneNumberInput.value = formattedNumber.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+                                      phoneNumberInput.value = formattedNumber.replace(/(\d{3})(\d{3})(\d{5})/, '+($1) $2-$3');
                                     });
                                     </script>
 
 
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="companyname">Quote</label>
-                                    <input type="text" class="form-control" id="companyname" placeholder="Enter company name">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <form action="#" method="post">
-                                    <div class="form-group">
-                                        <label for="country">Country:</label>
-                                        <select id="country" name="country" class="form-control">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="companyname">Quote</label>
+                            <input type="text" class="form-control" id="companyname" placeholder="Enter company name" name="Quote">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        
+                            <div class="form-group">
+                                <label for="country">Country:</label>
+                                <select id="country" name="Country" class="form-control">
 
-                                            <option value="">Select the country...</option>
-                                            <option value="RU">Russia</option>
-                                            <option value="UA">Ukraine</option>
-                                            <option value="BY">Belarus</option>
-                                            <option value="MD">Moldova</option>
-                                            <option value="US">UNITED STATES</option>
-                                            <option value="UK">Britain</option>
-                                            <option value="OTHER">Other (Please Specify)</option>
-                                            <input type="text" id="otherCountryInput" name="otherCountry" class="form-control" style="display: none;" placeholder="Enter your country">
+                                    <option value="">Select the country...</option>
+                                    <option value="RU">Russia</option>
+                                    <option value="UA">Ukraine</option>
+                                    <option value="BY">Belarus</option>
+                                    <option value="MD">Moldova</option>
+                                    <option value="US">UNITED STATES</option>
+                                    <option value="UK">Britain</option>
+                                    <option value="OTHER">Other (Please Specify)</option>
+                                    <input type="text" id="otherCountryInput" name="Country" class="form-control" style="display: none;" placeholder="Enter your country">
 
-                                        </select>
-                                        <script>
+                                </select>
+                                <script>
                                                         document.getElementById("country").addEventListener("change", function () {
                                                             var countrySelect = document.getElementById("country");
                                                             var otherInput = document.getElementById("otherCountryInput");
@@ -224,105 +233,105 @@
                                                         });
 
                                                     </script>
-                                    </div>
-
-                                </form>
                             </div>
 
-                        </div> <!-- end row -->
-                        <br/>
-                        <br/>
-                        <div class="row">
-                            <h4 class="header-title">Your data will be displayed on your page for everyone. If you want to hide something, specify it below</h4>
+                       
+                    </div>
 
-                            <div class="col-md-6">
-                                <div class="mt-3">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                        <label class="custom-control-label" for="customCheck1">Your personal information can only be seen by your friends</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck2">
-                                        <label class="custom-control-label" for="customCheck2">Show everyone only basic information about you</label>
-                                    </div>
+                </div> <!-- end row -->
+                <br/>
+                <br/>
+                <div class="row">
+                    <h4 class="header-title">Your data will be displayed on your page for everyone. If you want to hide something, specify it below</h4>
 
-                                </div>
+                    <div class="col-md-6">
+                        <div class="mt-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck1" name="YPICOBSBYF">
+                                <label class="custom-control-label" for="customCheck1">Your personal information can only be seen by your friends</label>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mt-3">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                        <label class="custom-control-label" for="customCheck1">Hide your browsing history</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck2">
-                                        <label class="custom-control-label" for="customCheck2">Hide my grades</label>
-                                    </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck2" name="SEOBIAY">
+                                <label class="custom-control-label" for="customCheck2">Show everyone only basic information about you</label>
+                            </div>
 
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mt-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck3" name="HYBH">
+                                <label class="custom-control-label" for="customCheck3">Hide your browsing history</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck4" name="HMG">
+                                <label class="custom-control-label" for="customCheck4">Hide my grades</label>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+
+                <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth mr-1"></i> Social</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="social-fb">Facebook</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fab fa-facebook-square"></i></span>
                                 </div>
+                                <input type="text" class="form-control" id="social-fb" placeholder="Url" name="Facebook">
                             </div>
                         </div>
-                        <br/>
-                        <br/>
-
-                        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth mr-1"></i> Social</h5>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="social-fb">Facebook</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fab fa-facebook-square"></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" id="social-fb" placeholder="Url">
-                                    </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="social-tw">Twitter</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fab fa-twitter"></i></span>
                                 </div>
+                                <input type="text" class="form-control" id="social-tw" placeholder="Username" name="Twitter">
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="social-tw">Twitter</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fab fa-twitter"></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" id="social-tw" placeholder="Username">
-                                    </div>
-                                </div>
-                            </div> <!-- end col -->
+                        </div>
+                    </div> <!-- end col -->
 
-                        </div> <!-- end row -->
+                </div> <!-- end row -->
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="social-insta">Instagram</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fab fa-instagram"></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" id="social-insta" placeholder="Url">
-                                    </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="social-insta">Instagram</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fab fa-instagram"></i></span>
                                 </div>
+                                <input type="text" class="form-control" id="social-insta" placeholder="Url" name="Instagram">
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="social-sky">Skype</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fab fa-skype"></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" id="social-sky" placeholder="username">
-                                    </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="social-sky">Skype</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fab fa-skype"></i></span>
                                 </div>
-                            </div> <!-- end col -->
-                        </div> <!-- end row -->
+                                <input type="text" class="form-control" id="social-sky" placeholder="username" name="Skype">
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
 
 
-                        <div class="text-right">
-                            <button type="submit" class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Save</button>
-                        </div>
-                        </form>
-                        </div>
+                <div class="text-right">
+                    <button type="submit" name="submit" class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Save</button>
+                </div>
+            }
+            </div>
                                 <!-- end settings content-->
                             </div>
                         </div> <!-- end tab-content -->

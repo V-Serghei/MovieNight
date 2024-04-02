@@ -17,5 +17,6 @@ namespace MovieNight.BusinessLogic.Interface
         int? GetUserIdFromSession();
         UserE GetUserData(int? userId);
         PersonalProfileM GetPersonalProfileM(int? userId);
+        SuccessOfTheActivity EdProfInfo(ProfEditingE editing);
     }
 }

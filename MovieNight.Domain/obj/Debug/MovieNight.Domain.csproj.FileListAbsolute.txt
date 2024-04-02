@@ -16,3 +16,5 @@ D:\Projects\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.csproj.Core
 D:\Projects\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.csproj.CopyComplete
 D:\Projects\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.dll
 D:\Projects\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.pdb
+D:\web project\Movie\MovieNight\MovieNight.Domain\bin\Debug\AutoMapper.dll
+D:\web project\Movie\MovieNight\MovieNight.Domain\bin\Debug\AutoMapper.xml

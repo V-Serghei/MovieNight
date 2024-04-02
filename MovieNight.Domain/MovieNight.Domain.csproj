@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.10.0.0\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -50,12 +53,15 @@
     <Compile Include="Entities\MovieM\MovieBbTable.cs" />
     <Compile Include="Entities\MovieM\Poster.cs" />
     <Compile Include="Entities\MovieM\ViewingHistoryM.cs" />
+    <Compile Include="Entities\PersonalP\PEdBdTable.cs" />
     <Compile Include="Entities\PersonalP\PersonalInfoDbTable.cs" />
     <Compile Include="Entities\PersonalP\PersonalProfileM.cs" />
+    <Compile Include="Entities\PersonalP\ProfEditingE.cs" />
     <Compile Include="Entities\TimeD.cs" />
     <Compile Include="Entities\UserE.cs" />
     <Compile Include="Entities\UserId\LogInData.cs" />
     <Compile Include="Entities\UserId\RegData.cs" />
+    <Compile Include="Entities\UserId\SuccessOfTheActivity.cs" />
     <Compile Include="Entities\UserId\UserDbTable.cs" />
     <Compile Include="Entities\UserId\UserVerification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -66,6 +72,8 @@
       <Name>MovieNight.Helpers</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
