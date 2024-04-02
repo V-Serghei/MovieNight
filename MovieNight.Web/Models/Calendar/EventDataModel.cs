@@ -12,7 +12,7 @@ namespace MovieNight.Web.Models.Calendar
         public string category { get; set; }
 
         public string beginning { get; set; }
-        public string ending { get;}
+        public string ending { get; set; }
 
     }
 }

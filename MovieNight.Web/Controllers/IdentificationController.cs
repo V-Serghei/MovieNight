@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using MovieNight.BusinessLogic.Interface;
 using MovieNight.Domain.Entities.UserId;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace MovieNight.Web.Controllers
 {
@@ -21,32 +22,35 @@ namespace MovieNight.Web.Controllers
             var sesControlBl = new BusinessLogic.BusinessLogic();
             SessionUser = sesControlBl.Session();
         }
+
         [HttpPost]
-        public ActionResult LoginPost(LoginViewModel model)
+        public async Task<ActionResult> LoginPost(LoginViewModel model)
         {
-            
+             
             LogInData logD = new LogInData
             {
-                Username = model.Username,
+                Email = model.Username,
                 Password = model.Password,
                 RememberMe = model.RememberMe,
+                LoginTime = DateTime.Now,
+                Ip = Request.ServerVariables["REMOTE_ADDR"]
+
             };
-            UserVerification verification =  SessionUser.UserVerification(logD);
+            UserVerification verification = await SessionUser.UserVerification(logD);
             if (verification.IsVerified == true)
             {
-                SessionUser.SetUserSession(verification.UserId);
                 return RedirectToAction("PersonalProfile", "InformationSynchronization");
 
             }
-            else return View("Login");
+            else return View("Login",verification);
         }
 
         [HttpPost]
-        public ActionResult RegistPost(RegistViewModel rModel)
+        public async Task<ActionResult> RegistPost(RegistViewModel rModel)
         {
             RegData RegD = new RegData
             {
-                FullName = rModel.FullName,
+                UserName = rModel.UserName,
                 Password = rModel.Password,
                 Email = rModel.Email,
                 Checkbox = rModel.Checkbox,
@@ -55,22 +59,25 @@ namespace MovieNight.Web.Controllers
 
             };
 
-            UserRegister rUserVerification = SessionUser.UserAdd(RegD);
+            var rUserVerification = await SessionUser.UserAdd(RegD);
 
             if (rUserVerification.SuccessUniq == true)
             {
-                SessionUser.SetUserSession(rUserVerification.UserId);
-                if (SessionUser.UserСreation(RegD)) return RedirectToAction("PersonalProfile", "InformationSynchronization");
-                //error reporting 
-                else return View("Register");
+                
+                if (SessionUser.UserСreation(RegD))
+                {
+                    return RedirectToAction("PersonalProfile", "InformationSynchronization");
+                }
+                else
+                {
+                    rUserVerification.StatusMsg = "DATABASE ERROR";
+                    return View("Register", rUserVerification); 
+                }
             }
             else
             {
-                //think about how to add an error message
-                return View("Register");
+                return View("Register", rUserVerification); 
             }
-
-            return View("Register");
         }
 
         // GET: Identification

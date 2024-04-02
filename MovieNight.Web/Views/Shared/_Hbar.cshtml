@@ -176,10 +176,21 @@
 
         @if (HttpContext.Current.Session["UserId"] !=null)
         {
-            
-            <li class="dropdown notification-list">
+
+
+
+                <li class="dropdown notification-list">
                 <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                    <img src="/images/users/photo_2023-03-30_21-08-09.jpg" alt="user-image" class="rounded-circle">
+                    @if (HttpContext.Current.Session["Avatar"] == null)
+                    {
+                        <img src="/images/users/default_avatar.png" alt="user-image" class="rounded-circle">
+                    }
+                    else
+                    {
+                        var avatarPath = (string)HttpContext.Current.Session["Avatar"];
+                        <img src="@avatarPath" alt="user-image" class="rounded-circle">
+                    }
+
                     <span class="pro-user-name ml-1">
                         @HttpContext.Current.Session["UserName"] <i class="mdi mdi-chevron-down"></i>
                     </span>
@@ -194,7 +205,7 @@
                         <span>My Account</span>
                     </a>
 
-                    <a href=@Url.Action("ProfileConfiguration","Setting") class="dropdown-item notify-item">
+                    <a href=@Url.Action("ProfileEditing","InformationSynchronization") class="dropdown-item notify-item">
                         <i class="mdi mdi-settings"></i>
                         <span>Settings</span>
                     </a>

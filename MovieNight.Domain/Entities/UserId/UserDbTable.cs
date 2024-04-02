@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MovieNight.Domain.enams;
+using MovieNight.Domain.Entities.PersonalP;
 
 namespace MovieNight.Domain.Entities.UserId
 {
@@ -39,9 +40,11 @@ namespace MovieNight.Domain.Entities.UserId
 
         public bool Checkbox { get; set; }
 
+        public string Salt { get; set; }
 
+        public int PEdBdTableId { get; set; }
 
-
+        public virtual PEdBdTable PEdBdTable { get; set; }
 
 
     }

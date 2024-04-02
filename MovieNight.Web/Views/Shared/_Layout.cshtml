@@ -13,6 +13,8 @@
 
     <!-- App css -->
 
+
+
     @Styles.Render("~/bundles/bootstrap/css")
     @Styles.Render("~/bundles/icons/css")
     @Styles.Render("~/bundles/app/css")
@@ -20,38 +22,43 @@
     @* friends styles *@
     @Styles.Render("~/bundles/custombox/css")
 
-            @* friends styles *@
-            @Styles.Render("~/bundles/custombox/css")
-            @* viewed list *@
-            @Styles.Render("~/bundles/dataTables_bootstrap4/css")
-            @Styles.Render("~/bundles/dataTables_responsive_bootstrap4/css")
-            @Styles.Render("~/bundles/dataTables_buttons_bootstrap4/css")
-            @Styles.Render("~/bundles/dataTables_select_bootstrap4/css")
-            @* STATISTIC *@
-            @Styles.Render("~/bundles/jquery_jvectormap_1_2_2/css")
-            @* News *@
-            @Styles.Render("~/bundles/magnific_popup/css")
-            @* Are watching *@
-            @Styles.Render("~/bundles/magnific_popup/css")
-          
-            @Styles.Render("~/bundles/bootstrap/css")
-            @Styles.Render("~/bundles/icons/css")
-            @Styles.Render("~/bundles/app/css")
-            @Styles.Render("~/bundles/slider/css")
-           @* @Styles.Render("~/bundles/new/css")*@
-            @* friends styles *@
-            @Styles.Render("~/bundles/custombox/css")
+    @* friends styles *@
+    @Styles.Render("~/bundles/custombox/css")
+    @* viewed list *@
+    @Styles.Render("~/bundles/dataTables_bootstrap4/css")
+    @Styles.Render("~/bundles/dataTables_responsive_bootstrap4/css")
+    @Styles.Render("~/bundles/dataTables_buttons_bootstrap4/css")
+    @Styles.Render("~/bundles/dataTables_select_bootstrap4/css")
+    @* STATISTIC *@
+    @Styles.Render("~/bundles/jquery_jvectormap_1_2_2/css")
+    @* News *@
+    @Styles.Render("~/bundles/magnific_popup/css")
+    @* Are watching *@
+    @Styles.Render("~/bundles/tablesaw/css")
 
-            @* calendar *@
-            @Styles.Render("~/bundles/fullcalendar/css")
+    @Styles.Render("~/bundles/bootstrap/css")
+    @Styles.Render("~/bundles/icons/css")
+    @Styles.Render("~/bundles/app/css")
+    @Styles.Render("~/bundles/slider/css")
+    @* @Styles.Render("~/bundles/new/css")*@
+    @* friends styles *@
+    @Styles.Render("~/bundles/custombox/css")
 
-            @* email *@
-            @Styles.Render("~/bundles/summernote_bs4/css")
+    @* calendar *@
+    @Styles.Render("~/bundles/fullcalendar/css")
+
+    @* email *@
+    @Styles.Render("~/bundles/summernote_bs4/css")
+    @Styles.Render("~/bundles/dropzone/css")
+  
+  
 
 
-            @if (IsSectionDefined("Styles"))
+
+
+    @if (IsSectionDefined("Styles"))
     {
-            @RenderSection("Styles", required: false)
+        @RenderSection("Styles", required: false)
     }
 
 
@@ -75,7 +82,7 @@
                 @Html.Partial("_Footer")
             </footer>
         </div>
-        
+
         <div class="right-bar">
             @Html.Partial("_Rbar")
         </div>
@@ -83,10 +90,7 @@
 
         @Scripts.Render("~/bundles/vendor/js")
         @Scripts.Render("~/bundles/app/js")
-        @Scripts.Render("~/bundles/AdditionalScripts/js")
-        @*friends scripts*@
-        @Scripts.Render("~/bundles/custombox/js")
-        @* viewed list *@
+
         @Scripts.Render("~/bundles/jquery_dataTables_min/js")
         @Scripts.Render("~/bundles/dataTables_bootstrap4/js")
         @Scripts.Render("~/bundles/dataTables_responsive/js")
@@ -102,7 +106,6 @@
         @Scripts.Render("~/bundles/vfs_fonts/js")
         @Scripts.Render("~/bundles/datatables_init/js")
 
-        @* STATISTIC *@
         @Scripts.Render("~/bundles/apexcharts_min/js")
         @Scripts.Render("~/bundles/jquery_sparkline_min/js")
         @Scripts.Render("~/bundles/jquery_jvectormap_1_2_2/js")
@@ -110,38 +113,47 @@
         @Scripts.Render("~/bundles/peity_min/js")
         @Scripts.Render("~/bundles/dashboard_init/js")
 
-        @* News *@
         @Scripts.Render("~/bundles/jquery.magnific_popup_min/js")
         @Scripts.Render("~/bundles/gallery_init/js")
 
-                @* Are watching *@
-                @Scripts.Render("~/bundles/tablesaw/js")
-                @Scripts.Render("~/bundles/tablesaw_init/js")
-                @*calendar*@
-                @Scripts.Render("~/bundles/moment/js")
-                @Scripts.Render("~/bundles/jquery-ui/js")
-                @Scripts.Render("~/bundles/fullcalendar/js")
-                @Scripts.Render("~/bundles/calendar_init/js")
+        @Scripts.Render("~/bundles/tablesaw/js")
+        @Scripts.Render("~/bundles/tablesaw_init/js")
 
-                @*Inbox*@
-                @Scripts.Render("~/bundles/inbox/js")
-                @Scripts.Render("~/bundles/summernote_bs4/js")
+        @Scripts.Render("~/bundles/moment/js")
+        @Scripts.Render("~/bundles/jquery-ui/js")
+        @Scripts.Render("~/bundles/fullcalendar/js")
+        @Scripts.Render("~/bundles/calendar_init/js")
 
-                <script>
-                    jQuery(document).ready(function () {
-                        $('.summernote').summernote({
-                            height: 230,                 // set editor height
-                            minHeight: null,             // set minimum height of editor
-                            maxHeight: null,             // set maximum height of editor
-                            focus: false                 // set focus to editable area after initializing summernote
-                        });
-                    });
-                </script>
+        @Scripts.Render("~/bundles/inbox/js")
+        @Scripts.Render("~/bundles/summernote_bs4/js")
+
+        @Scripts.Render("~/bundles/dropzone/js")
+        @Scripts.Render("~/bundles/fileuploads/js")
+
+        @Scripts.Render("~/bundles/form-advanced/js")
+
+        <script>
+    jQuery(document).ready(function () {
+        $('.summernote').summernote({
+            height: 230,
+            minHeight: null,
+            maxHeight: null,
+            focus: false
+        });
+    });
+</script>
+
+
+
+
 
 
         @RenderSection("scripts", required: false)
     </div>
 
-        </body>
-        </html>
+
+</body>
+
+</html>
+
 

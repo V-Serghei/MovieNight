@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.10.0.0\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -58,9 +61,26 @@
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="Interface\IMail\IInbox.cs" />
     <Compile Include="Interface\ISession.cs" />
+    <Compile Include="Migrations\202403292243475_InitialCreate.cs" />
+    <Compile Include="Migrations\202403292243475_InitialCreate.designer.cs">
+      <DependentUpon>202403292243475_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202403312045151_InitialMigration.cs" />
+    <Compile Include="Migrations\202403312045151_InitialMigration.designer.cs">
+      <DependentUpon>202403312045151_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202403312051232_InitialMigration1.cs" />
+    <Compile Include="Migrations\202403312051232_InitialMigration1.designer.cs">
+      <DependentUpon>202403312051232_InitialMigration1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202403312055288_NewInitialMigration.cs" />
+    <Compile Include="Migrations\202403312055288_NewInitialMigration.designer.cs">
+      <DependentUpon>202403312055288_NewInitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session\MailS\InboxS.cs" />
-    <Compile Include="Session\SessionLog.cs" />
+    <Compile Include="Session\SessionBL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MovieNight.Domain\MovieNight.Domain.csproj">
@@ -79,6 +99,20 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202403292243475_InitialCreate.resx">
+      <DependentUpon>202403292243475_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202403312045151_InitialMigration.resx">
+      <DependentUpon>202403312045151_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202403312051232_InitialMigration1.resx">
+      <DependentUpon>202403312051232_InitialMigration1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202403312055288_NewInitialMigration.resx">
+      <DependentUpon>202403312055288_NewInitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

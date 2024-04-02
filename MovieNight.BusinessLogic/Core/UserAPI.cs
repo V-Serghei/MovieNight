@@ -12,98 +12,228 @@ using MovieNight.Domain.Entities.DifferentE;
 
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.PersonalP;
+using System.Security.Cryptography;
+using System.Text.RegularExpressions;
+using System.Data.Entity;
+using System.Xml.Linq;
+using System.Web;
+using AutoMapper;
 
 namespace MovieNight.BusinessLogic.Core
 {
     public class UserApi
     {
-        public UserVerification GetUserVerification(LogInData logInData)
+        // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        //  - > password-related methods     
+        //  |  |  |  |  |  |  |  |  |  |  |  |
+        // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
+        public string HashPassword(string password, string salt)
         {
+            var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, Encoding.UTF8.GetBytes(salt), 10000);
 
+            var hashedPassword = Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(24));
+            return hashedPassword;
+        }
+
+        public bool VerifyPassword(string providedPassword, string storedHash, string salt)
+        {
+            var newHash = HashPassword(providedPassword, salt);
+            return newHash == storedHash;
+        }
+        
+        private string GetRandSalt()
+        {
+            var rng = new RNGCryptoServiceProvider();
+            var salt = new byte[16];
+            rng.GetBytes(salt);
+            return Convert.ToBase64String(salt);
+
+        }
+
+        // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        //
+        //           - > login  < -   
+        //  
+        // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
+
+        public bool IsValid(LogInData rData)
+        {
+            if (string.IsNullOrEmpty(rData.Password) || string.IsNullOrEmpty(rData.Email))
+                return false;
+
+            // Regex for email validation
+            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            if (!emailRegex.IsMatch(rData.Email))
+                return false;
+
+            // Minimum password length
+            if (rData.Password.Length < 10)
+                return false;
+
+            return true;
+        }
+
+        public async Task<UserVerification> GetUserVerification(LogInData logInData)
+        {
             //check if user exist
+            var userL = new UserVerification();
+
+            if (!IsValid(logInData))
+            {
+                userL.StatusMsg = "Invalid data";
+                userL.IsVerified = false;
+                return userL;
+            }
 
             using (var db = new UserContext())
             {
-                var user = db.UsersT.FirstOrDefault(u=> u.UserName == logInData.Username);
+                var userExists = await db.UsersT.FirstOrDefaultAsync(u => u.Email == logInData.Email);
+
+                if (userExists == null)
+                {
+                        userL.StatusMsg = "You have entered unrecorded mail";
+                        userL.IsVerified = false;
+                    return userL;
+                }else if (!VerifyPassword(logInData.Password, userExists.Password, userExists.Salt))
+                {
+                    userL.StatusMsg = "You entered the wrong password";
+                    userL.IsVerified = false;
+                    return userL;
+                }
+                else
+                {
+                    userL.StatusMsg = "Success";
+                    userL.IsVerified = true;
+                    userL.UserId = userExists.Id;
+                    userL.LogInData = logInData;
+                    HttpContext.Current.Session["UserId"] = userExists.Id;
+                    HttpContext.Current.Session["UserName"] = userExists.UserName;
+                    return userL;
+                }
             }
-            object ss = null;
 
-
-
-            var exUserAip = new UserVerification();
-            //database search logic
-
-            if(logInData.Username == "vistovschii@gmail.com" && logInData.Password == "1111") 
-            {
-                exUserAip.IsVerified = true;
-                exUserAip.LogInData = logInData;
-            }else
-            {
-                exUserAip.IsVerified = false;
-            }
-            return exUserAip;
         }
 
-        public UserRegister AddNewUserSuccess(RegData rData)
+
+        // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        //
+        //       - > registration  < -   
+        //  
+        // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
+        public bool IsValid(RegData rData)
         {
-            var exUserAip = new UserRegister();
+            if (string.IsNullOrEmpty(rData.UserName) || string.IsNullOrEmpty(rData.Password) || string.IsNullOrEmpty(rData.Email))
+                return false;
 
-            //check the database for such a user
+            // Regex for email validation
+            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            if (!emailRegex.IsMatch(rData.Email))
+                return false;
 
-            if (rData.FullName != "" && rData.Password != "" && rData.Email != "")
+            // Minimum password length
+            if (rData.Password.Length < 10)
+                return false;
+
+            return true;
+        }
+
+        public async Task<UserRegister> AddNewUserSuccess(RegData rData)
+        {
+            var userRegister = new UserRegister();
+
+            if (!IsValid(rData))
             {
-                exUserAip.SuccessUniq = true;
+                userRegister.StatusMsg = "Invalid data";
+                userRegister.SuccessUniq = false;
+                return userRegister;
             }
-            else exUserAip.SuccessUniq = false;
-            return exUserAip;
+
+            using (var db = new UserContext())
+            {
+                var userExists = await db.UsersT.FirstOrDefaultAsync(u => u.UserName == rData.UserName || u.Email == rData.Email);
+
+                if (userExists != null)
+                {
+                    if (userExists.UserName == rData.UserName)
+                        userRegister.StatusMsg = "Username already taken";
+                    else
+                        userRegister.StatusMsg = "Email already in use";
+
+                    return userRegister;
+                }
+            }
+
+            userRegister.SuccessUniq = true;
+            userRegister.StatusMsg = "Success";
+            return userRegister;
         }
 
         public bool UserAdding(RegData rData)
         {
             //add user to database
+
             var user = new UserDbTable()
             {
-                UserName = rData.FullName,
-                Password = rData.Password,
+                UserName = rData.UserName,
                 Email = rData.Email,
                 LastLoginDate = rData.RegDateTime,
                 LastIp = rData.Ip,
                 Role = LevelOfAccess.User,
-                Checkbox = rData.Checkbox
+                Checkbox = rData.Checkbox,
+                Salt = GetRandSalt()
+                
 
             };
-            using (var db = new UserContext())
-            {
-                var us = db.UsersT.FirstOrDefault(u => u.UserName == rData.FullName);
-            }
+            user.Password = HashPassword(rData.Password, user.Salt);
+           
 
             using (var db = new UserContext())
             {
-                db.UsersT.Add(user);
-                db.SaveChanges();
-            }
+                try
+                {
 
-            if (rData.FullName != null && rData.Password != null && rData.Email != null)
-            {
-                return true;
+                    db.UsersT.Add(user);
+                    db.SaveChanges();
+                    HttpContext.Current.Session["UserId"] = user.Id;
+                    HttpContext.Current.Session["UserName"] = user.UserName;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
             }
-            return false;
         }
+
+
+
+        // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        //
+        //        - > user read  < -   
+        //  
+        // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
+
         public UserE GetUserDataFromDatabase(int? userId)
         {
-            // Fetch user data from database 
-            UserE userE = null;
-            if (userId != null)
-            {
-                userE = new UserE
-                {
-                    Name = "Nelly",
-                    Email = "Nelly@gmail.com",
-                    //Id = userId,
-                    Password = "1111"
 
-                };
+
+            var userE = new UserE();
+            if (userId == null) return userE;
+
+            using (var db = new UserContext())
+            {
+                var userExists = db.UsersT.FirstOrDefault(u => u.Id == userId);
+
+                if (userExists != null)
+                {
+                    userE.Email = userExists.Email;
+                    userE.Password = userExists.Password;
+                    userE.Id = userExists.Id;
+                    userE.Username = userExists.UserName;
+                    return userE;
+                }
             }
+        
 
             return userE;
         }
@@ -112,13 +242,14 @@ namespace MovieNight.BusinessLogic.Core
         {
             //search the database
 
+
             PersonalProfileM personalProfileM = new PersonalProfileM
             {
                 Avatar = "~/images/users/photo_2023-03-30_21-08-09.jpg",
                 BUserE = new UserE
                 {
-                    Email = GetUserDataFromDatabase(userId).Email,
-                    Name = GetUserDataFromDatabase(userId).Name,
+                    Email = GetUserDataFromDatabase(userId).Email, 
+                    Username= GetUserDataFromDatabase(userId).Username,
                 },
                 Quote = "Movie fan",
                 AboutMe = "I’m Nelly and I love watching movies. Especially anime. For me, nothing is better than anime. Yes, and I’m also a cool IT girl and designer. And I’m also a master. I can do everything. " +
@@ -179,16 +310,82 @@ namespace MovieNight.BusinessLogic.Core
                         Path = "~/images/index2.jpg",
                     },
                     Star = i+4,
-                    ViewingTime = new TimeD
-                    {
-                        Day = 02+i,
-                        Month = 03+i,
-                        Year = 2024
-                    },
+                    ViewingTime = DateTime.Now
+                   
                 });
             }
 
             return personalProfileM;
         }
+        // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+        //
+        //        - > user editing  < -   
+        //  
+        // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
+
+
+
+        public UserDbTable GetCurrentLoggedInUserDb()
+        {
+            var userId = GetUserId(); 
+
+            using (var db = new UserContext())
+            {
+                return db.UsersT.FirstOrDefault(u => u.Id == userId);
+            }
+        }
+
+        internal int? GetUserId()
+        {
+            if (HttpContext.Current?.Session != null)
+            {
+                return (int?)HttpContext.Current.Session["UserId"];
+            }
+            return null;
+        }
+
+        public SuccessOfTheActivity EditingProfileData(ProfEditingE editing)
+        {
+            var result = new SuccessOfTheActivity();
+            var currentUser = GetCurrentLoggedInUserDb();
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ProfEditingE, PEdBdTable>()
+                    .ForMember(dest => dest.Id, opt => opt.Ignore());
+            });
+
+            var mapper = config.CreateMapper();
+            using (var db = new UserContext())
+            {
+                try
+                {
+                    var existingProfile = db.PEdBdTables.FirstOrDefault(u => u.User.Id == currentUser.Id);
+
+                    if (existingProfile != null)
+                    {
+                        mapper.Map(editing, existingProfile);
+                    }
+                    else
+                    {
+                        var newProfile = new PEdBdTable { User = currentUser };
+                        mapper.Map(editing, newProfile);
+                        db.PEdBdTables.Add(newProfile);
+                    }
+
+                    db.SaveChanges();
+                    result.Successes = true;
+                    result.Msg = "Successful retention in the database!";
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    result.Successes = false;
+                    result.Msg = ex.Message;
+                    return result;
+                }
+            }
+        }
+
+
     }
 }

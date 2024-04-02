@@ -1,4 +1,5 @@
-﻿using MovieNight.Domain.Entities.UserId;
+﻿using MovieNight.Domain.Entities.PersonalP;
+using MovieNight.Domain.Entities.UserId;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -8,13 +9,23 @@ using System.Threading.Tasks;
 
 namespace MovieNight.BusinessLogic.DBModel
 {
-    public class UserContext :DbContext
+    public class UserContext : DbContext
     {
-        public UserContext():base ("name=MovieNight") 
-        { 
+        public UserContext() : base("name=MovieNight")
+        {
 
         }
 
         public virtual DbSet<UserDbTable> UsersT { get; set; }
+        public virtual DbSet<PEdBdTable> PEdBdTables { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserDbTable>()
+                .HasOptional(u => u.PEdBdTable) 
+                .WithRequired(p => p.User);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

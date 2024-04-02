@@ -22,16 +22,7 @@ namespace MovieNight.Web.Controllers
         public ActionResult Index()
         {
 
-            var uData = new LogInData
-            {
-                Username = "sitavls",
-                Password = "hardmodnais1212",
-                Ip = "0.0.0.0",
-                LoginTime = DateTime.Now
 
-            };
-
-            UserVerification veer = SessionUser.UserVerification(uData);
 
             return View();
         }

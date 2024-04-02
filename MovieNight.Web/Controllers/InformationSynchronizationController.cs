@@ -11,19 +11,28 @@ using MovieNight.Web.Models;
 using MovieNight.Web.Models.Different;
 using MovieNight.Web.Models.Movie;
 using MovieNight.Web.Models.PersonalP;
+using AutoMapper;
+using MovieNight.Domain.Entities.UserId;
 
 namespace MovieNight.Web.Controllers
 {
     public class InformationSynchronizationController : Controller
     {
         internal ISession SessionUser;
+        private readonly IMapper _mapper;
         public InformationSynchronizationController()
         {
             var sesControlBl = new BusinessLogic.BusinessLogic();
             SessionUser = sesControlBl.Session();
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<PEditingM, ProfEditingE>(); 
+            });
+            _mapper = config.CreateMapper();
         }
 
         // GET: InformationSynchronization
+        [HttpGet]
         public ActionResult PersonalProfile()
         {
             if (SessionUser.GetUserIdFromSession() == null)
@@ -43,7 +52,7 @@ namespace MovieNight.Web.Controllers
                     BUserModel = new UserModel
                     {
                         Email = personalProfileM.BUserE.Email,
-                        Name = personalProfileM.BUserE.Name,
+                        Username = personalProfileM.BUserE.Username,
                     },
                     Location = personalProfileM.Location,
                     Quote = personalProfileM.Quote,
@@ -118,14 +127,44 @@ namespace MovieNight.Web.Controllers
            
         }
 
+        [HttpGet]
         public ActionResult UserTemplatePage()
         {
             return View();
         }
 
+        [HttpGet]
         public ActionResult MovieTemplatePage()
         {
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult ProfileEditing()
+        {
+
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ProfileEdit(PEditingM profEd)
+        {
+
+
+            var profEdBl = _mapper.Map<ProfEditingE>(profEd);
+
+            SuccessOfTheActivity _success = SessionUser.EdProfInfo(profEdBl);
+            if (_success.Successes == true)
+            {
+                return RedirectToAction("PersonalProfile", "InformationSynchronization");
+            }
+            else
+            {
+
+                return View("ProfileEditing",_success);
+            }
         }
     }
 }

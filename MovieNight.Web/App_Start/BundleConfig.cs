@@ -51,8 +51,6 @@ namespace MovieNight.Web
                          "~/vendor/datatables/dataTables.bootstrap4.js"));
             bundles.Add(new ScriptBundle("~/bundles/dataTables_responsive/js").Include(
                      "~/vendor/datatables/dataTables.responsive.min.js"));
-            bundles.Add(new ScriptBundle("~/bundles/dataTables_responsive/js").Include(
-                     "~/vendor/datatables/dataTables.responsive.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/dataTables_bootstrap4_min/js").Include(
                      "~/vendor/datatables/responsive.bootstrap4.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/dataTables_buttons_min/js").Include(
@@ -104,7 +102,7 @@ namespace MovieNight.Web
 
             //Are watching
 
-            bundles.Add(new StyleBundle("~/bundles/magnific_popup/css").Include(
+            bundles.Add(new StyleBundle("~/bundles/tablesaw/css").Include(
                     "~/vendor/tablesaw/tablesaw.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new ScriptBundle("~/bundles/tablesaw/js").Include(
@@ -140,6 +138,33 @@ namespace MovieNight.Web
                "~/vendor/summernote/summernote-bs4.min.js"));
             bundles.Add(new StyleBundle("~/bundles/summernote_bs4/css").Include(
                "~/vendor/summernote/summernote-bs4.css", new CssRewriteUrlTransform()));
+
+            //file
+            bundles.Add(new StyleBundle("~/bundles/dropzone/css").Include(
+                "~/vendor/dropzone/dropzone.min.css", new CssRewriteUrlTransform()));
+            
+            bundles.Add(new ScriptBundle("~/bundles/dropzone/js").Include(
+                    "~/vendor/dropzone/dropzone.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/fileuploads/js").Include(
+                    "~/scripts/pages/form-fileuploads.init.js"));
+
+
+          
+
+            bundles.Add(new ScriptBundle("~/bundles/form-advanced/js").Include(
+                "~/scripts/pages/form-advanced.init.js"));
+
+
+
+
+
+
+
+
+
+
+
+
         }
     }
 }

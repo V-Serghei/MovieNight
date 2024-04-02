@@ -14,7 +14,7 @@ namespace MovieNight.BusinessLogic
     {
         public ISession Session()
         {
-            return new SessionLog();
+            return new SessionBL();
         }
         public IInbox GetInbox()
         {

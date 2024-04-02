@@ -46,6 +46,9 @@
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.10.0.0\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -426,6 +429,7 @@
     <Content Include="images\users\avatar-7.jpg" />
     <Content Include="images\users\avatar-8.jpg" />
     <Content Include="images\users\avatar-9.jpg" />
+    <Content Include="images\users\default_avatar.png" />
     <Content Include="images\users\photo_2023-03-30_21-08-09.jpg" />
     <Content Include="images\Zac_Efron.jpg" />
     <Content Include="scripts\app.js" />
@@ -513,8 +517,31 @@
     <Content Include="scripts\vendor.min.js" />
     <Content Include="vendor\AdditionalScripts.js" />
     <Content Include="vendor\apexcharts\apexcharts.min.js" />
+    <Content Include="vendor\bootstrap-colorpicker\bootstrap-colorpicker.min.css" />
+    <Content Include="vendor\bootstrap-colorpicker\bootstrap-colorpicker.min.js" />
+    <Content Include="vendor\bootstrap-datepicker\bootstrap-datepicker.min.css" />
+    <Content Include="vendor\bootstrap-datepicker\bootstrap-datepicker.min.js" />
+    <Content Include="vendor\bootstrap-daterangepicker\daterangepicker.css" />
+    <Content Include="vendor\bootstrap-daterangepicker\daterangepicker.js" />
+    <Content Include="vendor\bootstrap-select\bootstrap-select.min.css" />
+    <Content Include="vendor\bootstrap-select\bootstrap-select.min.js" />
+    <Content Include="vendor\bootstrap-tagsinput\bootstrap-tagsinput.css" />
+    <Content Include="vendor\bootstrap-tagsinput\bootstrap-tagsinput.min.js" />
+    <Content Include="vendor\bootstrap-touchspin\jquery.bootstrap-touchspin.min.css" />
+    <Content Include="vendor\bootstrap-touchspin\jquery.bootstrap-touchspin.min.js" />
+    <Content Include="vendor\c3\c3.min.css" />
+    <Content Include="vendor\c3\c3.min.js" />
+    <Content Include="vendor\chart-js\Chart.bundle.min.js" />
+    <Content Include="vendor\chartist\chartist-plugin-tooltip.min.js" />
+    <Content Include="vendor\chartist\chartist.min.css" />
+    <Content Include="vendor\chartist\chartist.min.js" />
+    <Content Include="vendor\clockpicker\bootstrap-clockpicker.min.css" />
+    <Content Include="vendor\clockpicker\bootstrap-clockpicker.min.js" />
     <Content Include="vendor\custombox.min.css" />
     <Content Include="vendor\custombox.min.js" />
+    <Content Include="vendor\custombox\custombox.min.css" />
+    <Content Include="vendor\custombox\custombox.min.js" />
+    <Content Include="vendor\d3\d3.min.js" />
     <Content Include="vendor\datatables\buttons.bootstrap4.css" />
     <Content Include="vendor\datatables\buttons.bootstrap4.min.js" />
     <Content Include="vendor\datatables\buttons.flash.min.js" />
@@ -530,7 +557,36 @@
     <Content Include="vendor\datatables\responsive.bootstrap4.css" />
     <Content Include="vendor\datatables\responsive.bootstrap4.min.js" />
     <Content Include="vendor\datatables\select.bootstrap4.css" />
+    <Content Include="vendor\dropzone\dropzone.min.css" />
+    <Content Include="vendor\dropzone\dropzone.min.js" />
+    <Content Include="vendor\flot-charts\jquery.flot.crosshair.js" />
+    <Content Include="vendor\flot-charts\jquery.flot.js" />
+    <Content Include="vendor\flot-charts\jquery.flot.orderBars.js" />
+    <Content Include="vendor\flot-charts\jquery.flot.pie.js" />
+    <Content Include="vendor\flot-charts\jquery.flot.resize.js" />
+    <Content Include="vendor\flot-charts\jquery.flot.selection.js" />
+    <Content Include="vendor\flot-charts\jquery.flot.stack.js" />
+    <Content Include="vendor\flot-charts\jquery.flot.time.js" />
+    <Content Include="vendor\flot-charts\jquery.flot.tooltip.min.js" />
+    <Content Include="vendor\footable\footable.all.min.js" />
+    <Content Include="vendor\footable\footable.core.min.css" />
+    <Content Include="vendor\gmaps\gmaps.min.js" />
+    <Content Include="vendor\hopscotch\hopscotch.min.css" />
+    <Content Include="vendor\hopscotch\hopscotch.min.js" />
+    <Content Include="vendor\ion-rangeslider\ion.rangeSlider.css" />
+    <Content Include="vendor\ion-rangeslider\ion.rangeSlider.min.js" />
+    <Content Include="vendor\jquery-countdown\jquery.countdown.min.js" />
+    <Content Include="vendor\jquery-knob\jquery.knob.min.js" />
+    <Content Include="vendor\jquery-mapael\jquery.mapael.min.js" />
+    <Content Include="vendor\jquery-mapael\usa_states.min.js" />
+    <Content Include="vendor\jquery-mapael\world_countries.min.js" />
+    <Content Include="scripts\pages\jquery.mask.min.js" />
+    <Content Include="vendor\jquery-quicksearch\jquery.quicksearch.min.js" />
+    <Content Include="vendor\jquery-scrollto\jquery.scrollTo.min.js" />
     <Content Include="vendor\jquery-sparkline\jquery.sparkline.min.js" />
+    <Content Include="vendor\jquery-tabledit\jquery.tabledit.min.js" />
+    <Content Include="vendor\jquery-toast\jquery.toast.min.css" />
+    <Content Include="vendor\jquery-toast\jquery.toast.min.js" />
     <Content Include="vendor\jquery-vectormap\jquery-jvectormap-1.2.2.css" />
     <Content Include="vendor\jquery-vectormap\jquery-jvectormap-1.2.2.min.js" />
     <Content Include="vendor\jquery-vectormap\jquery-jvectormap-au-mill-en.js" />
@@ -540,23 +596,51 @@
     <Content Include="vendor\jquery-vectormap\jquery-jvectormap-us-il-chicago-mill-en.js" />
     <Content Include="vendor\jquery-vectormap\jquery-jvectormap-us-merc-en.js" />
     <Content Include="vendor\jquery-vectormap\jquery-jvectormap-world-mill-en.js" />
+    <Content Include="vendor\katex\katex.min.js" />
     <Content Include="vendor\magnific-popup\jquery.magnific-popup.min.js" />
     <Content Include="vendor\magnific-popup\magnific-popup.css" />
     <Content Include="vendor\fullcalendar\fullcalendar.min.css" />
     <Content Include="vendor\fullcalendar\fullcalendar.min.js" />
     <Content Include="vendor\jquery-ui\jquery-ui.min.js" />
     <Content Include="vendor\moment\moment.min.js" />
+    <Content Include="vendor\morris-js\morris.min.js" />
+    <Content Include="vendor\multiselect\jquery.multi-select.js" />
+    <Content Include="vendor\multiselect\multi-select.css" />
     <Content Include="vendor\myStyle.css" />
+    <Content Include="vendor\nestable2\jquery.nestable.min.css" />
+    <Content Include="vendor\nestable2\jquery.nestable.min.js" />
+    <Content Include="vendor\parsleyjs\parsley.min.js" />
     <Content Include="vendor\pdfmake\pdfmake.min.js" />
     <Content Include="vendor\pdfmake\vfs_fonts.js" />
     <Content Include="vendor\peity\jquery.peity.min.js" />
+    <Content Include="vendor\quill\quill.bubble.css" />
+    <Content Include="vendor\quill\quill.core.css" />
+    <Content Include="vendor\quill\quill.min.js" />
+    <Content Include="vendor\quill\quill.snow.css" />
+    <Content Include="vendor\raphael\raphael.min.js" />
+    <Content Include="vendor\rwd-table\rwd-table.min.css" />
+    <Content Include="vendor\rwd-table\rwd-table.min.js" />
+    <Content Include="vendor\select2\select2.min.css" />
+    <Content Include="vendor\select2\select2.min.js" />
     <Content Include="vendor\summernote\summernote-bs4.css" />
     <Content Include="vendor\summernote\summernote-bs4.min.js" />
+    <Content Include="vendor\sweetalert2\sweetalert2.min.css" />
+    <Content Include="vendor\sweetalert2\sweetalert2.min.js" />
+    <Content Include="vendor\switchery\switchery.min.css" />
+    <Content Include="vendor\switchery\switchery.min.js" />
+    <Content Include="vendor\tablesaw\tablesaw.css" />
+    <Content Include="vendor\tablesaw\tablesaw.js" />
+    <Content Include="vendor\treeview\jstree.min.js" />
+    <Content Include="vendor\treeview\style.css" />
+    <Content Include="vendor\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
+    <Content Include="vendor\x-editable\bootstrap-editable.css" />
+    <Content Include="vendor\x-editable\bootstrap-editable.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DataTransferController.cs" />
     <Compile Include="Controllers\InformationSynchronizationController.cs" />
     <Compile Include="Controllers\IdentificationController.cs" />
@@ -575,7 +659,9 @@
     <Compile Include="Models\Mail\InboxModel.cs" />
     <Compile Include="Models\Movie\ListOfFilmsModel.cs" />
     <Compile Include="Models\Movie\PosterModel.cs" />
+    <Compile Include="Models\Movie\UploadMovieFileModel.cs" />
     <Compile Include="Models\Movie\ViewingHistoryModel.cs" />
+    <Compile Include="Models\PersonalP\PEditingM.cs" />
     <Compile Include="Models\PersonalP\PersonalProfilModel.cs" />
     <Compile Include="Models\RegistViewModel.cs" />
     <Compile Include="Models\TimeModel.cs" />
@@ -672,6 +758,8 @@
     <Content Include="Views\DataTransfer\SentMail.cshtml" />
     <Content Include="Views\DataTransfer\Trash.cshtml" />
     <Content Include="Views\SearchSortAdd\FriendsMovies.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\InformationSynchronization\ProfileEditing.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -681,6 +769,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="uploads\" />
+    <Folder Include="vendor\jquery-mask-plugin\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MovieNight.BusinessLogic\MovieNight.BusinessLogic.csproj">

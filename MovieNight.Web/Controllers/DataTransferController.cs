@@ -27,7 +27,7 @@ namespace MovieNight.Web.Controllers
             UserE userE = new UserE()
             {
                 Id = 1,
-                Name = "Nelea",
+                Username = "Nelea",
                 Email = " ",
                 Password = " ",
             };

@@ -11,12 +11,12 @@ namespace MovieNight.BusinessLogic.Interface
 {
     public interface ISession
     {
-        UserVerification UserVerification(LogInData logInData);
-        UserRegister UserAdd(RegData rData);
+        Task<UserVerification> UserVerification(LogInData logInData);
+        Task<UserRegister> UserAdd(RegData rData);
         bool UserСreation(RegData rData);
-        void SetUserSession(int userId);
         int? GetUserIdFromSession();
         UserE GetUserData(int? userId);
         PersonalProfileM GetPersonalProfileM(int? userId);
+        SuccessOfTheActivity EdProfInfo(ProfEditingE editing);
     }
 }

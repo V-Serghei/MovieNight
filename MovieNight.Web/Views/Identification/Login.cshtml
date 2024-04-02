@@ -3,7 +3,8 @@
     ViewBag.Title = "Login";
     Layout = null;
 }
-@model MovieNight.Web.Models.LoginViewModel
+@model MovieNight.Domain.Entities.UserId.UserVerification
+
 
 
 <!DOCTYPE html>
@@ -43,7 +44,15 @@
                             {
 
                                 <form action="@Url.Action("Login", "Identification")" method="post">
-
+                                    @if (Model is { IsVerified: false })
+                                    {
+                                        <div class="alert alert-danger">
+                                            @if (!Model.IsVerified)
+                                            {
+                                                <p>@Model.StatusMsg</p>
+                                            }
+                                        </div>
+                                    }
                                     <div class="form-group mb-3">
                                         <label for="emailaddress">Email address</label>
                                         <input class="form-control" type="email" name="Username" id="emailaddress" required="" placeholder="Enter your email">

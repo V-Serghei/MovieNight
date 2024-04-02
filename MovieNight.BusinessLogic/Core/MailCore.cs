@@ -18,7 +18,7 @@ namespace MovieNight.BusinessLogic.Core
             inboxDs.Add(new InboxD
             {
                 IsChecked = true,
-                SenderName = user.Name,
+                SenderName = user.Username,
                 Theme = "I'm first",
                 Message = "My first message",
                 Date = new TimeD
