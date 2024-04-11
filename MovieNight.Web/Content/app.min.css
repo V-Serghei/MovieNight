@@ -1,13 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700);
 
-html {
-    position: relative;
-    min-height: 100%
-}
 
-body {
-    overflow-x: hidden
-}
 
 .metismenu {
     padding: 0
@@ -47,7 +40,7 @@ body {
 
 .nav-second-level li a, .nav-thrid-level li a {
     padding: 8px 20px;
-    color: #6e768e;
+    color: black;
     display: block;
     position: relative;
     -webkit-transition: all .4s;
@@ -87,7 +80,8 @@ body {
     top: 70px;
     -webkit-box-shadow: 0 1px 4px 0 rgba(0,0,0,.14);
     box-shadow: 0 1px 4px 0 rgba(0,0,0,.14);
-    z-index: 1
+    z-index: 1;
+    height: 100%
 }
 
 #sidebar-menu > ul > li > a {
@@ -170,6 +164,7 @@ body {
     transform: rotate(90deg)
 }
 
+
 #sidebar-menu .menu-title {
     padding: 10px 20px;
     letter-spacing: .05em;
@@ -178,7 +173,7 @@ body {
     font-size: .6875rem;
     text-transform: uppercase;
     color: #6e768e;
-    font-weight: 600
+    font-weight: 600;
 }
 
 #sidebar-menu .waves-ripple {
@@ -218,7 +213,7 @@ body {
     }
 
     .enlarged .left-side-menu #sidebar-menu .nav.collapse {
-        height: inherit !important
+        height: 100% !important
     }
 
     .enlarged .left-side-menu #sidebar-menu > ul > li {
@@ -407,19 +402,19 @@ body.enlarged {
         background-color: #f6f6f6
     }
 
-.enlarged.left-side-menu-sm #wrapper .left-side-menu {
+.enlarged.left-side-menu-sm #page-title .left-side-menu {
     text-align: left
 }
 
-    .enlarged.left-side-menu-sm #wrapper .left-side-menu ul li a i {
-        display: inline-block;
-        font-size: 18px;
-        line-height: 17px;
-        margin-left: 3px;
-        margin-right: 15px;
-        vertical-align: middle;
-        width: 20px
-    }
+.enlarged.left-side-menu-sm #wrapper .left-side-menu ul li a i {
+    display: inline-block;
+    font-size: 18px;
+    line-height: 17px;
+    margin-left: 3px;
+    margin-right: 15px;
+    vertical-align: middle;
+    width: 20px
+}
 
 .left-side-menu-dark .navbar-custom {
     -webkit-box-shadow: 0 3px 1px -2px rgba(56,65,74,.38),0 2px 2px 0 rgba(56,65,74,.1),0 1px 5px 0 rgba(56,65,74,.25);
@@ -427,14 +422,14 @@ body.enlarged {
 }
 
 .left-side-menu-dark .logo-box {
-    background-color: #38414a
+    background-color: rgba(75, 26, 111, 1)
 }
 
 .left-side-menu-dark .left-side-menu {
-    background-color: #38414a;
+    background-color: rgba(75, 26, 111, 1);
     -webkit-box-shadow: none;
     box-shadow: none;
-    border-right: 2px solid #3c4650
+    border-right: 2px solid rgba(75, 26, 111, 1)
 }
 
     .left-side-menu-dark .left-side-menu #sidebar-menu > ul > li > a {
@@ -460,7 +455,7 @@ body.enlarged {
     }
 
         .left-side-menu-dark .left-side-menu .nav-second-level li a:focus, .left-side-menu-dark .left-side-menu .nav-second-level li a:hover, .left-side-menu-dark .left-side-menu .nav-thrid-level li a:focus, .left-side-menu-dark .left-side-menu .nav-thrid-level li a:hover {
-            background-color: transparent;
+            background-color: aqua;
             color: #c8cddc
         }
 
@@ -501,7 +496,7 @@ body.enlarged {
     }
 
     .logo .logo-lg-text-light {
-        color: #fff;
+        color: #aaddfa;
         font-weight: 700;
         font-size: 22px;
         text-transform: uppercase
@@ -511,21 +506,21 @@ body.enlarged {
     height: 70px;
     width: 240px;
     float: left;
-    background-color: #3f51b5;
+    background-color: rgba(75, 26, 111, 1);
     -webkit-transition: all .2s ease-out;
     transition: all .2s ease-out
 }
 
 .navbar-custom {
-    background-color: #3f51b5;
+    background-color: rgba(75, 26, 111, 1);
     padding: 0 10px 0 0;
     position: fixed;
     left: 0;
     right: 0;
     height: 70px;
     z-index: 100;
-    -webkit-box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);
-    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)
+    -webkit-box-shadow: 0 20px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 50px 0 rgba(0,0,0,.12);
+    box-shadow: 0 7px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)
 }
 
     .navbar-custom .topnav-menu > li {
@@ -534,17 +529,17 @@ body.enlarged {
 
     .navbar-custom .topnav-menu .nav-link {
         padding: 0 15px;
-        color: rgba(255,255,255,.75);
+        color: paleturquoise;
         min-width: 32px;
         display: block;
         line-height: 70px;
         text-align: center;
-        max-height: 170px
+        max-height: 1700px
     }
 
     .navbar-custom .dropdown.show .nav-link {
-        background-color: rgba(255,255,255,.1);
-        color: #fff
+        background-color: rgba(57, 10, 92, 1);
+        color: white
     }
 
     .navbar-custom .app-search {
@@ -570,11 +565,11 @@ body.enlarged {
             height: 38px;
             padding-left: 20px;
             padding-right: 0;
-            color: #fff;
-            background-color: rgba(255,255,255,.1);
+            color: wheat;
+            background-color: rgba(112, 18, 181, 1);
             -webkit-box-shadow: none;
             box-shadow: none;
-            border-radius: 30px 0 0 30px
+            border-radius: 30px 0 0 300px
         }
 
         .navbar-custom .app-search .input-group-append {
@@ -583,23 +578,23 @@ body.enlarged {
         }
 
         .navbar-custom .app-search .btn {
-            background-color: rgba(255,255,255,.1);
+            background-color: rgba(112, 18, 181, 1);
             border-color: transparent;
             color: rgba(255,255,255,.5);
-            border-radius: 0 30px 30px 0;
+            border-radius: 0 300px 30px 0;
             -webkit-box-shadow: none !important;
             box-shadow: none !important
         }
 
     .navbar-custom .button-menu-mobile {
         border: none;
-        color: #fff;
+        color: cornflowerblue;
         display: inline-block;
         height: 70px;
         line-height: 70px;
         width: 60px;
         background-color: transparent;
-        font-size: 24px;
+        font-size: 40px;
         cursor: pointer
     }
 
@@ -633,7 +628,8 @@ body.enlarged {
     }
 
     .notification-list .notify-item {
-        padding: 12px 20px
+        padding: 12px 20px;
+           
     }
 
         .notification-list .notify-item .notify-icon {
@@ -714,7 +710,7 @@ body.enlarged {
 }
 
     .topbar-light .navbar-custom .topnav-menu .nav-link {
-        color:chocolate
+        color: chocolate
     }
 
     .topbar-light .navbar-custom .dropdown.show .nav-link {
@@ -730,7 +726,7 @@ body.enlarged {
     }
 
     .topbar-light .navbar-custom .app-search .form-control {
-        color: #323a46;
+        color: RED;
         background-color: #f6f6f6;
         border-color: #f6f6f6
     }
@@ -742,14 +738,15 @@ body.enlarged {
 
 .page-title-box {
     margin: 0 -27px 0;
-    padding: 5px 27px
+    padding: 5px 27px;
+    color: red;
 }
 
     .page-title-box .page-title {
         font-size: 1.1rem;
         margin: 0;
         line-height: 60px;
-        color: #323a46
+        color: #5d91de
     }
 
     .page-title-box .page-title-right {
@@ -790,14 +787,21 @@ body.enlarged {
 .footer {
     bottom: 0;
     padding: 19px 15px 20px;
-    position: absolute;
+    position: fixed;
     right: 0;
     color: #98a6ad;
     left: 240px;
     background-color: #fff;
     -webkit-box-shadow: 0 0 1px rgba(50,58,70,.1);
-    box-shadow: 0 0 1px rgba(50,58,70,.1)
+    box-shadow: 0 0 1px rgba(50,58,70,.1);
+    display: none
 }
+    
+
+    .footer.show {
+        display: block;
+    }
+
 
     .footer .footer-links a {
         color: #98a6ad;
@@ -830,7 +834,7 @@ body.enlarged {
 }
 
 .right-bar {
-    background-color: #fff;
+    background-color: rgb(136 64 190);
     -webkit-box-shadow: 0 0 24px 0 rgba(0,0,0,.06),0 1px 0 0 rgba(0,0,0,.02);
     box-shadow: 0 0 24px 0 rgba(0,0,0,.06),0 1px 0 0 rgba(0,0,0,.02);
     display: block;
@@ -840,13 +844,14 @@ body.enlarged {
     width: 280px;
     z-index: 9999;
     float: right !important;
-    right: -290px;
+    right: -100%;
     top: 0;
     bottom: 0
 }
 
     .right-bar .rightbar-title {
-        background-color: #3f51b5;
+        background-color: rgb(136 20 190);
+        
         padding: 25.5px 25px;
         color: #fff
     }
@@ -884,10 +889,10 @@ body.enlarged {
                 bottom: 0;
                 height: 24px;
                 width: 24px;
-                background-color: #fff;
+                background-color: #cdafed;
                 line-height: 24px;
                 border-radius: 50%;
-                -webkit-box-shadow: 0 4px 5px 0 rgba(0,0,0,.1);
+                -webkit-box-shadow: 0 4px 5px 0 rgba(0,0,0,.14);
                 box-shadow: 0 4px 5px 0 rgba(0,0,0,.1)
             }
 
@@ -896,7 +901,7 @@ body.enlarged {
         }
 
             .right-bar .user-box h5 a {
-                color: #323a46
+                color: #c1d7f7
             }
 
 .rightbar-overlay {
@@ -926,7 +931,7 @@ body.enlarged {
     }
 
         .right-bar .slimscroll-menu {
-            height: auto !important
+            height: 100% !important
         }
 }
 
@@ -3020,9 +3025,9 @@ table.dataTable {
     }
 
     table.dataTable tbody td.focus, table.dataTable tbody th.focus {
-        outline: 2px solid #3f51b5 !important;
+        outline: 2px solid #4c856e !important;
         outline-offset: -1px;
-        color: #3f51b5;
+        color: #4c856e;
         background-color: rgba(63,81,181,.15)
     }
 
@@ -3063,6 +3068,8 @@ div.dt-button-info {
     li.paginate_button.next, li.paginate_button.previous {
         display: inline-block;
         font-size: 1.5rem
+       
+      
     }
 
     li.paginate_button {
@@ -3960,7 +3967,7 @@ div.hopscotch-bubble {
     }
 
 body.authentication-bg {
-    background-image: url(../images/bg.png);
+    background-image: url(../images/index1.jpg);
     background-size: cover;
     background-position: center
 }
@@ -4828,4 +4835,64 @@ body.authentication-bg {
             font-size: 22px;
             top: 24px
         }
+
+
+
+.slider {
+    position: relative;
+    height: 400px;
+    margin: 20px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 16px 20px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.slider-slides {
+    position: relative;
+    height: 100%;
+    transition: transform 0.3s cubic-bezier(0.51, 0.92, 0.24, 1);
+    will-change: transform;
+}
+
+.slider-slide {
+    float: left;
+    height: 100%;
+    background-position: 50% 50%;
+    background-size: cover;
+}
+
+.slider-dots {
+    display: flex;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: calc(100% - 40px);
+}
+
+.slider-dot,
+.slider-indicator {
+    display: block;
+    margin: 0 5px;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.slider-indicator {
+    position: absolute;
+    background: white;
+    width: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 16px 20px rgba(0,0,0,0.2);
+}
+
+.slider-indicator-left {
+    transition: left 0.3s cubic-bezier(0.51, 0.92, 0.24, 1.15), right 0.3s 0.1s cubic-bezier(0.51, 0.92, 0.24, 1.15);
+}
+
+.slider-indicator-right {
+    transition: left 0.3s 0.1s cubic-bezier(0.51, 0.92, 0.24, 1.15), right 0.3s cubic-bezier(0.51, 0.92, 0.24, 1.15);
+}
+
+
+
 /*# sourceMappingURL=app.min.css.map */

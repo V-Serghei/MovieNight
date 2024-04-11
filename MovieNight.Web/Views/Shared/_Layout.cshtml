@@ -12,48 +12,148 @@
     <link rel="shortcut icon" href="/images/logo.ico">
 
     <!-- App css -->
-   
-    @Styles.Render("~/bundles/bootstrap/css");
-    @Styles.Render("~/bundles/icons/css");
-    @Styles.Render("~/bundles/app/css");
+
+
+
+    @Styles.Render("~/bundles/bootstrap/css")
+    @Styles.Render("~/bundles/icons/css")
+    @Styles.Render("~/bundles/app/css")
+    @Styles.Render("~/bundles/slider/css")
+    @* friends styles *@
+    @Styles.Render("~/bundles/custombox/css")
+
+    @* friends styles *@
+    @Styles.Render("~/bundles/custombox/css")
+    @* viewed list *@
+    @Styles.Render("~/bundles/dataTables_bootstrap4/css")
+    @Styles.Render("~/bundles/dataTables_responsive_bootstrap4/css")
+    @Styles.Render("~/bundles/dataTables_buttons_bootstrap4/css")
+    @Styles.Render("~/bundles/dataTables_select_bootstrap4/css")
+    @* STATISTIC *@
+    @Styles.Render("~/bundles/jquery_jvectormap_1_2_2/css")
+    @* News *@
+    @Styles.Render("~/bundles/magnific_popup/css")
+    @* Are watching *@
+    @Styles.Render("~/bundles/tablesaw/css")
+
+    @Styles.Render("~/bundles/bootstrap/css")
+    @Styles.Render("~/bundles/icons/css")
+    @Styles.Render("~/bundles/app/css")
+    @Styles.Render("~/bundles/slider/css")
+    @* @Styles.Render("~/bundles/new/css")*@
+    @* friends styles *@
+    @Styles.Render("~/bundles/custombox/css")
+
+    @* calendar *@
+    @Styles.Render("~/bundles/fullcalendar/css")
+
+    @* email *@
+    @Styles.Render("~/bundles/summernote_bs4/css")
+    @Styles.Render("~/bundles/dropzone/css")
+  
+  
+
+
+
 
     @if (IsSectionDefined("Styles"))
     {
         @RenderSection("Styles", required: false)
     }
 
-    @Styles.Render("~/bundles/main/css");
+
+
 
 
 </head>
 
 <body>
-    
-<div id="wrapper">
-    <div class="navbar-custom">
-        @Html.Partial("_Hbar");
-    </div>
-    <div class="left-side-menu">
-        @Html.Partial("_Lbar");
-    </div>
-    <div class="content-page">
-        @RenderBody();
-        @Html.Partial("_Content")
-    </div>
-    <div class="right-bar">
-        @Html.Partial("_Rbar");
-    </div>
+
+    <div id="wrapper">
+        <div class="navbar-custom">
+            @Html.Partial("_Hbar")
+        </div>
+        <div class="left-side-menu">
+            @Html.Partial("_Lbar")
+        </div>
+        <div class="content-page">
+            @RenderBody()
+            <footer class="footer">
+                @Html.Partial("_Footer")
+            </footer>
+        </div>
+
+        <div class="right-bar">
+            @Html.Partial("_Rbar")
+        </div>
 
 
-    @Scripts.Render("~/bundles/vendor/js")
-    @Scripts.Render("~/bundles/app/js")
+        @Scripts.Render("~/bundles/vendor/js")
+        @Scripts.Render("~/bundles/app/js")
 
-    
-    @RenderSection("scripts",required:false)
-</div>
+        @Scripts.Render("~/bundles/jquery_dataTables_min/js")
+        @Scripts.Render("~/bundles/dataTables_bootstrap4/js")
+        @Scripts.Render("~/bundles/dataTables_responsive/js")
+        @Scripts.Render("~/bundles/dataTables_bootstrap4_min/js")
+        @Scripts.Render("~/bundles/dataTables_buttons_min/js")
+        @Scripts.Render("~/bundles/buttons_bootstrap4_min/js")
+        @Scripts.Render("~/bundles/buttons_html5_min/js")
+        @Scripts.Render("~/bundles/buttons_flash_min/js")
+        @Scripts.Render("~/bundles/buttons_print_min/js")
+        @Scripts.Render("~/bundles/dataTables_keyTable_min/js")
+        @Scripts.Render("~/bundles/dataTables_select_min/js")
+        @Scripts.Render("~/bundles/pdfmake_min/js")
+        @Scripts.Render("~/bundles/vfs_fonts/js")
+        @Scripts.Render("~/bundles/datatables_init/js")
 
+        @Scripts.Render("~/bundles/apexcharts_min/js")
+        @Scripts.Render("~/bundles/jquery_sparkline_min/js")
+        @Scripts.Render("~/bundles/jquery_jvectormap_1_2_2/js")
+        @Scripts.Render("~/bundles/jquery_jvectormap_world_mill_en/js")
+        @Scripts.Render("~/bundles/peity_min/js")
+        @Scripts.Render("~/bundles/dashboard_init/js")
+
+        @Scripts.Render("~/bundles/jquery.magnific_popup_min/js")
+        @Scripts.Render("~/bundles/gallery_init/js")
+
+        @Scripts.Render("~/bundles/tablesaw/js")
+        @Scripts.Render("~/bundles/tablesaw_init/js")
+
+        @Scripts.Render("~/bundles/moment/js")
+        @Scripts.Render("~/bundles/jquery-ui/js")
+        @Scripts.Render("~/bundles/fullcalendar/js")
+        @Scripts.Render("~/bundles/calendar_init/js")
+
+        @Scripts.Render("~/bundles/inbox/js")
+        @Scripts.Render("~/bundles/summernote_bs4/js")
+
+        @Scripts.Render("~/bundles/dropzone/js")
+        @Scripts.Render("~/bundles/fileuploads/js")
+
+        @Scripts.Render("~/bundles/form-advanced/js")
+
+        <script>
+    jQuery(document).ready(function () {
+        $('.summernote').summernote({
+            height: 230,
+            minHeight: null,
+            maxHeight: null,
+            focus: false
+        });
+    });
+</script>
+
+
+
+
+
+
+        @RenderSection("scripts", required: false)
+    </div>
 
 
 </body>
+
 </html>
+
 

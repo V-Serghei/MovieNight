@@ -1,0 +1,467 @@
+﻿    @model MovieNight.Web.Models.PersonalP.PersonalProfileModel
+
+    @{
+        ViewBag.Title = "Personal Profile";
+    }
+    <div>
+        <div class="content">
+
+        <!-- Start Content-->
+            @if (Model == null)
+            {
+                <div class="account-pages mt-5 mb-5">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8 col-lg-6 col-xl-5">
+                                <div class="card">
+
+                                    <div class="card-body p-4">
+
+
+                                        <div class="text-center w-75 m-auto">
+                                            <a href=@Url.Action("Primary","MainPage")>
+                                                <span><img src="~/images/logo_text.png" alt="" height="44"></span>
+                                            </a>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="mt-4">
+                                                <div class="logout-checkmark">
+
+
+                                                </div>
+                                            </div>
+
+                                            <h3>Oops, you don’t seem to have the right to be here!</h3>
+
+                                            <p class="text-muted"> To view this page, you must first log in. </p>
+                                            <div class="text-center w-75 m-auto">
+                                                <a href="@Url.Action("Login","Identification")">
+                                                <button type="button" class="btn btn-outline-primary waves-effect waves-light">
+
+                                                    LOG IN
+                                                </button>
+                                                </a>
+
+
+                                            </div>
+                                        </div>
+
+                                    </div> <!-- end card-body -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+       
+            }
+            else
+            {
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Movie Night</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Profile</a></li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title">Profile</h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row">
+                    <div class="col-lg-4 col-xl-4">
+                        <div class="card-box text-center">
+                            <img src="@Url.Content(@Model.Avatar)" class="rounded-circle avatar-xl img-thumbnail"
+                                 alt="profile-image">
+
+                            <h4 class="mb-0">@Model.BUserModel.Username'</h4>
+                            <p class="text-muted">@Model.Quote</p>
+                            <a href=@Url.Action("PersonalPromotionStatistics", "Statistic")>
+                                <button type="button" class="btn btn-dark btn-xs waves-effect mb-2 waves-light">Personal Statistic</button>
+                            </a>
+                            <div class="text-left mt-3">
+                                <h4 class="font-13 text-uppercase">About Me :</h4>
+                                <p class="text-muted font-13 mb-3">
+                                    @Model.AboutMe
+                                </p>
+                                <p class="text-muted mb-2 font-13"><strong>Full Username :</strong> <span class="ml-2">@Model.BUserModel.Username</span></p>
+
+                                <p class="text-muted mb-2 font-13">
+                                    <strong>Mobile :</strong>
+                                    <span class="ml-2">
+                                        +(@Model.Number.CountryС)
+                                        @Model.Number.Number
+                                    </span>
+                                </p>
+
+                                <p class="text-muted mb-2 font-13"><strong>Email :</strong> <span class="ml-2 ">@Model.BUserModel.Email</span></p>
+
+                                <p class="text-muted mb-1 font-13"><strong>Location :</strong> <span class="ml-2">@Model.Location</span></p>
+                            </div>
+
+                            <ul class="social-list list-inline mt-3 mb-0">
+                                <li class="list-inline-item">
+                                    <a href="javascript: void(0);" class="social-list-item border-purple text-purple">
+                                        <i class="mdi mdi-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="javascript: void(0);" class="social-list-item border-danger text-danger">
+                                        <i class="mdi mdi-google"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="javascript: void(0);" class="social-list-item border-info text-info">
+                                        <i class="mdi mdi-twitter"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary">
+                                        <i class="mdi mdi-github-circle"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div> <!-- end card-box -->
+
+                        <div class="card-box">
+                            <h4 class="header-title">Viewing percentage</h4>
+                            <p class="mb-3">How many have you looked from the entire world base, so you can call yourself a fan of this genre</p>
+
+                            <div class="pt-1">
+                                <h6 class="text-uppercase mt-0">Anime <span class="float-right">99%</span></h6>
+                                <div class="progress progress-sm m-0">
+                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" style="width: 99%">
+                                        <span class="sr-only">99% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-2 pt-1">
+                                <h6 class="text-uppercase">Horrors<span class="float-right">20%</span></h6>
+                                <div class="progress progress-sm m-0">
+                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                                        <span class="sr-only">20% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-2 pt-1">
+                                <h6 class="text-uppercase">Fantasy <span class="float-right">15%</span></h6>
+                                <div class="progress progress-sm m-0">
+                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width: 15%">
+                                        <span class="sr-only">15% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-2 pt-1">
+                                <h6 class="text-uppercase">Detective <span class="float-right">5%</span></h6>
+                                <div class="progress progress-sm m-0">
+                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100" style="width: 5%">
+                                        <span class="sr-only">5% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-2 pt-1">
+                                <h6 class="text-uppercase">Cartoons <span class="float-right">1%</span></h6>
+                                <div class="progress progress-sm m-0">
+                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" style="width: 1%">
+                                        <span class="sr-only">1% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!-- end card-box-->
+
+                    </div> <!-- end col-->
+
+                    <div class="col-lg-8 col-xl-8">
+                        <div class="card-box">
+                            <ul class="nav nav-pills navtab-bg">
+                                <li class="nav-item">
+                                    <a href="#about-me" data-toggle="tab" aria-expanded="true" class="nav-link active ml-0">
+                                        <i class="mdi mdi-face-profile mr-1"></i>My activity
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#settings" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                        <i class="remixicon-award-line"></i>Achievements
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content">
+
+                                <div class="tab-pane show active" id="about-me">
+
+                                    <h5 class="mb-4 text-uppercase">
+                                        <i class="remixicon-film-line"></i>
+                                        Viewing history
+                                    </h5>
+
+
+                                    <ul class="list-unstyled timeline-sm">
+                                        @foreach (var viewingHistory in Model.ViewingHistory)
+                                        {
+                                            <li class="timeline-sm-item">
+                                                <span class="timeline-sm-date">
+                                                    @viewingHistory.ViewingTime.Day
+                                                .
+                                                @viewingHistory.ViewingTime.Month
+                                                .
+                                                @viewingHistory.ViewingTime.Year
+                                            </span>
+                                            <h5 class="mt-0 mb-1">@viewingHistory.Title</h5>
+                                            <div class="row">
+                                                <div class="col-md-10 col-xl-9">
+                                                    <p class="text-muted mt-2">
+                                                        <div class="rating-mini">
+                                                            @for (int i = 0; i < 10; i++)
+                                                            {
+                                                                if (@viewingHistory.Star > 0)
+                                                                {
+                                                                    <span class="active"></span>
+                                                                    viewingHistory.Star--;
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span></span>
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </p>
+
+                                                </div>
+                                                <div class="col-md-6 col-xl-3">
+                                                    <img src="@Url.Content(@viewingHistory.Poster.Path)" class="rounded-circle avatar-xl img-thumbnail"
+                                                         alt="profile-image">
+                                                </div>
+                                            </div>
+
+                                        </li>
+                                    }
+                                    </ul>
+
+                                    <h5 class="mb-3 mt-4 text-uppercase">
+                                        <i class="remixicon-send-plane-2-fill"></i>
+                                        In the plans
+                                    </h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless mb-0">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Title of the film</th>
+                                                    <th>Release date</th>
+                                                    <th>Number of views</th>
+                                                    <th>Genre</th>
+                                                    <th style="width:200px">Grade </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var modelListInThePlan in @Model.ListInThePlans)
+                                                {
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>@modelListInThePlan.Name</td>
+                                                        <td>@modelListInThePlan.Date.Day/@modelListInThePlan.Date.Month/@modelListInThePlan.Date.Year</td>
+                                                        <td>@modelListInThePlan.NumberOfViews</td>
+                                                        <td>
+                                                            @foreach (var tagModel in modelListInThePlan.Tags)
+                                                            {
+                                                                <span class="badge badge-info">@tagModel.Name</span>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            <div class="rating-mini">
+                                                                @for (int i = 0; i < 10; i++)
+                                                                {
+                                                                    if (@modelListInThePlan.Star > 0)
+                                                                    {
+                                                                        <span class="active"></span>
+                                                                        modelListInThePlan.Star--;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span></span>
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                                <!-- end timeline content-->
+
+                                <div class="tab-pane" id="settings">
+                                    <form>
+                                        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i> Personal Info</h5>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="firstname">First Username</label>
+                                                    <input type="text" class="form-control" id="firstname" placeholder="Enter first name">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="lastname">Last Username</label>
+                                                    <input type="text" class="form-control" id="lastname" placeholder="Enter last name">
+                                                </div>
+                                            </div> <!-- end col -->
+                                        </div> <!-- end row -->
+
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="userbio">Bio</label>
+                                                    <textarea class="form-control" id="userbio" rows="4" placeholder="Write something..."></textarea>
+                                                </div>
+                                            </div> <!-- end col -->
+                                        </div> <!-- end row -->
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="useremail">Email Address</label>
+                                                    <input type="email" class="form-control" id="useremail" placeholder="Enter email">
+                                                    <span class="form-text text-muted"><small>If you want to change email please <a href="javascript: void(0);">click</a> here.</small></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="userpassword">Password</label>
+                                                    <input type="password" class="form-control" id="userpassword" placeholder="Enter password">
+                                                    <span class="form-text text-muted"><small>If you want to change password please <a href="javascript: void(0);">click</a> here.</small></span>
+                                                </div>
+                                            </div> <!-- end col -->
+                                        </div> <!-- end row -->
+
+                                        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-office-building mr-1"></i> Company Info</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="companyname">Company Username</label>
+                                                    <input type="text" class="form-control" id="companyname" placeholder="Enter company name">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="cwebsite">Website</label>
+                                                    <input type="text" class="form-control" id="cwebsite" placeholder="Enter website url">
+                                                </div>
+                                            </div> <!-- end col -->
+                                        </div> <!-- end row -->
+
+                                        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth mr-1"></i> Social</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="social-fb">Facebook</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="fab fa-facebook-square"></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="social-fb" placeholder="Url">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="social-tw">Twitter</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="fab fa-twitter"></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="social-tw" placeholder="Username">
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end col -->
+                                        </div> <!-- end row -->
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="social-insta">Instagram</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="fab fa-instagram"></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="social-insta" placeholder="Url">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="social-lin">Linkedin</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="fab fa-linkedin"></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="social-lin" placeholder="Url">
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end col -->
+                                        </div> <!-- end row -->
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="social-sky">Skype</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="fab fa-skype"></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="social-sky" placeholder="username">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="social-gh">Github</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="fab fa-github"></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="social-gh" placeholder="Username">
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end col -->
+                                        </div> <!-- end row -->
+
+                                        <div class="text-right">
+                                            <button type="submit" class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- end settings content-->
+                            </div>
+                        </div> <!-- end tab-content -->
+                    </div> <!-- end card-box-->
+
+                </div> <!-- end col -->
+            </div>
+            <!-- end row-->
+            }
+        </div> <!-- container -->
+
+    </div> <!-- content -->
+    
+  
+
+    
