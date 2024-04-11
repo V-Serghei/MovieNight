@@ -12,11 +12,14 @@ namespace MovieNight.Domain.Entities.PersonalP
     public class PEdBdTable
     {
 
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
 
-        public UserDbTable User { get; set; }
+        [Key]
+        [ForeignKey("User")]
+        public int UserDbTableId { get; set; } // Теперь это и первичный ключ, и внешний ключ
+
+        // Навигационное свойство
+        public virtual UserDbTable User { get; set; }
+
 
         public string FirstName { get; set; }
 

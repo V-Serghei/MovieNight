@@ -113,7 +113,9 @@ namespace MovieNight.BusinessLogic.Core
             }
 
         }
-
+        
+        /// <param name="rData"></param>
+        /// <returns></returns>
 
         // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
         //
@@ -351,7 +353,8 @@ namespace MovieNight.BusinessLogic.Core
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ProfEditingE, PEdBdTable>()
-                    .ForMember(dest => dest.Id, opt => opt.Ignore());
+                    .ForMember(dest => dest.UserDbTableId, opt => opt.Ignore());
+
             });
 
             var mapper = config.CreateMapper();
@@ -367,11 +370,13 @@ namespace MovieNight.BusinessLogic.Core
                     }
                     else
                     {
+                        //TODO:Каждый раз сохраняет нового пользователя в таблице юзера
+                        //TODO:Each time saves a new user in the user table
                         var newProfile = new PEdBdTable { User = currentUser };
                         mapper.Map(editing, newProfile);
                         db.PEdBdTables.Add(newProfile);
                     }
-
+                    
                     db.SaveChanges();
                     result.Successes = true;
                     result.Msg = "Successful retention in the database!";

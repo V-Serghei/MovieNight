@@ -61,21 +61,9 @@
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="Interface\IMail\IInbox.cs" />
     <Compile Include="Interface\ISession.cs" />
-    <Compile Include="Migrations\202403292243475_InitialCreate.cs" />
-    <Compile Include="Migrations\202403292243475_InitialCreate.designer.cs">
-      <DependentUpon>202403292243475_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202403312045151_InitialMigration.cs" />
-    <Compile Include="Migrations\202403312045151_InitialMigration.designer.cs">
-      <DependentUpon>202403312045151_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202403312051232_InitialMigration1.cs" />
-    <Compile Include="Migrations\202403312051232_InitialMigration1.designer.cs">
-      <DependentUpon>202403312051232_InitialMigration1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202403312055288_NewInitialMigration.cs" />
-    <Compile Include="Migrations\202403312055288_NewInitialMigration.designer.cs">
-      <DependentUpon>202403312055288_NewInitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\202404112227320_PendingChanges.cs" />
+    <Compile Include="Migrations\202404112227320_PendingChanges.designer.cs">
+      <DependentUpon>202404112227320_PendingChanges.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -101,17 +89,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202403292243475_InitialCreate.resx">
-      <DependentUpon>202403292243475_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202403312045151_InitialMigration.resx">
-      <DependentUpon>202403312045151_InitialMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202403312051232_InitialMigration1.resx">
-      <DependentUpon>202403312051232_InitialMigration1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202403312055288_NewInitialMigration.resx">
-      <DependentUpon>202403312055288_NewInitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202404112227320_PendingChanges.resx">
+      <DependentUpon>202404112227320_PendingChanges.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

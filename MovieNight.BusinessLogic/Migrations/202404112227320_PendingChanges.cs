@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialMigration : DbMigration
+    public partial class PendingChanges : DbMigration
     {
         public override void Up()
         {
@@ -11,7 +11,7 @@
                 "dbo.PEdBdTables",
                 c => new
                     {
-                        Id = c.Int(nullable: false, identity: true),
+                        UserDbTableId = c.Int(nullable: false),
                         FirstName = c.String(),
                         LastName = c.String(),
                         AboutMe = c.String(),
@@ -30,16 +30,33 @@
                         Instagram = c.String(),
                         Skype = c.String(),
                     })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.UserDbTables", t => t.Id)
-                .Index(t => t.Id);
+                .PrimaryKey(t => t.UserDbTableId)
+                .ForeignKey("dbo.UserDbTables", t => t.UserDbTableId)
+                .Index(t => t.UserDbTableId);
+            
+            CreateTable(
+                "dbo.UserDbTables",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        UserName = c.String(nullable: false, maxLength: 30),
+                        Password = c.String(nullable: false, maxLength: 50),
+                        Email = c.String(nullable: false, maxLength: 30),
+                        LastLoginDate = c.DateTime(nullable: false),
+                        LastIp = c.String(),
+                        Role = c.Int(nullable: false),
+                        Checkbox = c.Boolean(nullable: false),
+                        Salt = c.String(),
+                    })
+                .PrimaryKey(t => t.Id);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.PEdBdTables", "Id", "dbo.UserDbTables");
-            DropIndex("dbo.PEdBdTables", new[] { "Id" });
+            DropForeignKey("dbo.PEdBdTables", "UserDbTableId", "dbo.UserDbTables");
+            DropIndex("dbo.PEdBdTables", new[] { "UserDbTableId" });
+            DropTable("dbo.UserDbTables");
             DropTable("dbo.PEdBdTables");
         }
     }

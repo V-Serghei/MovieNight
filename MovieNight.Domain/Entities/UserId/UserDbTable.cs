@@ -42,8 +42,6 @@ namespace MovieNight.Domain.Entities.UserId
 
         public string Salt { get; set; }
 
-        public int PEdBdTableId { get; set; }
-
         public virtual PEdBdTable PEdBdTable { get; set; }
 
 

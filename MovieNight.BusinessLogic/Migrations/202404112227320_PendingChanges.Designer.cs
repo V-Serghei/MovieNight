@@ -7,13 +7,13 @@ namespace MovieNight.BusinessLogic.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class InitialCreate : IMigrationMetadata
+    public sealed partial class PendingChanges : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCreate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(PendingChanges));
         
         string IMigrationMetadata.Id
         {
-            get { return "202403292243475_InitialCreate"; }
+            get { return "202404112227320_PendingChanges"; }
         }
         
         string IMigrationMetadata.Source
