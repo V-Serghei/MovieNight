@@ -66,6 +66,11 @@ namespace MovieNight.BusinessLogic.Session
         {
             return UserCookie(apiCookieValue,agent);
         }
+
+        public int? GetIdCurrUser(string userName)
+        {
+            return GetIdCurrUserDb(userName);
+        }
         //  - > user data update
         //...
 

@@ -65,7 +65,6 @@ namespace MovieNight.BusinessLogic.Core
 
         protected async Task<UserVerification> GetUserVerification(LogInData logInData)
         {
-            //check if user exist
             var userL = new UserVerification();
 
             if (!IsValid(logInData))
@@ -350,6 +349,15 @@ namespace MovieNight.BusinessLogic.Core
             return null;
         }
 
+        protected static int? GetIdCurrUserDb(string userName)
+        {
+            using (var db = new UserContext())
+            {
+                var existingUser = db.UsersT.FirstOrDefault(u => u.UserName == userName);
+                return existingUser?.Id;
+            }
+            
+        }
         protected SuccessOfTheActivity EditingProfileData(ProfEditingE editing)
         {
             var result = new SuccessOfTheActivity();
@@ -358,7 +366,6 @@ namespace MovieNight.BusinessLogic.Core
             {
                 cfg.CreateMap<ProfEditingE, PEdBdTable>()
                     .ForMember(dest => dest.UserDbTableId, opt => opt.Ignore());
-
             });
 
             var mapper = config.CreateMapper();
@@ -366,7 +373,8 @@ namespace MovieNight.BusinessLogic.Core
             {
                 try
                 {
-                    var existingProfile = db.PEdBdTables.FirstOrDefault(u => u.User.Id == currentUser.Id);
+                    var existingUser = db.UsersT.FirstOrDefault(u => u.Id == currentUser.Id);
+                    var existingProfile = db.PEdBdTables.FirstOrDefault(u => u.UserDbTableId == existingUser.Id);
 
                     if (existingProfile != null)
                     {
@@ -374,13 +382,11 @@ namespace MovieNight.BusinessLogic.Core
                     }
                     else
                     {
-                        //TODO:Каждый раз сохраняет нового пользователя в таблице юзера
-                        //TODO:Each time saves a new user in the user table
-                        var newProfile = new PEdBdTable { User = currentUser };
+                        var newProfile = new PEdBdTable { User = existingUser };
                         mapper.Map(editing, newProfile);
                         db.PEdBdTables.Add(newProfile);
                     }
-                    
+
                     db.SaveChanges();
                     result.Successes = true;
                     result.Msg = "Successful retention in the database!";

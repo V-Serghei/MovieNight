@@ -21,5 +21,7 @@ namespace MovieNight.BusinessLogic.Interface
         SuccessOfTheActivity EdProfInfo(ProfEditingE editing);
         HttpCookie GenCookie(LogInData userD);
         LogInData GetUserByCookie(string apiCookieValue,string agent);
+
+        int? GetIdCurrUser(string userName);
     }
 }

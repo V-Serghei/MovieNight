@@ -26,6 +26,7 @@ namespace MovieNight.BusinessLogic.DBModel
                 .HasOptional(u => u.PEdBdTable) // Указывает, что User может не иметь PEdBdTable
                 .WithRequired(p => p.User); // Указывает, что PEdBdTable всегда связана с User
         }
+       
 
 
     }
