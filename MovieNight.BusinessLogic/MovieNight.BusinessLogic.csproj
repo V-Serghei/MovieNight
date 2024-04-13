@@ -57,12 +57,14 @@
   <ItemGroup>
     <Compile Include="BusinessLogic.cs" />
     <Compile Include="Core\MailCore.cs" />
+    <Compile Include="Core\ServiceApi\FriendAPI.cs" />
     <Compile Include="Core\ServiceApi\MovieAPI.cs" />
     <Compile Include="Core\UserAPI.cs" />
     <Compile Include="DBModel\MovieContext.cs" />
     <Compile Include="DBModel\SessionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="Interface\IMail\IInbox.cs" />
+    <Compile Include="Interface\IService\IFriendsService.cs" />
     <Compile Include="Interface\IService\IMovie.cs" />
     <Compile Include="Interface\ISession.cs" />
     <Compile Include="Migrations\Movie\Configuration.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="Migrations\User\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session\MailS\InboxS.cs" />
+    <Compile Include="Session\Service\FriendService.cs" />
     <Compile Include="Session\Service\MovieService.cs" />
     <Compile Include="Session\SessionBL.cs" />
   </ItemGroup>

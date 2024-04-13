@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using MovieNight.BusinessLogic.DBModel;
 using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.DifferentE;
-using MovieNight.Helpers.CryptographyH;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.PersonalP;
 using System.Text.RegularExpressions;
@@ -16,6 +15,7 @@ using System.Data.Entity;
 using System.Diagnostics;
 using System.Web;
 using AutoMapper;
+using MovieNight.Helpers.CryptographyH;
 using MovieNight.Helpers.CookieH;
 
 namespace MovieNight.BusinessLogic.Core
@@ -145,7 +145,7 @@ namespace MovieNight.BusinessLogic.Core
                 userRegister.SuccessUniq = false;
                 return userRegister;
             }
-
+            
             using (var db = new UserContext())
             {
                 var userExists = await db.UsersT.FirstOrDefaultAsync(u => u.UserName == rData.UserName || u.Email == rData.Email);
