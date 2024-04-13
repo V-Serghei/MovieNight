@@ -246,9 +246,15 @@ namespace MovieNight.BusinessLogic.Core
 
         protected PersonalProfileM GetPersonalProfileDatabase(int? userId)
         {
-            //search the database
+            var user = GetCurrentLoggedInUserDb();
 
-
+            using (var userProfData = new UserContext())
+            {
+                var userProfCurrent = userProfData.PEdBdTables.FirstOrDefault(u => u.User.Id == userId);
+            }
+            
+            
+            
             PersonalProfileM personalProfileM = new PersonalProfileM
             {
                 Avatar = "~/images/users/photo_2023-03-30_21-08-09.jpg",
@@ -260,11 +266,6 @@ namespace MovieNight.BusinessLogic.Core
                 Quote = "Movie fan",
                 AboutMe = "I’m Nelly and I love watching movies. Especially anime. For me, nothing is better than anime. Yes, and I’m also a cool IT girl and designer. And I’m also a master. I can do everything. " +
                           "Cook, sew, draw, sculpt. I can learn everything. The main thing is to want.",
-                Number = new PhoneNumE
-                {
-                    Number = 69892856,
-                    CountryС = 373
-                },
                 Location = "Moldova",
                 ViewingHistory = new List<ViewingHistoryM>(),
                 ListInThePlans = new List<ListOfFilms>()

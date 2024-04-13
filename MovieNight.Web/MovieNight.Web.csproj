@@ -660,7 +660,11 @@
     <Compile Include="Models\Different\TagModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\Mail\InboxModel.cs" />
+    <Compile Include="Models\Movie\CastMember.cs" />
+    <Compile Include="Models\Movie\InterestingFact.cs" />
     <Compile Include="Models\Movie\ListOfFilmsModel.cs" />
+    <Compile Include="Models\Movie\MovieCard.cs" />
+    <Compile Include="Models\Movie\MovieTemplateInfModel.cs" />
     <Compile Include="Models\Movie\PosterModel.cs" />
     <Compile Include="Models\Movie\UploadMovieFileModel.cs" />
     <Compile Include="Models\Movie\ViewingHistoryModel.cs" />

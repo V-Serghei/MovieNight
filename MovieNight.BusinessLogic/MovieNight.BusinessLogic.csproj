@@ -57,18 +57,20 @@
   <ItemGroup>
     <Compile Include="BusinessLogic.cs" />
     <Compile Include="Core\MailCore.cs" />
+    <Compile Include="Core\ServiceApi\MovieAPI.cs" />
     <Compile Include="Core\UserAPI.cs" />
+    <Compile Include="DBModel\MovieContext.cs" />
     <Compile Include="DBModel\SessionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="Interface\IMail\IInbox.cs" />
+    <Compile Include="Interface\IService\IMovie.cs" />
     <Compile Include="Interface\ISession.cs" />
-    <Compile Include="Migrations\202404112227320_PendingChanges.cs" />
-    <Compile Include="Migrations\202404112227320_PendingChanges.designer.cs">
-      <DependentUpon>202404112227320_PendingChanges.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\Movie\Configuration.cs" />
+    <Compile Include="Migrations\Session\Configuration.cs" />
+    <Compile Include="Migrations\User\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session\MailS\InboxS.cs" />
+    <Compile Include="Session\Service\MovieService.cs" />
     <Compile Include="Session\SessionBL.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -88,11 +90,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202404112227320_PendingChanges.resx">
-      <DependentUpon>202404112227320_PendingChanges.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

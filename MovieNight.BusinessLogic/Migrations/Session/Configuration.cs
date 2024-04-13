@@ -1,18 +1,19 @@
-﻿namespace MovieNight.BusinessLogic.Migrations
+﻿namespace MovieNight.BusinessLogic.Migrations.Session
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<MovieNight.BusinessLogic.DBModel.UserContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<MovieNight.BusinessLogic.DBModel.SessionContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            MigrationsDirectory = @"Migrations\Session";
         }
 
-        protected override void Seed(MovieNight.BusinessLogic.DBModel.UserContext context)
+        protected override void Seed(MovieNight.BusinessLogic.DBModel.SessionContext context)
         {
             //  This method will be called after migrating to the latest version.
 

@@ -3,7 +3,7 @@ using MovieNight.Domain.Entities.UserId;
 
 namespace MovieNight.BusinessLogic.DBModel
 {
-    public class SessionContext:DbContext
+    public sealed class SessionContext:DbContext
 
     {
     public SessionContext() : base("name=MovieNight")
@@ -12,6 +12,6 @@ namespace MovieNight.BusinessLogic.DBModel
     }
 
 
-    public virtual DbSet<SessionCookie> Sessions { get; set; }
+    public DbSet<SessionCookie> Sessions { get; set; }
     }
 }
