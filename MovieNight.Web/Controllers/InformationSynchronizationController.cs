@@ -1,17 +1,13 @@
 ﻿using MovieNight.BusinessLogic.Interface;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI;
-using MovieNight.Domain.Entities;
 using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Web.Models;
 using MovieNight.Web.Models.Different;
 using MovieNight.Web.Models.Movie;
 using MovieNight.Web.Models.PersonalP;
 using AutoMapper;
+using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Domain.Entities.UserId;
 using MovieNight.Web.Infrastructure;
 
@@ -20,6 +16,8 @@ namespace MovieNight.Web.Controllers
     public class InformationSynchronizationController : MasterController
     {
         private readonly ISession _sessionUser;
+
+        private IMovie _movie;
             
         private readonly IMapper _mapper;
         public InformationSynchronizationController()
@@ -27,25 +25,31 @@ namespace MovieNight.Web.Controllers
             var sesControlBl = new BusinessLogic.BusinessLogic();
             _sessionUser = sesControlBl.Session();
 
+            var serviceMovieControlBl = new BusinessLogic.BusinessLogic();
+            _movie = serviceMovieControlBl.GetMovieService();
+            
             var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<PEditingM, ProfEditingE>(); 
+                cfg.CreateMap<PEditingM, ProfEditingE>();
+                cfg.CreateMap<PEditingM, PersonalProfileModel>();
             });
+
             _mapper = config.CreateMapper();
+
         }
 
         // GET: InformationSynchronization
         [HttpGet]
         public ActionResult PersonalProfile()
         {
+
             SessionStatus();
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
                 return RedirectToAction("Login", "Identification");
             }
             var user = System.Web.HttpContext.Current.GetMySessionObject();
-            if (_sessionUser.GetUserIdFromSession() == null)
+            if (user == null)
             {
-
                 return View();
             }
             else
@@ -64,11 +68,6 @@ namespace MovieNight.Web.Controllers
                     },
                     Location = personalProfileM.Location,
                     Quote = personalProfileM.Quote,
-                    Number = new PhoneNumModel
-                    {
-                        CountryС = personalProfileM.Number.CountryС,
-                        Number = personalProfileM.Number.Number
-                    },
                     ListInThePlans = new List<ListOfFilmsModel>(),
                     ViewingHistory = new List<ViewingHistoryModel>()
                 };
@@ -144,6 +143,8 @@ namespace MovieNight.Web.Controllers
         [HttpGet]
         public ActionResult MovieTemplatePage()
         {
+            
+            
             return View();
         }
 

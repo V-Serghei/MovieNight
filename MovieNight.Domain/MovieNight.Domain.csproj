@@ -49,8 +49,16 @@
     <Compile Include="Entities\DifferentE\PhoneNumE.cs" />
     <Compile Include="Entities\DifferentE\Tag.cs" />
     <Compile Include="Entities\MailE\InboxD.cs" />
+    <Compile Include="Entities\MovieM\CastMemberE.cs" />
+    <Compile Include="Entities\MovieM\EfDbEntities\CastMemDbTable.cs" />
+    <Compile Include="Entities\MovieM\EfDbEntities\InterestingFactDbTable.cs" />
+    <Compile Include="Entities\MovieM\EfDbEntities\MovieCardDbTable.cs" />
+    <Compile Include="Entities\MovieM\EfDbEntities\MovieDbTable.cs" />
+    <Compile Include="Entities\MovieM\InterestingFactE.cs" />
     <Compile Include="Entities\MovieM\ListOfFilms.cs" />
     <Compile Include="Entities\MovieM\MovieBbTable.cs" />
+    <Compile Include="Entities\MovieM\MovieCardE.cs" />
+    <Compile Include="Entities\MovieM\MovieTemplateInfE.cs" />
     <Compile Include="Entities\MovieM\Poster.cs" />
     <Compile Include="Entities\MovieM\ViewingHistoryM.cs" />
     <Compile Include="Entities\PersonalP\PEdBdTable.cs" />
