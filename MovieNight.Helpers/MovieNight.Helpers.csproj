@@ -44,6 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CookieH\GenCookie.cs" />
+    <Compile Include="CryptographyH\HashInfo.cs" />
+    <Compile Include="CryptographyH\HashPassword.cs" />
+    <Compile Include="CryptographyH\Salt.cs" />
+    <Compile Include="Different\ValidationStrD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

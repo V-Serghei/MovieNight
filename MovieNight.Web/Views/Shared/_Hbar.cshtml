@@ -1,5 +1,9 @@
-﻿@using MovieNight.Domain.Entities
+﻿@using MovieNight.Web.Infrastructure
 @model dynamic
+
+@{
+    var logInData = HttpContext.Current.GetMySessionObject();
+}
 
 @{
     ViewBag.Title = "_Hbar";
@@ -174,7 +178,7 @@
             </div>
         </li>
 
-        @if (HttpContext.Current.Session["UserId"] !=null)
+        @if (logInData != null)
         {
 
 
@@ -192,7 +196,7 @@
                     }
 
                     <span class="pro-user-name ml-1">
-                        @HttpContext.Current.Session["UserName"] <i class="mdi mdi-chevron-down"></i>
+                        @logInData.Username <i class="mdi mdi-chevron-down"></i>
                     </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right profile-dropdown ">

@@ -58,6 +58,7 @@
     <Compile Include="BusinessLogic.cs" />
     <Compile Include="Core\MailCore.cs" />
     <Compile Include="Core\UserAPI.cs" />
+    <Compile Include="DBModel\SessionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="Interface\IMail\IInbox.cs" />
     <Compile Include="Interface\ISession.cs" />

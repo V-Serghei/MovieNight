@@ -15,6 +15,9 @@ namespace MovieNight.Domain.Entities.UserId
         public string Ip { get; set; }
         public DateTime LoginTime { get; set; }
         public bool RememberMe { get; set; } = false;
+        
+        public string Agent { get; set; }
+        
 
     }
 }
