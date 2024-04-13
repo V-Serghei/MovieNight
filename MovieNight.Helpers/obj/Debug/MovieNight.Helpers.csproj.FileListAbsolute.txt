@@ -7,3 +7,12 @@ D:\web project\Movie\MovieNight\MovieNight.Helpers\obj\Debug\MovieNight.Helpers.
 D:\web project\Movie\MovieNight\MovieNight.Helpers\bin\Debug\AutoMapper.dll
 D:\web project\Movie\MovieNight\MovieNight.Helpers\bin\Debug\AutoMapper.xml
 D:\web project\Movie\MovieNight\MovieNight.Helpers\obj\Debug\MovieNight.Helpers.csproj.CopyComplete
+D:\Projects\MovieNight\MovieNight.Helpers\bin\Debug\MovieNight.Helpers.dll
+D:\Projects\MovieNight\MovieNight.Helpers\bin\Debug\MovieNight.Helpers.pdb
+D:\Projects\MovieNight\MovieNight.Helpers\bin\Debug\AutoMapper.dll
+D:\Projects\MovieNight\MovieNight.Helpers\bin\Debug\AutoMapper.xml
+D:\Projects\MovieNight\MovieNight.Helpers\obj\Debug\MovieNight.Helpers.csproj.AssemblyReference.cache
+D:\Projects\MovieNight\MovieNight.Helpers\obj\Debug\MovieNight.Helpers.csproj.CoreCompileInputs.cache
+D:\Projects\MovieNight\MovieNight.Helpers\obj\Debug\MovieNight.Helpers.csproj.CopyComplete
+D:\Projects\MovieNight\MovieNight.Helpers\obj\Debug\MovieNight.Helpers.dll
+D:\Projects\MovieNight\MovieNight.Helpers\obj\Debug\MovieNight.Helpers.pdb
