@@ -9,8 +9,7 @@
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
-            ContextKey = "MovieNight.BusinessLogic.DBModel.UserContext";
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(MovieNight.BusinessLogic.DBModel.UserContext context)

@@ -645,6 +645,7 @@
     <Compile Include="Controllers\InformationSynchronizationController.cs" />
     <Compile Include="Controllers\IdentificationController.cs" />
     <Compile Include="Controllers\MainPageController.cs" />
+    <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\SearchSortAddController.cs" />
     <Compile Include="Controllers\SettingController.cs" />
@@ -652,6 +653,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\Different\ValidationStr.cs" />
+    <Compile Include="Infrastructure\HttpContextInfrastructure.cs" />
     <Compile Include="Models\Calendar\EventDataModel.cs" />
     <Compile Include="Models\Different\PhoneNumModel.cs" />
     <Compile Include="Models\Different\TagModel.cs" />

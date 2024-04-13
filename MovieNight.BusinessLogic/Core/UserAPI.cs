@@ -2,22 +2,21 @@
 using MovieNight.Domain.Entities.UserId;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MovieNight.BusinessLogic.DBModel;
 using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.DifferentE;
-
+using MovieNight.Helpers.CryptographyH;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.PersonalP;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Data.Entity;
-using System.Xml.Linq;
+using System.Diagnostics;
 using System.Web;
 using AutoMapper;
+using MovieNight.Helpers.CookieH;
 
 namespace MovieNight.BusinessLogic.Core
 {
@@ -27,28 +26,28 @@ namespace MovieNight.BusinessLogic.Core
         //  - > password-related methods     
         //  |  |  |  |  |  |  |  |  |  |  |  |
         // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
-        public string HashPassword(string password, string salt)
-        {
-            var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, Encoding.UTF8.GetBytes(salt), 10000);
-
-            var hashedPassword = Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(24));
-            return hashedPassword;
-        }
-
-        public bool VerifyPassword(string providedPassword, string storedHash, string salt)
-        {
-            var newHash = HashPassword(providedPassword, salt);
-            return newHash == storedHash;
-        }
-        
-        private string GetRandSalt()
-        {
-            var rng = new RNGCryptoServiceProvider();
-            var salt = new byte[16];
-            rng.GetBytes(salt);
-            return Convert.ToBase64String(salt);
-
-        }
+        // public string HashPassword(string password, string salt)
+        // {
+        //     var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, Encoding.UTF8.GetBytes(salt), 10000);
+        //
+        //     var hashedPassword = Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(24));
+        //     return hashedPassword;
+        // }
+        //
+        // public bool VerifyPassword(string providedPassword, string storedHash, string salt)
+        // {
+        //     var newHash = HashPassword(providedPassword, salt);
+        //     return newHash == storedHash;
+        // }
+        //
+        // private string GetRandSalt()
+        // {
+        //     var rng = new RNGCryptoServiceProvider();
+        //     var salt = new byte[16];
+        //     rng.GetBytes(salt);
+        //     return Convert.ToBase64String(salt);
+        //
+        // }
 
         // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
         //
@@ -56,26 +55,16 @@ namespace MovieNight.BusinessLogic.Core
         //  
         // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
 
-        public bool IsValid(LogInData rData)
+        private bool IsValid(LogInData rData)
         {
-            if (string.IsNullOrEmpty(rData.Password) || string.IsNullOrEmpty(rData.Email))
+            if (string.IsNullOrEmpty(rData.Password) || (string.IsNullOrEmpty(rData.Email) && string.IsNullOrEmpty(rData.Username)))
                 return false;
 
-            // Regex for email validation
-            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-            if (!emailRegex.IsMatch(rData.Email))
-                return false;
-
-            // Minimum password length
-            if (rData.Password.Length < 10)
-                return false;
-
-            return true;
+            return rData.Password.Length >= 10;
         }
 
-        public async Task<UserVerification> GetUserVerification(LogInData logInData)
+        protected async Task<UserVerification> GetUserVerification(LogInData logInData)
         {
-            //check if user exist
             var userL = new UserVerification();
 
             if (!IsValid(logInData))
@@ -87,14 +76,21 @@ namespace MovieNight.BusinessLogic.Core
 
             using (var db = new UserContext())
             {
-                var userExists = await db.UsersT.FirstOrDefaultAsync(u => u.Email == logInData.Email);
-
+                UserDbTable userExists;
+                if (logInData.Email != null)
+                {
+                     userExists = await db.UsersT.FirstOrDefaultAsync(u => u.Email == logInData.Email);
+                }
+                else
+                {
+                     userExists = await db.UsersT.FirstOrDefaultAsync(u => u.UserName == logInData.Username);
+                }
                 if (userExists == null)
                 {
-                        userL.StatusMsg = "You have entered unrecorded mail";
+                        userL.StatusMsg = "You have entered unrecorded data";
                         userL.IsVerified = false;
                     return userL;
-                }else if (!VerifyPassword(logInData.Password, userExists.Password, userExists.Salt))
+                }else if (!HashPassword.VerifyPassword(logInData.Password, userExists.Password, userExists.Salt))
                 {
                     userL.StatusMsg = "You entered the wrong password";
                     userL.IsVerified = false;
@@ -106,6 +102,8 @@ namespace MovieNight.BusinessLogic.Core
                     userL.IsVerified = true;
                     userL.UserId = userExists.Id;
                     userL.LogInData = logInData;
+                    userL.LogInData.Username = userExists.UserName;
+                    userL.LogInData.Email = userExists.Email;
                     HttpContext.Current.Session["UserId"] = userExists.Id;
                     HttpContext.Current.Session["UserName"] = userExists.UserName;
                     return userL;
@@ -113,31 +111,31 @@ namespace MovieNight.BusinessLogic.Core
             }
 
         }
-
+        
+        /// <param name="rData"></param>
+        /// <returns></returns>
 
         // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
         //
         //       - > registration  < -   
         //  
         // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
-        public bool IsValid(RegData rData)
+        private bool IsValid(RegData rData)
         {
             if (string.IsNullOrEmpty(rData.UserName) || string.IsNullOrEmpty(rData.Password) || string.IsNullOrEmpty(rData.Email))
                 return false;
-
-            // Regex for email validation
+            
             var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
             if (!emailRegex.IsMatch(rData.Email))
                 return false;
-
-            // Minimum password length
+            
             if (rData.Password.Length < 10)
                 return false;
 
             return true;
         }
 
-        public async Task<UserRegister> AddNewUserSuccess(RegData rData)
+        protected async Task<UserRegister> AddNewUserSuccess(RegData rData)
         {
             var userRegister = new UserRegister();
 
@@ -165,10 +163,19 @@ namespace MovieNight.BusinessLogic.Core
 
             userRegister.SuccessUniq = true;
             userRegister.StatusMsg = "Success";
+            userRegister.CurUser = new LogInData
+            {
+                Username = rData.UserName,
+                Email = rData.Email,
+                Password = rData.Password
+            };
+            
+            
+           
             return userRegister;
         }
 
-        public bool UserAdding(RegData rData)
+        protected static bool UserAdding(RegData rData)
         {
             //add user to database
 
@@ -180,13 +187,12 @@ namespace MovieNight.BusinessLogic.Core
                 LastIp = rData.Ip,
                 Role = LevelOfAccess.User,
                 Checkbox = rData.Checkbox,
-                Salt = GetRandSalt()
+                Salt = Salt.GetRandSalt()
                 
 
             };
-            user.Password = HashPassword(rData.Password, user.Salt);
-           
-
+            user.Password = HashPassword.HashPass(rData.Password, user.Salt);
+            
             using (var db = new UserContext())
             {
                 try
@@ -213,7 +219,7 @@ namespace MovieNight.BusinessLogic.Core
         //  
         // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
 
-        public UserE GetUserDataFromDatabase(int? userId)
+        protected UserE GetUserDataFromDatabase(int? userId)
         {
 
 
@@ -238,7 +244,7 @@ namespace MovieNight.BusinessLogic.Core
             return userE;
         }
 
-        public PersonalProfileM GetPersonalProfileDatabase(int? userId)
+        protected PersonalProfileM GetPersonalProfileDatabase(int? userId)
         {
             //search the database
 
@@ -324,8 +330,7 @@ namespace MovieNight.BusinessLogic.Core
         // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
 
 
-
-        public UserDbTable GetCurrentLoggedInUserDb()
+        private UserDbTable GetCurrentLoggedInUserDb()
         {
             var userId = GetUserId(); 
 
@@ -344,14 +349,23 @@ namespace MovieNight.BusinessLogic.Core
             return null;
         }
 
-        public SuccessOfTheActivity EditingProfileData(ProfEditingE editing)
+        protected static int? GetIdCurrUserDb(string userName)
+        {
+            using (var db = new UserContext())
+            {
+                var existingUser = db.UsersT.FirstOrDefault(u => u.UserName == userName);
+                return existingUser?.Id;
+            }
+            
+        }
+        protected SuccessOfTheActivity EditingProfileData(ProfEditingE editing)
         {
             var result = new SuccessOfTheActivity();
             var currentUser = GetCurrentLoggedInUserDb();
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ProfEditingE, PEdBdTable>()
-                    .ForMember(dest => dest.Id, opt => opt.Ignore());
+                    .ForMember(dest => dest.UserDbTableId, opt => opt.Ignore());
             });
 
             var mapper = config.CreateMapper();
@@ -359,7 +373,8 @@ namespace MovieNight.BusinessLogic.Core
             {
                 try
                 {
-                    var existingProfile = db.PEdBdTables.FirstOrDefault(u => u.User.Id == currentUser.Id);
+                    var existingUser = db.UsersT.FirstOrDefault(u => u.Id == currentUser.Id);
+                    var existingProfile = db.PEdBdTables.FirstOrDefault(u => u.UserDbTableId == existingUser.Id);
 
                     if (existingProfile != null)
                     {
@@ -367,7 +382,7 @@ namespace MovieNight.BusinessLogic.Core
                     }
                     else
                     {
-                        var newProfile = new PEdBdTable { User = currentUser };
+                        var newProfile = new PEdBdTable { User = existingUser };
                         mapper.Map(editing, newProfile);
                         db.PEdBdTables.Add(newProfile);
                     }
@@ -385,7 +400,89 @@ namespace MovieNight.BusinessLogic.Core
                 }
             }
         }
+        internal  HttpCookie Cookie(LogInData userD)
+        {
+            using (var us = new UserContext())
+            {
+                var user = (from u in us.UsersT where u.Email == userD.Email select u).FirstOrDefault();
 
+                Debug.Assert(user != null, nameof(user) + " != null");
+                var apiCookie = new HttpCookie("X-KEY")
+                {
+                    Value = GenCookie.Create(userD.Email + userD.Agent, 
+                        user.Salt, HashInfo.HashInf(userD.Email + userD.Agent,user.Salt))
+                };
+
+                using (var db = new SessionContext())
+                {
+                    var userCookie = (from e in db.Sessions where e.Email == userD.Email select e).FirstOrDefault();
+
+                    if (userCookie != null)
+                    {
+                        userCookie.CookieString = apiCookie.Value;
+                        userCookie.ExpireTime = DateTime.Now.AddMinutes(60);
+                        using (var todo = new SessionContext())
+                        {
+                            todo.Entry(userCookie).State = EntityState.Modified;
+                            todo.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+
+                        db.Sessions.Add(new SessionCookie
+                        {
+                            CookieString = apiCookie.Value,
+                            ExpireTime = DateTime.Now.AddMinutes(60),
+                            Email = userD.Email,
+                            UserName = userD.Username,
+
+                        });
+
+                        db.SaveChanges();
+                    }
+                }
+
+                return apiCookie;
+            }
+        }
+        
+        internal static LogInData UserCookie(string cookie, string agent)
+        {
+            SessionCookie session;
+            UserDbTable currentUser;
+
+            using (var db = new SessionContext())
+            {
+                session = db.Sessions.FirstOrDefault(s => s.CookieString == cookie && s.ExpireTime > DateTime.Now);
+            }
+
+            if (session == null) return null;
+            using (var db = new UserContext())
+            {
+                var validate = new EmailAddressAttribute();
+                currentUser = validate.IsValid(session.Email) ? 
+                    db.UsersT.FirstOrDefault(u => u.Email == session.Email) : 
+                    db.UsersT.FirstOrDefault(u => u.UserName == session.UserName);
+            }
+            
+            if (currentUser == null) return null;
+            var apiCookie = new HttpCookie("X-KEY")
+            {
+                Value = GenCookie.Create(currentUser.Email + agent, 
+                    currentUser.Salt, HashInfo.HashInf(currentUser.Email + agent,currentUser.Salt))
+            };
+            if (apiCookie.Value != cookie) return null;
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<UserDbTable, LogInData>();
+            });
+
+            var mapper = config.CreateMapper();
+            var userLog = mapper.Map<LogInData>(currentUser);
+
+            return userLog;
+        }
 
     }
 }

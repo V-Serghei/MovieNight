@@ -13,17 +13,19 @@ using MovieNight.Web.Models.Movie;
 using MovieNight.Web.Models.PersonalP;
 using AutoMapper;
 using MovieNight.Domain.Entities.UserId;
+using MovieNight.Web.Infrastructure;
 
 namespace MovieNight.Web.Controllers
 {
-    public class InformationSynchronizationController : Controller
+    public class InformationSynchronizationController : MasterController
     {
-        internal ISession SessionUser;
+        private readonly ISession _sessionUser;
+            
         private readonly IMapper _mapper;
         public InformationSynchronizationController()
         {
             var sesControlBl = new BusinessLogic.BusinessLogic();
-            SessionUser = sesControlBl.Session();
+            _sessionUser = sesControlBl.Session();
 
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<PEditingM, ProfEditingE>(); 
@@ -35,15 +37,21 @@ namespace MovieNight.Web.Controllers
         [HttpGet]
         public ActionResult PersonalProfile()
         {
-            if (SessionUser.GetUserIdFromSession() == null)
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Login", "Identification");
+            }
+            var user = System.Web.HttpContext.Current.GetMySessionObject();
+            if (_sessionUser.GetUserIdFromSession() == null)
             {
 
                 return View();
             }
             else
             {
-                PersonalProfileM personalProfileM = SessionUser.GetPersonalProfileM(
-                    SessionUser.GetUserIdFromSession());
+                PersonalProfileM personalProfileM = _sessionUser.GetPersonalProfileM(
+                    _sessionUser.GetUserIdFromSession());
 
                 PersonalProfileModel model = new PersonalProfileModel
                 {
@@ -155,7 +163,7 @@ namespace MovieNight.Web.Controllers
 
             var profEdBl = _mapper.Map<ProfEditingE>(profEd);
 
-            SuccessOfTheActivity _success = SessionUser.EdProfInfo(profEdBl);
+            SuccessOfTheActivity _success = _sessionUser.EdProfInfo(profEdBl);
             if (_success.Successes == true)
             {
                 return RedirectToAction("PersonalProfile", "InformationSynchronization");

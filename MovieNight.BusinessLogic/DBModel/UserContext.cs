@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace MovieNight.BusinessLogic.DBModel
 {
     public class UserContext : DbContext
@@ -22,10 +23,11 @@ namespace MovieNight.BusinessLogic.DBModel
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserDbTable>()
-                .HasOptional(u => u.PEdBdTable) 
-                .WithRequired(p => p.User);
-
-            base.OnModelCreating(modelBuilder);
+                .HasOptional(u => u.PEdBdTable) // Указывает, что User может не иметь PEdBdTable
+                .WithRequired(p => p.User); // Указывает, что PEdBdTable всегда связана с User
         }
+       
+
+
     }
 }

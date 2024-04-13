@@ -10,7 +10,7 @@ using MovieNight.Domain.Entities.PersonalP;
 
 namespace MovieNight.Domain.Entities.UserId
 {
-    public class UserDbTable
+    public sealed class UserDbTable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -42,9 +42,7 @@ namespace MovieNight.Domain.Entities.UserId
 
         public string Salt { get; set; }
 
-        public int PEdBdTableId { get; set; }
-
-        public virtual PEdBdTable PEdBdTable { get; set; }
+        public PEdBdTable PEdBdTable { get; set; }
 
 
     }

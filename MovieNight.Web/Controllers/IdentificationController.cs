@@ -1,6 +1,7 @@
 ﻿using MovieNight.Web.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Deployment.Internal;
 using System.Linq;
 using System.Web;
@@ -9,74 +10,82 @@ using MovieNight.BusinessLogic.Interface;
 using MovieNight.Domain.Entities.UserId;
 using System.Reflection;
 using System.Threading.Tasks;
+using MovieNight.Web.Infrastructure;
+using MovieNight.Web.Infrastructure.Different;
 
 namespace MovieNight.Web.Controllers
 {
     public class IdentificationController : Controller
     {
-        internal ISession SessionUser;
+        private readonly ISession _sessionUser;
         
          
         public IdentificationController()
         {
             var sesControlBl = new BusinessLogic.BusinessLogic();
-            SessionUser = sesControlBl.Session();
+            _sessionUser = sesControlBl.Session();
         }
 
         [HttpPost]
-        public async Task<ActionResult> LoginPost(LoginViewModel model)
+        public async Task<JsonResult> LoginPost(LoginViewModel model)
         {
-             
-            LogInData logD = new LogInData
+            var logD = new LogInData
             {
-                Email = model.Username,
                 Password = model.Password,
                 RememberMe = model.RememberMe,
                 LoginTime = DateTime.Now,
-                Ip = Request.ServerVariables["REMOTE_ADDR"]
-
+                Ip = Request.ServerVariables["REMOTE_ADDR"],
+                Agent = HttpContextInfrastructure.GetUserAgentInfo(Request)
             };
-            UserVerification verification = await SessionUser.UserVerification(logD);
-            if (verification.IsVerified == true)
+            if (ValidationStr.IsEmail(model.Username)) logD.Email = model.Username;
+            else logD.Username = model.Username;
+            var verification = await _sessionUser.UserVerification(logD);
+            if (verification.IsVerified)
             {
-                return RedirectToAction("PersonalProfile", "InformationSynchronization");
+                HttpCookie cookie = _sessionUser.GenCookie(verification.LogInData);
+                ControllerContext.HttpContext.Response.Cookies.Add(cookie);
+                return Json(new { redirect = Url.Action("PersonalProfile", "InformationSynchronization") });
 
             }
-            else return View("Login",verification);
+            return Json(new { success = false, statusMsg = verification.StatusMsg });
         }
 
         [HttpPost]
-        public async Task<ActionResult> RegistPost(RegistViewModel rModel)
+        public async Task<JsonResult> RegistPost(RegistViewModel rModel)
         {
-            RegData RegD = new RegData
+            var regD = new RegData
             {
                 UserName = rModel.UserName,
                 Password = rModel.Password,
                 Email = rModel.Email,
                 Checkbox = rModel.Checkbox,
                 RegDateTime = DateTime.Now,
-                Ip = Request.ServerVariables["REMOTE_ADDR"]
+                Ip = Request.UserHostAddress
 
             };
 
-            var rUserVerification = await SessionUser.UserAdd(RegD);
+            var rUserVerification = await _sessionUser.UserAdd(regD);
 
             if (rUserVerification.SuccessUniq == true)
             {
                 
-                if (SessionUser.UserСreation(RegD))
+                if (_sessionUser.UserСreation(regD))
                 {
-                    return RedirectToAction("PersonalProfile", "InformationSynchronization");
+                    
+                    var cookie = _sessionUser.GenCookie(rUserVerification.CurUser);
+                    ControllerContext.HttpContext.Response.Cookies.Add(cookie);
+                    System.Web.HttpContext.Current.SetMySessionObject(rUserVerification.CurUser);
+                    return Json(new { redirect = Url.Action("PersonalProfile", "InformationSynchronization") });
                 }
                 else
                 {
                     rUserVerification.StatusMsg = "DATABASE ERROR";
-                    return View("Register", rUserVerification); 
+                    return Json(new { success = false, statusMsg = rUserVerification.StatusMsg });
                 }
             }
             else
             {
-                return View("Register", rUserVerification); 
+                return Json(new { success = false, statusMsg = rUserVerification.StatusMsg });
             }
         }
 

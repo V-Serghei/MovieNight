@@ -2,13 +2,17 @@
 @{
     ViewBag.Title = "ProfileEditing";
 }
+@using MovieNight.Web.Infrastructure
 @model MovieNight.Domain.Entities.UserId.SuccessOfTheActivity
+@{
+    var logInData = HttpContext.Current.GetMySessionObject();
+}
 
 <div>
     <div class="content">
 
         <!-- Start Content-->
-        @if (HttpContext.Current.Session["UserId"] == null)
+        @if ((logInData == null))
         {
             <div class="account-pages mt-5 mb-5">
                 <div class="container">

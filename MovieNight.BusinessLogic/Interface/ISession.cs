@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using MovieNight.Domain.Entities;
 using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Domain.Entities.UserId;
@@ -18,5 +19,9 @@ namespace MovieNight.BusinessLogic.Interface
         UserE GetUserData(int? userId);
         PersonalProfileM GetPersonalProfileM(int? userId);
         SuccessOfTheActivity EdProfInfo(ProfEditingE editing);
+        HttpCookie GenCookie(LogInData userD);
+        LogInData GetUserByCookie(string apiCookieValue,string agent);
+
+        int? GetIdCurrUser(string userName);
     }
 }
