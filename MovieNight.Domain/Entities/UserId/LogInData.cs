@@ -17,7 +17,9 @@ namespace MovieNight.Domain.Entities.UserId
         public bool RememberMe { get; set; } = false;
         
         public string Agent { get; set; }
-        
+
+        public string Avatar { get; set; }
+
 
     }
 }

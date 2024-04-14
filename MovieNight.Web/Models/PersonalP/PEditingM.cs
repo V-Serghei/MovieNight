@@ -13,6 +13,7 @@ namespace MovieNight.Web.Models.PersonalP
         public string AboutMe { get; set; }
         public string Gender { get; set; }
         public string Avatar { get; set; }
+        public HttpPostedFileBase AvatarFile { get; set; }
         public DateTime DataBirth { get; set; }
         public string PhoneNumber { get; set; }
         public string Country { get; set; }

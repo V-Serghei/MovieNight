@@ -1,17 +1,26 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using AutoMapper;
 using MovieNight.BusinessLogic.Interface;
+using MovieNight.Domain.Entities.UserId;
 using MovieNight.Web.Infrastructure;
+using MovieNight.Web.Models;
 
 namespace MovieNight.Web.Controllers
 {
     public class MasterController:Controller
     {
         private readonly ISession _session;
-
+        private readonly IMapper _mapper;
         public MasterController()
         {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<LogInData,UserModel >();
+
+            });
+            _mapper = config.CreateMapper();
             var bl = new BusinessLogic.BusinessLogic();
             _session = bl.Session();
         }
@@ -22,9 +31,11 @@ namespace MovieNight.Web.Controllers
             if (apiCookie != null)
             {
                 var profile = _session.GetUserByCookie(apiCookie.Value,HttpContextInfrastructure.GetUserAgentInfo(Request));
+                
                 if (profile != null)
-                {
-                    System.Web.HttpContext.Current.SetMySessionObject(profile);
+                {                var us = _mapper.Map<UserModel>(profile);
+
+                    System.Web.HttpContext.Current.SetMySessionObject(us);
                     System.Web.HttpContext.Current.Session["LoginStatus"] = "login";
                 }
                 else

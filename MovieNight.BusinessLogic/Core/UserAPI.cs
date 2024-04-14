@@ -107,6 +107,8 @@ namespace MovieNight.BusinessLogic.Core
                     userL.LogInData = logInData;
                     userL.LogInData.Username = userExists.UserName;
                     userL.LogInData.Email = userExists.Email;
+                    var userD = db.PEdBdTables.FirstOrDefault(u => u.UserDbTableId == userExists.Id);
+                    if(userD?.Avatar != null) userL.LogInData.Avatar = userD.Avatar;
                     HttpContext.Current.Session["UserId"] = userExists.Id;
                     HttpContext.Current.Session["UserName"] = userExists.UserName;
                     return userL;
@@ -155,15 +157,12 @@ namespace MovieNight.BusinessLogic.Core
 
                 if (userExists != null)
                 {
-                    if (userExists.UserName == rData.UserName)
-                        userRegister.StatusMsg = "Username already taken";
-                    else
-                        userRegister.StatusMsg = "Email already in use";
+                    userRegister.StatusMsg = userExists.UserName == rData.UserName ? "Username already taken" : "Email already in use";
 
                     return userRegister;
                 }
             }
-
+            
             userRegister.SuccessUniq = true;
             userRegister.StatusMsg = "Success";
             userRegister.CurUser = new LogInData
@@ -250,14 +249,15 @@ namespace MovieNight.BusinessLogic.Core
         protected PersonalProfileM GetPersonalProfileDatabase(int? userId)
         {
             
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<PEdBdTable,PersonalProfileM>()
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<PEdBdTable, PersonalProfileM>()
                     .ForMember(dist => dist.BUserE,
                         src => src.Ignore());
+
             });
 
             _mapper = config.CreateMapper();
-            var user = GetCurrentLoggedInUserDb();
 
             using (var userProfData = new UserContext())
             {
@@ -266,7 +266,14 @@ namespace MovieNight.BusinessLogic.Core
                     
                     var userProfCurrent = userProfData.PEdBdTables.FirstOrDefault(u => u.User.Id == userId);
                     var userP = _mapper.Map<PersonalProfileM>(userProfCurrent);
-                    return userP;
+                    if (userP != null) return userP;
+                    var userDef = GetUserDataFromDatabase(userId);
+                    return new PersonalProfileM
+                    {
+
+
+                        BUserE = userDef
+                    };
                 }
                 catch (Exception ex)
                 {
@@ -501,6 +508,7 @@ namespace MovieNight.BusinessLogic.Core
                 currentUser = validate.IsValid(session.Email) ? 
                     db.UsersT.FirstOrDefault(u => u.Email == session.Email) : 
                     db.UsersT.FirstOrDefault(u => u.UserName == session.UserName);
+                
             }
             
             if (currentUser == null) return null;
@@ -517,6 +525,11 @@ namespace MovieNight.BusinessLogic.Core
 
             var mapper = config.CreateMapper();
             var userLog = mapper.Map<LogInData>(currentUser);
+            using (var db = new UserContext())
+            {
+                var avatar = db.PEdBdTables.FirstOrDefault(u => u.UserDbTableId == currentUser.Id);
+                if (avatar != null) userLog.Avatar = avatar.Avatar;
+            }
 
             return userLog;
         }

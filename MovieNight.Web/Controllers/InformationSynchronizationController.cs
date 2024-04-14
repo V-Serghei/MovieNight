@@ -204,26 +204,15 @@ namespace MovieNight.Web.Controllers
         [HttpPost]
         public ActionResult ProfileEdit(PEditingM profEd)
         {
-            if (Request.Files.Count > 0)
+            if (profEd.AvatarFile != null)
             {
-                var file = Request.Files[0];
-                if (file != null && file.ContentLength > 0 && file.ContentType.StartsWith("image/"))
-                {
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    string filePath = Path.Combine(Server.MapPath("~/uploads/avatars"), fileName);
+                
+                var filePath = Path.Combine(Server.MapPath("~/uploads/avatars"), profEd.AvatarFile.FileName);
+                profEd.AvatarFile.SaveAs(filePath);
+                profEd.Avatar = "~/uploads/avatars/" + profEd.AvatarFile.FileName;
 
-                    if (!Directory.Exists(Server.MapPath("~/uploads/avatars")))
-                    {
-                        Directory.CreateDirectory(Server.MapPath("~/uploads/avatars"));
-                    }
-
-                    file.SaveAs(Path.Combine(Server.MapPath("~/uploads/avatars"), fileName));
-
-                    profEd.Avatar = fileName;
-                }
             }
-
-
+            
 
             var profEdBl = _mapper.Map<ProfEditingE>(profEd);
 
