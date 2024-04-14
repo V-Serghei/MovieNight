@@ -54,7 +54,10 @@ namespace MovieNight.BusinessLogic.Core
         //           - > login  < -   
         //  
         // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
-
+        private IMapper _mapper;
+        
+        
+        
         private bool IsValid(LogInData rData)
         {
             if (string.IsNullOrEmpty(rData.Password) || (string.IsNullOrEmpty(rData.Email) && string.IsNullOrEmpty(rData.Username)))
@@ -246,83 +249,106 @@ namespace MovieNight.BusinessLogic.Core
 
         protected PersonalProfileM GetPersonalProfileDatabase(int? userId)
         {
+            
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<PEdBdTable,PersonalProfileM>()
+                    .ForMember(dist => dist.BUserE,
+                        src => src.Ignore());
+            });
+
+            _mapper = config.CreateMapper();
             var user = GetCurrentLoggedInUserDb();
 
             using (var userProfData = new UserContext())
             {
-                var userProfCurrent = userProfData.PEdBdTables.FirstOrDefault(u => u.User.Id == userId);
-            }
-            
-            
-            
-            PersonalProfileM personalProfileM = new PersonalProfileM
-            {
-                Avatar = "~/images/users/photo_2023-03-30_21-08-09.jpg",
-                BUserE = new UserE
+                try
                 {
-                    Email = GetUserDataFromDatabase(userId).Email, 
-                    Username= GetUserDataFromDatabase(userId).Username,
-                },
-                Quote = "Movie fan",
-                AboutMe = "I’m Nelly and I love watching movies. Especially anime. For me, nothing is better than anime. Yes, and I’m also a cool IT girl and designer. And I’m also a master. I can do everything. " +
-                          "Cook, sew, draw, sculpt. I can learn everything. The main thing is to want.",
-                Location = "Moldova",
-                ViewingHistory = new List<ViewingHistoryM>(),
-                ListInThePlans = new List<ListOfFilms>()
-
-            };
-            //Get out of the movie database
-            for (int i = 0; i < 5; i++)
-            {
-                personalProfileM.ListInThePlans.Add(new ListOfFilms
-                {
-                    Date = new TimeD
-                    {
-                        Day = 10+i,
-                        Month = 10,
-                        Year = 2024
-                    },
-                    Name = "The Shawshank Redemption",
-                    NumberOfViews = 1102031331,
-                    Star = 5+i,
-                    Tags = new List<Tag>
-                    {
-                        new Tag
-                        {
-                            Id = 15+i,
-                            Name = "drama"
-                        },
-                        new Tag
-                        {
-                        Id = 12+i,
-                        Name = "family"
-                    }
-                    }
                     
-                });
-                
-
-            }
-            for (int i = 0; i < 5; i++)
-            {
-                personalProfileM.ViewingHistory.Add(new ViewingHistoryM
+                    var userProfCurrent = userProfData.PEdBdTables.FirstOrDefault(u => u.User.Id == userId);
+                    var userP = _mapper.Map<PersonalProfileM>(userProfCurrent);
+                    return userP;
+                }
+                catch (Exception ex)
                 {
-                    Description = "",
-                    Id = i,
-                    Title = "Solo Leveling",
-                    Poster = new Poster
+                    var userDef = GetUserDataFromDatabase(userId);
+                    return new PersonalProfileM
                     {
-                        Id = i,
-                        Name = "Solo Leveling",
-                        Path = "~/images/index2.jpg",
-                    },
-                    Star = i+4,
-                    ViewingTime = DateTime.Now
-                   
-                });
+                        BUserE = userDef
+                    };
+                }
             }
-
-            return personalProfileM;
+           
+            
+            
+            
+            // PersonalProfileM personalProfileM = new PersonalProfileM
+            // {
+            //     Avatar = "~/images/users/photo_2023-03-30_21-08-09.jpg",
+            //     BUserE = new UserE
+            //     {
+            //         Email = GetUserDataFromDatabase(userId).Email, 
+            //         Username= GetUserDataFromDatabase(userId).Username,
+            //     },
+            //     Quote = "Movie fan",
+            //     AboutMe = "I’m Nelly and I love watching movies. Especially anime. For me, nothing is better than anime. Yes, and I’m also a cool IT girl and designer. And I’m also a master. I can do everything. " +
+            //               "Cook, sew, draw, sculpt. I can learn everything. The main thing is to want.",
+            //     Location = "Moldova",
+            //     ViewingHistory = new List<ViewingHistoryM>(),
+            //     ListInThePlans = new List<ListOfFilms>()
+            //
+            // };
+            // //Get out of the movie database
+            // for (int i = 0; i < 5; i++)
+            // {
+            //     personalProfileM.ListInThePlans.Add(new ListOfFilms
+            //     {
+            //         Date = new TimeD
+            //         {
+            //             Day = 10+i,
+            //             Month = 10,
+            //             Year = 2024
+            //         },
+            //         Name = "The Shawshank Redemption",
+            //         NumberOfViews = 1102031331,
+            //         Star = 5+i,
+            //         Tags = new List<Tag>
+            //         {
+            //             new Tag
+            //             {
+            //                 Id = 15+i,
+            //                 Name = "drama"
+            //             },
+            //             new Tag
+            //             {
+            //             Id = 12+i,
+            //             Name = "family"
+            //         }
+            //         }
+            //         
+            //     });
+            //     
+            //
+            // }
+            // for (int i = 0; i < 5; i++)
+            // {
+            //     personalProfileM.ViewingHistory.Add(new ViewingHistoryM
+            //     {
+            //         Description = "",
+            //         Id = i,
+            //         Title = "Solo Leveling",
+            //         Poster = new Poster
+            //         {
+            //             Id = i,
+            //             Name = "Solo Leveling",
+            //             Path = "~/images/index2.jpg",
+            //         },
+            //         Star = i+4,
+            //         ViewingTime = DateTime.Now
+            //        
+            //     });
+            // }
+            //
+            // return personalProfileM;
         }
         // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
         //
@@ -380,6 +406,16 @@ namespace MovieNight.BusinessLogic.Core
                     if (existingProfile != null)
                     {
                         mapper.Map(editing, existingProfile);
+                        if (existingUser != null)
+                        {
+                            if (editing.Username != null)
+                                    existingUser.UserName = editing.Username;
+                            if (editing.Email != null)
+                                existingUser.Email = editing.Email;
+                            if (editing.Password != null)
+                                existingUser.Password = HashPassword.HashPass(editing.Password,existingUser.Salt);
+                        }
+                       
                     }
                     else
                     {
