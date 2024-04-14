@@ -57,5 +57,58 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             }
             return friendsPageD;
         }
+        
+        public FriendsListD getListOfUsersD()
+        {
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<PEdBdTable,FriendsPageD>()
+                    .ForMember(dest => dest.BUserE, 
+                        opt => opt.Ignore());
+            });
+            
+            var mapper = config.CreateMapper();
+            
+            FriendsListD friendsListD = new FriendsListD();
+            using (var db = new UserContext())
+            {
+                try
+                {
+                    var list10Users = db.UsersT.Take(10).ToList();
+                    foreach (var list10 in list10Users)
+                    {
+                        var userd = db.PEdBdTables.FirstOrDefault(p => p.UserDbTableId == list10.Id);
+                        if (userd != null)
+                        {
+                            var oneOfList = mapper.Map<FriendsPageD>(userd);
+                            oneOfList.BUserE = new UserE
+                            {
+                                Username = list10.UserName,
+                                Email = list10.Email
+                            };
+                            friendsListD.ListOfFriends.Add(oneOfList);
+                        }
+                        else
+                        {
+                            var oneOfList = new FriendsPageD
+                            {
+                                BUserE = new UserE
+                                {
+                                    Username = list10.UserName,
+                                    Email = list10.Email
+                                }
+                            };
+                            friendsListD.ListOfFriends.Add(oneOfList);
+                        }
+                    } 
+                }
+                catch (Exception exception)
+                {
+                    return null;
+                }
+            }
+            return friendsListD;
+        }
     }
+    
 }

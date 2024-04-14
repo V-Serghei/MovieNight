@@ -664,6 +664,7 @@
     <Compile Include="Models\Calendar\EventDataModel.cs" />
     <Compile Include="Models\Different\PhoneNumModel.cs" />
     <Compile Include="Models\Different\TagModel.cs" />
+    <Compile Include="Models\Friends\FriendListModel.cs" />
     <Compile Include="Models\Friends\FriendPageModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\Mail\InboxModel.cs" />

@@ -11,5 +11,6 @@ namespace MovieNight.BusinessLogic.Interface.IService
     public interface IFriendsService 
     {
         FriendsPageD getFriendDate(int? id);
+        FriendsListD getListOfUsers();
     }
 }
