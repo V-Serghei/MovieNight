@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MovieNight.Domain.enams;
 
 namespace MovieNight.Domain.Entities.UserId
 {
@@ -18,6 +19,7 @@ namespace MovieNight.Domain.Entities.UserId
         
         public string Agent { get; set; }
         
+        public LevelOfAccess Role { get; set; }
 
     }
 }

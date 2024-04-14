@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MovieNight.Web.Attributes;
 
 namespace MovieNight.Web.Controllers
 {
@@ -13,6 +14,7 @@ namespace MovieNight.Web.Controllers
         // GET: Admin
 
         [HttpPost]
+        [AdminMod]
         public ActionResult UploadingTheFileOfAddingMoviesDb(HttpPostedFileBase file)
         {
             if (file != null)

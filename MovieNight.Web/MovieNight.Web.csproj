@@ -635,13 +635,19 @@
     <Content Include="vendor\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="vendor\x-editable\bootstrap-editable.css" />
     <Content Include="vendor\x-editable\bootstrap-editable.min.js" />
+    <Content Include="Views\Error\Error404Page.cshtml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Attributes\AdminModAttribute.cs" />
+    <Compile Include="Attributes\GuestModAttribute.cs" />
+    <Compile Include="Attributes\ModeratorModAttribute.cs" />
+    <Compile Include="Attributes\UserModAttribute.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DataTransferController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\InformationSynchronizationController.cs" />
     <Compile Include="Controllers\IdentificationController.cs" />
     <Compile Include="Controllers\MainPageController.cs" />
