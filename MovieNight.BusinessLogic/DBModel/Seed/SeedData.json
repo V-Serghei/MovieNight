@@ -1,0 +1,318 @@
+﻿[
+  {
+    "Title": "Фильм 1",
+    "PosterImage": "url1",
+    "Quote": "Цитата 1",
+    "Description": "Описание фильма 1",
+    "ProductionYear": "2022-01-01",
+    "Country": "Страна 1",
+    "Genre": ["Жанр 1", "Жанр 2", "Жанр 3"],
+    "Location": "Локация 1",
+    "Director": "Режиссер 1",
+    "DurationJ": "02:30:00",
+    "MovieNightGrade": 8.5,
+    "Certificate": "PG-13",
+    "ProductionCompany": "Компания 1",
+    "Budget": "1000000",
+    "GrossWorldwide": "20000000",
+    "Language": "Язык 1",
+    "CastMembers": [
+      {
+        "Name": "Актер 1",
+        "Role": "Роль 1",
+        "ImageUrl": "url1"
+      },
+      {
+        "Name": "Актер 2",
+        "Role": "Роль 2",
+        "ImageUrl": "url2"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Карточка 1",
+        "ImageUrl": "url3",
+        "Description": "Описание карточки 1"
+      },
+      {
+        "Title": "Карточка 2",
+        "ImageUrl": "url4",
+        "Description": "Описание карточки 2"
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Факт 1",
+        "FactText": "Текст факта 1"
+      },
+      {
+        "FactName": "Факт 2",
+        "FactText": "Текст факта 2"
+      }
+    ]
+  }, {
+  "Title": "The Shawshank Redemption",
+  "PosterImage": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SY1000_CR0,0,675,1000_AL_.jpg",
+  "Quote": "Hope is a good thing, maybe the best of things, and no good thing ever dies.",
+  "Description": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
+  "ProductionYear": "1994-09-23",
+  "Country": "USA",
+  "Genre": ["Drama", "Crime"],
+  "Location": "Shawshank State Penitentiary",
+  "Director": "Frank Darabont",
+  "DurationJ": "02:22:00",
+  "MovieNightGrade": 9.3,
+  "Certificate": "R",
+  "ProductionCompany": "Castle Rock Entertainment",
+  "Budget": "25,000,000",
+  "GrossWorldwide": "160,000,000",
+  "Language": "English",
+  "CastMembers": [
+    {
+      "Name": "Tim Robbins",
+      "Role": "Andy Dufresne",
+      "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTk3NjI2NTQ0Ml5BMl5BanBnXkFtZTcwNzE4Mjg3MQ@@._V1_SY1000_CR0,0,670,1000_AL_.jpg"
+    },
+    {
+      "Name": "Morgan Freeman",
+      "Role": "Ellis Boyd \"Red\" Redding",
+      "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTc0NjY1NTYxOV5BMl5BanBnXkFtZTcwMzI2MjA0Mg@@._V1_SY1000_CR0,0,672,1000_AL_.jpg"
+    }
+  ],
+  "MovieCards": [
+    {
+      "Title": "Card 1",
+      "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SY1000_CR0,0,675,1000_AL_.jpg",
+      "Description": "A story of hope and redemption."
+    },
+    {
+      "Title": "Card 2",
+      "ImageUrl": "https://m.media-amazon.com/images/M/MV5BZjgxMDg3NTEtNjZkOC00MDJmLTg2MjUtYzE5NjgxYzFhMzUxXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SY1000_CR0,0,674,1000_AL_.jpg",
+      "Description": "Two men find solace in prison."
+    }
+  ],
+  "InterestingFacts": [
+    {
+      "FactName": "Fact 1",
+      "FactText": "The Shawshank Redemption was filmed in an actual abandoned prison."
+    },
+    {
+      "FactName": "Fact 2",
+      "FactText": "Morgan Freeman's character, Red, was originally supposed to be played by Clint Eastwood."
+    }
+  ]
+},
+  {
+    "Title": "The Godfather",
+    "PosterImage": "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlZWQ0NGVlMjE3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY1000_CR0,0,700,1000_AL_.jpg",
+    "Quote": "I'm gonna make him an offer he can't refuse.",
+    "Description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+    "ProductionYear": "1972-03-15",
+    "Country": "USA",
+    "Genre": ["Crime", "Drama"],
+    "Location": "New York City",
+    "Director": "Francis Ford Coppola",
+    "DurationJ": "02:55:00",
+    "MovieNightGrade": 9.2,
+    "Certificate": "R",
+    "ProductionCompany": "Paramount Pictures",
+    "Budget": "6,000,000",
+    "GrossWorldwide": "245,066,411",
+    "Language": "English, Italian",
+    "CastMembers": [
+      {
+        "Name": "Marlon Brando",
+        "Role": "Don Vito Corleone",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTQ3Mjg1OTU2OF5BMl5BanBnXkFtZTcwMzI5MTQzNw@@._V1_SY1000_CR0,0,675,1000_AL_.jpg"
+      },
+      {
+        "Name": "Al Pacino",
+        "Role": "Michael Corleone",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNjAlYWUxZWUtYzAwMC00MzVmLTkwYWQtY2U1YWE2MDVmZWM3XkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_SY1000_CR0,0,675,1000_AL_.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Card 1",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlZWQ0NGVlMjE3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY1000_CR0,0,700,1000_AL_.jpg",
+        "Description": "A classic crime film."
+      },
+      {
+        "Title": "Card 2",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNThlNjY2MGEtZGM2ZC00NTE0LTk4YWMtMDYzYzY2ZmQ2NjY2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY1000_CR0,0,675,1000_AL_.jpg",
+        "Description": "A story of family and loyalty."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The Godfather was the highest-grossing film of 1972."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Marlon Brando refused to accept his Academy Award for Best Actor."
+      }
+    ]
+  },
+  {
+    "Title": "Бэтмен",
+    "PosterImage": "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTEtMDc2OS00NDZhLTk2N2MtODU0NjI4OTU2OTIxXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_Ratio0.6716_AL_.jpg",
+    "Quote": "Я - возмездие. Я - ночь. Я - Бэтмен.",
+    "Description": "Брюс Уэйн, миллиардер и плейбой, ночью становится Бэтменом, защитником Готэм-сити от преступности.",
+    "ProductionYear": "1972-03-15",
+    "Country": "США",
+    "Genre": ["Боевик", "Детектив", "Триллер"],
+    "Location": "Готэм-сити",
+    "Director": "Мэтт Ривз",
+    "DurationJ": "02:55:00",
+    "MovieNightGrade": 8.5,
+    "Certificate": "PG-13",
+    "ProductionCompany": "Warner Bros. Pictures",
+    "Budget": "100000000",
+    "GrossWorldwide": "750000000",
+    "Language": "Английский",
+    "CastMembers": [
+      {
+        "Name": "Роберт Паттинсон",
+        "Role": "Брюс Уэйн / Бэтмен",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNzUwN2E3ZDItZGQyOC00MzM2LWJhZDctYzAzN2VkNjY0YzM3XkEyXkFqcGdeQXVyMTQ3MDY5Ng@@._V1_Ratio0.7273_AL_.jpg"
+      },
+      {
+        "Name": "Зои Кравиц",
+        "Role": "Селина Кайл / Женщина-кошка",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMjA2NjMzMTkzN15BMl5BanBnXkFtZTgwODg4NTc4NzM@._V1_Ratio0.7273_AL_.jpg"
+      },
+      {
+        "Name": "Пол Дано",
+        "Role": "Эдвард Нэштон / Загадочник",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTg0NTYzMTQxNV5BMl5BanBnXkFtZTgwNDI1MTE0NzM@._V1_Ratio0.7273_AL_.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Бэтмен: Возвращение",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTYzNTg3MDI5NF5BMl5BanBnXkFtZTcwNTMwMTU0NA@@._V1_Ratio0.6716_AL_.jpg",
+        "Description": "Бэтмен возвращается, чтобы сразиться с Пингвином и Женщиной-кошкой."
+      },
+      {
+        "Title": "Бэтмен: Начало",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNTM3OTc0MzM2OV5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_Ratio0.6716_AL_.jpg",
+        "Description": "Происхождение Бэтмена и его превращение в защитника Готэм-сити."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Бэтмобиль",
+        "FactText": "Бэтмобиль в фильме был создан на основе Chevrolet Camaro 1969 года."
+      },
+      {
+        "FactName": "Загадки Загадочника",
+        "FactText": "Загадки, которые Загадочник загадывает Бэтмену, основаны на реальных загадках из комиксов о Бэтмене."
+      }
+    ]
+  },
+  {
+    "Title": "Властелин колец: Братство кольца",
+    "PosterImage": "https://example.com/posters/lotr-fellowship-of-the-ring.jpg",
+    "Quote": "Одно кольцо, чтобы всех поработить.",
+    "Description": "Фродо Бэггинс, совсем не ведомый далеким странствиям, становится обладателем Всемогущего Кольца. С помощью Гэндальфа и других друзей, он отправляется на поиски таинственной Горы Одно Кольцо, чтобы уничтожить его и спасти Средиземье.",
+    "ProductionYear": "2001-12-19",
+    "Country": "США, Новая Зеландия",
+    "Genre": ["Эпическое фэнтези", "Приключение"],
+    "Location": "Средиземье",
+    "Director": "Питер Джексон",
+    "DurationJ": "02:58:00",
+    "MovieNightGrade": 9.0,
+    "Certificate": "PG-13",
+    "ProductionCompany": "New Line Cinema",
+    "Budget": "$93,000,000",
+    "GrossWorldwide": "$871,530,324",
+    "Language": "Английский",
+    "CastMembers": [
+      {
+        "Name": "Элайджа Вуд",
+        "Role": "Фродо Бэггинс",
+        "ImageUrl": "https://example.com/actors/elijah-wood.jpg"
+      },
+      {
+        "Name": "Иэн МакКеллен",
+        "Role": "Гэндальф Серый",
+        "ImageUrl": "https://example.com/actors/ian-mckellen.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Плакат",
+        "ImageUrl": "https://example.com/cards/lotr-movie-card1.jpg",
+        "Description": "Приключенческая сага, взявшая начало от великолепной книги Дж. Р. Р. Толкина."
+      },
+      {
+        "Title": "Афиша",
+        "ImageUrl": "https://example.com/cards/lotr-movie-card2.jpg",
+        "Description": "Кинематографическое чудо, которое оставило глубокий след в сердцах зрителей."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Запись в кинематографии",
+        "FactText": "Съемки фильма составили более 450 дней."
+      },
+      {
+        "FactName": "Оскар",
+        "FactText": "Фильм завоевал 4 премии Оскар."
+      }
+    ]
+  },
+  {
+    "Title": "Интерстеллар",
+    "PosterImage": "https://example.com/posters/interstellar.jpg",
+    "Quote": "Нам нужно больше пространства.",
+    "Description": "В не очень удаленном будущем человечество сталкивается с катастрофическим изменением климата. Чтобы спасти человеческую расу, команда астронавтов отправляется в космос на поиски нового дома для человечества.",
+    "ProductionYear": "2014-11-05",
+    "Country": "США, Великобритания, Канада",
+    "Genre": ["Научная фантастика", "Приключение"],
+    "Location": "Космос",
+    "Director": "Кристофер Нолан",
+    "DurationJ": "02:49:00",
+    "MovieNightGrade": 8.6,
+    "Certificate": "PG-13",
+    "ProductionCompany": "Paramount Pictures, Warner Bros. Pictures",
+    "Budget": "$165,000,000",
+    "GrossWorldwide": "$677,470,644",
+    "Language": "Английский",
+    "CastMembers": [
+      {
+        "Name": "Мэттью МакКонахи",
+        "Role": "Джозеф Купер",
+        "ImageUrl": "https://example.com/actors/matthew-mcconaughey.jpg"
+      },
+      {
+        "Name": "Энн Хэтэуэй",
+        "Role": "Амелия Бренд",
+        "ImageUrl": "https://example.com/actors/anne-hathaway.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Плакат",
+        "ImageUrl": "https://example.com/cards/interstellar-movie-card1.jpg",
+        "Description": "Эмоциональное и научно значимое кинематографическое произведение."
+      },
+      {
+        "Title": "Афиша",
+        "ImageUrl": "https://example.com/cards/interstellar-movie-card2.jpg",
+        "Description": "Исследуйте космические просторы вместе с астронавтами."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Научное сотрудничество",
+        "FactText": "Фильм сотрудничал с физиками-консультантами для максимальной научной достоверности."
+      },
+      {
+        "FactName": "Музыкальное сопровождение",
+        "FactText": "Саундтрек к фильму был написан известным композитором Хансом Циммером."
+      }
+    ]
+  }
+]

@@ -10,22 +10,23 @@ using System.Threading.Tasks;
 
 namespace MovieNight.BusinessLogic.DBModel
 {
-    public class UserContext : DbContext
+    public sealed class UserContext : DbContext
     {
         public UserContext() : base("name=MovieNight")
         {
 
         }
 
-        public virtual DbSet<UserDbTable> UsersT { get; set; }
-        public virtual DbSet<PEdBdTable> PEdBdTables { get; set; }
+        public DbSet<UserDbTable> UsersT { get; set; }
+        public DbSet<PEdBdTable> PEdBdTables { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserDbTable>()
-                .HasOptional(u => u.PEdBdTable) // Указывает, что User может не иметь PEdBdTable
-                .WithRequired(p => p.User); // Указывает, что PEdBdTable всегда связана с User
+                .HasOptional(u => u.PEdBdTable) 
+                .WithRequired(p => p.User); 
         }
+       
 
 
     }

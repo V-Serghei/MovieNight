@@ -15,7 +15,7 @@ namespace MovieNight.Domain.Entities.PersonalP
 
         [Key]
         [ForeignKey("User")]
-        public int UserDbTableId { get; set; } // Теперь это и первичный ключ, и внешний ключ
+        public int? UserDbTableId { get; set; } // Изменен тип на int?
 
         // Навигационное свойство
         public virtual UserDbTable User { get; set; }
@@ -53,7 +53,7 @@ namespace MovieNight.Domain.Entities.PersonalP
 
         public string Instagram { get; set; }
 
-        public string Skype { get; set; }
+        public string GitHab { get; set; }
 
 
 

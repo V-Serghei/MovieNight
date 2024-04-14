@@ -34,6 +34,9 @@
     <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.10.0.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -49,8 +52,16 @@
     <Compile Include="Entities\DifferentE\PhoneNumE.cs" />
     <Compile Include="Entities\DifferentE\Tag.cs" />
     <Compile Include="Entities\MailE\InboxD.cs" />
+    <Compile Include="Entities\MovieM\CastMemberE.cs" />
+    <Compile Include="Entities\MovieM\EfDbEntities\CastMemDbTable.cs" />
+    <Compile Include="Entities\MovieM\EfDbEntities\InterestingFactDbTable.cs" />
+    <Compile Include="Entities\MovieM\EfDbEntities\MovieCardDbTable.cs" />
+    <Compile Include="Entities\MovieM\EfDbEntities\MovieDbTable.cs" />
+    <Compile Include="Entities\MovieM\InterestingFactE.cs" />
     <Compile Include="Entities\MovieM\ListOfFilms.cs" />
     <Compile Include="Entities\MovieM\MovieBbTable.cs" />
+    <Compile Include="Entities\MovieM\MovieCardE.cs" />
+    <Compile Include="Entities\MovieM\MovieTemplateInfE.cs" />
     <Compile Include="Entities\MovieM\Poster.cs" />
     <Compile Include="Entities\MovieM\ViewingHistoryM.cs" />
     <Compile Include="Entities\PersonalP\PEdBdTable.cs" />
@@ -61,6 +72,7 @@
     <Compile Include="Entities\UserE.cs" />
     <Compile Include="Entities\UserId\LogInData.cs" />
     <Compile Include="Entities\UserId\RegData.cs" />
+    <Compile Include="Entities\UserId\SessionCookie.cs" />
     <Compile Include="Entities\UserId\SuccessOfTheActivity.cs" />
     <Compile Include="Entities\UserId\UserDbTable.cs" />
     <Compile Include="Entities\UserId\UserVerification.cs" />

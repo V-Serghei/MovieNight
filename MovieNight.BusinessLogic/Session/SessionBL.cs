@@ -57,7 +57,20 @@ namespace MovieNight.BusinessLogic.Session
             return EditingProfileData(editing);
         }
 
+        public HttpCookie GenCookie(LogInData userD)
+        {
+            return Cookie(userD);
+        }
 
+        public LogInData GetUserByCookie(string apiCookieValue, string agent)
+        {
+            return UserCookie(apiCookieValue,agent);
+        }
+
+        public int? GetIdCurrUser(string userName)
+        {
+            return GetIdCurrUserDb(userName);
+        }
         //  - > user data update
         //...
 

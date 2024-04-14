@@ -43,6 +43,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -57,17 +60,24 @@
   <ItemGroup>
     <Compile Include="BusinessLogic.cs" />
     <Compile Include="Core\MailCore.cs" />
+    <Compile Include="Core\ServiceApi\MovieAPI.cs" />
     <Compile Include="Core\UserAPI.cs" />
+    <Compile Include="DBModel\MovieContext.cs" />
+    <Compile Include="DBModel\SessionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="Interface\IMail\IInbox.cs" />
+    <Compile Include="Interface\IService\IMovie.cs" />
     <Compile Include="Interface\ISession.cs" />
-    <Compile Include="Migrations\202404112227320_PendingChanges.cs" />
-    <Compile Include="Migrations\202404112227320_PendingChanges.designer.cs">
-      <DependentUpon>202404112227320_PendingChanges.cs</DependentUpon>
+    <Compile Include="Migrations\Movie\202404141507399_k.cs" />
+    <Compile Include="Migrations\Movie\202404141507399_k.designer.cs">
+      <DependentUpon>202404141507399_k.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\Movie\Configuration.cs" />
+    <Compile Include="Migrations\Session\Configuration.cs" />
+    <Compile Include="Migrations\User\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session\MailS\InboxS.cs" />
+    <Compile Include="Session\Service\MovieService.cs" />
     <Compile Include="Session\SessionBL.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -81,7 +91,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DBModel\Seed\" />
     <Folder Include="MainBL\" />
   </ItemGroup>
   <ItemGroup>
@@ -89,8 +98,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202404112227320_PendingChanges.resx">
-      <DependentUpon>202404112227320_PendingChanges.cs</DependentUpon>
+    <Content Include="DBModel\Seed\SeedData.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\Movie\202404141507399_k.resx">
+      <DependentUpon>202404141507399_k.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

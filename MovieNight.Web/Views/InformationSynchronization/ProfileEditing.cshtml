@@ -2,13 +2,18 @@
 @{
     ViewBag.Title = "ProfileEditing";
 }
-@model MovieNight.Domain.Entities.UserId.SuccessOfTheActivity
+@using System.Activities.Statements
+@using MovieNight.Web.Infrastructure
+@model MovieNight.Web.Models.PersonalP.PersonalProfileModel
+@{
+    var logInData = HttpContext.Current.GetMySessionObject();
+}
 
 <div>
     <div class="content">
 
         <!-- Start Content-->
-        @if (HttpContext.Current.Session["UserId"] == null)
+        @if ((logInData == null))
         {
             <div class="account-pages mt-5 mb-5">
                 <div class="container">
@@ -88,33 +93,58 @@
 
                         <div class="tab-pane" id="settings">
                         
-                 @using (Html.BeginForm("ProfileEdit", "InformationSynchronization", FormMethod.Post))
+                 @using (Html.BeginForm("ProfileEdit", "InformationSynchronization", FormMethod.Post,new { enctype = "multipart/form-data" }))
                  {
-                     if (Model is { Successes: false })
+                     if (Model is not { MsgResp: null })
                      {
                          <div class="alert alert-danger">
-                             @if (!Model.Successes)
-                             {
-                                 <p>@Model.Msg</p>
-                             }
+                            
+                                 <p>@Model.MsgResp</p>
+                             
                          </div>
                      }
                 <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i> Personal Info</h5>
                 <div class="form-group">
                     <label for="Username">Username</label>
-                    <input type="text" name="Username" class="form-control" id="Username" placeholder="Enter Username" value="">
+                    @if (Model.BUserE.Username == null)
+                    {
+                        <input type="text" name="Username" class="form-control" id="Username" placeholder="Enter Username" value="">
+                    }
+                    else
+                    {
+                        <input type="text" name="Username" class="form-control" id="Username" placeholder="@Model.BUserE.Username" value="@Model.BUserE.Username">
+                    }
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="firstname">First Username</label>
-                            <input type="text" class="form-control" id="firstname" placeholder="Enter first name" name="FirstName" value="">
+                           @if (Model.FirstName != null)
+                           {
+                               
+                               <label for="firstname">First Username</label>
+                               <input type="text" class="form-control" id="firstname" placeholder="Enter first name" name="FirstName" value="@Model.FirstName">
+                           }
+                           else
+                           {
+                               <label for="firstname">First Username</label>
+                               <input type="text" class="form-control" id="firstname" placeholder="Enter first name" name="FirstName" value="">
+                           }
+                           
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="lastname">Last Username</label>
-                            <input type="text" class="form-control" id="lastname" placeholder="Enter last name" name="LastName" value="">
+                            @if (Model.LastName == null)
+                            {
+                                <label for="lastname">Last Username</label>
+                                <input type="text" class="form-control" id="lastname" placeholder="Enter last name" name="LastName" value="">
+                            }
+                            else
+                            {
+                                <label for="lastname">Last Username</label>
+                                <input type="text" class="form-control" id="lastname" placeholder="Enter last name" name="LastName" value="@Model.LastName">
+                            }
+                            
                         </div>
                     </div> <!-- end col -->
                 </div> <!-- end row -->
@@ -122,8 +152,18 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group">
-                            <label for="userbio">AboutMe</label>
-                            <textarea class="form-control" id="userbio" rows="4"  placeholder="Write something..." name="AboutMe" ></textarea>
+                             @if (Model.AboutMe == null)
+                                {
+                                    <label for="AboutMe">AboutMe</label>
+                                    <textarea class="form-control" id="AboutMe" rows="4"  placeholder="Write something..." name="AboutMe" ></textarea>
+                                }
+                                else
+                                {
+                                    <label for="AboutMe">AboutMe</label>
+                                    <textarea class="form-control" id="AboutMe" rows="4" placeholder="Write something..." name="AboutMe">@Model.AboutMe</textarea>
+
+                                }
+                            
                         </div>
                     </div> <!-- end col -->
                 </div> <!-- end row -->
@@ -131,109 +171,193 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="useremail">Email Address</label>
-                            <input type="email" class="form-control" id="useremail" placeholder="Enter email" name="Email">
+                            @if(logInData.Email!=null)
+                            {
+                            <label for="Email">Email Address</label>
+                            <input type="email" class="form-control" id="Email" placeholder="Enter email" name="Email" value="@logInData.Email">
                             <span class="form-text text-muted"><small>If you want to change email please <a href="javascript: void(0);">click</a> here.</small></span>
+                            }
+                            else
+                            {
+                            <label for="Email">Email Address</label>
+                            <input type="email" class="form-control" id="Email" placeholder="Enter email" name="Email" value="Error">
+                            <span class="form-text text-muted"><small>If you want to change email please <a href="javascript: void(0);">click</a> here.</small></span>
+                            }
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="userpassword">Password</label>
-                            <input type="password" class="form-control" id="userpassword" placeholder="Enter password" name="Password">
+                            <label for="Password">Password</label>
+                            <input type="password" class="form-control" id="Password" placeholder="Enter password" name="Password">
                             <span class="form-text text-muted"><small>If you want to change password please <a href="javascript: void(0);">click</a> here.</small></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="cgender">Gender</label>
-                            <select class="form-control" id="cgender" name="Gender" required>
-                                <option value="male">Non</option>
-                                <option value="male">man</option>
-                                <option value="female">woman</option>
-                                <option value="other">another</option>
-                            </select>
+                            @if(Model.Gender!=null)
+                            {
+                                <label for="Gender">Gender</label>
+                                <select class="form-control" id="Gender" name="Gender" required>
+                                    <option value="non" @(Model.Gender == "non" ? "selected" : "")>Non</option>
+                                    <option value="male" @(Model.Gender == "male" ? "selected" : "")>man</option>
+                                    <option value="female" @(Model.Gender == "female" ? "selected" : "")>woman</option>
+                                    <option value="other" @(Model.Gender == "other" ? "selected" : "")>another</option>
+                                </select>
+                            
+                            }
+                            else
+                            {
+                                <label for="Gender">Gender</label>
+                                <select class="form-control" id="Gender" name="Gender" required>
+                                    <option value="non">Non</option>
+                                    <option value="male">man</option>
+                                    <option value="female">woman</option>
+                                    <option value="other">another</option>
+                                </select>
+                            }
                         </div>
                     </div>
 
                     <div class="form-group col-md-6">
                         <div class="form-group">
-                            <label for="example-fileinput"> Upload avatar</label>
+                            
+                            @if (Model.Avatar != null)
+                            {
+                                <label for="AvatarFile"> Upload avatar</label>
 
-                            <input type="file" class="form-control" id="example-fileinput" name="Avatar">
+                                <input type="file" class="form-control" id="AvatarFile" name="AvatarFile" accept="image/*">
+                            }
+                            else
+                            {
+                                <label for="AvatarFile"> Upload avatar</label>
+
+                                <input type="file" class="form-control" id="AvatarFile" name="AvatarFile" accept="image/*">
+                            }
+                            
 
                         </div>
                     </div>
+
                 </div> <!-- end row -->
 
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label" for="example-date">Date of birth</label>
-                    <div class="col-sm-10">
-                        <input class="form-control" type="date" name="DataBirth" id="example-date">
-                    </div>
+                    @if (Model.DataBirth != default(DateTime))
+                    {
+                        <label class="col-sm-2 col-form-label" for="example-date">Date of birth</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="date" name="DataBirth" id="example-date" value="@Model.DataBirth.ToString("yyyy-MM-dd")">
+                        </div>
+                    }
+                    else 
+
+                    {
+                        <label class="col-sm-2 col-form-label" for="example-date">Date of birth</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="date" name="DataBirth" id="example-date">
+                        </div>
+                    }
+                   
                 </div>
 
                 <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-office-building mr-1"></i> Additional information</h5>
                 <div class="form-group">
-                    <label for="phone_number">US Telephone</label>
+                    @if (Model.PhoneNumber != null)
+                    {<label for="phone_number">US Telephone</label>
                     <input type="tel" id="phone_number" class="form-control"
                            maxlength="15"
                            pattern="^\+(\d{3}\) \d{3}-\d{4}$"
-                           name="PhoneNumber">
+                           name="PhoneNumber" value="@Model.PhoneNumber">
                     <span class="font-13 text-muted">e.g. (123) 456-7890</span>
+                    
+                    }
+                    else
+                    {
+                        <label for="phone_number">US Telephone</label>
+                        <input type="tel" id="phone_number" class="form-control"
+                               maxlength="15"
+                               pattern="^\+(\d{3}\) \d{3}-\d{4}$"
+                               name="PhoneNumber">
+                        <span class="font-13 text-muted">e.g. (123) 456-7890</span>
+                    
+                    }
                 </div>
-
-
-
-
+                
                 <script>
-                                    const phoneNumberInput = document.getElementById('phone_number');
-
-                                    phoneNumberInput.addEventListener('input', function() {
-                                      const formattedNumber = phoneNumberInput.value.replace(/\D/g, '');
-                                      phoneNumberInput.value = formattedNumber.replace(/(\d{3})(\d{3})(\d{5})/, '+($1) $2-$3');
-                                    });
-                                    </script>
+                    const phoneNumberInput = document.getElementById('phone_number');
+    
+                    phoneNumberInput.addEventListener('input', function() {
+                      const formattedNumber = phoneNumberInput.value.replace(/\D/g, '');
+                      phoneNumberInput.value = formattedNumber.replace(/(\d{3})(\d{3})(\d{5})/, '+($1) $2-$3');
+                    });
+                </script>
 
 
 
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="companyname">Quote</label>
-                            <input type="text" class="form-control" id="companyname" placeholder="Enter company name" name="Quote">
+                            @if (Model.Quote != null)
+                            {
+                                <label for="Quote">Quote</label>
+                                <input type="text" class="form-control" id="Quote" placeholder="Enter your Quote" name="Quote" value="@Model.Quote">
+                            }
+                            else
+                            {
+                                <label for="Quote">Quote</label>
+                                <input type="text" class="form-control" id="Quote" placeholder="Enter your Quote" name="Quote" >
+                            }
+                            
                         </div>
                     </div>
                     <div class="col-md-6">
                         
-                            <div class="form-group">
+                        <div class="form-group">
+                          @if (Model.Country != null)
+                          {
+                              <label for="country">Country:</label>
+                              <select id="country" name="Country" class="form-control">
+                                  <option value="">Select the country...</option>
+                                  <option value="Russia" @(Model.Country == "Russia" ? "selected" : "")>Russia</option>
+                                  <option value="Ukraine" @(Model.Country == "Ukraine" ? "selected" : "")>Ukraine</option>
+                                  <option value="Belarus" @(Model.Country == "Belarus" ? "selected" : "")>Belarus</option>
+                                  <option value="Moldova" @(Model.Country == "Moldova" ? "selected" : "")>Moldova</option>
+                                  <option value="UNITED STATES" @(Model.Country == "UNITED STATES" ? "selected" : "")>UNITED STATES</option>
+                                  <option value="Britain" @(Model.Country == "Britain" ? "selected" : "")>Britain</option>
+                                  <option value="OTHER" @(Model.Country == "OTHER" ? "selected" : "")>Other (Please Specify)</option>
+                                  <input type="text" id="otherCountryInput" name="Country" class="form-control" style="display: none;" placeholder="Enter your country">
+                              </select>
+                          }
+                            else
+                            {
                                 <label for="country">Country:</label>
                                 <select id="country" name="Country" class="form-control">
 
                                     <option value="">Select the country...</option>
-                                    <option value="RU">Russia</option>
-                                    <option value="UA">Ukraine</option>
-                                    <option value="BY">Belarus</option>
-                                    <option value="MD">Moldova</option>
-                                    <option value="US">UNITED STATES</option>
-                                    <option value="UK">Britain</option>
+                                    <option value="Russia">Russia</option>
+                                    <option value="Ukraine">Ukraine</option>
+                                    <option value="Belarus">Belarus</option>
+                                    <option value="Moldova">Moldova</option>
+                                    <option value="UNITED STATES">UNITED STATES</option>
+                                    <option value="Britain">Britain</option>
                                     <option value="OTHER">Other (Please Specify)</option>
                                     <input type="text" id="otherCountryInput" name="Country" class="form-control" style="display: none;" placeholder="Enter your country">
 
                                 </select>
-                                <script>
-                                                        document.getElementById("country").addEventListener("change", function () {
-                                                            var countrySelect = document.getElementById("country");
-                                                            var otherInput = document.getElementById("otherCountryInput");
+                            }
+                            <script>
+                                document.getElementById("country").addEventListener("change", function () {
+                                    var countrySelect = document.getElementById("country");
+                                    var otherInput = document.getElementById("otherCountryInput");
+    
+                                    if (countrySelect.value === "OTHER") {
+                                        otherInput.style.display = "block";
+                                    } else {
+                                        otherInput.style.display = "none";
+                                    }
+                                });
 
-                                                            if (countrySelect.value === "OTHER") {
-                                                                otherInput.style.display = "block";
-                                                            } else {
-                                                                otherInput.style.display = "none";
-                                                            }
-                                                        });
-
-                                                    </script>
-                            </div>
+                            </script>
+                        </div>
 
                        
                     </div>
@@ -248,11 +372,11 @@
                         <div class="mt-3">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="customCheck1" name="YPICOBSBYF">
-                                <label class="custom-control-label" for="customCheck1">Your personal information can only be seen by your friends</label>
+                                <label class="custom-control-label" for="customCheck1" name="YPICOBSBYF">Your personal information can only be seen by your friends</label>
                             </div>
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="customCheck2" name="SEOBIAY">
-                                <label class="custom-control-label" for="customCheck2">Show everyone only basic information about you</label>
+                                <label class="custom-control-label" for="customCheck2" name="SEOBIAY">Show everyone only basic information about you</label>
                             </div>
 
                         </div>
@@ -261,11 +385,11 @@
                         <div class="mt-3">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="customCheck3" name="HYBH">
-                                <label class="custom-control-label" for="customCheck3">Hide your browsing history</label>
+                                <label class="custom-control-label" for="customCheck3" name="HYBH">Hide your browsing history</label>
                             </div>
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="customCheck4" name="HMG">
-                                <label class="custom-control-label" for="customCheck4">Hide my grades</label>
+                                <label class="custom-control-label" for="customCheck4" name="HMG">Hide my grades</label>
                             </div>
 
                         </div>
@@ -280,21 +404,48 @@
                         <div class="form-group">
                             <label for="social-fb">Facebook</label>
                             <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fab fa-facebook-square"></i></span>
-                                </div>
-                                <input type="text" class="form-control" id="social-fb" placeholder="Url" name="Facebook">
+                               
+                                @if (Model.Facebook!= null)
+                                {
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fab fa-facebook-square"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="social-fb" placeholder="Url" name="Facebook" value="@Model.Facebook">
+
+                                }
+                                else
+                                {
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fab fa-facebook-square"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="social-fb" placeholder="Url" name="Facebook">
+
+                                }
                             </div>
                         </div>
                     </div>
+                    
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="social-tw">Twitter</label>
                             <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fab fa-twitter"></i></span>
-                                </div>
-                                <input type="text" class="form-control" id="social-tw" placeholder="Username" name="Twitter">
+                               
+                                @if (Model.Twitter != null)
+                                {
+                                    <input type="text" class="form-control" id="social-tw" placeholder="Username" name="Twitter" value="@Model.Twitter">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fab fa-twitter"></i></span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    
+                                    <input type="text" class="form-control" id="social-tw" placeholder="Username" name="Twitter">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fab fa-twitter"></i></span>
+                                    </div>
+
+                                }
                             </div>
                         </div>
                     </div> <!-- end col -->
@@ -304,23 +455,49 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="social-insta">Instagram</label>
+                            <label for="social-instagram">Instagram</label>
                             <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fab fa-instagram"></i></span>
-                                </div>
-                                <input type="text" class="form-control" id="social-insta" placeholder="Url" name="Instagram">
+                               
+                                @if (Model.Instagram != null)
+                                {
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fab fa-instagram"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="social-instagram" placeholder="Url" name="Instagram" value="@Model.Instagram"> 
+                                   
+                                }
+                                else
+                                {
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fab fa-instagram"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="social-instagram" placeholder="Url" name="Instagram">
+                                   
+                                }
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="social-sky">Skype</label>
+                            <label for="social-github">GitHab</label>
                             <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fab fa-skype"></i></span>
-                                </div>
-                                <input type="text" class="form-control" id="social-sky" placeholder="username" name="Skype">
+                                
+                                @if (Model.GitHab != null)
+                                {
+                                   
+                                    <input type="text" class="form-control" id="social-github" placeholder="Url" name="GitHab" value="@Model.GitHab">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fab fa-github"></i></span>
+                                    </div>
+                                }
+                                else
+                                {
+                                   
+                                    <input type="text" class="form-control" id="social-github" placeholder="username" name="GitHab">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fab fa-github"></i></span>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div> <!-- end col -->

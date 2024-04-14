@@ -1,5 +1,10 @@
-﻿@using MovieNight.Domain.Entities
+﻿@using MovieNight.Web.Infrastructure
+@using MovieNight.Web.Models
 @model dynamic
+
+@{
+    var userModel = HttpContext.Current.GetMySessionObject();
+}
 
 @{
     ViewBag.Title = "_Hbar";
@@ -174,25 +179,24 @@
             </div>
         </li>
 
-        @if (HttpContext.Current.Session["UserId"] !=null)
+        @if (userModel != null)
         {
 
 
 
                 <li class="dropdown notification-list">
                 <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                    @if (HttpContext.Current.Session["Avatar"] == null)
+                    @if (userModel.Avatar==null)
                     {
                         <img src="/images/users/default_avatar.png" alt="user-image" class="rounded-circle">
                     }
                     else
                     {
-                        var avatarPath = (string)HttpContext.Current.Session["Avatar"];
-                        <img src="@avatarPath" alt="user-image" class="rounded-circle">
+                        <img src="@Url.Content(userModel.Avatar)" alt="user-image" class="rounded-circle">
                     }
 
                     <span class="pro-user-name ml-1">
-                        @HttpContext.Current.Session["UserName"] <i class="mdi mdi-chevron-down"></i>
+                        @userModel.Username <i class="mdi mdi-chevron-down"></i>
                     </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
