@@ -195,10 +195,28 @@ namespace MovieNight.Web.Controllers
         [HttpGet]
         public ActionResult ProfileEditing()
         {
-
-
-
-            return View();
+            var used = _sessionUser.GetPersonalProfileM(HttpContextInfrastructure.GetGlobalParam());
+            
+            var model = _mapper.Map<PersonalProfileModel>(used);
+            var userCurr = System.Web.HttpContext.Current.GetMySessionObject();
+            if (model != null && model.BUserE == null)
+            {
+                model.BUserE = new UserModel
+                {
+                    Username = userCurr.Username,
+                    Email = userCurr.Email
+                };
+            }
+            if(model!=null) return View(model);
+            else return View(new PersonalProfileModel
+            {
+                MsgResp = "Things go wrong!!!",
+                BUserE = new UserModel
+                {
+                    Username = userCurr.Username,
+                    Email = userCurr.Email
+                }
+            });
         }
 
         [HttpPost]
@@ -212,8 +230,8 @@ namespace MovieNight.Web.Controllers
                 profEd.Avatar = "~/uploads/avatars/" + profEd.AvatarFile.FileName;
 
             }
-            
 
+            var userCurr = System.Web.HttpContext.Current.GetMySessionObject();
             var profEdBl = _mapper.Map<ProfEditingE>(profEd);
 
             var success = _sessionUser.EdProfInfo(profEdBl);
@@ -223,8 +241,21 @@ namespace MovieNight.Web.Controllers
             }
             else
             {
-
-                return View("ProfileEditing",success);
+                PersonalProfileModel resp = _mapper.Map<PersonalProfileModel>(success.InfOfUser);
+                if (resp != null)
+                {
+                    resp.MsgResp = success.Msg;
+                    return View("ProfileEditing",resp);
+                }
+                return View("ProfileEditing", new PersonalProfileModel
+                {
+                    MsgResp = success.Msg,
+                    BUserE = new UserModel
+                    {
+                        Username = userCurr.Username,
+                        Email = userCurr.Email
+                    }
+                });
             }
         }
     }

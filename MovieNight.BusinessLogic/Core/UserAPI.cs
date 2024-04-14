@@ -270,8 +270,6 @@ namespace MovieNight.BusinessLogic.Core
                     var userDef = GetUserDataFromDatabase(userId);
                     return new PersonalProfileM
                     {
-
-
                         BUserE = userDef
                     };
                 }
@@ -399,7 +397,10 @@ namespace MovieNight.BusinessLogic.Core
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ProfEditingE, PEdBdTable>()
-                    .ForMember(dest => dest.UserDbTableId, opt => opt.Ignore());
+                    .ForMember(dest => dest.UserDbTableId,
+                        opt => opt.Ignore())
+                    .ForMember(dist=>dist.Avatar, 
+                        opt =>opt.Ignore());
             });
 
             var mapper = config.CreateMapper();
@@ -413,6 +414,14 @@ namespace MovieNight.BusinessLogic.Core
                     if (existingProfile != null)
                     {
                         mapper.Map(editing, existingProfile);
+                        if (existingProfile.Avatar != null && editing.Avatar != null)
+                        {
+                            existingProfile.Avatar = editing.Avatar;
+                        }
+                        else if (existingProfile.Avatar == null && editing.Avatar != null)
+                        {
+                            existingProfile.Avatar = editing.Avatar;
+                        }
                         if (existingUser != null)
                         {
                             if (editing.Username != null)

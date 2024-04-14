@@ -67,6 +67,10 @@
     <Compile Include="Interface\ISession.cs" />
     <Compile Include="Migrations\Movie\Configuration.cs" />
     <Compile Include="Migrations\Session\Configuration.cs" />
+    <Compile Include="Migrations\User\202404141207020_ConfigCollTable.cs" />
+    <Compile Include="Migrations\User\202404141207020_ConfigCollTable.designer.cs">
+      <DependentUpon>202404141207020_ConfigCollTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\User\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session\MailS\InboxS.cs" />
@@ -90,6 +94,11 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\User\202404141207020_ConfigCollTable.resx">
+      <DependentUpon>202404141207020_ConfigCollTable.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

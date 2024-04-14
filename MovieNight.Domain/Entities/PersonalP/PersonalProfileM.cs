@@ -45,6 +45,6 @@ namespace MovieNight.Domain.Entities.PersonalP
 
         public string Instagram { get; set; }
 
-        public string Skype { get; set; }
+        public string GitHab { get; set; }
     }
 }
