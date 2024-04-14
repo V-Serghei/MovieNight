@@ -10,6 +10,7 @@ using MovieNight.Web.Models.Movie;
 using MovieNight.Web.Models.PersonalP;
 using AutoMapper;
 using MovieNight.BusinessLogic.Interface.IService;
+using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.UserId;
 using MovieNight.Web.Infrastructure;
 
@@ -36,6 +37,14 @@ namespace MovieNight.Web.Controllers
                 cfg.CreateMap<PersonalProfileM, PersonalProfileModel>()
                     .ForMember(dist => dist.BUserE,
                         src => src.Ignore());
+                cfg.CreateMap<MovieTemplateInfE, MovieTemplateInfModel>()
+                    .ForMember(cnf => cnf.CastMembers,
+                        src => src.Ignore())
+                    .ForMember(cnf => cnf.InterestingFacts,
+                        src => src.Ignore())
+                    .ForMember(cnf => cnf.MovieCards,
+                        src => src.Ignore());
+
             });
 
             _mapper = config.CreateMapper();

@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Microsoft SQL Server (JetBrains)" uuid="df868ffa-f198-4518-a1ea-9e6602566961">
-      <driver-ref>sqlserver.jb</driver-ref>
-      <synchronize>true</synchronize>
-      <configured-by-url>true</configured-by-url>
-      <jdbc-driver>com.jetbrains.jdbc.sqlserver.SqlServerDriver</jdbc-driver>
-      <jdbc-url>Data Source=DESKTOP-HV4H0VE;     Initial Catalog=MovieNight;     Integrated Security=True;     MultipleActiveResultSets=True;     App=EntityFramework</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="DESKTOP-HV4H0VE" uuid="cbfd8e10-751f-4006-877c-2cfb445a8332">
+    <data-source source="LOCAL" name="Microsoft SQL Server (JetBrains)" uuid="a8b100a1-7da6-42cb-96ce-c7563e593264">
       <driver-ref>sqlserver.jb</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.jetbrains.jdbc.sqlserver.SqlServerDriver</jdbc-driver>

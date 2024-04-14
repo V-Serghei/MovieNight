@@ -1,22 +1,19 @@
-﻿using MovieNight.Domain.Entities;
-using MovieNight.Domain.Entities.UserId;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using MovieNight.BusinessLogic.DBModel;
 using MovieNight.Domain.enams;
-using MovieNight.Domain.Entities.DifferentE;
-using MovieNight.Helpers.CryptographyH;
-using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities;
 using MovieNight.Domain.Entities.PersonalP;
-using System.Text.RegularExpressions;
+using MovieNight.Domain.Entities.UserId;
+using MovieNight.Helpers.CookieH;
+using MovieNight.Helpers.CryptographyH;
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Diagnostics;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
-using AutoMapper;
-using MovieNight.Helpers.CookieH;
 
 namespace MovieNight.BusinessLogic.Core
 {
@@ -177,9 +174,14 @@ namespace MovieNight.BusinessLogic.Core
             return userRegister;
         }
 
+        
+        
         protected static bool UserAdding(RegData rData)
         {
             //add user to database
+
+          
+            
 
             var user = new UserDbTable()
             {

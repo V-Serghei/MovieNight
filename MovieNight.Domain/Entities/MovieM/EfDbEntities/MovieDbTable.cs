@@ -12,13 +12,13 @@ namespace MovieNight.Domain.Entities.MovieM.EfDbEntities
         public int Id { get; set; }
         
         [Required]
-        [StringLength(50,MinimumLength = 1)]
+        [StringLength(500,MinimumLength = 1)]
         public string Title { get; set; }
         
         
         public string PosterImage { get; set; }
         
-        [StringLength(50)]
+        [StringLength(500,MinimumLength = 1)]
         public string Quote { get; set; }
         
         [Required]
@@ -35,13 +35,13 @@ namespace MovieNight.Domain.Entities.MovieM.EfDbEntities
         public string Genres { get; set; }
 
         [Required]
-        [StringLength(50,MinimumLength = 3)]
+        [StringLength(500,MinimumLength = 3)]
         public string Location { get; set; }
         
         [Required]
         public string Director { get; set; }
         
-        [DataType(DataType.Time)]
+        //[DataType(DataType.Time)]
         public DateTime Duration { get; set; }
         
         [Required]
@@ -49,7 +49,7 @@ namespace MovieNight.Domain.Entities.MovieM.EfDbEntities
         public float MovieNightGrade { get; set; }
         
         [Required]
-        [StringLength(4,MinimumLength = 3)]
+        [StringLength(30,MinimumLength = 1)]
         public string Certificate { get; set; }
         
         public string ProductionCompany { get; set; }

@@ -10,7 +10,7 @@ namespace MovieNight.Domain.Entities.MovieM.EfDbEntities
         public int Id { get; set; }
         
         [Required]
-        [StringLength(50,MinimumLength = 3)]
+        [StringLength(500,MinimumLength = 1)]
         public string Title { get; set; }
         
         [Required]

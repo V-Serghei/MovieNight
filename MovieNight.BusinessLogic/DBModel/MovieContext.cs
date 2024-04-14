@@ -8,7 +8,6 @@ namespace MovieNight.BusinessLogic.DBModel
     {
         public MovieContext() : base("name=MovieNight")
         {
-
         }
 
         public DbSet<MovieDbTable> MovieDb { get; set; }
@@ -31,6 +30,7 @@ namespace MovieNight.BusinessLogic.DBModel
                     mc.MapLeftKey("MovieId");
                     mc.MapRightKey("CastMemberId");
                 });
+           
         }
     }
 }
