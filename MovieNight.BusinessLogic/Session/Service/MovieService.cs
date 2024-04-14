@@ -6,9 +6,9 @@ namespace MovieNight.BusinessLogic.Session.Service
 {
     public class MovieService:MovieAPI,IMovie
     {
-        public MovieTemplateInfE GetMovieInf()
+        public MovieTemplateInfE GetMovieInf(int? id)
         {
-            return null;
+            return GetMovieFromDb( id);
         }
 
     }

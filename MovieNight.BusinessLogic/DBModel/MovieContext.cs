@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
 
 namespace MovieNight.BusinessLogic.DBModel
@@ -9,6 +10,15 @@ namespace MovieNight.BusinessLogic.DBModel
         {
 
         }
+
+        public DbSet<MovieDbTable> MovieDb { get; set; }
+        
+        public DbSet<MovieCardDbTable> MovieCard { get; set; }
+        
+        public DbSet<CastMemDbTable> CastDbTables { get; set; }
+        
+        public DbSet<InterestingFactDbTable> InterestingFact { get; set; }
+ 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             

@@ -18,8 +18,7 @@ namespace MovieNight.Domain.Entities.MovieM.EfDbEntities
         
         public string Description { get; set; }
 
-        // Внешний ключ на таблицу MovieDbTable
-        [ForeignKey("MovieDbTable")]
+        [ForeignKey("Movie")] // Исправление: указать корректное название навигационного свойства
         public int MovieId { get; set; }
         public virtual MovieDbTable Movie { get; set; }
     }

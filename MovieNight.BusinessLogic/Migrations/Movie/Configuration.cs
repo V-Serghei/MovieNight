@@ -9,10 +9,10 @@
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             MigrationsDirectory = @"Migrations\Movie";
         }
-
+        
         protected override void Seed(MovieNight.BusinessLogic.DBModel.MovieContext context)
         {
             //  This method will be called after migrating to the latest version.

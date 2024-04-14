@@ -4,7 +4,7 @@ namespace MovieNight.BusinessLogic.Interface.IService
 {
     public interface IMovie
     {
-        MovieTemplateInfE GetMovieInf();
+        MovieTemplateInfE GetMovieInf(int? id);
         
     }
 }

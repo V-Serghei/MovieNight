@@ -92,7 +92,7 @@
 
                         <div class="tab-pane" id="settings">
                         
-                 @using (Html.BeginForm("ProfileEdit", "InformationSynchronization", FormMethod.Post))
+                 @using (Html.BeginForm("ProfileEdit", "InformationSynchronization", FormMethod.Post,new { enctype = "multipart/form-data" }))
                  {
                      if (Model is { Successes: false })
                      {
@@ -161,12 +161,13 @@
 
                     <div class="form-group col-md-6">
                         <div class="form-group">
-                            <label for="example-fileinput"> Upload avatar</label>
-
-                            <input type="file" class="form-control" id="example-fileinput" name="Avatar">
-
+                            <label for="Avatar"> Upload avatar</label>
+                    
+                            <input type="file" class="form-control" id="Avatar" name="Avatar" accept="image/*">
+                    
                         </div>
                     </div>
+
                 </div> <!-- end row -->
 
                 <div class="form-group row">
@@ -319,12 +320,12 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="social-sky">Skype</label>
+                            <label for="social-sky">GitHab</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fab fa-skype"></i></span>
                                 </div>
-                                <input type="text" class="form-control" id="social-sky" placeholder="username" name="Skype">
+                                <input type="text" class="form-control" id="social-sky" placeholder="username" name="GitHab">
                             </div>
                         </div>
                     </div> <!-- end col -->

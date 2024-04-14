@@ -34,7 +34,7 @@ namespace MovieNight.Web.Controllers
                 Password = model.Password,
                 RememberMe = model.RememberMe,
                 LoginTime = DateTime.Now,
-                Ip = Request.ServerVariables["REMOTE_ADDR"],
+                Ip = Request.UserHostAddress,
                 Agent = HttpContextInfrastructure.GetUserAgentInfo(Request)
             };
             if (ValidationStr.IsEmail(model.Username)) logD.Email = model.Username;
@@ -44,6 +44,7 @@ namespace MovieNight.Web.Controllers
             {
                 HttpCookie cookie = _sessionUser.GenCookie(verification.LogInData);
                 ControllerContext.HttpContext.Response.Cookies.Add(cookie);
+                System.Web.HttpContext.Current.SetMySessionObject(verification.LogInData);
                 return Json(new { redirect = Url.Action("PersonalProfile", "InformationSynchronization") });
 
             }
@@ -66,12 +67,13 @@ namespace MovieNight.Web.Controllers
 
             var rUserVerification = await _sessionUser.UserAdd(regD);
 
-            if (rUserVerification.SuccessUniq == true)
+            if (rUserVerification.SuccessUniq)
             {
                 
                 if (_sessionUser.UserСreation(regD))
                 {
                     
+                    rUserVerification.CurUser.Agent = HttpContextInfrastructure.GetUserAgentInfo(Request);
                     var cookie = _sessionUser.GenCookie(rUserVerification.CurUser);
                     ControllerContext.HttpContext.Response.Cookies.Add(cookie);
                     System.Web.HttpContext.Current.SetMySessionObject(rUserVerification.CurUser);
