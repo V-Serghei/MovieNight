@@ -7,6 +7,7 @@ using MovieNight.Domain.Entities.UserId;
 using MovieNight.Helpers.CookieH;
 using MovieNight.Helpers.CryptographyH;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using MovieNight.Domain.Entities.MovieM;
 
 namespace MovieNight.BusinessLogic.Core
 {
@@ -270,6 +272,8 @@ namespace MovieNight.BusinessLogic.Core
                     var userP = _mapper.Map<PersonalProfileM>(userProfCurrent);
                     if (userP != null) return userP;
                     var userDef = GetUserDataFromDatabase(userId);
+                    
+                   
                     return new PersonalProfileM
                     {
                         BUserE = userDef
@@ -424,13 +428,15 @@ namespace MovieNight.BusinessLogic.Core
                         {
                             existingProfile.Avatar = editing.Avatar;
                         }
+                        
+                        
                         if (existingUser != null)
                         {
                             if (editing.Username != null)
                                     existingUser.UserName = editing.Username;
-                            if (editing.Email != null)
+                            if (editing.Email != null && editing.Email!="Error")
                                 existingUser.Email = editing.Email;
-                            if (editing.Password != null)
+                            if (editing.Password != null && editing.Password!="Error")
                                 existingUser.Password = HashPassword.HashPass(editing.Password,existingUser.Salt);
                         }
                        

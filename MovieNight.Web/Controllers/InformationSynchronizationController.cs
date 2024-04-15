@@ -202,7 +202,7 @@ namespace MovieNight.Web.Controllers
         {
             try
             {
-                int? id = 10;
+                int? id = 3;
                 var movie = _movie.GetMovieInf(id);
                 if (movie != null)
                 {

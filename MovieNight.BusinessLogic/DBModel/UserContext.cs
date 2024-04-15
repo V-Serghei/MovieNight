@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.ModelBinding;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 
 
@@ -27,14 +28,42 @@ namespace MovieNight.BusinessLogic.DBModel
         {
             modelBuilder.Entity<UserDbTable>()
                 .HasOptional(u => u.PEdBdTable)
-                .WithRequired(p => p.User)
-                .Map(m => m.MapKey("UserId"));
-
-            modelBuilder.Entity<UserDbTable>()
-                .HasMany(u => u.ViewList)
-                .WithRequired(v => v.User)
-                .HasForeignKey(v => v.UserId);
+                .WithRequired(p => p.User);
             
+            modelBuilder.Entity<ViewListDbTable>()
+                .HasKey(w => w.Id); 
+            
+            modelBuilder.Entity<ViewListDbTable>()
+                .HasRequired(w => w.User)
+                .WithMany()
+                .HasForeignKey(w => w.UserId);
+
+            modelBuilder.Entity<ViewListDbTable>()
+                .HasRequired(w => w.Movie)
+                .WithMany()
+                .HasForeignKey(w => w.MovieId);
+
+            // modelBuilder.Entity<ViewListDbTable>()
+            //     .HasOptional(v => v.User)
+            //     .WithMany(u => u.ViewListEntries)
+            //     .HasForeignKey(v => v.UserId);
+            //
+            // modelBuilder.Entity<ViewListDbTable>()
+            //     .HasOptional(v => v.Movie)
+            //     .WithMany(m => m.ViewListEntries)
+            //     .HasForeignKey(v => v.MovieId);
+
+
+            // modelBuilder.Entity<MovieDbTable>()
+            //     .HasMany(m => m.CastMembers)
+            //     .WithMany(c => c.Movies)
+            //     .Map(mc =>
+            //     {
+            //         mc.ToTable("MovieCastMembers");
+            //         mc.MapLeftKey("MovieId");
+            //         mc.MapRightKey("CastMemberId");
+            //     });
+
         }
 
 

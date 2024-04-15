@@ -37,16 +37,15 @@ namespace MovieNight.Domain.Entities.UserId
 
         [Required]
         public LevelOfAccess Role { get; set; }
-
-
+        
         public bool Checkbox { get; set; }
 
         public string Salt { get; set; }
-
-     
-
-        public virtual ICollection<ViewListDbTable> ViewList { get; set; } 
+        
         public PEdBdTable PEdBdTable { get; set; }
+        
+        public ICollection<ViewListDbTable> ViewListEntries { get; set; }
+
 
         
 
