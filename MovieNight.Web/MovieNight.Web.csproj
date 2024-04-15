@@ -636,6 +636,7 @@
     <Content Include="vendor\x-editable\bootstrap-editable.css" />
     <Content Include="vendor\x-editable\bootstrap-editable.min.js" />
     <Content Include="Views\Error\Error404Page.cshtml" />
+    <Content Include="Views\SearchSortAdd\FindFriends.cshtml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

@@ -38,7 +38,7 @@ namespace MovieNight.Web.Controllers
         // GET: SearchSortAdd
         public ActionResult FriendsPage()
         {
-            var listU = _serviceFriend.getListOfUsers();
+            var listU = _serviceFriend.getListOfFriends();
             FriendListModel friendListModel = new FriendListModel();
             foreach (var t in listU.ListOfFriends)
             {
@@ -85,6 +85,30 @@ namespace MovieNight.Web.Controllers
         public ActionResult FriendsMovies()
         {
             return View();
+        }
+        
+        [HttpGet]
+        public ActionResult FindFriends(int _skipParametr)
+        {
+            var listU = _serviceFriend.getListOfUsers(_skipParametr);
+            FriendListModel friendListModel = new FriendListModel();
+            if (listU == null)
+            {
+                return View();
+            }
+            foreach (var t in listU.ListOfFriends)
+            {
+                FriendsPageD tmp = t; 
+                var listOfUsers = _mapper.Map<FriendPageModel>(tmp);
+                listOfUsers.BUserE = new UserModel
+                {
+                    Username = tmp.BUserE.Username,
+                    Email = tmp.BUserE.Email
+                };
+                friendListModel.ListOfFriends.Add(listOfUsers);
+            }
+
+            return View(friendListModel);
         }
     }
 }

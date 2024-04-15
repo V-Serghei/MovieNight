@@ -10,6 +10,7 @@ using AutoMapper;
 using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Domain.Entities.Friends;
 using MovieNight.Domain.Entities.UserId;
+using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Models.Friends;
 
@@ -180,6 +181,7 @@ namespace MovieNight.Web.Controllers
         }
 
         [HttpPost]
+        [UserMod]
         public ActionResult ProfileEdit(PEditingM profEd)
         {
 

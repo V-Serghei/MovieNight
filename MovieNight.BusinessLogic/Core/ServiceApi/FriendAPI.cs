@@ -58,7 +58,59 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             return friendsPageD;
         }
         
-        public FriendsListD getListOfUsersD()
+        public FriendsListD getListOfUsersD(int _skipParameter)
+        {
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<PEdBdTable,FriendsPageD>()
+                    .ForMember(dest => dest.BUserE, 
+                        opt => opt.Ignore());
+            });
+            
+            var mapper = config.CreateMapper();
+            
+            FriendsListD friendsListD = new FriendsListD();
+            using (var db = new UserContext())
+            {
+                try
+                {
+                    var list9Users = db.UsersT.OrderBy(u => u.Id).Skip(_skipParameter*9).Take(9).ToList();
+                    foreach (var list9 in list9Users)
+                    {
+                        var userd = db.PEdBdTables.FirstOrDefault(p => p.UserDbTableId == list9.Id);
+                        if (userd != null)
+                        {
+                            var oneOfList = mapper.Map<FriendsPageD>(userd);
+                            oneOfList.BUserE = new UserE
+                            {
+                                Username = list9.UserName,
+                                Email = list9.Email
+                            };
+                            friendsListD.ListOfFriends.Add(oneOfList);
+                        }
+                        else
+                        {
+                            var oneOfList = new FriendsPageD
+                            {
+                                BUserE = new UserE
+                                {
+                                    Username = list9.UserName,
+                                    Email = list9.Email
+                                }
+                            };
+                            friendsListD.ListOfFriends.Add(oneOfList);
+                        }
+                    } 
+                }
+                catch (Exception exception)
+                {
+                    return null;
+                }
+            }
+            return friendsListD;
+        }
+        
+        public FriendsListD getListOfFriendsD()
         {
             var config = new MapperConfiguration(c =>
             {

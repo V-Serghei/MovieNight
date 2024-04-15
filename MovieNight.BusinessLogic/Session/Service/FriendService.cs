@@ -16,9 +16,13 @@ namespace MovieNight.BusinessLogic.Session.Service
             return getFriendDateDB(id);
         }
 
-        public FriendsListD getListOfUsers()
+        public FriendsListD getListOfUsers( int _skipParameter)
         {
-            return getListOfUsersD();
+            return getListOfUsersD(_skipParameter);
+        }
+        public FriendsListD getListOfFriends()
+        {
+            return getListOfFriendsD();
         }
     }
 }
