@@ -44,6 +44,12 @@ namespace MovieNight.Web.Controllers
                         src => src.Ignore())
                     .ForMember(cnf => cnf.MovieCards,
                         src => src.Ignore());
+                cfg.CreateMap<InterestingFact, InterestingFactE>();
+                cfg.CreateMap<InterestingFactE, InterestingFact>();
+                cfg.CreateMap<MovieCardE, MovieCard>();
+                cfg.CreateMap<MovieCard, MovieCardE>();
+                cfg.CreateMap<CastMemberE, CastMember>();
+                cfg.CreateMap<CastMember, CastMemberE>();
 
             });
 
@@ -194,10 +200,33 @@ namespace MovieNight.Web.Controllers
         [HttpGet]
         public ActionResult MovieTemplatePage()
         {
-            int? id = 1;
-            var movie = _movie.GetMovieInf(id);
-            
-            
+            try
+            {
+                int? id = 10;
+                var movie = _movie.GetMovieInf(id);
+                if (movie != null)
+                {
+                    var movieModel = _mapper.Map<MovieTemplateInfModel>(movie);
+                    movieModel.MovieCards = _mapper.Map<List<MovieCard>>(movie.MovieCards);
+                    movieModel.CastMembers = _mapper.Map<List<CastMember>>(movie.CastMembers);
+                    movieModel.InterestingFacts = _mapper.Map<List<InterestingFact>>(movie.InterestingFacts);
+                    movieModel.Genre = new List<string>();
+                    foreach (var GEN in movie.Genre)
+                    {
+                        movieModel.Genre.Add(GEN);
+                    }
+                    return View(movieModel);
+                }
+
+                // return View("Error404", "Error");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                //return View("Error500", "Error");
+            }
+
             return View();
         }
 

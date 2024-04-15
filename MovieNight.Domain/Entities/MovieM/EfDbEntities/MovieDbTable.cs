@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieNight.Domain.Entities.MovieM.EfDbEntities
 {
-    public class MovieDbTable
+    public sealed class MovieDbTable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -61,12 +61,12 @@ namespace MovieNight.Domain.Entities.MovieM.EfDbEntities
         public string Language { get; set; }
         
         // Link "one-to-many" with CastMemberDbTable
-        public virtual ICollection<CastMemDbTable> CastMembers { get; set; }
+        public ICollection<CastMemDbTable> CastMembers { get; set; }
         
         // Link "one-to-many" with MovieCardDbTable table
-        public virtual ICollection<MovieCardDbTable> MovieCards { get; set; }
+        public ICollection<MovieCardDbTable> MovieCards { get; set; }
         
         // Link "one-to-many" with InterestingFactDbTable table
-        public virtual ICollection<InterestingFactDbTable> InterestingFacts { get; set; }
+        public ICollection<InterestingFactDbTable> InterestingFacts { get; set; }
     }
 }

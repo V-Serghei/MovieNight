@@ -136,6 +136,10 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             }
                         }
 
+                        movieDb.Genre = new List<string>();
+                        
+                            movieDb.Genre.Add(movieS.Genres);
+                        
                     }
 
                     return movieDb;

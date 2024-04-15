@@ -66,6 +66,8 @@
     <Compile Include="Entities\MovieM\ViewingHistoryM.cs" />
     <Compile Include="Entities\PersonalP\PEdBdTable.cs" />
     <Compile Include="Entities\PersonalP\PersonalInfoDbTable.cs" />
+    <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkDbTable.cs" />
+    <Compile Include="Entities\PersonalP\PersonalPDb\ViewListDbTable.cs" />
     <Compile Include="Entities\PersonalP\PersonalProfileM.cs" />
     <Compile Include="Entities\PersonalP\ProfEditingE.cs" />
     <Compile Include="Entities\TimeD.cs" />
