@@ -1,8 +1,10 @@
-﻿@using MovieNight.Web.Infrastructure
+﻿@using MovieNight.Domain.enams
+@using MovieNight.Web.Infrastructure
+@using MovieNight.Web.Models
 @model dynamic
 
 @{
-    var logInData = HttpContext.Current.GetMySessionObject();
+    var userModel = HttpContext.Current.GetMySessionObject();
 }
 
 @{
@@ -27,104 +29,111 @@
         </li>
 
 
+    
+    <li class="dropdown notification-list">
+        <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+            <i class="fe-bell noti-icon"></i>
+            <span class="badge badge-danger rounded-circle noti-icon-badge">3</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right dropdown-lg">
 
-        <li class="dropdown notification-list">
-            <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                <i class="fe-bell noti-icon"></i>
-                <span class="badge badge-danger rounded-circle noti-icon-badge">3</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-lg">
+            <!-- item-->
+            <div class="dropdown-item noti-title">
+                <h5 class="m-0">
+                    <span class="float-right">
+                        <a href="" class="text-dark">
+                            <small>Clear All</small>
+                        </a>
+                    </span>Notification
+                </h5>
+            </div>
+
+            <div class="slimscroll noti-scroll">
 
                 <!-- item-->
-                <div class="dropdown-item noti-title">
-                    <h5 class="m-0">
-                        <span class="float-right">
-                            <a href="" class="text-dark">
-                                <small>Clear All</small>
-                            </a>
-                        </span>Notification
-                    </h5>
-                </div>
-
-                <div class="slimscroll noti-scroll">
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item active">
-                        <div class="notify-icon bg-soft-primary text-primary">
-                            <i class="mdi mdi-comment-account-outline"></i>
-                        </div>
-                        <p class="notify-details">
-                            Doug Dukes commented on Admin Dashboard
-                            <small class="text-muted">1 min ago</small>
-                        </p>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                        <div class="notify-icon">
-                            <img src="/images/users/avatar-2.jpg" class="img-fluid rounded-circle" alt="" />
-                        </div>
-                        <p class="notify-details">Mario Drummond</p>
-                        <p class="text-muted mb-0 user-msg">
-                            <small>Hi, How are you? What about our next meeting</small>
-                        </p>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                        <div class="notify-icon">
-                            <img src="/images/users/avatar-4.jpg" class="img-fluid rounded-circle" alt="" />
-                        </div>
-                        <p class="notify-details">Karen Robinson</p>
-                        <p class="text-muted mb-0 user-msg">
-                            <small>Wow ! this admin looks good and awesome design</small>
-                        </p>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                        <div class="notify-icon bg-soft-warning text-warning">
-                            <i class="mdi mdi-account-plus"></i>
-                        </div>
-                        <p class="notify-details">
-                            New user registered.
-                            <small class="text-muted">5 hours ago</small>
-                        </p>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                        <div class="notify-icon bg-info">
-                            <i class="mdi mdi-comment-account-outline"></i>
-                        </div>
-                        <p class="notify-details">
-                            Caleb Flakelar commented on Admin
-                            <small class="text-muted">4 days ago</small>
-                        </p>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                        <div class="notify-icon bg-secondary">
-                            <i class="mdi mdi-heart"></i>
-                        </div>
-                        <p class="notify-details">
-                            Carlos Crouch liked
-                            <b>Admin</b>
-                            <small class="text-muted">13 days ago</small>
-                        </p>
-                    </a>
-                </div>
-
-                <!-- All-->
-                <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item notify-all">
-                    View all
-                    <i class="fi-arrow-right"></i>
+                <a href="javascript:void(0);" class="dropdown-item notify-item active">
+                    <div class="notify-icon bg-soft-primary text-primary">
+                        <i class="mdi mdi-comment-account-outline"></i>
+                    </div>
+                    <p class="notify-details">
+                        Doug Dukes commented on Admin Dashboard
+                        <small class="text-muted">1 min ago</small>
+                    </p>
                 </a>
 
-            </div>
-        </li>
+                <!-- item-->
+                <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    <div class="notify-icon">
+                        <img src="/images/users/avatar-2.jpg" class="img-fluid rounded-circle" alt="" />
+                    </div>
+                    <p class="notify-details">Mario Drummond</p>
+                    <p class="text-muted mb-0 user-msg">
+                        <small>Hi, How are you? What about our next meeting</small>
+                    </p>
+                </a>
 
+                <!-- item-->
+                <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    <div class="notify-icon">
+                        <img src="/images/users/avatar-4.jpg" class="img-fluid rounded-circle" alt="" />
+                    </div>
+                    <p class="notify-details">Karen Robinson</p>
+                    <p class="text-muted mb-0 user-msg">
+                        <small>Wow ! this admin looks good and awesome design</small>
+                    </p>
+                </a>
+
+                <!-- item-->
+                <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    <div class="notify-icon bg-soft-warning text-warning">
+                        <i class="mdi mdi-account-plus"></i>
+                    </div>
+                    <p class="notify-details">
+                        New user registered.
+                        <small class="text-muted">5 hours ago</small>
+                    </p>
+                </a>
+
+                <!-- item-->
+                <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    <div class="notify-icon bg-info">
+                        <i class="mdi mdi-comment-account-outline"></i>
+                    </div>
+                    <p class="notify-details">
+                        Caleb Flakelar commented on Admin
+                        <small class="text-muted">4 days ago</small>
+                    </p>
+                </a>
+
+                <!-- item-->
+                <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    <div class="notify-icon bg-secondary">
+                        <i class="mdi mdi-heart"></i>
+                    </div>
+                    <p class="notify-details">
+                        Carlos Crouch liked
+                        <b>Admin</b>
+                        <small class="text-muted">13 days ago</small>
+                    </p>
+                </a>
+            </div>
+
+            <!-- All-->
+            <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item notify-all">
+                View all
+                <i class="fi-arrow-right"></i>
+            </a>
+
+        </div>
+    </li>
+@if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+{
+    <li class="dropdown notification-list">
+        <a class="nav-link dropdown-toggle" href="@Url.Action("ReviewPage","InformationSynchronization")" role="button" >
+           <i class=" remixicon-quill-pen-line" ></i>
+        </a>
+    </li>
+}
         <li class="dropdown notification-list">
             <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                 <i class=" remixicon-bookmark-3-line"></i>
@@ -178,25 +187,24 @@
             </div>
         </li>
 
-        @if (logInData != null)
+        @if (userModel != null)
         {
 
 
 
                 <li class="dropdown notification-list">
                 <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                    @if (HttpContext.Current.Session["Avatar"] == null)
+                    @if (userModel.Avatar==null)
                     {
                         <img src="/images/users/default_avatar.png" alt="user-image" class="rounded-circle">
                     }
                     else
                     {
-                        var avatarPath = (string)HttpContext.Current.Session["Avatar"];
-                        <img src="@avatarPath" alt="user-image" class="rounded-circle">
+                        <img src="@Url.Content(userModel.Avatar)" alt="user-image" class="rounded-circle">
                     }
 
                     <span class="pro-user-name ml-1">
-                        @logInData.Username <i class="mdi mdi-chevron-down"></i>
+                        @userModel.Username <i class="mdi mdi-chevron-down"></i>
                     </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right profile-dropdown ">

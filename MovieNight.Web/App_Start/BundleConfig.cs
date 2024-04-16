@@ -109,16 +109,7 @@ namespace MovieNight.Web
                     "~/vendor/tablesaw/tablesaw.js"));
             bundles.Add(new ScriptBundle("~/bundles/tablesaw_init/js").Include(
                     "~/scripts/pages/tablesaw.init.js"));
-
-
-
-
-
-
-
-
-
-
+            
             //calendar
             bundles.Add(new StyleBundle("~/bundles/fullcalendar/css").Include(
                 "~/vendor/fullcalendar/fullcalendar.min.css", new CssRewriteUrlTransform()));
@@ -147,22 +138,15 @@ namespace MovieNight.Web
                     "~/vendor/dropzone/dropzone.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/fileuploads/js").Include(
                     "~/scripts/pages/form-fileuploads.init.js"));
-
-
-          
-
+            
             bundles.Add(new ScriptBundle("~/bundles/form-advanced/js").Include(
                 "~/scripts/pages/form-advanced.init.js"));
 
 
-
-
-
-
-
-
-
-
+                //Review page
+            bundles.Add(new ScriptBundle("~/bundles/kanban/js").Include(
+                        "~/scripts/pages/kanban.init.js"));
+                
 
 
         }

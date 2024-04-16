@@ -1,22 +1,21 @@
-﻿using MovieNight.Domain.Entities;
+﻿using AutoMapper;
+using MovieNight.BusinessLogic.DBModel;
+using MovieNight.Domain.enams;
+using MovieNight.Domain.Entities;
+using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Domain.Entities.UserId;
+using MovieNight.Helpers.CookieH;
+using MovieNight.Helpers.CryptographyH;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using MovieNight.BusinessLogic.DBModel;
-using MovieNight.Domain.enams;
-using MovieNight.Domain.Entities.DifferentE;
-using MovieNight.Domain.Entities.MovieM;
-using MovieNight.Domain.Entities.PersonalP;
-using System.Text.RegularExpressions;
 using System.Data.Entity;
 using System.Diagnostics;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
-using AutoMapper;
-using MovieNight.Helpers.CryptographyH;
-using MovieNight.Helpers.CookieH;
+using MovieNight.Domain.Entities.MovieM;
 
 namespace MovieNight.BusinessLogic.Core
 {
@@ -54,7 +53,10 @@ namespace MovieNight.BusinessLogic.Core
         //           - > login  < -   
         //  
         // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
-
+        private IMapper _mapper;
+        
+        
+        
         private bool IsValid(LogInData rData)
         {
             if (string.IsNullOrEmpty(rData.Password) || (string.IsNullOrEmpty(rData.Email) && string.IsNullOrEmpty(rData.Username)))
@@ -104,6 +106,10 @@ namespace MovieNight.BusinessLogic.Core
                     userL.LogInData = logInData;
                     userL.LogInData.Username = userExists.UserName;
                     userL.LogInData.Email = userExists.Email;
+                    userL.LogInData.Role = userExists.Role;
+                    
+                    var userD = db.PEdBdTables.FirstOrDefault(u => u.UserDbTableId == userExists.Id);
+                    if(userD?.Avatar != null) userL.LogInData.Avatar = userD.Avatar;
                     HttpContext.Current.Session["UserId"] = userExists.Id;
                     HttpContext.Current.Session["UserName"] = userExists.UserName;
                     return userL;
@@ -152,22 +158,20 @@ namespace MovieNight.BusinessLogic.Core
 
                 if (userExists != null)
                 {
-                    if (userExists.UserName == rData.UserName)
-                        userRegister.StatusMsg = "Username already taken";
-                    else
-                        userRegister.StatusMsg = "Email already in use";
+                    userRegister.StatusMsg = userExists.UserName == rData.UserName ? "Username already taken" : "Email already in use";
 
                     return userRegister;
                 }
             }
-
+            
             userRegister.SuccessUniq = true;
             userRegister.StatusMsg = "Success";
             userRegister.CurUser = new LogInData
             {
                 Username = rData.UserName,
                 Email = rData.Email,
-                Password = rData.Password
+                Password = rData.Password,
+                Role = LevelOfAccess.User
             };
             
             
@@ -175,9 +179,14 @@ namespace MovieNight.BusinessLogic.Core
             return userRegister;
         }
 
+        
+        
         protected static bool UserAdding(RegData rData)
         {
             //add user to database
+
+          
+            
 
             var user = new UserDbTable()
             {
@@ -246,83 +255,114 @@ namespace MovieNight.BusinessLogic.Core
 
         protected PersonalProfileM GetPersonalProfileDatabase(int? userId)
         {
-            var user = GetCurrentLoggedInUserDb();
+            
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<PEdBdTable, PersonalProfileM>()
+                    .ForMember(dist => dist.BUserE,
+                        src => src.Ignore());
+
+            });
+
+            _mapper = config.CreateMapper();
 
             using (var userProfData = new UserContext())
             {
-                var userProfCurrent = userProfData.PEdBdTables.FirstOrDefault(u => u.User.Id == userId);
-            }
-            
-            
-            
-            PersonalProfileM personalProfileM = new PersonalProfileM
-            {
-                Avatar = "~/images/users/photo_2023-03-30_21-08-09.jpg",
-                BUserE = new UserE
+                try
                 {
-                    Email = GetUserDataFromDatabase(userId).Email, 
-                    Username= GetUserDataFromDatabase(userId).Username,
-                },
-                Quote = "Movie fan",
-                AboutMe = "I’m Nelly and I love watching movies. Especially anime. For me, nothing is better than anime. Yes, and I’m also a cool IT girl and designer. And I’m also a master. I can do everything. " +
-                          "Cook, sew, draw, sculpt. I can learn everything. The main thing is to want.",
-                Location = "Moldova",
-                ViewingHistory = new List<ViewingHistoryM>(),
-                ListInThePlans = new List<ListOfFilms>()
-
-            };
-            //Get out of the movie database
-            for (int i = 0; i < 5; i++)
-            {
-                personalProfileM.ListInThePlans.Add(new ListOfFilms
-                {
-                    Date = new TimeD
-                    {
-                        Day = 10+i,
-                        Month = 10,
-                        Year = 2024
-                    },
-                    Name = "The Shawshank Redemption",
-                    NumberOfViews = 1102031331,
-                    Star = 5+i,
-                    Tags = new List<Tag>
-                    {
-                        new Tag
-                        {
-                            Id = 15+i,
-                            Name = "drama"
-                        },
-                        new Tag
-                        {
-                        Id = 12+i,
-                        Name = "family"
-                    }
-                    }
                     
-                });
-                
-
-            }
-            for (int i = 0; i < 5; i++)
-            {
-                personalProfileM.ViewingHistory.Add(new ViewingHistoryM
-                {
-                    Description = "",
-                    Id = i,
-                    Title = "Solo Leveling",
-                    Poster = new Poster
-                    {
-                        Id = i,
-                        Name = "Solo Leveling",
-                        Path = "~/images/index2.jpg",
-                    },
-                    Star = i+4,
-                    ViewingTime = DateTime.Now
+                    var userProfCurrent = userProfData.PEdBdTables.FirstOrDefault(u => u.User.Id == userId);
+                    var userP = _mapper.Map<PersonalProfileM>(userProfCurrent);
+                    if (userP != null) return userP;
+                    var userDef = GetUserDataFromDatabase(userId);
+                    
                    
-                });
+                    return new PersonalProfileM
+                    {
+                        BUserE = userDef
+                    };
+                }
+                catch (Exception ex)
+                {
+                    var userDef = GetUserDataFromDatabase(userId);
+                    return new PersonalProfileM
+                    {
+                        BUserE = userDef
+                    };
+                }
             }
-
-            return personalProfileM;
+           
+            
+            
+            
+            // PersonalProfileM personalProfileM = new PersonalProfileM
+            // {
+            //     Avatar = "~/images/users/photo_2023-03-30_21-08-09.jpg",
+            //     BUserE = new UserE
+            //     {
+            //         Email = GetUserDataFromDatabase(userId).Email, 
+            //         Username= GetUserDataFromDatabase(userId).Username,
+            //     },
+            //     Quote = "Movie fan",
+            //     AboutMe = "I’m Nelly and I love watching movies. Especially anime. For me, nothing is better than anime. Yes, and I’m also a cool IT girl and designer. And I’m also a master. I can do everything. " +
+            //               "Cook, sew, draw, sculpt. I can learn everything. The main thing is to want.",
+            //     Location = "Moldova",
+            //     ViewingHistory = new List<ViewingHistoryM>(),
+            //     ListInThePlans = new List<ListOfFilms>()
+            //
+            // };
+            // //Get out of the movie database
+            // for (int i = 0; i < 5; i++)
+            // {
+            //     personalProfileM.ListInThePlans.Add(new ListOfFilms
+            //     {
+            //         Date = new TimeD
+            //         {
+            //             Day = 10+i,
+            //             Month = 10,
+            //             Year = 2024
+            //         },
+            //         Name = "The Shawshank Redemption",
+            //         NumberOfViews = 1102031331,
+            //         Star = 5+i,
+            //         Tags = new List<Tag>
+            //         {
+            //             new Tag
+            //             {
+            //                 Id = 15+i,
+            //                 Name = "drama"
+            //             },
+            //             new Tag
+            //             {
+            //             Id = 12+i,
+            //             Name = "family"
+            //         }
+            //         }
+            //         
+            //     });
+            //     
+            //
+            // }
+            // for (int i = 0; i < 5; i++)
+            // {
+            //     personalProfileM.ViewingHistory.Add(new ViewingHistoryM
+            //     {
+            //         Description = "",
+            //         Id = i,
+            //         Title = "Solo Leveling",
+            //         Poster = new Poster
+            //         {
+            //             Id = i,
+            //             Name = "Solo Leveling",
+            //             Path = "~/images/index2.jpg",
+            //         },
+            //         Star = i+4,
+            //         ViewingTime = DateTime.Now
+            //        
+            //     });
+            // }
+            //
+            // return personalProfileM;
         }
         // /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
         //
@@ -366,7 +406,10 @@ namespace MovieNight.BusinessLogic.Core
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ProfEditingE, PEdBdTable>()
-                    .ForMember(dest => dest.UserDbTableId, opt => opt.Ignore());
+                    .ForMember(dest => dest.UserDbTableId,
+                        opt => opt.Ignore())
+                    .ForMember(dist => dist.Avatar,
+                        opt => opt.Ignore());
             });
 
             var mapper = config.CreateMapper();
@@ -380,6 +423,26 @@ namespace MovieNight.BusinessLogic.Core
                     if (existingProfile != null)
                     {
                         mapper.Map(editing, existingProfile);
+                        if (existingProfile.Avatar != null && editing.Avatar != null)
+                        {
+                            existingProfile.Avatar = editing.Avatar;
+                        }
+                        else if (existingProfile.Avatar == null && editing.Avatar != null)
+                        {
+                            existingProfile.Avatar = editing.Avatar;
+                        }
+                        
+                        
+                        if (existingUser != null)
+                        {
+                            if (editing.Username != null)
+                                    existingUser.UserName = editing.Username;
+                            if (editing.Email != null && editing.Email!="Error")
+                                existingUser.Email = editing.Email;
+                            // if (editing.Password != null && editing.Password!="Error")
+                            //     existingUser.Password = HashPassword.HashPass(editing.Password,existingUser.Salt);
+                        }
+                       
                     }
                     else
                     {
@@ -465,6 +528,7 @@ namespace MovieNight.BusinessLogic.Core
                 currentUser = validate.IsValid(session.Email) ? 
                     db.UsersT.FirstOrDefault(u => u.Email == session.Email) : 
                     db.UsersT.FirstOrDefault(u => u.UserName == session.UserName);
+                
             }
             
             if (currentUser == null) return null;
@@ -481,6 +545,11 @@ namespace MovieNight.BusinessLogic.Core
 
             var mapper = config.CreateMapper();
             var userLog = mapper.Map<LogInData>(currentUser);
+            using (var db = new UserContext())
+            {
+                var avatar = db.PEdBdTables.FirstOrDefault(u => u.UserDbTableId == currentUser.Id);
+                if (avatar != null) userLog.Avatar = avatar.Avatar;
+            }
 
             return userLog;
         }

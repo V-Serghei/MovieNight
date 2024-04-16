@@ -17,9 +17,12 @@ namespace MovieNight.Domain.Entities.UserId
         public DateTime LoginTime { get; set; }
         public bool RememberMe { get; set; } = false;
         
-        public string Agent { get; set; }
-        
         public LevelOfAccess Role { get; set; }
+        
+        public string Agent { get; set; }
+
+        public string Avatar { get; set; }
+
 
     }
 }

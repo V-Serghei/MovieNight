@@ -7,10 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.PersonalP;
+using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 
 namespace MovieNight.Domain.Entities.UserId
 {
-    public sealed class UserDbTable
+    public  class UserDbTable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -36,14 +37,14 @@ namespace MovieNight.Domain.Entities.UserId
 
         [Required]
         public LevelOfAccess Role { get; set; }
-
-
+        
         public bool Checkbox { get; set; }
 
         public string Salt { get; set; }
-
+        
         public PEdBdTable PEdBdTable { get; set; }
-
-
+        
+        public ICollection<ViewListDbTable> ViewListEntries { get; set; }
+        
     }
 }

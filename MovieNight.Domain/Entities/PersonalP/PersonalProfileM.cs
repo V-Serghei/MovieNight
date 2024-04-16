@@ -26,7 +26,6 @@ namespace MovieNight.Domain.Entities.PersonalP
         
         public string PhoneNumber { get; set; }
 
-        public string Location { get; set; }
         public List<ViewingHistoryM> ViewingHistory { get; set; }
         public List<ListOfFilms> ListInThePlans { get; set; }
         
@@ -46,6 +45,6 @@ namespace MovieNight.Domain.Entities.PersonalP
 
         public string Instagram { get; set; }
 
-        public string Skype { get; set; }
+        public string GitHab { get; set; }
     }
 }

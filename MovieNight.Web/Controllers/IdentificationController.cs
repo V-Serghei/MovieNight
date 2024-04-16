@@ -10,6 +10,7 @@ using MovieNight.BusinessLogic.Interface;
 using MovieNight.Domain.Entities.UserId;
 using System.Reflection;
 using System.Threading.Tasks;
+using AutoMapper;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Infrastructure.Different;
 
@@ -18,10 +19,17 @@ namespace MovieNight.Web.Controllers
     public class IdentificationController : Controller
     {
         private readonly ISession _sessionUser;
-        
+        private readonly IMapper _mapper;
          
         public IdentificationController()
         {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<LogInData,UserModel >();
+
+            });
+                _mapper = config.CreateMapper();
+
             var sesControlBl = new BusinessLogic.BusinessLogic();
             _sessionUser = sesControlBl.Session();
         }
@@ -34,7 +42,7 @@ namespace MovieNight.Web.Controllers
                 Password = model.Password,
                 RememberMe = model.RememberMe,
                 LoginTime = DateTime.Now,
-                Ip = Request.ServerVariables["REMOTE_ADDR"],
+                Ip = Request.UserHostAddress,
                 Agent = HttpContextInfrastructure.GetUserAgentInfo(Request)
             };
             if (ValidationStr.IsEmail(model.Username)) logD.Email = model.Username;
@@ -44,6 +52,8 @@ namespace MovieNight.Web.Controllers
             {
                 HttpCookie cookie = _sessionUser.GenCookie(verification.LogInData);
                 ControllerContext.HttpContext.Response.Cookies.Add(cookie);
+                var us = _mapper.Map<UserModel>(verification.LogInData);
+                System.Web.HttpContext.Current.SetMySessionObject(us);
                 return Json(new { redirect = Url.Action("PersonalProfile", "InformationSynchronization") });
 
             }
@@ -66,15 +76,17 @@ namespace MovieNight.Web.Controllers
 
             var rUserVerification = await _sessionUser.UserAdd(regD);
 
-            if (rUserVerification.SuccessUniq == true)
+            if (rUserVerification.SuccessUniq)
             {
                 
                 if (_sessionUser.UserСreation(regD))
                 {
                     
+                    rUserVerification.CurUser.Agent = HttpContextInfrastructure.GetUserAgentInfo(Request);
                     var cookie = _sessionUser.GenCookie(rUserVerification.CurUser);
                     ControllerContext.HttpContext.Response.Cookies.Add(cookie);
-                    System.Web.HttpContext.Current.SetMySessionObject(rUserVerification.CurUser);
+                    var us = _mapper.Map<UserModel>(rUserVerification.CurUser);
+                    System.Web.HttpContext.Current.SetMySessionObject(us);
                     return Json(new { redirect = Url.Action("PersonalProfile", "InformationSynchronization") });
                 }
                 else

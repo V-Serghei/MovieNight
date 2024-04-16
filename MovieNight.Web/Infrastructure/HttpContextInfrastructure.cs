@@ -2,17 +2,18 @@
 
 using System.Web;
 using MovieNight.Domain.Entities.UserId;
+using MovieNight.Web.Models;
 
 namespace MovieNight.Web.Infrastructure
 {
     public static class HttpContextInfrastructure
     {
-        public static LogInData GetMySessionObject(this HttpContext current)
+        public static UserModel GetMySessionObject(this HttpContext current)
         {
-            return (LogInData)current?.Session["__SessionObject"];
+            return (UserModel)current?.Session["__SessionObject"];
         }
         
-        public static void SetMySessionObject(this HttpContext current, LogInData profile)
+        public static void SetMySessionObject(this HttpContext current, UserModel profile)
         {
             current.Session.Add("__SessionObject", profile);
         }

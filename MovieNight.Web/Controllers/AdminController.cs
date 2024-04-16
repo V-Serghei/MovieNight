@@ -19,7 +19,7 @@ namespace MovieNight.Web.Controllers
         {
             if (file != null)
             {
-
+                
                 var filePath = Path.Combine(Server.MapPath("~/uploads"), file.FileName);
                 file.SaveAs(filePath);
 

@@ -30,7 +30,7 @@ namespace MovieNight.Domain.Entities.PersonalP
         public string Facebook { get; set; }
         public string Twitter { get; set; }
         public string Instagram { get; set; }
-        public string Skype { get; set; }
+        public string GitHab { get; set; }
        
     }
 }
