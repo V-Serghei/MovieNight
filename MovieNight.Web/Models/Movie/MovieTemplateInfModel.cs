@@ -5,6 +5,7 @@ namespace MovieNight.Web.Models.Movie
 {
     public class MovieTemplateInfModel
     {
+        public int Id { get; set; }
         public string Title { get; set; }
         public string PosterImage { get; set; }
         public string Quote { get; set; }
@@ -24,6 +25,8 @@ namespace MovieNight.Web.Models.Movie
         public List<CastMember> CastMembers { get; set; }
         public List<MovieCard> MovieCards { get; set; }
         public List<InterestingFact> InterestingFacts { get; set; }
+
+        public string Msg { get; set; } = "bookmark";
     }
     
 }

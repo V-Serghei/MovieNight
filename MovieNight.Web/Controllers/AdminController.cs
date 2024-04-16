@@ -13,6 +13,7 @@ namespace MovieNight.Web.Controllers
         // GET: Admin
 
         [HttpPost]
+        
         public ActionResult UploadingTheFileOfAddingMoviesDb(HttpPostedFileBase file)
         {
             if (file != null)

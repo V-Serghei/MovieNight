@@ -106,6 +106,8 @@ namespace MovieNight.BusinessLogic.Core
                     userL.LogInData = logInData;
                     userL.LogInData.Username = userExists.UserName;
                     userL.LogInData.Email = userExists.Email;
+                    userL.LogInData.Role = userExists.Role;
+                    
                     var userD = db.PEdBdTables.FirstOrDefault(u => u.UserDbTableId == userExists.Id);
                     if(userD?.Avatar != null) userL.LogInData.Avatar = userD.Avatar;
                     HttpContext.Current.Session["UserId"] = userExists.Id;
@@ -168,7 +170,8 @@ namespace MovieNight.BusinessLogic.Core
             {
                 Username = rData.UserName,
                 Email = rData.Email,
-                Password = rData.Password
+                Password = rData.Password,
+                Role = LevelOfAccess.Admin
             };
             
             
@@ -191,7 +194,7 @@ namespace MovieNight.BusinessLogic.Core
                 Email = rData.Email,
                 LastLoginDate = rData.RegDateTime,
                 LastIp = rData.Ip,
-                Role = LevelOfAccess.User,
+                Role = rData.Role,
                 Checkbox = rData.Checkbox,
                 Salt = Salt.GetRandSalt()
                 
@@ -405,8 +408,8 @@ namespace MovieNight.BusinessLogic.Core
                 cfg.CreateMap<ProfEditingE, PEdBdTable>()
                     .ForMember(dest => dest.UserDbTableId,
                         opt => opt.Ignore())
-                    .ForMember(dist=>dist.Avatar, 
-                        opt =>opt.Ignore());
+                    .ForMember(dist => dist.Avatar,
+                        opt => opt.Ignore());
             });
 
             var mapper = config.CreateMapper();
@@ -436,8 +439,8 @@ namespace MovieNight.BusinessLogic.Core
                                     existingUser.UserName = editing.Username;
                             if (editing.Email != null && editing.Email!="Error")
                                 existingUser.Email = editing.Email;
-                            if (editing.Password != null && editing.Password!="Error")
-                                existingUser.Password = HashPassword.HashPass(editing.Password,existingUser.Salt);
+                            // if (editing.Password != null && editing.Password!="Error")
+                            //     existingUser.Password = HashPassword.HashPass(editing.Password,existingUser.Salt);
                         }
                        
                     }

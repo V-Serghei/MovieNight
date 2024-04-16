@@ -45,9 +45,6 @@ namespace MovieNight.Domain.Entities.UserId
         public PEdBdTable PEdBdTable { get; set; }
         
         public ICollection<ViewListDbTable> ViewListEntries { get; set; }
-
-
         
-
     }
 }

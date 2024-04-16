@@ -2,6 +2,7 @@
 using MovieNight.BusinessLogic.Interface;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Web.Models;
@@ -202,7 +203,7 @@ namespace MovieNight.Web.Controllers
         {
             try
             {
-                int? id = 3;
+                int id = 3;
                 var movie = _movie.GetMovieInf(id);
                 if (movie != null)
                 {
@@ -215,6 +216,8 @@ namespace MovieNight.Web.Controllers
                     {
                         movieModel.Genre.Add(GEN);
                     }
+
+                    movieModel.Id = id;
                     return View(movieModel);
                 }
 
@@ -296,5 +299,17 @@ namespace MovieNight.Web.Controllers
                 });
             }
         }
+
+        [HttpPost]
+        public Task<JsonResult> BookmarkMovie(int movieid)
+        {   
+            string newMessage = "Новое сообщение";
+
+            // Установка нового сообщения в ViewBag
+            ViewBag.Msg = newMessage;
+
+            return Task.FromResult(Json(new {}));
+        }
+        
     }
 }
