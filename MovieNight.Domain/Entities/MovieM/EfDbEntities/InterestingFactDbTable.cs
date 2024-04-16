@@ -3,7 +3,7 @@
 
     namespace MovieNight.Domain.Entities.MovieM.EfDbEntities
     {
-        public class InterestingFactDbTable
+        public sealed class InterestingFactDbTable
         {
             [Key]
             [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,9 +17,9 @@
             [StringLength(1500,MinimumLength = 1)]
             public string FactText { get; set; }
 
-            // Внешний ключ на таблицу MovieDbTable
+            // External key to MovieDbTable table
             [ForeignKey("Movie")]
             public int MovieId { get; set; }
-            public virtual MovieDbTable Movie { get; set; }
+            public MovieDbTable Movie { get; set; }
         }
     }

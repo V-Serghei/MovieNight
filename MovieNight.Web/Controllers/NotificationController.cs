@@ -1,6 +1,7 @@
 ﻿using Microsoft.Ajax.Utilities;
 using MovieNight.BusinessLogic;
 using MovieNight.BusinessLogic.Interface;
+using MovieNight.Domain.Entities.Notification;
 using MovieNight.Web.Models.Calendar;
 using System;
 using System.Collections.Generic;
@@ -20,26 +21,18 @@ namespace MovieNight.Web.Controllers
             var bl = new BusinessLogic.BusinessLogic();
             EventSession = bl.Session();
         }
-
-
         [HttpPost]
         public ActionResult EventSave(EventDataModel eventDataModel)
         {
-            if (eventDataModel == null)
+            EventE eventE = new EventE()
             {
-                return View("Calendar");
-            }
-            //EventE eventE = new EventE()
-            //{
-            //    EventTitle = eventDataModel.title,
-            //    Category = Domain.enams.EventColor.Blue,
-            //    StartTime = eventDataModel.beginning,
-            //    EndTime = eventDataModel.ending
-            //};
-            return RedirectToAction("UploadingTheFileOfAddingMoviesDb","Admin");
+                EventTitle = eventDataModel.title,
+                Category = Domain.enams.EventColor.Blue,
+                //StartTime = eventDataModel.beginning,
+                //EndTime = eventDataModel.ending
+            };
+            return RedirectToAction("Index","MainPage");
         }
-
-        [HttpGet]
         public ActionResult Calendar()
         {
             return View();

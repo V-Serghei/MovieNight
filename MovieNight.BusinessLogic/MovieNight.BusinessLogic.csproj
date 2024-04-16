@@ -60,23 +60,35 @@
   <ItemGroup>
     <Compile Include="BusinessLogic.cs" />
     <Compile Include="Core\MailCore.cs" />
+    <Compile Include="Core\ServiceApi\FriendAPI.cs" />
     <Compile Include="Core\ServiceApi\MovieAPI.cs" />
     <Compile Include="Core\UserAPI.cs" />
+    <Compile Include="DBModel\MasterContext.cs" />
     <Compile Include="DBModel\MovieContext.cs" />
     <Compile Include="DBModel\SessionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="Interface\IMail\IInbox.cs" />
+    <Compile Include="Interface\IService\IFriendsService.cs" />
     <Compile Include="Interface\IService\IMovie.cs" />
     <Compile Include="Interface\ISession.cs" />
-    <Compile Include="Migrations\Movie\202404141507399_k.cs" />
-    <Compile Include="Migrations\Movie\202404141507399_k.designer.cs">
-      <DependentUpon>202404141507399_k.cs</DependentUpon>
+    <Compile Include="Migrations\Movie\202404151835349_Moviee.cs" />
+    <Compile Include="Migrations\Movie\202404151835349_Moviee.designer.cs">
+      <DependentUpon>202404151835349_Moviee.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Movie\Configuration.cs" />
+    <Compile Include="Migrations\Session\202404151836060_Session.cs" />
+    <Compile Include="Migrations\Session\202404151836060_Session.designer.cs">
+      <DependentUpon>202404151836060_Session.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Session\Configuration.cs" />
+    <Compile Include="Migrations\User\202404151831372_Movie.cs" />
+    <Compile Include="Migrations\User\202404151831372_Movie.designer.cs">
+      <DependentUpon>202404151831372_Movie.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\User\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session\MailS\InboxS.cs" />
+    <Compile Include="Session\Service\FriendService.cs" />
     <Compile Include="Session\Service\MovieService.cs" />
     <Compile Include="Session\SessionBL.cs" />
   </ItemGroup>
@@ -101,8 +113,14 @@
     <Content Include="DBModel\Seed\SeedData.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\Movie\202404141507399_k.resx">
-      <DependentUpon>202404141507399_k.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Movie\202404151835349_Moviee.resx">
+      <DependentUpon>202404151835349_Moviee.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Session\202404151836060_Session.resx">
+      <DependentUpon>202404151836060_Session.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\User\202404151831372_Movie.resx">
+      <DependentUpon>202404151831372_Movie.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

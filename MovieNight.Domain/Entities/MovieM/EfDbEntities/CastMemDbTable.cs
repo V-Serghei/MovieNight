@@ -4,7 +4,7 @@
 
     namespace MovieNight.Domain.Entities.MovieM.EfDbEntities
     {
-        public class CastMemDbTable
+        public sealed class CastMemDbTable
         {
             [Key]
             [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,7 +19,7 @@
             [Required]
             public string ImageUrl { get; set; }
 
-            // Связь "многие-ко-многим" с таблицей MovieDbTable
-            public virtual ICollection<MovieDbTable> Movies { get; set; }
+            // Link "many-to-many" with the table MovieDbTable
+            public ICollection<MovieDbTable> Movies { get; set; }
         }
     }

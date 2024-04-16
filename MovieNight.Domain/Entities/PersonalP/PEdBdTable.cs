@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 using MovieNight.Domain.Entities.UserId;
 
 namespace MovieNight.Domain.Entities.PersonalP
@@ -15,9 +16,8 @@ namespace MovieNight.Domain.Entities.PersonalP
 
         [Key]
         [ForeignKey("User")]
-        public int? UserDbTableId { get; set; } // Изменен тип на int?
+        public int? UserDbTableId { get; set; } 
 
-        // Навигационное свойство
         public virtual UserDbTable User { get; set; }
 
 
@@ -54,6 +54,7 @@ namespace MovieNight.Domain.Entities.PersonalP
         public string Instagram { get; set; }
 
         public string GitHab { get; set; }
+        
 
 
 

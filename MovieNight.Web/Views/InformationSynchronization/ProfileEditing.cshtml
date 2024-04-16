@@ -174,22 +174,28 @@
                             @if(logInData.Email!=null)
                             {
                             <label for="Email">Email Address</label>
-                            <input type="email" class="form-control" id="Email" placeholder="Enter email" name="Email" value="@logInData.Email">
+                            <input type="email" class="form-control" id="Email" placeholder="Enter email" name="Email" value="@logInData.Email" readonly="readonly">
                             <span class="form-text text-muted"><small>If you want to change email please <a href="javascript: void(0);">click</a> here.</small></span>
                             }
                             else
                             {
                             <label for="Email">Email Address</label>
-                            <input type="email" class="form-control" id="Email" placeholder="Enter email" name="Email" value="Error">
+                            <input type="email" class="form-control" id="Email" placeholder="Enter email" name="Email" value="Error" readonly="readonly">
                             <span class="form-text text-muted"><small>If you want to change email please <a href="javascript: void(0);">click</a> here.</small></span>
                             }
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="Password">Password</label>
-                            <input type="password" class="form-control" id="Password" placeholder="Enter password" name="Password">
-                            <span class="form-text text-muted"><small>If you want to change password please <a href="javascript: void(0);">click</a> here.</small></span>
+                            @if(Model.BUserE is { Password: not null }){<label for="Password">Password</label>
+                            <input type="password" class="form-control" id="Password" placeholder="Enter password" name="Password" value="@Model.BUserE.Password" readonly="readonly">
+                            <span class="form-text text-muted"><small>If you want to change password please <a href="javascript: void(0);">click</a> here.</small></span>}
+                            else
+                            {
+                                <label for="Password">Password</label>
+                                <input type="password" class="form-control" id="Password" placeholder="Enter password" name="Password" value="Error" readonly="readonly">
+                                <span class="form-text text-muted"><small>If you want to change password please <a href="javascript: void(0);">click</a> here.</small></span>
+                            }
                         </div>
                     </div>
                     <div class="col-md-6">

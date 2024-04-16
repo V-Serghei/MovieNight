@@ -1,0 +1,249 @@
+﻿@using MovieNight.Web.Models.Friends
+@model MovieNight.Web.Models.Friends.FriendListModel
+
+@{
+    ViewBag.Title = "FindFriends";
+}
+
+<div>
+    <div class="content">
+
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">MovieNight</a></li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Find Friends</a></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card-box">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <label for="inputPassword2" class="sr-only">Search</label>
+                                        <input type="search" class="form-control" id="inputPassword2" placeholder="Search...">
+                                    </div>
+                                    <div class="form-group mx-sm-3">
+                                    </div>
+                                </form>
+                            </div>
+                        </div> <!-- end row -->
+                    </div> <!-- end card-box -->
+                </div><!-- end col-->
+            </div>
+            <!-- end row -->
+
+            @{
+                for (int i = 0; i < Model.ListOfFriends.Count; i++)
+                {
+                    var person = Model.ListOfFriends[i];
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="text-center card-box ribbon-box">
+                                <div class="clearfix"></div>
+                                <div class="pt-2 pb-2">
+                                    <img src="~/images/Nelea/Richi.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+
+                                    <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">@person.BUserE.Username</a></h4>
+                                    <p> <span> <a href="#" class="text-pink">@person.BUserE.Email</a> </span></p>
+
+                                    <p class="text-muted font-13 mb-3">
+                                        @person.Quote
+                                    </p>
+
+                                    <a href=@Url.Action("Compose", "DataTransfer")>
+                                        <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                            <i class="mdi mdi-email mr-1"></i> Message
+                                        </button>
+                                    </a>
+                                    <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", person.BUserE.Id)>
+                                        <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                            <i class="remixicon-account-pin-box-fill"></i> Go to profile
+                                        </button>
+                                    </a>
+
+                                    <ul class="social-list list-inline mt-3 mb-0">
+                                        <li class="list-inline-item">
+                                            <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github-circle"></i></a>
+                                        </li>
+                                    </ul>
+
+                                </div> <!-- end .padding -->
+                            </div> <!-- end card-box-->
+                        </div> <!-- end col -->
+
+                        @if (i + 1 < Model.ListOfFriends.Count)
+                        {
+                            var nextPerson = Model.ListOfFriends[i + 1];
+                            i++;
+                        <div class="col-lg-4">
+                            <div class="text-center card-box ribbon-box">
+                                <div class="clearfix"></div>
+                                <div class="pt-2 pb-2">
+                                    <img src="~/images/Nelea/Richi.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+
+                                    <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">@nextPerson.BUserE.Username</a></h4>
+                                    <p> <span> <a href="#" class="text-pink">@nextPerson.BUserE.Email</a> </span></p>
+
+                                    <p class="text-muted font-13 mb-3">
+                                        @nextPerson.Quote
+                                    </p>
+
+                                    <a href=@Url.Action("Compose", "DataTransfer")>
+                                        <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                            <i class="mdi mdi-email mr-1"></i> Message
+                                        </button>
+                                    </a>
+                                    <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", nextPerson.BUserE.Id)>
+                                        <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                            <i class="remixicon-account-pin-box-fill"></i> Go to profile
+                                        </button>
+                                    </a>
+
+                                    <ul class="social-list list-inline mt-3 mb-0">
+                                        <li class="list-inline-item">
+                                            <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github-circle"></i></a>
+                                        </li>
+                                    </ul>
+
+                                </div> <!-- end .padding -->
+                            </div> <!-- end card-box-->
+                        </div> <!-- end col -->
+                        }
+                        
+                        @if (i + 1 < Model.ListOfFriends.Count)
+                        {
+                            var nextnextPerson = Model.ListOfFriends[i + 1];
+                            i++;
+                        <div class="col-lg-4">
+                            <div class="text-center card-box ribbon-box">
+                                <div class="clearfix"></div>
+                                <div class="pt-2 pb-2">
+                                    <img src="~/images/Nelea/Richi.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+
+                                    <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">@nextnextPerson.BUserE.Username</a></h4>
+                                    <p> <span> <a href="#" class="text-pink">@person.BUserE.Email</a> </span></p>
+
+                                    <p class="text-muted font-13 mb-3">
+                                        @nextnextPerson.Quote
+                                    </p>
+
+                                    <a href=@Url.Action("Compose", "DataTransfer")>
+                                        <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                            <i class="mdi mdi-email mr-1"></i> Message
+                                        </button>
+                                    </a>
+                                    <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", nextnextPerson.BUserE.Id)>
+                                        <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                            <i class="remixicon-account-pin-box-fill"></i> Go to profile
+                                        </button>
+                                    </a>
+
+                                    <ul class="social-list list-inline mt-3 mb-0">
+                                        <li class="list-inline-item">
+                                            <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github-circle"></i></a>
+                                        </li>
+                                    </ul>
+
+                                </div> <!-- end .padding -->
+                            </div> <!-- end card-box-->
+                        </div> <!-- end col -->
+                        }
+                        
+                    </div>
+                    <!-- end row -->
+                }
+            }
+
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-right">
+                        <ul class="pagination pagination-rounded justify-content-end" id="paginationList">
+                            <!-- Здесь будет генерироваться список пагинации -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                // Функция для загрузки страницы с указанным _skipParametr
+                function loadPage(skipParam) {
+                    var url = '@Url.Action("FindFriends", "SearchSortAdd")';
+                    url += '?_skipParametr=' + skipParam;
+                    window.location.href = url;
+                }
+
+                // Генерация списка пагинации
+                function generatePagination(totalPages, currentPage, itemsPerPage) {
+                    var paginationList = $('#paginationList');
+                    paginationList.empty();
+
+                    // Добавление кнопок для каждой страницы
+                    for (var i = 1; i <= totalPages; i++) {
+                        var liClass = (i === currentPage) ? 'page-item active' : 'page-item';
+                        var pageLink = $('<a>', {
+                            class: 'page-link',
+                            href: 'javascript:void(0);',
+                            text: i,
+                            click: function () {
+                                var skipParam = (i - 1) * itemsPerPage;
+                                loadPage(skipParam);
+                            }
+                        });
+                        var listItem = $('<li>', { class: liClass }).append(pageLink);
+                        paginationList.append(listItem);
+                    }
+                }
+
+                // Вызов функции генерации пагинации при загрузке страницы
+                $(document).ready(function () {
+                    // Здесь установите значения totalPages, currentPage и itemsPerPage из вашей модели или контроллера
+                    var totalPages = 5; // Общее количество страниц
+                    var currentPage = 1; // Текущая страница
+                    var itemsPerPage = 10; // Количество элементов на странице
+
+                    generatePagination(totalPages, currentPage, itemsPerPage);
+                });
+            </script>
+            <!-- end row -->
+
+
+        </div> <!-- container -->
+
+    </div> <!-- content -->
+
+
+</div>
+

@@ -7,6 +7,7 @@ using MovieNight.Domain.Entities.UserId;
 using MovieNight.Helpers.CookieH;
 using MovieNight.Helpers.CryptographyH;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using MovieNight.Domain.Entities.MovieM;
 
 namespace MovieNight.BusinessLogic.Core
 {
@@ -104,6 +106,8 @@ namespace MovieNight.BusinessLogic.Core
                     userL.LogInData = logInData;
                     userL.LogInData.Username = userExists.UserName;
                     userL.LogInData.Email = userExists.Email;
+                    userL.LogInData.Role = userExists.Role;
+                    
                     var userD = db.PEdBdTables.FirstOrDefault(u => u.UserDbTableId == userExists.Id);
                     if(userD?.Avatar != null) userL.LogInData.Avatar = userD.Avatar;
                     HttpContext.Current.Session["UserId"] = userExists.Id;
@@ -147,7 +151,7 @@ namespace MovieNight.BusinessLogic.Core
                 userRegister.SuccessUniq = false;
                 return userRegister;
             }
-
+            
             using (var db = new UserContext())
             {
                 var userExists = await db.UsersT.FirstOrDefaultAsync(u => u.UserName == rData.UserName || u.Email == rData.Email);
@@ -166,7 +170,8 @@ namespace MovieNight.BusinessLogic.Core
             {
                 Username = rData.UserName,
                 Email = rData.Email,
-                Password = rData.Password
+                Password = rData.Password,
+                Role = LevelOfAccess.Admin
             };
             
             
@@ -189,7 +194,7 @@ namespace MovieNight.BusinessLogic.Core
                 Email = rData.Email,
                 LastLoginDate = rData.RegDateTime,
                 LastIp = rData.Ip,
-                Role = LevelOfAccess.User,
+                Role = LevelOfAccess.Admin,
                 Checkbox = rData.Checkbox,
                 Salt = Salt.GetRandSalt()
                 
@@ -270,6 +275,8 @@ namespace MovieNight.BusinessLogic.Core
                     var userP = _mapper.Map<PersonalProfileM>(userProfCurrent);
                     if (userP != null) return userP;
                     var userDef = GetUserDataFromDatabase(userId);
+                    
+                   
                     return new PersonalProfileM
                     {
                         BUserE = userDef
@@ -401,8 +408,8 @@ namespace MovieNight.BusinessLogic.Core
                 cfg.CreateMap<ProfEditingE, PEdBdTable>()
                     .ForMember(dest => dest.UserDbTableId,
                         opt => opt.Ignore())
-                    .ForMember(dist=>dist.Avatar, 
-                        opt =>opt.Ignore());
+                    .ForMember(dist => dist.Avatar,
+                        opt => opt.Ignore());
             });
 
             var mapper = config.CreateMapper();
@@ -424,14 +431,16 @@ namespace MovieNight.BusinessLogic.Core
                         {
                             existingProfile.Avatar = editing.Avatar;
                         }
+                        
+                        
                         if (existingUser != null)
                         {
                             if (editing.Username != null)
                                     existingUser.UserName = editing.Username;
-                            if (editing.Email != null)
+                            if (editing.Email != null && editing.Email!="Error")
                                 existingUser.Email = editing.Email;
-                            if (editing.Password != null)
-                                existingUser.Password = HashPassword.HashPass(editing.Password,existingUser.Salt);
+                            // if (editing.Password != null && editing.Password!="Error")
+                            //     existingUser.Password = HashPassword.HashPass(editing.Password,existingUser.Salt);
                         }
                        
                     }

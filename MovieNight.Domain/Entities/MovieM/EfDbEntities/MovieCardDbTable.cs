@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieNight.Domain.Entities.MovieM.EfDbEntities
 {
-    public class MovieCardDbTable
+    public sealed class MovieCardDbTable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,8 +18,8 @@ namespace MovieNight.Domain.Entities.MovieM.EfDbEntities
         
         public string Description { get; set; }
 
-        [ForeignKey("Movie")] // Исправление: указать корректное название навигационного свойства
+        [ForeignKey("Movie")]
         public int MovieId { get; set; }
-        public virtual MovieDbTable Movie { get; set; }
+        public MovieDbTable Movie { get; set; }
     }
 }
