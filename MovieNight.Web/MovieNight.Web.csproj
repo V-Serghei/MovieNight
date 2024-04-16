@@ -637,14 +637,21 @@
     <Content Include="vendor\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="vendor\x-editable\bootstrap-editable.css" />
     <Content Include="vendor\x-editable\bootstrap-editable.min.js" />
+    <Content Include="Views\Error\Error404Page.cshtml" />
+    <Content Include="Views\SearchSortAdd\FindFriends.cshtml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Attributes\AdminModAttribute.cs" />
+    <Compile Include="Attributes\GuestModAttribute.cs" />
+    <Compile Include="Attributes\ModeratorModAttribute.cs" />
+    <Compile Include="Attributes\UserModAttribute.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DataTransferController.cs" />
     <Compile Include="Controllers\IdentificationController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\InformationSynchronizationController.cs" />
     <Compile Include="Controllers\MainPageController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
@@ -660,6 +667,8 @@
     <Compile Include="Models\Calendar\EventDataModel.cs" />
     <Compile Include="Models\Different\PhoneNumModel.cs" />
     <Compile Include="Models\Different\TagModel.cs" />
+    <Compile Include="Models\Friends\FriendListModel.cs" />
+    <Compile Include="Models\Friends\FriendPageModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\Mail\InboxModel.cs" />
     <Compile Include="Models\Movie\CastMember.cs" />

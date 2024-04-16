@@ -28,5 +28,9 @@ namespace MovieNight.BusinessLogic
             return new MovieService();
         }
         
+        public IFriendsService GetFriendsService()
+        {
+            return new FriendService();
+        }
     }
 }

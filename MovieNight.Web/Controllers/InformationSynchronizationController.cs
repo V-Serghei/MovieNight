@@ -12,8 +12,11 @@ using MovieNight.Web.Models.PersonalP;
 using AutoMapper;
 using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities.Friends;
 using MovieNight.Domain.Entities.UserId;
+using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
+using MovieNight.Web.Models.Friends;
 
 namespace MovieNight.Web.Controllers
 {
@@ -24,6 +27,8 @@ namespace MovieNight.Web.Controllers
         private IMovie _movie;
             
         private readonly IMapper _mapper;
+        
+        private readonly IFriendsService _serviceFriend;
         public InformationSynchronizationController()
         {
             var sesControlBl = new BusinessLogic.BusinessLogic();
@@ -31,6 +36,9 @@ namespace MovieNight.Web.Controllers
 
             var serviceMovieControlBl = new BusinessLogic.BusinessLogic();
             _movie = serviceMovieControlBl.GetMovieService();
+
+            var serviceFriend = new BusinessLogic.BusinessLogic();
+            _serviceFriend = serviceFriend.GetFriendsService();
             
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<PEditingM, ProfEditingE>();
@@ -52,6 +60,9 @@ namespace MovieNight.Web.Controllers
                 cfg.CreateMap<CastMemberE, CastMember>();
                 cfg.CreateMap<CastMember, CastMemberE>();
 
+                cfg.CreateMap<FriendsPageD, FriendPageModel>()
+                    .ForMember(dest=>dest.BUserE, 
+                        opt=>opt.Ignore());
             });
 
             _mapper = config.CreateMapper();
@@ -193,8 +204,18 @@ namespace MovieNight.Web.Controllers
         [HttpGet]
         public ActionResult UserTemplatePage()
         {
-            
-            
+            int? id = 1;
+            var friendsDate = _serviceFriend.getFriendDate(id);
+            var friendmodel = _mapper.Map<FriendPageModel>(friendsDate);
+            if (friendmodel != null)
+            {
+                friendmodel.BUserE = new UserModel
+                {
+                    Username = friendsDate.BUserE.Username,
+                    Email = friendsDate.BUserE.Email
+                };
+                return View(friendmodel);
+            }
             return View();
         }
 
@@ -261,6 +282,7 @@ namespace MovieNight.Web.Controllers
         }
 
         [HttpPost]
+        [UserMod]
         public ActionResult ProfileEdit(PEditingM profEd)
         {
             if (profEd.AvatarFile != null)

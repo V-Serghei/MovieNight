@@ -1,11 +1,9 @@
-﻿@using System.Activities.Expressions
-@using MovieNight.Web.Models.Friends
+﻿@using MovieNight.Web.Models.Friends
 @model MovieNight.Web.Models.Friends.FriendListModel
 
 @{
-    ViewBag.Title = "FriendsPage";
+    ViewBag.Title = "FindFriends";
 }
-
 
 <div>
     <div class="content">
@@ -20,11 +18,9 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">MovieNight</a></li>
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Friends</a></li>
-                                <li class="breadcrumb-item active">My friends</li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Find Friends</a></li>
                             </ol>
                         </div>
-                        <h4 class="page-title text-warning font-weight-bold">My friends</h4>
                     </div>
                 </div>
             </div>
@@ -44,16 +40,6 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-lg-4">
-                                <div class="text-lg-right mt-3 mt-lg-0">
-                                   <a href="@Url.Action("FindFriends","SearchSortAdd",new{_skipParametr = 0})">
-                                       <button type="button" class="btn btn-outline-primary waves-effect waves-light">
-                                           <i class="mdi mdi-plus-circle mr-1"></i>
-                                           Add friend
-                                       </button>
-                                    </a>
-                                </div>
-                            </div><!-- end col-->
                         </div> <!-- end row -->
                     </div> <!-- end card-box -->
                 </div><!-- end col-->

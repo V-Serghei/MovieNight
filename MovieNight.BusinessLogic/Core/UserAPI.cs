@@ -151,7 +151,7 @@ namespace MovieNight.BusinessLogic.Core
                 userRegister.SuccessUniq = false;
                 return userRegister;
             }
-
+            
             using (var db = new UserContext())
             {
                 var userExists = await db.UsersT.FirstOrDefaultAsync(u => u.UserName == rData.UserName || u.Email == rData.Email);

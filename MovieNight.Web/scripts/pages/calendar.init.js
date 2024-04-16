@@ -67,9 +67,11 @@
                     .append(
                         "<div class='col-12'><div class='form-group'><label class='control-label'>Event Name</label><input class='form-control' placeholder='Insert Event Name' type='text' name='title'/></div></div>",
                     )
+
                     .append(
                         "<div class='col-12'><div class='form-group'><label class='control-label'>Category</label><select class='form-control' name='category'></select></div></div>",
                     )
+
                     .find("select[name='category']")
 
                     .append("<option value='bg-success'>I need to see it</option>")
@@ -95,7 +97,7 @@
                     .click(function () {
                         i.submit();
                         var formData = i.serialize();
-                       
+                        // Send data to the controller using AJAX
                         $.ajax({
                             url: '/Notification/EventSave',
                             type: 'POST',
