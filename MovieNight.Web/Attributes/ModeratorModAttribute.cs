@@ -6,18 +6,28 @@ using MovieNight.BusinessLogic.Core;
 using MovieNight.BusinessLogic.Interface;
 using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities;
+using MovieNight.Domain.Entities.UserId;
 using MovieNight.Web.Infrastructure;
+using MovieNight.Web.Models;
 
 namespace MovieNight.Web.Attributes
 {
     public class ModeratorModAttribute : ActionFilterAttribute
     {
         private readonly ISession _sessionBL;
+        private readonly IMapper _mapper;
+
 
         public ModeratorModAttribute()
         {
             var businessLogic = new BusinessLogic.BusinessLogic();
             _sessionBL = businessLogic.Session();
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<LogInData, UserModel>();
+
+            });
+            _mapper = config.CreateMapper();
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -27,9 +37,11 @@ namespace MovieNight.Web.Attributes
             {
                 var agent = HttpContext.Current.Request.UserAgent;
                 var profile = _sessionBL.GetUserByCookie(apiCookie.Value, agent);
+                var us = _mapper.Map<UserModel>(profile);
+
                 if (profile != null && profile.Role == LevelOfAccess.Moderator)
                 {
-                    HttpContext.Current.SetMySessionObject(profile);
+                    HttpContext.Current.SetMySessionObject(us);
                 }
                 else
                 {
