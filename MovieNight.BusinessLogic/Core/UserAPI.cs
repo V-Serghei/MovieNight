@@ -308,13 +308,13 @@ namespace MovieNight.BusinessLogic.Core
             //               "Cook, sew, draw, sculpt. I can learn everything. The main thing is to want.",
             //     Location = "Moldova",
             //     ViewingHistory = new List<ViewingHistoryM>(),
-            //     ListInThePlans = new List<ListOfFilms>()
+            //     ListInThePlans = new List<ListOfFilmsE>()
             //
             // };
             // //Get out of the movie database
             // for (int i = 0; i < 5; i++)
             // {
-            //     personalProfileM.ListInThePlans.Add(new ListOfFilms
+            //     personalProfileM.ListInThePlans.Add(new ListOfFilmsE
             //     {
             //         Date = new TimeD
             //         {

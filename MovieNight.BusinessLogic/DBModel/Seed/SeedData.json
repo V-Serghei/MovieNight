@@ -1,6 +1,7 @@
 ﻿[
   {
     "Title": "Фильм 1",
+    "Tags": 2,
     "PosterImage": "url1",
     "Quote": "Цитата 1",
     "Description": "Описание фильма 1",
@@ -52,6 +53,7 @@
     ]
   }, {
   "Title": "The Shawshank Redemption",
+  "Tags": 1,
   "PosterImage": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SY1000_CR0,0,675,1000_AL_.jpg",
   "Quote": "Hope is a good thing, maybe the best of things, and no good thing ever dies.",
   "Description": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
@@ -104,6 +106,7 @@
 },
   {
     "Title": "The Godfather",
+    "Tags": 1,
     "PosterImage": "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlZWQ0NGVlMjE3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY1000_CR0,0,700,1000_AL_.jpg",
     "Quote": "I'm gonna make him an offer he can't refuse.",
     "Description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
@@ -156,6 +159,7 @@
   },
   {
     "Title": "Бэтмен",
+    "Tags": 1,
     "PosterImage": "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTEtMDc2OS00NDZhLTk2N2MtODU0NjI4OTU2OTIxXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_Ratio0.6716_AL_.jpg",
     "Quote": "Я - возмездие. Я - ночь. Я - Бэтмен.",
     "Description": "Брюс Уэйн, миллиардер и плейбой, ночью становится Бэтменом, защитником Готэм-сити от преступности.",
@@ -213,6 +217,7 @@
   },
   {
     "Title": "Властелин колец: Братство кольца",
+    "Tags": 1,
     "PosterImage": "https://example.com/posters/lotr-fellowship-of-the-ring.jpg",
     "Quote": "Одно кольцо, чтобы всех поработить.",
     "Description": "Фродо Бэггинс, совсем не ведомый далеким странствиям, становится обладателем Всемогущего Кольца. С помощью Гэндальфа и других друзей, он отправляется на поиски таинственной Горы Одно Кольцо, чтобы уничтожить его и спасти Средиземье.",
@@ -265,6 +270,7 @@
   },
   {
     "Title": "Интерстеллар",
+    "Tags": 1,
     "PosterImage": "https://example.com/posters/interstellar.jpg",
     "Quote": "Нам нужно больше пространства.",
     "Description": "В не очень удаленном будущем человечество сталкивается с катастрофическим изменением климата. Чтобы спасти человеческую расу, команда астронавтов отправляется в космос на поиски нового дома для человечества.",

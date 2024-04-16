@@ -31,6 +31,6 @@ namespace MovieNight.Domain.Entities.PersonalP
         //some type for world view statistics
         public List<ViewingHistoryM> ViewingHistory { get; set; }
 
-        public List<ListOfFilms> ListInThePlans { get; set; }
+        public List<ListOfFilmsE> ListInThePlans { get; set; }
     }
 }

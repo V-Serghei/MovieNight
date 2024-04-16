@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Caching;
+using System.Web.UI;
 using AutoMapper;
 using MovieNight.BusinessLogic.DBModel;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
+using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 using Newtonsoft.Json;
 
 namespace MovieNight.BusinessLogic.Core.ServiceApi
@@ -156,8 +161,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         {
             using (var db = new MovieContext())
             {
-
-
+                
                 foreach (var movieTemplate in movies)
                 {
                     try
@@ -166,15 +170,16 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         var movieDb = new MovieDbTable
                         {
                             Title = movieTemplate.Title,
+                            Tags = movieTemplate.Tags,
                             PosterImage = movieTemplate.PosterImage,
                             Quote = movieTemplate.Quote,
                             Description = movieTemplate.Description,
                             ProductionYear = movieTemplate.ProductionYear,
                             Country = movieTemplate.Country,
-                            Genres = JsonConvert.SerializeObject(movieTemplate.Genre), // Сохраняем жанры в формате JSON
+                            Genres = JsonConvert.SerializeObject(movieTemplate.Genre), 
                             Location = movieTemplate.Location,
                             Director = movieTemplate.Director,
-                            Duration = DateTime.Parse(movieTemplate.DurationJ), // Преобразуем строку в TimeSpan
+                            Duration = DateTime.Parse(movieTemplate.DurationJ), 
                             MovieNightGrade = movieTemplate.MovieNightGrade,
                             Certificate = movieTemplate.Certificate,
                             ProductionCompany = movieTemplate.ProductionCompany,
@@ -252,10 +257,6 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
             }
         }
-    
-        
-        
-        
         
         private List<MovieTemplateInfE> ReadMoviesFromJson(string url)
         {
@@ -269,6 +270,63 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             moviess = JsonConvert.DeserializeObject<List<MovieTemplateInfE>>(json);
 
             return moviess;
+        }
+
+        public async Task<BookmarkE> SetNewBookmarkDb((int user,int movie) idAdd)
+        {
+            BookmarkE resp = new BookmarkE();
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var verify = await db.Bookmark.FirstOrDefaultAsync(b => b.UserId == idAdd.user && b.MovieId == idAdd.movie);
+            
+                    if (verify == null )
+                    {
+                        var addBookmarkE = new BookmarkDbTable
+                        {
+                            UserId = idAdd.user,
+                            MovieId = idAdd.movie,
+                            TimeAdd = DateTime.Now
+                        };
+                        db.Bookmark.Add(addBookmarkE);
+                        await db.SaveChangesAsync();
+                        resp.Msg = "Success";
+                        resp.Success = true;
+                        return resp;
+                    }
+                    else
+                    {
+                        resp.Msg = "Have already been added!";
+                        resp.Success = false;
+                        return  resp;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                resp.Msg = "Error: " + ex.Message;
+                resp.Success = false;
+                return  resp;
+            }
+        }
+
+        public bool GetInfBookmarkDb((int user,int movie) movieid)
+        {
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var verify =  db.Bookmark.FirstOrDefault(b => b.UserId == movieid.user && b.MovieId == movieid.movie);
+
+                    return verify != null;
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                return  false ;
+            }
         }
 
         

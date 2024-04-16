@@ -46,5 +46,7 @@ namespace MovieNight.Domain.Entities.UserId
         
         public ICollection<ViewListDbTable> ViewListEntries { get; set; }
         
+        public ICollection<BookmarkDbTable> Bookmark { get; set; }
+        
     }
 }

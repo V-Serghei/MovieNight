@@ -7,7 +7,7 @@ using MovieNight.Domain.Entities.DifferentE;
 
 namespace MovieNight.Domain.Entities.MovieM
 {
-    public class ListOfFilms
+    public class ListOfFilmsE
     {
         public string Name { get; set; }
         public TimeD Date { get; set; }

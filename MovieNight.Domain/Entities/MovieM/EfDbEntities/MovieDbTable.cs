@@ -2,6 +2,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using MovieNight.Domain.enams;
     using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 
     namespace MovieNight.Domain.Entities.MovieM.EfDbEntities
@@ -12,11 +13,13 @@
             [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
             public int Id { get; set; }
             
+            
             [Required]
             [StringLength(500,MinimumLength = 1)]
             public string Title { get; set; }
             
-            
+            public FilmCategory Tags { get; set; }
+
             public string PosterImage { get; set; }
             
             [StringLength(500,MinimumLength = 1)]
@@ -71,5 +74,8 @@
             public ICollection<InterestingFactDbTable> InterestingFacts { get; set; }
             
             public virtual ICollection<ViewListDbTable> ViewListEntries { get; set; }
+            
+            public virtual ICollection<BookmarkDbTable> BookmarkDbTables { get; set; }
+            
         }
     }

@@ -27,7 +27,7 @@ namespace MovieNight.Domain.Entities.PersonalP
         public string PhoneNumber { get; set; }
 
         public List<ViewingHistoryM> ViewingHistory { get; set; }
-        public List<ListOfFilms> ListInThePlans { get; set; }
+        public List<ListOfFilmsE> ListInThePlans { get; set; }
         
         public string Country { get; set; }
 

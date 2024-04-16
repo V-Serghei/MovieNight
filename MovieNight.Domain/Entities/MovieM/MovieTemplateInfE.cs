@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using MovieNight.Domain.enams;
 using Newtonsoft.Json;
 
 namespace MovieNight.Domain.Entities.MovieM
 {
     public class MovieTemplateInfE
     {
+        
+        public int Id { get; set; }
         public string Title { get; set; }
+        
+        public FilmCategory Tags { get; set; }
+
         public string PosterImage { get; set; }
         public string Quote { get; set; }
         public string Description { get; set; }

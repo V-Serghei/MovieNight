@@ -679,6 +679,7 @@
     <Compile Include="Models\Movie\PosterModel.cs" />
     <Compile Include="Models\Movie\UploadMovieFileModel.cs" />
     <Compile Include="Models\Movie\ViewingHistoryModel.cs" />
+    <Compile Include="Models\PersonalP\Bookmark\BookmarkModel.cs" />
     <Compile Include="Models\PersonalP\PEditingM.cs" />
     <Compile Include="Models\PersonalP\PersonalProfilModel.cs" />
     <Compile Include="Models\RegistViewModel.cs" />

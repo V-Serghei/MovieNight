@@ -17,6 +17,7 @@ using MovieNight.Domain.Entities.UserId;
 using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Models.Friends;
+using MovieNight.Web.Models.PersonalP.Bookmark;
 
 namespace MovieNight.Web.Controllers
 {
@@ -59,6 +60,9 @@ namespace MovieNight.Web.Controllers
                 cfg.CreateMap<MovieCard, MovieCardE>();
                 cfg.CreateMap<CastMemberE, CastMember>();
                 cfg.CreateMap<CastMember, CastMemberE>();
+                cfg.CreateMap<ListOfFilmsE, ListOfFilmsModel>();
+                cfg.CreateMap<ListOfFilmsModel, ListOfFilmsE>();
+
 
                 cfg.CreateMap<FriendsPageD, FriendPageModel>()
                     .ForMember(dest=>dest.BUserE, 
@@ -93,6 +97,7 @@ namespace MovieNight.Web.Controllers
                         var userM = _mapper.Map<PersonalProfileModel>(user);
                         if (userM != null)
                         {
+                            var listInPl = _movie.GetListPlain(userId);
                             userM.BUserE = new UserModel
                             {
                                 Username = userHttp.Username,
@@ -224,7 +229,7 @@ namespace MovieNight.Web.Controllers
         {
             try
             {
-                int id = 3;
+                int id = 12;
                 var movie = _movie.GetMovieInf(id);
                 if (movie != null)
                 {
@@ -233,6 +238,8 @@ namespace MovieNight.Web.Controllers
                     movieModel.CastMembers = _mapper.Map<List<CastMember>>(movie.CastMembers);
                     movieModel.InterestingFacts = _mapper.Map<List<InterestingFact>>(movie.InterestingFacts);
                     movieModel.Genre = new List<string>();
+                    movieModel.Bookmark = _movie.GetInfBookmark((System.Web.HttpContext.
+                        Current.GetMySessionObject().Id,id));
                     foreach (var GEN in movie.Genre)
                     {
                         movieModel.Genre.Add(GEN);
@@ -322,16 +329,31 @@ namespace MovieNight.Web.Controllers
             }
         }
 
+        
         [HttpPost]
-        public Task<JsonResult> BookmarkMovie(int movieid)
+        public async Task<JsonResult> BookmarkMovie(int movieid)
         {   
-            string newMessage = "Новое сообщение";
+            var bookMe = await _movie.SetNewBookmark((System.Web.HttpContext.
+                Current.GetMySessionObject().Id,movieid));
+            var bookM = new BookmarkModel
+            {
+                IdUser = bookMe.IdUser,
+                IdMovie = bookMe.IdMovie,
+                Msg = bookMe.Msg,
+                Success = bookMe.Success
 
-            // Установка нового сообщения в ViewBag
-            ViewBag.Msg = newMessage;
-
-            return Task.FromResult(Json(new {}));
+            };
+            
+            
+            
+            return Json(new { success = true, Msg = "StatusMsg", newButtonTitle = "Новое сообщение", newButtonColor = "red", bookM}); 
         }
         
+        public async Task<JsonResult> AddToViewed(int movieid)
+        {
+            
+            return Json(new { success = true, statusMsg = "StatusMsg", newButtonTitle = "Новое сообщение", newButtonColor = "red" }); 
+        }
+
     }
 }

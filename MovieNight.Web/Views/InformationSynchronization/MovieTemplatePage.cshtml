@@ -1,11 +1,11 @@
-﻿@model MovieNight.Web.Models.Movie.MovieTemplateInfModel
-    
+﻿@using System.Web.UI.WebControls
+@using MovieNight.Web.Models.PersonalP.Bookmark
+@model MovieNight.Web.Models.Movie.MovieTemplateInfModel
+
 
 @{
-    ViewBag.Title = @Model.Title;
-    
+    ViewBag.Title = Model == null ? "Movie" : @Model.Title;
 }
-
 
 
 @if(Model != null) {
@@ -33,6 +33,7 @@
             </div>
             <!-- end page title -->
 
+
             <div class="row">
                 <div class="col-lg-4 col-xl-4">
                     <div class="card-box text-center">
@@ -56,21 +57,49 @@
                         <button type="button" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Will watch</button>
                         <button type="button" class="btn btn-danger btn-xs waves-effect mb-2 waves-light">Schedule</button><br>
                         <button type="button" class="btn btn-primary btn-lg waves-effect mb-2 waves-light">Watch Now</button>
-                       
 
-                        @Ajax.ActionLink("Bookmark", "BookmarkMovie", "InformationSynchronization",
-                            new { movieId = Model.Id },
-                            new AjaxOptions
-                            {
-                                HttpMethod = "POST",
-                                UpdateTargetId = "bookmarkStatus",
-                                OnSuccess = "function(response) { $('#bookmarkStatus').html(response); if (response === 'Bookmarked') $('.btn').prop('disabled', true); }"
-                            },
-                            new { @class = "btn btn-primary btn-lg waves-effect mb-2 waves-light", title = ViewBag.Msg })
+                    <div id="bookmarkStatus">
+                     @{
+                         string buttonText = Model.Bookmark ? "Delete" : "Bookmark";
+                         string buttonColor = Model.Bookmark ? "btn-danger" : "btn-primary";
+                         var linkModel = new BookmarkModel()
+                         {
+                              
+                             IdMovie = Model.Id,
+                         };
+                     }
+                     
+                     @Ajax.ActionLink(
+                         buttonText,
+                         "BookmarkMovie",
+                         "InformationSynchronization",
+                         new
+                         {
+                             movieId = linkModel.IdMovie
+                         },
+                         new AjaxOptions
+                         {
+                             HttpMethod = "POST",
+                             UpdateTargetId = "bookmarkStatus",
+                             OnSuccess = @"function(response) {
+                                 $('#bookmarkStatus').html(response.statusMsg); 
+                                 if (response.bookM && response.bookM.newButtonTitle && response.bookM.newButtonColor) {
+                                     $('#bookmarkButton').text(response.bookM.newButtonTitle); 
+                                     $('#bookmarkButton').addClass(response.bookM.newButtonColor); 
+                                     $('#bookmarkButton').prop('disabled', true); 
+                                 }
+                             }"
+                         },
+                         new { @class = "btn btn-lg waves-effect mb-2 waves-light " + buttonColor, title = buttonText }
+                     )
 
 
-                        
-                        
+                       </div>
+
+
+
+
+
                         <style>
                             .star-rating {
                                 display: flex;
