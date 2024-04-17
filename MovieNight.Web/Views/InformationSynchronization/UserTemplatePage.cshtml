@@ -1,4 +1,5 @@
-﻿@model MovieNight.Web.Models.Friends.FriendPageModel
+﻿@using MovieNight.Domain.enams
+@model MovieNight.Web.Models.Friends.FriendPageModel
 
 @{
     ViewBag.Title = "User template page";
@@ -278,38 +279,70 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var modelListInThePlan in @Model.ListInThePlans)
-                                                {
-                                                    <tr>
-                                                        <td></td>
-                                                        <td>@modelListInThePlan.Name</td>
-                                                        <td>@modelListInThePlan.Date.Day/@modelListInThePlan.Date.Month/@modelListInThePlan.Date.Year</td>
-                                                        <td>@modelListInThePlan.NumberOfViews</td>
-                                                        <td>
-                                                            @foreach (var tagModel in modelListInThePlan.Tags)
-                                                            {
-                                                                <span class="badge badge-info">@tagModel.Name</span>
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            <div class="rating-mini">
-                                                                @for (int i = 0; i < 10; i++)
-                                                                {
-                                                                    if (@modelListInThePlan.Star > 0)
-                                                                    {
-                                                                        <span class="active"></span>
-                                                                        modelListInThePlan.Star--;
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <span></span>
-                                                                    }
-                                                                }
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-
-                                                }
+                                               @foreach (var modelListInThePlan in @Model.ListInThePlans)
+                                                                                          {
+                                                                                              <tr>
+                                                                                                  <td></td>
+                                                                                                  <td>@modelListInThePlan.Name</td>
+                                                                                                  <td>@modelListInThePlan.Date.ToString("dd/MM/yyyy")</td>
+                                                                                                  <td>@modelListInThePlan.NumberOfViews</td>
+                                                                                                  <td>
+                                                                                                      @{
+                                                                                                          var genresArray = modelListInThePlan.Genre
+                                                                                                              .Replace("\\\"", "") 
+                                                                                                              .Replace("]", "")    
+                                                                                                              .Replace("[", "")    
+                                                                                                              .Replace("\"", "")   
+                                                                                                              .Trim('[', ']')      
+                                                                                                              .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)  
+                                                                                                              .Select(genre => genre.Trim())  
+                                                                                                              .ToArray();
+                                              
+                                                                                                      }
+                                                                                                      
+                                                                                                      @foreach (var genre in genresArray){
+                                                                                                          <span class="badge badge-info">@genre</span>
+                                                                                                          <br>
+                                                                                                      }
+                                                                                                      @if (modelListInThePlan.Tags == FilmCategory.Film)
+                                                                                                      {
+                                                                                                          <span class="badge badge-info">Film</span>
+                                              
+                                                                                                      }
+                                                                                                      else if (modelListInThePlan.Tags == FilmCategory.Anime)
+                                                                                                      {
+                                                                                                          <span class="badge badge-info">Anime</span>
+                                                                                                      }
+                                                                                                      else if (modelListInThePlan.Tags == FilmCategory.Serial)
+                                                                                                      {
+                                                                                                          <span class="badge badge-info">Serial</span>
+                                                                                                      }
+                                                                                                      else if (modelListInThePlan.Tags == FilmCategory.Cartoon)
+                                                                                                      {
+                                                                                                          <span class="badge badge-info">Cartoon</span>
+                                                                                                      }
+                                                                                                      
+                                                                                                      
+                                                                                                  </td>
+                                                                                                  <td>
+                                                                                                      <div class="rating-mini">
+                                                                                                          @for (int i = 0; i < 10; i++)
+                                                                                                          {
+                                                                                                              if (@modelListInThePlan.Star > 0)
+                                                                                                              {
+                                                                                                                  <span class="active"></span>
+                                                                                                                  modelListInThePlan.Star--;
+                                                                                                              }
+                                                                                                              else
+                                                                                                              {
+                                                                                                                  <span></span>
+                                                                                                              }
+                                                                                                          }
+                                                                                                      </div>
+                                                                                                  </td>
+                                                                                              </tr>
+                                              
+                                                                                          }
 
                                             </tbody>
                                         </table>

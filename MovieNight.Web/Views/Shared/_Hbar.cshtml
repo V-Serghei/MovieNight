@@ -134,7 +134,16 @@
         </a>
     </li>
 }
-        <li class="dropdown notification-list">
+
+@if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+{
+    <li class="dropdown notification-list">
+        <a class="nav-link dropdown-toggle  " href="@Url.Action("Index","Admin")">
+           <i class=" remixicon-file-add-fill" ></i>
+        </a>
+    </li>
+}
+<li class="dropdown notification-list">
             <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                 <i class=" remixicon-bookmark-3-line"></i>
                 <span class="badge badge-danger rounded-bottom-pill noti-icon-badge">2</span>

@@ -26,7 +26,7 @@ namespace MovieNight.Web.Models.PersonalP
 
         public string Location { get; set; }
         public List<ViewingHistoryM> ViewingHistory { get; set; }
-        public List<ListOfFilmsE> ListInThePlans { get; set; }
+        public List<ListOfFilmsModel> ListInThePlans { get; set; }
         
         public string Country { get; set; }
 

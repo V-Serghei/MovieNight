@@ -1,5 +1,7 @@
 ﻿@using System.Globalization
 @using System.Threading
+@using MovieNight.Domain.enams
+@using Newtonsoft.Json
 @model MovieNight.Web.Models.PersonalP.PersonalProfileModel
 
 @{
@@ -323,13 +325,45 @@
                                                 <tr>
                                                     <td></td>
                                                     <td>@modelListInThePlan.Name</td>
-                                                    <td>@modelListInThePlan.Date.Day/@modelListInThePlan.Date.Month/@modelListInThePlan.Date.Year</td>
+                                                    <td>@modelListInThePlan.Date.ToString("dd/MM/yyyy")</td>
                                                     <td>@modelListInThePlan.NumberOfViews</td>
                                                     <td>
-                                                        @foreach (var tagModel in modelListInThePlan.Tags)
-                                                        {
-                                                            <span class="badge badge-info">@tagModel.Name</span>
+                                                        @{
+                                                            var genresArray = modelListInThePlan.Genre
+                                                                .Replace("\\\"", "") 
+                                                                .Replace("]", "")    
+                                                                .Replace("[", "")    
+                                                                .Replace("\"", "")   
+                                                                .Trim('[', ']')      
+                                                                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)  
+                                                                .Select(genre => genre.Trim())  
+                                                                .ToArray();
+
                                                         }
+                                                        
+                                                        @foreach (var genre in genresArray){
+                                                            <span class="badge badge-info">@genre</span>
+                                                            <br>
+                                                        }
+                                                        @if (modelListInThePlan.Tags == FilmCategory.Film)
+                                                        {
+                                                            <span class="badge badge-info">Film</span>
+
+                                                        }
+                                                        else if (modelListInThePlan.Tags == FilmCategory.Anime)
+                                                        {
+                                                            <span class="badge badge-info">Anime</span>
+                                                        }
+                                                        else if (modelListInThePlan.Tags == FilmCategory.Serial)
+                                                        {
+                                                            <span class="badge badge-info">Serial</span>
+                                                        }
+                                                        else if (modelListInThePlan.Tags == FilmCategory.Cartoon)
+                                                        {
+                                                            <span class="badge badge-info">Cartoon</span>
+                                                        }
+                                                        
+                                                        
                                                     </td>
                                                     <td>
                                                         <div class="rating-mini">

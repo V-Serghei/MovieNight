@@ -98,6 +98,7 @@ namespace MovieNight.Web.Controllers
                         if (userM != null)
                         {
                             var listInPl = _movie.GetListPlain(userId);
+                            userM.ListInThePlans = _mapper.Map<List<ListOfFilmsModel>>(listInPl);
                             userM.BUserE = new UserModel
                             {
                                 Username = userHttp.Username,

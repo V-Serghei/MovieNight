@@ -10,6 +10,7 @@ using System.Web.Caching;
 using System.Web.UI;
 using AutoMapper;
 using MovieNight.BusinessLogic.DBModel;
+using MovieNight.BusinessLogic.Migrations.User;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
@@ -249,7 +250,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         {
                             foreach (var validationError in validationErrors.ValidationErrors)
                             {
-                                Console.WriteLine($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                                Console.WriteLine($@"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
                             }
                         }
                     }
@@ -263,7 +264,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             //string jsonFileName = "SeedData.json";
             //string jsonFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, jsonFileName);
             string jsonFilePath = url;
-            List<MovieTemplateInfE> moviess = new List<MovieTemplateInfE>();
+            List<MovieTemplateInfE> moviess;
 
             string json = File.ReadAllText(jsonFilePath);
 
@@ -326,6 +327,49 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             {
                 
                 return  false ;
+            }
+        }
+
+        public List<ListOfFilmsE> GetListPlainDb(int? userId)
+        {
+            var listBookmark = new List<ListOfFilmsE>();
+
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var dbList = db.Bookmark.Where(l => l.UserId == userId).ToList();
+                    foreach (var bookmarkDbTable in dbList)
+                    {
+                        using (var movie = new MovieContext())
+                        {
+                            var movieS = movie.MovieDb.FirstOrDefault(m => m.Id == bookmarkDbTable.MovieId);
+                            if (movieS != null)
+                            {
+                                listBookmark.Add(new ListOfFilmsE
+                                {
+                                    Name = movieS.Title,
+                                    Date = bookmarkDbTable.TimeAdd,
+                                    NumberOfViews = db.ViewList.Count(n => n.UserId == userId),
+                                    Tags = movieS.Tags,
+                                    Star = movieS.MovieNightGrade,
+                                    Genre = JsonConvert.SerializeObject(movieS.Genres)
+                                });
+                            }
+                            
+                           
+                        }
+                       
+                    }
+
+                    return listBookmark;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                return listBookmark;
             }
         }
 

@@ -26,7 +26,7 @@ namespace MovieNight.BusinessLogic.Session.Service
 
         public List<ListOfFilmsE> GetListPlain(int? userId)
         {
-            throw null;
+            return GetListPlainDb(userId);
         }
 
       
