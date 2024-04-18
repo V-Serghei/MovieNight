@@ -15,6 +15,7 @@ using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 using Newtonsoft.Json;
+using EntityState = System.Data.Entity.EntityState;
 
 namespace MovieNight.BusinessLogic.Core.ServiceApi
 {
@@ -91,9 +92,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 MapperCard,MapperFact,MapperCast,MapperFilm
             });
         }
-        
-        
-        public MovieTemplateInfE GetMovieFromDb(int? id)
+
+
+        protected MovieTemplateInfE GetMovieFromDb(int? id)
         {
             GetMappersSettings();
             var movieDb = new MovieTemplateInfE();
@@ -158,7 +159,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             }
 
         }
-        public void PopulateDatabase(List<MovieTemplateInfE> movies)
+
+        private void PopulateDatabase(List<MovieTemplateInfE> movies)
         {
             using (var db = new MovieContext())
             {
@@ -273,9 +275,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             return moviess;
         }
 
-        public async Task<BookmarkE> SetNewBookmarkDb((int user,int movie) idAdd)
+        protected async Task<BookmarkE> SetNewBookmarkDb((int user,int movie) idAdd)
         {
-            BookmarkE resp = new BookmarkE();
+            var resp = new BookmarkE();
             try
             {
                 using (var db = new UserContext())
@@ -312,7 +314,36 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             }
         }
 
-        public bool GetInfBookmarkDb((int user,int movie) movieid)
+        protected async Task<bool> DeleteBookmarkDb((int user,int movie) idAdd)
+        {
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var bookmarkToDelete = await db.Bookmark.FirstOrDefaultAsync(b => b.UserId == idAdd.user && b.MovieId == idAdd.movie);
+
+                    if (bookmarkToDelete != null)
+                    {
+                        db.Bookmark.Remove(bookmarkToDelete);
+
+                        await db.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    
+                }
+            }catch (Exception ex)
+            {
+                Console.WriteLine($@"Error deleting bookmark: {ex.Message}");
+                return  false;
+            }
+
+            return true;
+        }
+
+        protected bool GetInfBookmarkDb((int user,int movie) movieid)
         {
             try
             {
@@ -330,7 +361,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             }
         }
 
-        public List<ListOfFilmsE> GetListPlainDb(int? userId)
+
+        protected List<ListOfFilmsE> GetListPlainDb(int? userId)
         {
             var listBookmark = new List<ListOfFilmsE>();
 
@@ -348,6 +380,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             {
                                 listBookmark.Add(new ListOfFilmsE
                                 {
+                                    MovieId = movieS.Id,
                                     Name = movieS.Title,
                                     Date = bookmarkDbTable.TimeAdd,
                                     NumberOfViews = db.ViewList.Count(n => n.UserId == userId),
@@ -372,6 +405,132 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 return listBookmark;
             }
         }
+
+        protected float GetUserRatingDb((int user, int movie) valueTuple)
+        {
+            
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var verify =  db.ViewList?.FirstOrDefault(b => b.UserId == valueTuple.user && b.MovieId == valueTuple.movie);
+
+                    if (verify != null) return verify.UserValues;
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                return 0 ;
+            }
+
+            return 0;
+        }
+
+        protected async Task<bool> SetReteMovieAndViewDb((int user, int movieId, int rating) valueTuple)
+        {
+            //TODO:Add response model
+
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var verify = await db.ViewList.FirstOrDefaultAsync(b => b.UserId == valueTuple.user && b.MovieId == valueTuple.movieId);
+
+                    var ms = new MasterContext();
+
+                    var movieC = ms.Movies.FirstOrDefaultAsync(m => m.Id == valueTuple.movieId);
+                    if (verify == null )
+                    {
+                        if (movieC.Result != null)
+                        {
+                            var addBookmarkE = new ViewListDbTable()
+                            {
+                                UserId = valueTuple.user,
+                                MovieId = valueTuple.movieId,
+                                ReviewDate = DateTime.Now,
+                                TimeSpent = movieC.Result.Duration,
+                                UserValues = valueTuple.rating,
+                                UserViewCount = db.ViewList.Count()
+                            };
+                            db.ViewList.Add(addBookmarkE);
+                        }
+
+                        await db.SaveChangesAsync();
+                        return true;
+                    }
+                    else
+                    {
+                        if (movieC.Result != null)
+                        {
+                             verify.UserValues = valueTuple.rating;
+                             db.Entry(verify).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                            
+                        }
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+
+        }
+
+        protected List<ViewingHistoryM> GetViewingListDb(int? userId)
+        {
+            
+            var viewingList = new List<ViewingHistoryM>();
+
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var dbList = db.ViewList.Where(l => l.UserId == userId).ToList();
+                    foreach (var viewList in dbList)
+                    {
+                        using (var movie = new MovieContext())
+                        {
+                            var movieS = movie.MovieDb.FirstOrDefault(m => m.Id == viewList.MovieId);
+                            if (movieS != null)
+                            {
+                                viewingList.Add(new ViewingHistoryM
+                                {
+                                    Title = movieS.Title,
+                                    Description = movieS.Description,
+                                    Id = movieS.Id,
+                                    Poster = movieS.PosterImage,
+                                    ReviewDate = viewList.ReviewDate,
+                                    TimeSpent = viewList.TimeSpent,
+                                    UserComment = viewList.UserComment,
+                                    UserValues = viewList.UserValues,
+                                    UserViewCount = viewList.UserViewCount
+                                    
+                                });
+                            }
+                            
+                           
+                        }
+                       
+                    }
+
+                    return viewingList;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                return viewingList;
+            }
+            
+        }
+
+
+
 
         
     }

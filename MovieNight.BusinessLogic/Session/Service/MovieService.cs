@@ -29,6 +29,28 @@ namespace MovieNight.BusinessLogic.Session.Service
             return GetListPlainDb(userId);
         }
 
+        public async Task<bool> DeleteBookmark((int Id, int movieId) valueTuple)
+        {
+            return await DeleteBookmarkDb(valueTuple);
+        }
+
+        public float GetUserRating((int Id, int id) valueTuple)
+        {
+            return GetUserRatingDb(valueTuple);
+
+        }
+
+        public async Task<bool> SetReteMovieAndView((int Id, int movieId, int rating) valueTuple)
+        {
+            return await SetReteMovieAndViewDb(valueTuple);
+        }
+
+        public List<ViewingHistoryM> GetViewingList(int? userId)
+        {
+            return GetViewingListDb(userId);
+        }
+
+
       
         
         

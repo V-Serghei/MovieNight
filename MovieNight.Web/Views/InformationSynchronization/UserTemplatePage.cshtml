@@ -223,42 +223,39 @@
                                     <ul class="list-unstyled timeline-sm">
                                         @foreach (var viewingHistory in Model.ViewingHistory)
                                         {
-                                            <li class="timeline-sm-item">
-                                                <span class="timeline-sm-date">
-                                                    @viewingHistory.ViewingTime.Day
-                                                    .
-                                                    @viewingHistory.ViewingTime.Month
-                                                    .
-                                                    @viewingHistory.ViewingTime.Year
-                                                </span>
-                                                <h5 class="mt-0 mb-1">@viewingHistory.Title</h5>
-                                                <div class="row">
-                                                    <div class="col-md-10 col-xl-9">
-                                                        <p class="text-muted mt-2">
-                                                            <div class="rating-mini">
-                                                                @for (int i = 0; i < 10; i++)
-                                                                {
-                                                                    if (@viewingHistory.Star > 0)
-                                                                    {
-                                                                        <span class="active"></span>
-                                                                        viewingHistory.Star--;
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <span></span>
-                                                                    }
-                                                                }
-                                                            </div>
-                                                        </p>
+                                        <li class="timeline-sm-item">
+                                            <span class="timeline-sm-date">
+                                                @viewingHistory.ReviewDate.ToString("HH:mm:ss")
 
+                                            </span>
+                                            <h5 class="mt-0 mb-1">@viewingHistory.Title</h5>
+                                            <div class="row">
+                                                <div class="col-md-10 col-xl-9">
+                                                    <p class="text-muted mt-2">
+                                                    <div class="rating-mini">
+                                                        @for (int i = 0; i < 10; i++)
+                                                        {
+                                                        if (@viewingHistory.UserValues > 0)
+                                                        {
+                                                        <span class="active"></span>
+                                                        viewingHistory.UserValues--;
+                                                        }
+                                                        else
+                                                        {
+                                                        <span></span>
+                                                        }
+                                                        }
                                                     </div>
-                                                    <div class="col-md-6 col-xl-3">
-                                                        <img src="@Url.Content(@viewingHistory.Poster.Path)" class="rounded-circle avatar-xl img-thumbnail"
-                                                             alt="profile-image">
-                                                    </div>
+                                                    </p>
+
                                                 </div>
+                                                <div class="col-md-6 col-xl-3">
+                                                    <img src="@Url.Content(@viewingHistory.Poster)" class="rounded-circle avatar-xl img-thumbnail"
+                                                         alt="profile-image">
+                                                </div>
+                                            </div>
 
-                                            </li>
+                                        </li>
                                         }
                                     </ul>
 

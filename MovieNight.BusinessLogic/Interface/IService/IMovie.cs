@@ -13,5 +13,9 @@ namespace MovieNight.BusinessLogic.Interface.IService
         bool GetInfBookmark((int,int) movieid);
 
         List<ListOfFilmsE> GetListPlain(int? userId);
+        Task<bool> DeleteBookmark((int Id, int movieId) valueTuple);
+        float GetUserRating((int Id, int id) valueTuple);
+        Task<bool> SetReteMovieAndView((int Id, int movieId, int rating) valueTuple);
+        List<ViewingHistoryM> GetViewingList(int? userId);
     }
 }

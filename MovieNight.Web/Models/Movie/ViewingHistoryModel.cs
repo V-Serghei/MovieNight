@@ -7,11 +7,21 @@ namespace MovieNight.Web.Models.Movie
 {
     public class ViewingHistoryModel
     {
-        public TimeModel ViewingTime { get; set; }
+        
+        public DateTime ReviewDate { get; set; }
+        
         public string Description { get; set; }
         public string Title { get; set; }
         public int? Id { get; set; }
-        public int Star { get; set; }
-        public PosterModel Poster { get; set; }
+        public int UserValues { get; set; }
+        public string Poster { get; set; }
+        
+        public string UserComment { get; set; } 
+        
+        public int UserViewCount { get; set; }        
+        
+        public DateTime TimeSpent { get; set; }       
+        
+        
     }
 }

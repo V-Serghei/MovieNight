@@ -24,7 +24,7 @@ namespace MovieNight.Domain.Entities.PersonalP.PersonalPDb
                                                
         public int UserViewCount { get; set; }        
                                                
-        public TimeSpan TimeSpent { get; set; }       
+        public DateTime TimeSpent { get; set; }       
         
         // //Resolve the conflict table
         // // Navigation property to represent the associated movie for this view list entry

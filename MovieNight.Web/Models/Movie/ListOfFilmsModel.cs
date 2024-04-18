@@ -9,6 +9,7 @@ namespace MovieNight.Web.Models.Movie
 {
     public class ListOfFilmsModel
     {
+        public int? MovieId { get; set; }
         public string Name { get; set; }
         public DateTime Date { get; set; }
         public long NumberOfViews { get; set; }

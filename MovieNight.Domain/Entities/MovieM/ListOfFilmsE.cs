@@ -10,6 +10,7 @@ namespace MovieNight.Domain.Entities.MovieM
 {
     public class ListOfFilmsE
     {
+        public int? MovieId { get; set; }
         public string Name { get; set; }
         public DateTime Date { get; set; }
         public long NumberOfViews { get; set; }
