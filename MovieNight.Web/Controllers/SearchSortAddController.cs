@@ -6,8 +6,12 @@ using System.Web.Mvc;
 using AutoMapper;
 using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Domain.Entities.Friends;
+using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities.PersonalP;
+using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Models;
 using MovieNight.Web.Models.Friends;
+using MovieNight.Web.Models.Movie;
 using MovieNight.Web.Models.PersonalP;
 
 namespace MovieNight.Web.Controllers
@@ -16,10 +20,12 @@ namespace MovieNight.Web.Controllers
     {
         private readonly IFriendsService _serviceFriend;
         private readonly IMapper _mapper;
+        private IMovie _movie;
         public SearchSortAddController()
         {
-            var serviceFriend = new BusinessLogic.BusinessLogic();
-            _serviceFriend = serviceFriend.GetFriendsService();
+            var service = new BusinessLogic.BusinessLogic();
+            _serviceFriend = service.GetFriendsService();
+            _movie = service.GetMovieService();
             
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<FriendsPageD , FriendPageModel>()
@@ -29,6 +35,28 @@ namespace MovieNight.Web.Controllers
                         opt=>opt.Ignore())
                     .ForMember(dest=>dest.ListInThePlans, 
                         opt=>opt.Ignore());
+                cfg.CreateMap<PEditingM, ProfEditingE>();
+                cfg.CreateMap<PEditingM, PersonalProfileModel>();
+                cfg.CreateMap<PersonalProfileM, PersonalProfileModel>()
+                    .ForMember(dist => dist.BUserE,
+                        src => src.Ignore());
+                cfg.CreateMap<MovieTemplateInfE, MovieTemplateInfModel>()
+                    .ForMember(cnf => cnf.CastMembers,
+                        src => src.Ignore())
+                    .ForMember(cnf => cnf.InterestingFacts,
+                        src => src.Ignore())
+                    .ForMember(cnf => cnf.MovieCards,
+                        src => src.Ignore());
+                cfg.CreateMap<InterestingFact, InterestingFactE>();
+                cfg.CreateMap<InterestingFactE, InterestingFact>();
+                cfg.CreateMap<MovieCardE, MovieCard>();
+                cfg.CreateMap<MovieCard, MovieCardE>();
+                cfg.CreateMap<CastMemberE, CastMember>();
+                cfg.CreateMap<CastMember, CastMemberE>();
+                cfg.CreateMap<ListOfFilmsE, ListOfFilmsModel>();
+                cfg.CreateMap<ListOfFilmsModel, ListOfFilmsE>();
+                cfg.CreateMap<ViewingHistoryM,ViewingHistoryModel>();
+                cfg.CreateMap<ViewingHistoryModel,ViewingHistoryM>();
                 
             });
 
@@ -57,7 +85,9 @@ namespace MovieNight.Web.Controllers
 
         public ActionResult ViewedList()
         {
-            return View();
+            var viewList = _movie.GetViewingList(System.Web.HttpContext.Current.GetMySessionObject().Id);
+            var viewingModel = _mapper.Map<List<ViewingHistoryModel>>(viewList);
+            return View(viewingModel);
         }
 
         public ActionResult MovieSearch()

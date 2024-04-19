@@ -1,9 +1,10 @@
-﻿
+﻿    @model List<MovieNight.Web.Models.Movie.ViewingHistoryModel>
+
 @{
     ViewBag.Title = "ViewedList";
 }
 
-<div>
+
 
 
     <div class="content">
@@ -49,117 +50,16 @@
 
 
                             <tbody>
+                            @foreach (var movie in Model)
+                            {
                             <tr>
-                                <td>The Shawshank Redemption</td>
-                                <td>1994</td>
-                                <td>2024-02-20</td>
-                                <td>9,28</td>
-                                <td>10</td>
+                                <td>@movie.Title</td>
+                                <td>@movie.ReviewDate.Year</td>
+                                <td>@movie.ReviewDate.ToString("yyyy-MM-dd")</td>
+                                <td>@movie.UserValues</td>
+                                <td>@movie.UserViewCount</td>
                             </tr>
-                            <tr>
-                                <td>The Godfather</td>
-                                <td>1972</td>
-                                <td>2024-02-15</td>
-                                <td>9,15</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>The Dark Knight</td>
-                                <td>2008</td>
-                                <td>2024-02-10</td>
-                                <td>8,23</td>
-                                <td>8</td>
-                            </tr>
-                            <tr>
-                                <td>Forrest Gump</td>
-                                <td>1994</td>
-                                <td>2024-02-05</td>
-                                <td>8.8</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>The Matrix</td>
-                                <td>1999</td>
-                                <td>2024-02-12</td>
-                                <td>8.7</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>Pulp Fiction</td>
-                                <td>1994</td>
-                                <td>2024-02-18</td>
-                                <td>8.9</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>Schindler's List</td>
-                                <td>1993</td>
-                                <td>2024-02-14</td>
-                                <td>8.9</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>Inception</td>
-                                <td>2010</td>
-                                <td>2024-02-09</td>
-                                <td>8.8</td>
-                                <td>9</td>
-                            </tr><tr>
-                                <td>The Shawshank Redemption</td>
-                                <td>1994</td>
-                                <td>2024-02-20</td>
-                                <td>9,28</td>
-                                <td>10</td>
-                            </tr>
-                            <tr>
-                                <td>The Godfather</td>
-                                <td>1972</td>
-                                <td>2024-02-15</td>
-                                <td>9,15</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>The Dark Knight</td>
-                                <td>2008</td>
-                                <td>2024-02-10</td>
-                                <td>8,23</td>
-                                <td>8</td>
-                            </tr>
-                            <tr>
-                                <td>Forrest Gump</td>
-                                <td>1994</td>
-                                <td>2024-02-05</td>
-                                <td>8.8</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>The Matrix</td>
-                                <td>1999</td>
-                                <td>2024-02-12</td>
-                                <td>8.7</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>Pulp Fiction</td>
-                                <td>1994</td>
-                                <td>2024-02-18</td>
-                                <td>8.9</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>Schindler's List</td>
-                                <td>1993</td>
-                                <td>2024-02-14</td>
-                                <td>8.9</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>Inception</td>
-                                <td>2010</td>
-                                <td>2024-02-09</td>
-                                <td>8.8</td>
-                                <td>9</td>
-                            </tr>
+                            }
                             </tbody>
                         </table>
 
@@ -171,5 +71,5 @@
 
 
     </div>
-</div>
+
 
