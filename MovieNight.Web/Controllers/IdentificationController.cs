@@ -118,5 +118,21 @@ namespace MovieNight.Web.Controllers
         {
             return View();
         }
+
+        public ActionResult Logout()
+        {
+
+            var delSession = _sessionUser.DelSessionCurrUser(System.Web.HttpContext.Current.GetMySessionObject().Username);
+
+            if (delSession)
+            {
+                ControllerContext.HttpContext.Response.Cookies.Remove("X-KEY");
+                System.Web.HttpContext.Current.SetMySessionObject(null);
+                return RedirectToAction("Index", "MainPage");
+                
+            }
+            
+            return View("Login");
+        }
     }
 }

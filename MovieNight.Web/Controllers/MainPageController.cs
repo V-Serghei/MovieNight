@@ -23,29 +23,54 @@ namespace MovieNight.Web.Controllers
         public ActionResult Index()
         {
             SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+            {
+                return View();
+            }
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
                 return RedirectToAction("Login", "Identification");
             }
             var user = System.Web.HttpContext.Current.GetMySessionObject();
-            HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(user.Username));
+            if(user==null){HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(null));
+            }
+            else
+            {
+                HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(user.Username));
+            }
             return View();
         }
 
         public ActionResult Primary()
         {
             SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+            {
+                return View();
+            }
+
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
                 return RedirectToAction("Login", "Identification");
             }
             var user = System.Web.HttpContext.Current.GetMySessionObject();
+            if(user==null){HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(null));
+            }
+            else
+            {
+                HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(user.Username));
+            }
+            
             return View();
         }
 
         public ActionResult News()
         {
             SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+            {
+                return View();
+            }
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
                 return RedirectToAction("Login", "Identification");
@@ -68,6 +93,10 @@ namespace MovieNight.Web.Controllers
         public ActionResult AreWatching()
         {
             SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+            {
+                return View();
+            }
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
                 return RedirectToAction("Login", "Identification");

@@ -554,5 +554,28 @@ namespace MovieNight.BusinessLogic.Core
             return userLog;
         }
 
+        protected bool DelSessionCurrUserDb(string userN)
+        {
+            SessionCookie session;
+            UserDbTable currentUser;
+
+            using (var db = new SessionContext())
+            {
+                session = db.Sessions.FirstOrDefault(s => s.UserName == userN);
+                if (session != null)
+                {
+                    db.Sessions.Remove(session);
+                    db.SaveChanges();
+                    return true;
+                }
+            }
+            
+
+          
+
+
+            return false;
+        }
+
     }
 }

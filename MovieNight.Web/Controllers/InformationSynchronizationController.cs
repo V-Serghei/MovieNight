@@ -82,6 +82,10 @@ namespace MovieNight.Web.Controllers
             try
             {
                 SessionStatus();
+                if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+                {
+                    return View();
+                }
                 if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
                 {
                     return RedirectToAction("Login", "Identification");
