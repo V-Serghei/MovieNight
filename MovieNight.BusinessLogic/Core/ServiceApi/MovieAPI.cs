@@ -98,9 +98,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         {
             GetMappersSettings();
             var movieDb = new MovieTemplateInfE();
-            var op = ReadMoviesFromJson("D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
+            //var op = ReadMoviesFromJson("D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
 
-            PopulateDatabase(op);
+            //PopulateDatabase(op);
             //conf.CreateMapper();
             //var maper = conf.CreateMapper();
             using (var db = new MovieContext())
@@ -173,7 +173,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         var movieDb = new MovieDbTable
                         {
                             Title = movieTemplate.Title,
-                            Tags = movieTemplate.Tags,
+                            Category = movieTemplate.Category,
                             PosterImage = movieTemplate.PosterImage,
                             Quote = movieTemplate.Quote,
                             Description = movieTemplate.Description,
@@ -384,7 +384,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                                     Name = movieS.Title,
                                     Date = bookmarkDbTable.TimeAdd,
                                     NumberOfViews = db.ViewList.Count(n => n.UserId == userId),
-                                    Tags = movieS.Tags,
+                                    Category = movieS.Category,
                                     Star = movieS.MovieNightGrade,
                                     Genre = JsonConvert.SerializeObject(movieS.Genres)
                                 });
@@ -480,6 +480,12 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
         }
 
+        #region ViewList
+
+        /// <summary>
+        /// View List
+        /// </summary>
+        /// 
         protected List<ViewingHistoryM> GetViewingListDb(int? userId)
         {
             
@@ -507,7 +513,10 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                                     TimeSpent = viewList.TimeSpent,
                                     UserComment = viewList.UserComment,
                                     UserValues = viewList.UserValues,
-                                    UserViewCount = viewList.UserViewCount
+                                    UserViewCount = viewList.UserViewCount,
+                                    YearOfRelease = movieS.ProductionYear,
+                                    MovieNightValues = movieS.MovieNightGrade,
+                                    Category = movieS.Category
                                     
                                 });
                             }
@@ -518,7 +527,6 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     }
 
                     return viewingList;
-
                 }
             }
             catch (Exception ex)
@@ -526,12 +534,40 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 
                 return viewingList;
             }
-            
         }
 
 
+        protected async Task<IEnumerable<ViewingHistoryM>> GetNewViewListDb(ViewListSortCommandE commandE)
+        {
+            var currStateViewList = new List<ViewingHistoryM>();
+
+            using (var db = new UserContext() )
+            {
+                using (var dbM = new MovieContext())
+                {
+                    var preliminaryResult = db.ViewList
+                        .Where(l => l.Category == commandE.Category) // Фильтрация по категории
+                        .Join(
+                            dbM.MovieDb, // Таблица с фильмами
+                            viewList => viewList.MovieId, // Ключ соединения в таблице ViewListDbTable
+                            movie => movie.Id, // Ключ соединения в таблице MovieDbTable
+                            (viewList, movie) => new { ViewList = viewList, Movie = movie } // Результат соединения
+                        )
+                        .Where(joined =>
+                            commandE.SearchParameter == null || joined.Movie.Title.StartsWith(commandE.SearchParameter))
+                        .Select(joined => joined.ViewList);
+                }
+            }
+            
 
 
+            return currStateViewList;
+        }
+        
+        #endregion
+        
+        
+        
         
     }
 }

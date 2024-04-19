@@ -11,7 +11,7 @@ namespace MovieNight.Domain.Entities.MovieM
         public int Id { get; set; }
         public string Title { get; set; }
         
-        public FilmCategory Tags { get; set; }
+        public FilmCategory Category { get; set; }
 
         public string PosterImage { get; set; }
         public string Quote { get; set; }

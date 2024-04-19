@@ -5,7 +5,7 @@ namespace MovieNight.Domain.enams
 {
     public enum FilmCategory
     {
-        None,
+        None = 0,
         Film,
         Serial,
         Cartoon,

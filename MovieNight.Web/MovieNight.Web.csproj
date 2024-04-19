@@ -870,6 +870,7 @@
     <Compile Include="Models\PersonalP\PEditingM.cs" />
     <Compile Include="Models\PersonalP\PersonalProfilModel.cs" />
     <Compile Include="Models\RegistViewModel.cs" />
+    <Compile Include="Models\SortingSearchingFiltering\ViewListSort.cs" />
     <Compile Include="Models\TimeModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

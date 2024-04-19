@@ -132,7 +132,6 @@
                                                             <strong>DataBirth :</strong>
                                                             <span class="ml-2">
                                                                 @Model.DataBirth.ToString("dd MMMM yyyy")
-
                                                             </span>
                                                         </p>
                                                          }                         
@@ -267,6 +266,54 @@
                                                 <span class="timeline-sm-date">
                                                     @viewingHistory.ReviewDate.Date.ToString("dd/MM/yyyy")
                                                 </span>
+                                                <div class="dropdown notification-list">
+                                                    <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                                           
+
+                                                            <span class="pro-user-name ml-1">
+                                                              <i class="mdi mdi-chevron-down"></i>
+                                                     </span>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right profile-dropdown " style=width:400px!important;>
+                                                        <div class="dropdown-header noti-title">
+                                                            <h6 class="text-overflow m-0">Additional:
+                                                            </h6>
+                                                        </div>
+
+                                                        @if(viewingHistory.Description!=null){ <a class="dropdown-item notify-item">
+                                                            <i class=" remixicon-device-line"></i>
+                                                            <span>Description:</span><br/>
+                                                            <p style="white-space: pre-wrap;">@viewingHistory.Description</p>
+                                                        </a>}
+
+                                                        @if(viewingHistory.TimeSpent!=null) {<a class="dropdown-item notify-item">
+                                                            <i class="remixicon-time-fill"></i>
+                                                            <span>Time Spent:</span><br/>
+                                                            <p>
+                                                                @viewingHistory.ReviewDate.ToString("HH:mm:ss")
+                                                            </p>
+
+                                                        </a>}
+
+                                                        @if(viewingHistory.UserComment!=null){ <a class="dropdown-item notify-item">
+                                                            <i class=" remixicon-edit-2-line"></i>
+
+                                                            <span> Your Comment:</span><br/>
+                                                            <p>@viewingHistory.UserComment</p>
+                                                        </a>}
+
+                                                        @if(viewingHistory.UserViewCount!=null){ <a  class="dropdown-item notify-item">
+                                                            <i class="remixicon-gradienter-line"></i>
+                                                            <span>Your View Count:</span><br/>
+                                                            <p>@viewingHistory.UserViewCount</p>
+                                                        </a>}
+
+                                                        <div class="dropdown-divider"></div>
+
+
+
+                                                    </div>
+                                                </div>
                                                 <h5 class="mt-0 mb-1">@viewingHistory.Title</h5>
                                                 <div class="row">
                                                     <div class="col-md-10 col-xl-9">
@@ -326,54 +373,7 @@
                                                         <img src="@Url.Content(@viewingHistory.Poster)" class="rounded-circle avatar-xl img-thumbnail"
                                                              alt="profile-image">
                                                     </div>
-                                                    <div class="dropdown notification-list">
-                                                        <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                                           
-
-                                                            <span class="pro-user-name ml-1">
-                                                              <i class="mdi mdi-chevron-down"></i>
-                                                     </span>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-right profile-dropdown " style=width:400px!important;>
-                                                            <div class="dropdown-header noti-title">
-                                                                <h6 class="text-overflow m-0">Additional:
-                                                                </h6>
-                                                            </div>
-
-                                                            @if(viewingHistory.Description!=null){ <a class="dropdown-item notify-item">
-                                                                <i class=" remixicon-device-line"></i>
-                                                                <span>Description:</span><br/>
-                                                                <p style="white-space: pre-wrap;">@viewingHistory.Description</p>
-                                                            </a>}
-
-                                                            @if(viewingHistory.TimeSpent!=null) {<a class="dropdown-item notify-item">
-                                                                <i class="remixicon-time-fill"></i>
-                                                                <span>Time Spent:</span><br/>
-                                                                <p>      
-                                                                    @viewingHistory.ReviewDate.ToString("HH:mm:ss")
-                                                                    </p>
-
-                                                            </a>}
-
-                                                            @if(viewingHistory.UserComment!=null){ <a class="dropdown-item notify-item">
-                                                                <i class=" remixicon-edit-2-line"></i>
-                                                                
-                                                                <span> Your Comment:</span><br/>
-                                                                <p>@viewingHistory.UserComment</p>
-                                                            </a>}
-
-                                                            @if(viewingHistory.UserViewCount!=null){ <a  class="dropdown-item notify-item">
-                                                                <i class="remixicon-gradienter-line"></i>
-                                                                <span>Your View Count:</span><br/>
-                                                                <p>@viewingHistory.UserViewCount</p>
-                                                            </a>}
-
-                                                            <div class="dropdown-divider"></div>
-
-
-
-                                                        </div>
-                                                    </div>
+                                                  
                                                 </div>
 
                                             </li>

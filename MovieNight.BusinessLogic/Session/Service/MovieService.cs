@@ -50,6 +50,11 @@ namespace MovieNight.BusinessLogic.Session.Service
             return GetViewingListDb(userId);
         }
 
+        public async Task<IEnumerable<ViewingHistoryM>> GetNewViewList(ViewListSortCommandE transCommand)
+        {
+            return  await GetNewViewListDb(transCommand);
+        }
+
 
       
         

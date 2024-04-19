@@ -121,7 +121,7 @@ namespace MovieNight.Web.Controllers
 
         public ActionResult Logout()
         {
-
+            
             var delSession = _sessionUser.DelSessionCurrUser(System.Web.HttpContext.Current.GetMySessionObject().Username);
 
             if (delSession)

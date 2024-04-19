@@ -18,7 +18,7 @@
             [StringLength(500,MinimumLength = 1)]
             public string Title { get; set; }
             
-            public FilmCategory Tags { get; set; }
+            public FilmCategory Category { get; set; }
 
             public string PosterImage { get; set; }
             
@@ -63,6 +63,7 @@
             public string GrossWorldwide { get; set; }
             
             public string Language { get; set; }
+            
             
             // Link "one-to-many" with CastMemberDbTable
             public ICollection<CastMemDbTable> CastMembers { get; set; }

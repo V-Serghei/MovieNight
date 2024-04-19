@@ -32,7 +32,8 @@ namespace MovieNight.Web.Controllers
                 return RedirectToAction("Login", "Identification");
             }
             var user = System.Web.HttpContext.Current.GetMySessionObject();
-            if(user==null){HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(null));
+            if(user==null){
+                HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(null));
             }
             else
             {

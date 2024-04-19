@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Antlr.Runtime.Misc;
 using AutoMapper;
 using MovieNight.BusinessLogic.Interface.IService;
+using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.Friends;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.PersonalP;
@@ -13,6 +16,7 @@ using MovieNight.Web.Models;
 using MovieNight.Web.Models.Friends;
 using MovieNight.Web.Models.Movie;
 using MovieNight.Web.Models.PersonalP;
+using MovieNight.Web.Models.SortingSearchingFiltering;
 
 namespace MovieNight.Web.Controllers
 {
@@ -20,7 +24,7 @@ namespace MovieNight.Web.Controllers
     {
         private readonly IFriendsService _serviceFriend;
         private readonly IMapper _mapper;
-        private IMovie _movie;
+        private readonly IMovie _movie;
         public SearchSortAddController()
         {
             var service = new BusinessLogic.BusinessLogic();
@@ -57,7 +61,10 @@ namespace MovieNight.Web.Controllers
                 cfg.CreateMap<ListOfFilmsModel, ListOfFilmsE>();
                 cfg.CreateMap<ViewingHistoryM,ViewingHistoryModel>();
                 cfg.CreateMap<ViewingHistoryModel,ViewingHistoryM>();
+                cfg.CreateMap<ViewListSort, ViewListSortCommandE>();
+                cfg.CreateMap<ViewListSortCommandE,ViewListSort>();
                 
+
             });
 
             _mapper = config.CreateMapper();
@@ -83,12 +90,7 @@ namespace MovieNight.Web.Controllers
             return View(friendListModel);
         }
 
-        public ActionResult ViewedList()
-        {
-            var viewList = _movie.GetViewingList(System.Web.HttpContext.Current.GetMySessionObject().Id);
-            var viewingModel = _mapper.Map<List<ViewingHistoryModel>>(viewList);
-            return View(viewingModel);
-        }
+       
 
         public ActionResult MovieSearch()
         {
@@ -140,5 +142,38 @@ namespace MovieNight.Web.Controllers
 
             return View(friendListModel);
         }
+
+
+        #region ViewedList
+
+        /// <summary>
+        /// Viewed List
+        /// management and processing
+        /// </summary>
+
+        [HttpGet]
+        public ActionResult ViewedList()
+        {
+            var viewList = _movie.GetViewingList(System.Web.HttpContext.Current.GetMySessionObject().Id);
+            var viewingModel = _mapper.Map<List<ViewingHistoryModel>>(viewList);
+            return View(viewingModel);
+        }
+
+        #endregion
+        
+        [HttpPost]
+        public async Task<ActionResult> CurrentSortingAndFilteringAction(ViewListSort command)
+        {
+            var transCommand = _mapper.Map<ViewListSortCommandE>(command);
+            transCommand.Category = FilmCategory.Film;
+            transCommand.SearchParameter = "G";
+            
+            var currStateList = await _movie.GetNewViewList(transCommand);
+            
+            List<ViewingHistoryModel> newListV = new ListStack<ViewingHistoryModel>();
+            return Json(new {newListV });
+        }
+        
+        
     }
 }
