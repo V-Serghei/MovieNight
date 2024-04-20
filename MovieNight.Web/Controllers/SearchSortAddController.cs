@@ -59,7 +59,11 @@ namespace MovieNight.Web.Controllers
                 cfg.CreateMap<CastMember, CastMemberE>();
                 cfg.CreateMap<ListOfFilmsE, ListOfFilmsModel>();
                 cfg.CreateMap<ListOfFilmsModel, ListOfFilmsE>();
-                cfg.CreateMap<ViewingHistoryM,ViewingHistoryModel>();
+                cfg.CreateMap<ViewingHistoryM, ViewingHistoryModel>()
+                    .ForPath(dest => dest.YearOfRelease, opt =>
+                        opt.MapFrom(src => src.YearOfRelease.ToString("yyyy-MM-dd")))
+                    .ForPath(dest => dest.ReviewDate, opt =>
+                        opt.MapFrom(src => src.ReviewDate.ToString("yyyy-MM-dd")));
                 cfg.CreateMap<ViewingHistoryModel,ViewingHistoryM>();
                 cfg.CreateMap<ViewListSort, ViewListSortCommandE>();
                 cfg.CreateMap<ViewListSortCommandE,ViewListSort>();
@@ -165,14 +169,13 @@ namespace MovieNight.Web.Controllers
         public async Task<ActionResult> CurrentSortingAndFilteringAction(ViewListSort command)
         {
             var transCommand = _mapper.Map<ViewListSortCommandE>(command);
-            transCommand.Category = FilmCategory.Film;
-            transCommand.SearchParameter = "G";
-            
+    
             var currStateList = await _movie.GetNewViewList(transCommand);
-            
-            List<ViewingHistoryModel> newListV = new ListStack<ViewingHistoryModel>();
-            return Json(new {newListV });
+            var newListV = _mapper.Map<List<ViewingHistoryModel>>(currStateList);
+
+            return Json(new { success = true, newListV = newListV });
         }
+
         
         
     }

@@ -5,12 +5,14 @@ using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Web.Caching;
 using System.Web.UI;
 using AutoMapper;
 using MovieNight.BusinessLogic.DBModel;
 using MovieNight.BusinessLogic.Migrations.User;
+using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
@@ -27,8 +29,10 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         private IMapper MapperFact{ get; set; }
         private IMapper MapperCast{ get; set; }
         private IMapper MapperCard{ get; set; }
+        
+        private IMapper MapperViewList { get; set; }
 
-        private List<IMapper> LMapper{ get; set; }
+        private List<IMapper> LMapper => GetMappersSettings();
 
 
         private List<IMapper> GetMappersSettings()  
@@ -87,16 +91,33 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 config.CreateMap<MovieCardDbTable, MovieCardE>();
             });
             MapperCard = confCard.CreateMapper();
-            return (LMapper = new List<IMapper>
+
+            var configV = new MapperConfiguration(confV =>
             {
-                MapperCard,MapperFact,MapperCast,MapperFilm
+                confV.CreateMap<ViewingHistoryM, ViewListDbTable>()
+                    .ForPath(dest => dest.Movie.MovieNightGrade, opt =>
+                        opt.MapFrom(src => src.MovieNightGrade))
+                    .ForPath(dist => dist.Movie.ProductionYear, opt =>
+                        opt.MapFrom(src => src.YearOfRelease));
+                confV.CreateMap<ViewListDbTable, ViewingHistoryM>()
+                    .ForPath(dest => dest.MovieNightGrade, opt => 
+                        opt.MapFrom(src => src.Movie.MovieNightGrade))
+                    .ForPath(dist => dist.YearOfRelease, opt =>
+                        opt.MapFrom(src => src.Movie.ProductionYear));
             });
+
+
+            MapperViewList = configV.CreateMapper();
+            return new List<IMapper>
+            {
+                MapperCard,MapperFact,MapperCast,MapperFilm,MapperViewList
+            };
         }
 
 
         protected MovieTemplateInfE GetMovieFromDb(int? id)
         {
-            GetMappersSettings();
+           // GetMappersSettings();
             var movieDb = new MovieTemplateInfE();
             //var op = ReadMoviesFromJson("D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
 
@@ -515,8 +536,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                                     UserValues = viewList.UserValues,
                                     UserViewCount = viewList.UserViewCount,
                                     YearOfRelease = movieS.ProductionYear,
-                                    MovieNightValues = movieS.MovieNightGrade,
-                                    Category = movieS.Category
+                                    MovieNightGrade = movieS.MovieNightGrade,
+                                    Category = movieS.Category,
                                     
                                 });
                             }
@@ -537,31 +558,89 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         }
 
 
-        protected async Task<IEnumerable<ViewingHistoryM>> GetNewViewListDb(ViewListSortCommandE commandE)
+        protected Task<IEnumerable<ViewingHistoryM>> GetNewViewListDb(ViewListSortCommandE commandE)
         {
-            var currStateViewList = new List<ViewingHistoryM>();
-
+            List<ViewingHistoryM> currStateViewList;
+            GetMappersSettings();
             using (var db = new UserContext() )
             {
-                using (var dbM = new MovieContext())
-                {
-                    var preliminaryResult = db.ViewList
-                        .Where(l => l.Category == commandE.Category) // Фильтрация по категории
-                        .Join(
-                            dbM.MovieDb, // Таблица с фильмами
-                            viewList => viewList.MovieId, // Ключ соединения в таблице ViewListDbTable
-                            movie => movie.Id, // Ключ соединения в таблице MovieDbTable
-                            (viewList, movie) => new { ViewList = viewList, Movie = movie } // Результат соединения
-                        )
-                        .Where(joined =>
-                            commandE.SearchParameter == null || joined.Movie.Title.StartsWith(commandE.SearchParameter))
-                        .Select(joined => joined.ViewList);
+                List<ViewListDbTable> preliminaryResult;
+                if(!string.IsNullOrEmpty(commandE.SearchParameter)){
+                    if(commandE.Category != FilmCategory.Non){
+                        preliminaryResult = db.ViewList
+                            .Where(l => l.Category == commandE.Category)
+                            .Where(u => u.Title.StartsWith(commandE.SearchParameter))
+                            .Include(viewListDbTable => viewListDbTable.Movie)
+                            .ToList();
+                    }
+                    else
+                    {
+                        preliminaryResult = db.ViewList.Where(u => u.Title.StartsWith(commandE.SearchParameter))
+                            .Include(viewListDbTable => viewListDbTable.Movie)
+                            .ToList();;
+                    }
+                    
+                     
                 }
+                else
+                {
+                    if (commandE.Category != FilmCategory.Non)
+                    {
+                        preliminaryResult = db.ViewList.Where(l => l.Category == commandE.Category)
+                            .Include(viewListDbTable => viewListDbTable.Movie).ToList();
+                    }
+                    else
+                    {
+                        preliminaryResult = db.ViewList.Include(viewListDbTable => viewListDbTable.Movie).ToList();
+
+                    }
+                }
+                
+                using (var movieD = new MovieContext())
+                {
+                    if (commandE.SortingDirection != SortDirection.Non)
+                    {
+                        switch (commandE.Field)
+                        {
+                            case SelectField.Title:
+                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
+                                    ? preliminaryResult.OrderBy(r => r.Title).ToList()
+                                    : preliminaryResult.OrderByDescending(r => r.Title).ToList();
+                                break;
+                            case SelectField.YearOfRelease:
+                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
+                                    ? preliminaryResult.OrderBy(r => r.Movie.ProductionYear).ToList()
+                                    : preliminaryResult.OrderByDescending(r => r.Movie.ProductionYear).ToList();
+                                break;
+                            case SelectField.ReviewDate:
+                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
+                                    ? preliminaryResult.OrderBy(r => r.ReviewDate).ToList()
+                                    : preliminaryResult.OrderByDescending(r => r.ReviewDate).ToList();
+                                break;
+                            case SelectField.MovieNight:
+                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
+                                    ? preliminaryResult.OrderBy(r => r.Movie.MovieNightGrade).ToList()
+                                    : preliminaryResult.OrderByDescending(r => r.Movie.MovieNightGrade).ToList();
+                                break;
+                            case SelectField.UserValues:
+                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
+                                    ? preliminaryResult.OrderBy(r => r.UserValues).ToList()
+                                    : preliminaryResult.OrderByDescending(r => r.UserValues).ToList();
+                                break;
+                            default:
+                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
+                                    ? preliminaryResult.OrderBy(r => r.Title).ToList()
+                                    : preliminaryResult.OrderByDescending(r => r.Title).ToList();
+                                break;
+                        }
+                    }
+                }
+                currStateViewList = MapperViewList.Map<List<ViewingHistoryM>>(preliminaryResult);
             }
             
+            
 
-
-            return currStateViewList;
+            return Task.FromResult<IEnumerable<ViewingHistoryM>>(currStateViewList);
         }
         
         #endregion

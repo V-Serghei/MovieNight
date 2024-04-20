@@ -22,90 +22,99 @@ ViewBag.Title = "ViewedList";
             </div>
         </div>
     </div>
+    @using (Ajax.BeginForm("CurrentSortingAndFilteringAction", "SearchSortAdd", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                UpdateTargetId = "tableContainer", // Идентификатор контейнера для обновления
+                OnSuccess = "handleSuccess", // JavaScript-функция для обработки успешного запроса
+                OnFailure = "handleFailure" // JavaScript-функция для обработки ошибки запроса
+            }))
+    {
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="header-title">List of what was reviewed</h4>
 
-                    <div class="row">
-                        <!-- Category Selector -->
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="categorySelector">Select Category:</label>
-                                <select id="categorySelector" class="form-control" name="Category">
-                                    <option value="0">None</option>
-                                    <option value="1">Film</option>
-                                    <option value="2">Serial</option>
-                                    <option value="3">Cartoon</option>
-                                    <option value="4">Anime</option>
-                                </select>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title">List of what was reviewed</h4>
+
+                        <div class="row">
+                            <!-- Category Selector -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="categorySelector">Select Category:</label>
+                                    <select id="categorySelector" class="form-control" name="Category">
+                                        <option value="0">Non</option>
+                                        <option value="1">Film</option>
+                                        <option value="2">Serial</option>
+                                        <option value="3">Cartoon</option>
+                                        <option value="4">Anime</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Field Selector -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="fieldSelector">Select Field:</label>
+                                    <select id="fieldSelector" class="form-control" name="Field">
+                                        <option value="0">Non</option>
+                                        <option value="1">Title</option>
+                                        <option value="2">Year of release</option>
+                                        <option value="3">Review Date</option>
+                                        <option value="4"> Movie Night</option>
+                                        <option value="5">User Grade</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Sorting Direction Selector -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="sortDirectionSelector">Sort Direction:</label>
+                                    <select id="sortDirectionSelector" class="form-control" name="SortingDirection">
+                                        <option value="0">Non</option>
+                                        <option value="1">Ascending</option>
+                                        <option value="2">Descending</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <!-- Search Field -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="searchField">Search:</label>
+                                    <input type="text" class="form-control" id="searchField" name="SearchParameter" placeholder="Enter search term">
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Field Selector -->
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="fieldSelector">Select Field:</label>
-                                <select id="fieldSelector" class="form-control" name="Field">
-                                    <option value="0">Non</option>
-                                    <option value="1">Title</option>
-                                    <option value="2">Year of release</option>
-                                    <option value="3">Review Date</option>
-                                    <option value="4"> Movie Night</option>
-                                    <option value="5">User Grade</option>
-                                </select>
-                            </div>
-                        </div>
 
-                        <!-- Sorting Direction Selector -->
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="sortDirectionSelector">Sort Direction:</label>
-                                <select id="sortDirectionSelector" class="form-control" name="SortingDirection">
-                                    <option value="0">Non</option>
-                                    <option value="1">Ascending</option>
-                                    <option value="2">Descending</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        
-                        <!-- Search Field -->
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="searchField">Search:</label>
-                                <input type="text" class="form-control" id="searchField" name="Search" placeholder="Enter search term">
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <table id="alternative-page-datatable" class="table dt-responsive nowrap movie-table">
-                        <thead>
-                        <tr>
-                            <th>Title of the film</th>
-                            <th>Year of release</th>
-                            <th>Review date</th>
-                            <th>Movie Night</th>
-                            <th>Your grade</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach (var movie in Model)
-                        {
-                        <tr>
-                            <td>@movie.Title</td>
-                            <td>@movie.ReviewDate.Year</td>
-                            <td>@movie.ReviewDate.ToString("yyyy-MM-dd")</td>
-                            <td>@movie.UserValues</td>
-                            <td>@movie.UserViewCount</td>
-                        </tr>
-                        }
-                        </tbody>
-                    </table>
-                    <style>
+                        <table id="alternative-page-datatable" class="table dt-responsive nowrap movie-table">
+                            <thead>
+                            <tr>
+                                <th>Title of the film</th>
+                                <th>Year of release</th>
+                                <th>Review date</th>
+                                <th>Movie Night</th>
+                                <th>Your grade</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var movie in Model)
+                            {
+                                <tr>
+                                    <td>@movie.Title</td>
+                                    <td>@movie.YearOfRelease</td>
+                                    <td>@movie.ReviewDate</td>
+                                    <td>@movie.MovieNightGrade</td>
+                                    <td>@movie.UserValues</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                        <style>
                         
                         .page-link .icon {
                             border-radius: 50%; 
@@ -149,76 +158,62 @@ ViewBag.Title = "ViewedList";
                         }
 
                     </style>
-                    <!-- Pagination -->
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
-                            <div style="margin-right: 10px">
-                                <li class="page-item">
-                                    <a class="page-link page-number" href="#" aria-label="Previous">
-                                        <span class="icon" aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
-                            </div>
-                            
-                            <li class="page-item"><a class="page-link page-number" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link page-number" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link page-number" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link page-number" href="#">4</a></li>
-                            <!-- Add more page numbers as needed -->
-                            <div style="margin-left: 10px">
-                                <li class="page-item">
-                                    <a class="page-link page-number" href="@Url.Action("CurrentSortingAndFilteringAction","SearchSortAdd",new {})" aria-label="Next">
-                                        <span class="icon" aria-hidden="true">&raquo;</span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>
-                            </div>
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <div style="margin-right: 10px">
+                                    <li class="page-item">
+                                        <a class="page-link page-number" href="#" aria-label="Previous">
+                                            <span class="icon" aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    </li>
+                                </div>
 
-                        </ul>
-                    </nav>
+                                <li class="page-item"><a class="page-link page-number" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link page-number" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link page-number" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link page-number" href="#">4</a></li>
+                                <!-- Add more page numbers as needed -->
+                                <div style="margin-left: 10px">
+                                    <li class="page-item">
+                                        <a class="page-link page-number" href="#" aria-label="Next">
+                                            <span class="icon" aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </li>
+                                </div>
+
+                            </ul>
+                        </nav>
 
 
 
-                </div> <!-- end card body-->
-            </div> <!-- end card -->
-        </div><!-- end col-->
-    </div>
+                    </div> <!-- end card body-->
+                </div> <!-- end card -->
+            </div><!-- end col-->
+        </div>
+    }
 </div>
 
 <script>
-    $(document).ready(function(){
-        function sendRequest() {
-            var category = $('#categorySelector').val();
-            var field = $('#fieldSelector').val();
-            var sortDirection = $('#sortDirectionSelector').val();
-            var search = $('#searchField').val();
-            
-            $.ajax({
-                url: '/SearchSortAdd/CurrentSortingAndFilteringAction', 
-                type: 'POST',
-                data: {
-                    Category: category,
-                    Field: field,
-                    SortingDirection: sortDirection,
-                    Search: search
-                },
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
+    function handleSuccess(data) {
+        if (data.success) {
+            var newTableBody = '';
+            $.each(data.newListV, function (index, item) {
+                newTableBody += '<tr>' +
+                    '<td>' + item.Title + '</td>' +
+                    '<td>' + item.YearOfRelease + '</td>' +
+                    '<td>' + item.ReviewDate + '</td>' +
+                    '<td>' + item.MovieNightGrade + '</td>' +
+                    '<td>' + item.UserValues + '</td>' +
+                    '</tr>';
             });
+            $('table.movie-table tbody').html(newTableBody);
+        } else {
+            console.error('Operation failed');
         }
+    }
 
-        $('#searchField').on('input', function() {
-            sendRequest(); 
-        });
 
-        
-        $('#categorySelector, #fieldSelector, #sortDirectionSelector').change(function() {
-            sendRequest(); 
-        });
-    });
 </script>

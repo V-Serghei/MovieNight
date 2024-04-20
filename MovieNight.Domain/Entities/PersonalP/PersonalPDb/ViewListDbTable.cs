@@ -17,7 +17,9 @@ namespace MovieNight.Domain.Entities.PersonalP.PersonalPDb
         public virtual UserDbTable User { get; set; } 
         public virtual MovieDbTable Movie { get; set; }
         
-        public int UserValues { get; set; }           
+        public int UserValues { get; set; }      
+        
+        public string Title { get; set; }
                                                
         public DateTime ReviewDate { get; set; }      
                                                

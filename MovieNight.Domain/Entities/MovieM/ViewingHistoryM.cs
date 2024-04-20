@@ -18,7 +18,7 @@ namespace MovieNight.Domain.Entities.MovieM
         public int? Id { get; set; }
         public int UserValues { get; set; }
         
-        public float MovieNightValues { get; set; }
+        public float MovieNightGrade { get; set; }
         public string Poster { get; set; }
         
         public string UserComment { get; set; } 

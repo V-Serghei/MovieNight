@@ -107,6 +107,7 @@ namespace MovieNight.BusinessLogic.Core
                     userL.LogInData.Username = userExists.UserName;
                     userL.LogInData.Email = userExists.Email;
                     userL.LogInData.Role = userExists.Role;
+                    userL.LogInData.Id = userExists.Id;
                     
                     var userD = db.PEdBdTables.FirstOrDefault(u => u.UserDbTableId == userExists.Id);
                     if(userD?.Avatar != null) userL.LogInData.Avatar = userD.Avatar;
