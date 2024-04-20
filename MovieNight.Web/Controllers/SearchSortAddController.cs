@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using Antlr.Runtime.Misc;
 using AutoMapper;
 using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Domain.enams;
@@ -25,6 +22,7 @@ namespace MovieNight.Web.Controllers
         private readonly IFriendsService _serviceFriend;
         private readonly IMapper _mapper;
         private readonly IMovie _movie;
+        
         public SearchSortAddController()
         {
             var service = new BusinessLogic.BusinessLogic();
@@ -159,8 +157,13 @@ namespace MovieNight.Web.Controllers
         public ActionResult ViewedList()
         {
             var viewList = _movie.GetViewingList(System.Web.HttpContext.Current.GetMySessionObject().Id);
+            
             var viewingModel = _mapper.Map<List<ViewingHistoryModel>>(viewList);
-            return View(viewingModel);
+            
+            var list = viewingModel.Take(10).ToList();
+            System.Web.HttpContext.Current.SetListViewingHistoryS(viewingModel);
+            
+            return View(list);
         }
 
         #endregion
@@ -168,12 +171,47 @@ namespace MovieNight.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> CurrentSortingAndFilteringAction(ViewListSort command)
         {
-            var transCommand = _mapper.Map<ViewListSortCommandE>(command);
-    
-            var currStateList = await _movie.GetNewViewList(transCommand);
-            var newListV = _mapper.Map<List<ViewingHistoryModel>>(currStateList);
+            if (HttpContextInfrastructure.CurrentCommandStateComparison(command))
+            {
+                if (command.DirectionStep == Direction.Right)
+                {
+                    command.PageNumber += 1;
+                    if (command.PageNumber <= 1) command.PageNumber = 1;
+                    else if (command.PageNumber >= System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+                        command.PageNumber = System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10;
+                }
+                else if(command.DirectionStep == Direction.Left) 
+                {
+                    command.PageNumber -= 1;
 
-            return Json(new { success = true, newListV = newListV });
+                    if (command.PageNumber <= 1) command.PageNumber = 1;
+                    else if (command.PageNumber >= System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+                        command.PageNumber = System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10;
+                }
+                var currStateListCache = System.Web.HttpContext.Current.GetListViewingHistoryS();
+                var currList = currStateListCache.Skip((command.PageNumber - 1) * 10).Take(10).ToList();
+                ViewBag.NumOfPage = command.PageNumber;
+
+                return Json(new { success = true, newListV = currList });
+            }
+            else
+            {
+                command.PageNumber = 1;
+                System.Web.HttpContext.Current.SetCommandViewList(command);
+                var transCommand = _mapper.Map<ViewListSortCommandE>(command);
+                var currStateList = await _movie.GetNewViewList(transCommand);
+                var newListV = _mapper.Map<List<ViewingHistoryModel>>(currStateList);
+                System.Web.HttpContext.Current.SetListViewingHistoryS(newListV);
+                var currList = newListV.Take(10).ToList();
+                ViewBag.NumOfPage = command.PageNumber;
+                return Json(new { success = true, newListV = currList });
+
+            }
+            
+            //var currStateList = await _movie.GetNewViewList(transCommand);
+            //var newListV = _mapper.Map<List<ViewingHistoryModel>>(currStateList);
+
+            // return Json(new { success = true, newListV = newListV });
         }
 
         

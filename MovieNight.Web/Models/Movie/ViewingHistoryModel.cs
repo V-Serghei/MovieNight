@@ -24,8 +24,9 @@ namespace MovieNight.Web.Models.Movie
         
         public int UserViewCount { get; set; }        
         
-        public string TimeSpent { get; set; }       
-        
-        
+        public string TimeSpent { get; set; }
+
+
+
     }
 }

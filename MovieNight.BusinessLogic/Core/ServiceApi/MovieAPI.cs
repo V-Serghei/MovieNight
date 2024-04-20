@@ -117,13 +117,13 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
         protected MovieTemplateInfE GetMovieFromDb(int? id)
         {
-           // GetMappersSettings();
+            GetMappersSettings();
             var movieDb = new MovieTemplateInfE();
             //var op = ReadMoviesFromJson("D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
 
             //PopulateDatabase(op);
-            //conf.CreateMapper();
-            //var maper = conf.CreateMapper();
+            // conf.CreateMapper();
+            // var maper = conf.CreateMapper();
             using (var db = new MovieContext())
             {
                 try
@@ -172,8 +172,10 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
                     return movieDb;
                 }
-                catch (Exception ex)
+                catch (NullReferenceException ex)
                 {
+                    Console.WriteLine(@"Ошибка: " + ex.Message);
+                    Console.WriteLine(@"StackTrace: " + ex.StackTrace);
                     return null;
                 }
                 

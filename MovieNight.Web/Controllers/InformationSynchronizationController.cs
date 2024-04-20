@@ -239,7 +239,8 @@ namespace MovieNight.Web.Controllers
         {
             try
             {
-                int id = 15;
+                Random random = new Random();
+                int id = random.Next(1, 501);
                 var movie = _movie.GetMovieInf(id);
                 if (movie != null)
                 {

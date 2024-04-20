@@ -848,6 +848,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\CacheI\ViewListCacheKey.cs" />
     <Compile Include="Infrastructure\Different\ValidationStr.cs" />
     <Compile Include="Infrastructure\HttpContextInfrastructure.cs" />
     <Compile Include="Models\Achievement\Achievement.cs" />
