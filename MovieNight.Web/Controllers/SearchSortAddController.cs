@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
@@ -19,10 +21,14 @@ namespace MovieNight.Web.Controllers
 {
     public class SearchSortAddController : Controller
     {
+        
         private readonly IFriendsService _serviceFriend;
         private readonly IMapper _mapper;
         private readonly IMovie _movie;
-        
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private static readonly object lockObj = new object();
+        private static bool requestInProgress = false;
+        private static Timer timer;
         public SearchSortAddController()
         {
             var service = new BusinessLogic.BusinessLogic();
@@ -157,9 +163,18 @@ namespace MovieNight.Web.Controllers
         public ActionResult ViewedList()
         {
             var viewList = _movie.GetViewingList(System.Web.HttpContext.Current.GetMySessionObject().Id);
-            
+            ViewBag.NumOfPage = 1;
             var viewingModel = _mapper.Map<List<ViewingHistoryModel>>(viewList);
-            
+            System.Web.HttpContext.Current.SetCommandViewList(new ViewListSort
+            {
+                PageNumber = ViewBag.CurrentPageNumber = 1,
+                Field = SelectField.Non,
+                DirectionStep = Direction.Non,
+                SortingDirection = SortDirection.Non,
+                SearchParameter = "",
+                Category = FilmCategory.Non
+            });
+
             var list = viewingModel.Take(10).ToList();
             System.Web.HttpContext.Current.SetListViewingHistoryS(viewingModel);
             
@@ -168,53 +183,262 @@ namespace MovieNight.Web.Controllers
 
         #endregion
         
-        [HttpPost]
-        public async Task<ActionResult> CurrentSortingAndFilteringAction(ViewListSort command)
-        {
-            if (HttpContextInfrastructure.CurrentCommandStateComparison(command))
-            {
-                if (command.DirectionStep == Direction.Right)
-                {
-                    command.PageNumber += 1;
-                    if (command.PageNumber <= 1) command.PageNumber = 1;
-                    else if (command.PageNumber >= System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
-                        command.PageNumber = System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10;
-                }
-                else if(command.DirectionStep == Direction.Left) 
-                {
-                    command.PageNumber -= 1;
-
-                    if (command.PageNumber <= 1) command.PageNumber = 1;
-                    else if (command.PageNumber >= System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
-                        command.PageNumber = System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10;
-                }
-                var currStateListCache = System.Web.HttpContext.Current.GetListViewingHistoryS();
-                var currList = currStateListCache.Skip((command.PageNumber - 1) * 10).Take(10).ToList();
-                ViewBag.NumOfPage = command.PageNumber;
-
-                return Json(new { success = true, newListV = currList });
-            }
-            else
-            {
-                command.PageNumber = 1;
-                System.Web.HttpContext.Current.SetCommandViewList(command);
-                var transCommand = _mapper.Map<ViewListSortCommandE>(command);
-                var currStateList = await _movie.GetNewViewList(transCommand);
-                var newListV = _mapper.Map<List<ViewingHistoryModel>>(currStateList);
-                System.Web.HttpContext.Current.SetListViewingHistoryS(newListV);
-                var currList = newListV.Take(10).ToList();
-                ViewBag.NumOfPage = command.PageNumber;
-                return Json(new { success = true, newListV = currList });
-
-            }
-            
-            //var currStateList = await _movie.GetNewViewList(transCommand);
-            //var newListV = _mapper.Map<List<ViewingHistoryModel>>(currStateList);
-
-            // return Json(new { success = true, newListV = newListV });
-        }
-
+    [HttpPost]
+//     public async Task<ActionResult> CurrentSortingAndFilteringAction(ViewListSort command)
+//     {
+//         try
+//         {
+//             // if (Request.Form["cancel"] != null)
+//             // {
+//             //     CancelRequests();
+//             //     return RedirectToAction("Cancelled");
+//             // }
+//             lock (lockObj)
+//             {
+//                 // Если запрос уже выполняется, не даем запустить новый
+//                 if (requestInProgress)
+//                 {
+//                     return RedirectToAction("Cancelled");
+//                 }
+//
+//                 // Устанавливаем флаг, что запрос начался
+//                 requestInProgress = true;
+//             }
+//             
+//             timer = new Timer(TimerCallback, null, 1000, Timeout.Infinite);
+//             // Выполняем запрос и ожидаем результат
+//             var result = await PerformRequestAsync(command, cancellationTokenSource.Token);
+//
+//             // Возвращаем результат
+//             return result;
+//         }
+//         finally
+//         {
+//             // После выполнения запроса снимаем флаг
+//             lock (lockObj)
+//             {
+//                 requestInProgress = false;
+//             }
+//         }
+//     }
+//     private void TimerCallback(object state)
+//     {
+//         lock (lockObj)
+//         {
+//             // Сбрасываем флаг после истечения таймера
+//             requestInProgress = false;
+//         }
+//     }
+//     private async Task<ActionResult> PerformRequestAsync(ViewListSort command, CancellationToken cancellationToken)
+//     {  cancellationToken.ThrowIfCancellationRequested();
+//            if (HttpContextInfrastructure.CurrentCommandStateComparison(command))
+//         {
+//             if (command.DirectionStep == Direction.Right)
+//             {
+//                 if ((System.Web.HttpContext.Current.GetCommandViewList().PageNumber == command.PageNumber))
+//                     command.PageNumber += 1;
+//     
+//                 if (command.PageNumber <= 1) command.PageNumber = 1;
+//                 else if (command.PageNumber >= (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+//                              ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+//                              : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1))
+//                     command.PageNumber = (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+//                         ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+//                         : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1);
+//             }
+//             else if (command.DirectionStep == Direction.Left)
+//             {
+//                 if ((System.Web.HttpContext.Current.GetCommandViewList().PageNumber == command.PageNumber))
+//                     command.PageNumber -= 1;
+//     
+//                 if (command.PageNumber <= 1) command.PageNumber = 1;
+//                 else if (command.PageNumber >= (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+//                              ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+//                              : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1))
+//                     command.PageNumber = (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+//                         ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+//                         : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1);
+//             }
+//     
+//             var currStateListCache = System.Web.HttpContext.Current.GetListViewingHistoryS();
+//             var currList = currStateListCache.Skip((command.PageNumber - 1) * 10).Take(10).ToList();
+//             System.Web.HttpContext.Current.SetCommandViewList(command);
+//             ViewBag.CurrentPageNumber = command.PageNumber;
+//     
+//             return Json(new { success = true, newListV = currList, pageNumber = command.PageNumber });
+//         }else {
+//                command.PageNumber = 1;
+//                System.Web.HttpContext.Current.SetCommandViewList(command);
+//                var transCommand = _mapper.Map<ViewListSortCommandE>(command);
+//                var currStateList = await _movie.GetNewViewList(transCommand);
+//                var newListV = _mapper.Map<List<ViewingHistoryModel>>(currStateList);
+//                System.Web.HttpContext.Current.SetListViewingHistoryS(newListV);
+//                var currList = newListV.Take(10).ToList();
+//                ViewBag.CurrentPageNumber = command.PageNumber;
+//                return Json(new { success = true, newListV = currList, pageNumber = command.PageNumber });
+//         }
+//     }
+//
+// // Метод для отмены всех ожидающих запросов
+//         public void CancelRequests()
+//         {
+//             cancellationTokenSource.Cancel();
+//             // Сбрасываем таймер
+//             timer?.Change(Timeout.Infinite, Timeout.Infinite);
+//         }
+//
+//
+// // Действие, которое будет вызываться, если запрос был отменен
+//     public ActionResult Cancelled()
+//     {
+//         return View();
+//     }
+    // public async Task<ActionResult> CurrentSortingAndFilteringAction(ViewListSort command)
+    // {
+    //     try
+    //     {
+    //         cancellationTokenSource.Token.ThrowIfCancellationRequested();
+    //         cancellationTokenSource = new CancellationTokenSource();
+    //         cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(0.005)); // Отмена через 5 секунд
+    //
+    //         // Делаем задержку на 5 секунд
+    //         await Task.Delay(TimeSpan.FromSeconds(0.005), cancellationTokenSource.Token);
+    //         
+    //         
+    //             if (HttpContextInfrastructure.CurrentCommandStateComparison(command))
+    //             {
+    //                 if (command.DirectionStep == Direction.Right)
+    //                 {
+    //                     if ((System.Web.HttpContext.Current.GetCommandViewList().PageNumber == command.PageNumber))
+    //                         command.PageNumber += 1;
+    //
+    //                     if (command.PageNumber <= 1) command.PageNumber = 1;
+    //                     else if (command.PageNumber >= (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+    //                         ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+    //                         : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1))
+    //                         command.PageNumber = (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+    //                             ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+    //                             : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1);
+    //                 }
+    //                 else if (command.DirectionStep == Direction.Left)
+    //                 {
+    //                     if ((System.Web.HttpContext.Current.GetCommandViewList().PageNumber == command.PageNumber))
+    //                         command.PageNumber -= 1;
+    //
+    //                     if (command.PageNumber <= 1) command.PageNumber = 1;
+    //                     else if (command.PageNumber >= (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+    //                         ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+    //                         : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1))
+    //                         command.PageNumber = (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+    //                             ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+    //                             : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1);
+    //                 }
+    //
+    //                 var currStateListCache = System.Web.HttpContext.Current.GetListViewingHistoryS();
+    //                 var currList = currStateListCache.Skip((command.PageNumber - 1) * 10).Take(10).ToList();
+    //                 System.Web.HttpContext.Current.SetCommandViewList(command);
+    //                 ViewBag.CurrentPageNumber = command.PageNumber;
+    //
+    //                 return Json(new { success = true, newListV = currList, pageNumber = command.PageNumber });
+    //             }
+    //             else
+    //             {
+    //                 command.PageNumber = 1;
+    //                 System.Web.HttpContext.Current.SetCommandViewList(command);
+    //                 var transCommand = _mapper.Map<ViewListSortCommandE>(command);
+    //                 var currStateList = await _movie.GetNewViewList(transCommand);
+    //                 var newListV = _mapper.Map<List<ViewingHistoryModel>>(currStateList);
+    //                 System.Web.HttpContext.Current.SetListViewingHistoryS(newListV);
+    //                 var currList = newListV.Take(10).ToList();
+    //                 ViewBag.CurrentPageNumber = command.PageNumber;
+    //                 return Json(new { success = true, newListV = currList, pageNumber = command.PageNumber });
+    //             }
+    //         
+    //     }
+    //     catch (OperationCanceledException)
+    //     {
+    //         
+    //         return RedirectToAction("Cancelled");
+    //     }
+    // }
+    //
+    // // Метод для отмены всех ожидающих запросов
+    // public void CancelRequests()
+    // {
+    //     cancellationTokenSource.Cancel(); // Отменяем токен
+    //     cancellationTokenSource.Dispose(); // Освобождаем ресурсы CancellationTokenSource
+    //     cancellationTokenSource = new CancellationTokenSource(); // Создаем новый CancellationTokenSource для следующих запросов
+    // }
+    //
+    // // Действие, которое будет вызываться, если запрос был отменен
+    // public ActionResult Cancelled()
+    // {
+    //     return View();
+    // }
+    public async Task<ActionResult> CurrentSortingAndFilteringAction(ViewListSort command)
+    {
         
+                if (HttpContextInfrastructure.CurrentCommandStateComparison(command))
+                {
+                    if (command.DirectionStep == Direction.Right)
+                    {
+                        if ((System.Web.HttpContext.Current.GetCommandViewList().PageNumber == command.PageNumber))
+                            command.PageNumber += 1;
+
+                        if (System.Web.HttpContext.Current.GetCommandViewList().PageNumber > command.PageNumber)
+                            command.PageNumber = (System.Web.HttpContext.Current.GetCommandViewList().PageNumber);
+                        
+                        
+                        if (command.PageNumber <= 1) command.PageNumber = 1;
+                        else if (command.PageNumber >= (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+                            ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+                            : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1))
+                            command.PageNumber = (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+                                ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+                                : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1);
+                    }
+                    else if (command.DirectionStep == Direction.Left)
+                    {
+                        if ((System.Web.HttpContext.Current.GetCommandViewList().PageNumber == command.PageNumber))
+                            command.PageNumber -= 1;
+    
+                        if (System.Web.HttpContext.Current.GetCommandViewList().PageNumber < command.PageNumber)
+                            command.PageNumber = (System.Web.HttpContext.Current.GetCommandViewList().PageNumber);
+                        
+                        if (command.PageNumber <= 1) command.PageNumber = 1;
+                        else if (command.PageNumber >= (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+                            ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+                            : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1))
+                            command.PageNumber = (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+                                ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+                                : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1);
+                    }
+    
+                    var currStateListCache = System.Web.HttpContext.Current.GetListViewingHistoryS();
+                    var currList = currStateListCache.Skip((command.PageNumber - 1) * 10).Take(10).ToList();
+                    System.Web.HttpContext.Current.SetCommandViewList(command);
+                    ViewBag.CurrentPageNumber = command.PageNumber;
+    
+                    return Json(new { success = true, newListV = currList, pageNumber = command.PageNumber });
+                }
+                else
+                {
+                    command.PageNumber = 1;
+                    System.Web.HttpContext.Current.SetCommandViewList(command);
+                    var transCommand = _mapper.Map<ViewListSortCommandE>(command);
+                    var currStateList = await _movie.GetNewViewList(transCommand);
+                    var newListV = _mapper.Map<List<ViewingHistoryModel>>(currStateList);
+                    System.Web.HttpContext.Current.SetListViewingHistoryS(newListV);
+                    var currList = newListV.Take(10).ToList();
+                    ViewBag.CurrentPageNumber = command.PageNumber;
+                    return Json(new { success = true, newListV = currList, pageNumber = command.PageNumber });
+                }
+            
+        
+    }
+    
+
+
         
     }
 }
