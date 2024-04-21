@@ -12,6 +12,8 @@ namespace MovieNight.BusinessLogic.Interface.IService
     {
         FriendsPageD getFriendDate(int? id);
         FriendsListD getListOfUsers(int _skipParameter);
-        FriendsListD getListOfFriends();
+        FriendsListD getListOfFriends(int _skipParameter);
+        bool setAddFriend((int _userId, int? _friendId) valueTuple);
+        bool setDeleteFriend((int _userId, int? _friendId) valueTuple);
     }
 }

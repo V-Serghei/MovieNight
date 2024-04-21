@@ -20,9 +20,19 @@ namespace MovieNight.BusinessLogic.Session.Service
         {
             return getListOfUsersD(_skipParameter);
         }
-        public FriendsListD getListOfFriends()
+        public FriendsListD getListOfFriends(int _skipParameter)
         {
-            return getListOfFriendsD();
+            return getListOfFriendsD(_skipParameter);
+        }
+
+        public bool setAddFriend((int _userId, int? _friendId) valueTuple)
+        {
+            return setAddFriendD(valueTuple);
+        }
+        
+        public bool setDeleteFriend((int _userId, int? _friendId) valueTuple)
+        {
+            return setDeleteFriendD(valueTuple);
         }
     }
 }

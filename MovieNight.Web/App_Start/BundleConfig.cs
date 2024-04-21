@@ -113,14 +113,29 @@ namespace MovieNight.Web
             //calendar
             bundles.Add(new StyleBundle("~/bundles/fullcalendar/css").Include(
                 "~/vendor/fullcalendar/fullcalendar.min.css", new CssRewriteUrlTransform()));
+             bundles.Add(new StyleBundle("~/bundles/clockpicker/css").Include(
+                    "~/vendor/clockpicker/bootstrap-clockpicker.min.css", new CssRewriteUrlTransform()));
+            bundles.Add(new StyleBundle("~/bundles/bootstrap-datepicker/css").Include(
+                    "~/vendor/bootstrap-datepicker/bootstrap-datepicker.min.css", new CssRewriteUrlTransform()));
+            bundles.Add(new StyleBundle("~/bundles/bootstrap-daterangepicker/css").Include(
+                    "~/vendor/bootstrap-daterangepicker/daterangepicker.css", new CssRewriteUrlTransform()));
+               
             bundles.Add(new ScriptBundle("~/bundles/moment/js").Include(
-               "~/vendor/moment/moment.min.js"));
+                "~/vendor/moment/moment.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui/js").Include(
                 "~/vendor/jquery-ui/jquery-ui.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/fullcalendar/js").Include(
                 "~/vendor/fullcalendar/fullcalendar.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/calendar_init/js").Include(
                 "~/scripts/pages/calendar.init.js"));
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap-datepicker/js").Include(
+                "~/vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/form-pickers_init/js").Include(
+                "~/scripts/pages/form-pickers.init.js"));
+            bundles.Add(new ScriptBundle("~/bundles/clockpicker/js").Include(
+                "~/vendor/clockpicker/bootstrap-clockpicker.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap-daterangepicker/js").Include(
+                "~/vendor/bootstrap-daterangepicker/daterangepicker.js"));
 
             //email
             bundles.Add(new ScriptBundle("~/bundles/inbox/js").Include(

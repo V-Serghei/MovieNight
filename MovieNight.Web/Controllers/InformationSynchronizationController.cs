@@ -72,6 +72,7 @@ namespace MovieNight.Web.Controllers
 
         // GET: InformationSynchronization
         [HttpGet]
+        [UserMod]
         public ActionResult PersonalProfile()
         {
 
@@ -203,6 +204,7 @@ namespace MovieNight.Web.Controllers
         }
 
         [HttpGet]
+        [UserMod]
         public ActionResult UserTemplatePage()
         {
             int? id = 1;
@@ -256,6 +258,7 @@ namespace MovieNight.Web.Controllers
         }
 
         [HttpGet]
+        [UserMod]
         public ActionResult ProfileEditing()
         {
             var used = _sessionUser.GetPersonalProfileM(HttpContextInfrastructure.GetGlobalParam());
@@ -338,6 +341,11 @@ namespace MovieNight.Web.Controllers
         {
             return View();
         }
-        
+
+        [ModeratorMod]
+        public ActionResult MovieTemplateEditing()
+        {
+            return View();
+        }
     }
 }

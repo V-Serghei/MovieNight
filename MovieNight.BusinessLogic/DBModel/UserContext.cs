@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.ModelBinding;
+using MovieNight.Domain.Entities.Friends;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 
 
@@ -23,6 +24,7 @@ namespace MovieNight.BusinessLogic.DBModel
         public DbSet<PEdBdTable> PEdBdTables { get; set; }
         
         public DbSet<ViewListDbTable> ViewList { get; set; }
+        public DbSet<FriendsDbTable> Friends { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -42,6 +44,17 @@ namespace MovieNight.BusinessLogic.DBModel
                 .HasRequired(w => w.Movie)
                 .WithMany()
                 .HasForeignKey(w => w.MovieId);
+            
+            modelBuilder.Entity<FriendsDbTable>()
+                .HasRequired(f => f.User)
+                .WithMany(u => u.FriendsDbTables)
+                .HasForeignKey(f => f.IdUser)
+                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<FriendsDbTable>()
+                .HasRequired(f => f.Friend)
+                .WithMany() // Нет навигационного свойства, так как Friend используется только в контексте Friendship
+                .HasForeignKey(f => f.IdFriend)
+                .WillCascadeOnDelete(false);
 
             // modelBuilder.Entity<ViewListDbTable>()
             //     .HasOptional(v => v.User)
@@ -63,12 +76,6 @@ namespace MovieNight.BusinessLogic.DBModel
             //         mc.MapLeftKey("MovieId");
             //         mc.MapRightKey("CastMemberId");
             //     });
-
         }
-
-
-       
-
-
     }
 }
