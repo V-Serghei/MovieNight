@@ -10,6 +10,6 @@ namespace MovieNight.BusinessLogic.Interface.IMail
 {
     public interface IInbox
     {
-        List<InboxD> InboxEquipment(UserE user);
+        List<InboxD> InboxEquipment();
     }
 }

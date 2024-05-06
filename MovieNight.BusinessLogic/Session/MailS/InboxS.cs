@@ -12,9 +12,9 @@ namespace MovieNight.BusinessLogic.Session.MailS
 {
     public class InboxS : MailCore, IInbox
     {
-        public List<InboxD> InboxEquipment(UserE user)
+        public List<InboxD> InboxEquipment()
         {
-            return InboxEquipmentFromData(user);
+            return InboxEquipmentFromData();
         }
     }
 }

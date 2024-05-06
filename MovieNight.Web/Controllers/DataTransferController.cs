@@ -14,24 +14,17 @@ namespace MovieNight.Web.Controllers
 {
     public class DataTransferController : Controller
     {
-        internal IInbox CompleteInbox;
+        internal IInbox сompleteInbox;
         public DataTransferController()
         {
             var MailBL = new BusinessLogic.BusinessLogic();
-            CompleteInbox = MailBL.GetInbox();
+            сompleteInbox = MailBL.GetInbox();
         }
         // GET: DataTransfer
         public ActionResult Inbox()
         {
             List<InboxModel> Message = new List<InboxModel>();
-            UserE userE = new UserE()
-            {
-                Id = 1,
-                Username = "Nelea",
-                Email = " ",
-                Password = " ",
-            };
-            List<InboxD> MessageD = CompleteInbox.InboxEquipment(userE);
+            List<InboxD> MessageD = сompleteInbox.InboxEquipment();
             foreach (var TMP in MessageD) 
             {
                 Message.Add(new InboxModel
