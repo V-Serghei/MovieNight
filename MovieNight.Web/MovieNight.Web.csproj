@@ -860,6 +860,7 @@
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\Mail\InboxModel.cs" />
     <Compile Include="Models\Movie\CastMember.cs" />
+    <Compile Include="Models\Movie\FilmCommandSort.cs" />
     <Compile Include="Models\Movie\InterestingFact.cs" />
     <Compile Include="Models\Movie\ListOfFilmsModel.cs" />
     <Compile Include="Models\Movie\MovieCard.cs" />

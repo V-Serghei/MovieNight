@@ -10,9 +10,7 @@ namespace MovieNight.Domain.Entities.MovieM
         
         public int Id { get; set; }
         public string Title { get; set; }
-        
         public FilmCategory Category { get; set; }
-
         public string PosterImage { get; set; }
         public string Quote { get; set; }
         public string Description { get; set; }
@@ -22,7 +20,6 @@ namespace MovieNight.Domain.Entities.MovieM
         public string Location { get; set; }
         public string Director { get; set; }
         public string DurationJ { get; set; }
-
         [JsonIgnore] 
         public DateTime Duration { get; set; }
         public float MovieNightGrade { get; set; }

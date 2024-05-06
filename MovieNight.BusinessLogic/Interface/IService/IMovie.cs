@@ -18,5 +18,6 @@ namespace MovieNight.BusinessLogic.Interface.IService
         Task<bool> SetReteMovieAndView((int Id, int movieId, int rating) valueTuple);
         List<ViewingHistoryM> GetViewingList(int? userId);
         Task<IEnumerable<ViewingHistoryM>> GetNewViewList(ViewListSortCommandE transCommand);
+        List<MovieTemplateInfE> GetListMovie();
     }
 }

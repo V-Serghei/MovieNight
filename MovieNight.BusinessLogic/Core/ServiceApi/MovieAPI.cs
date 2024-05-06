@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -35,11 +36,18 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         private List<IMapper> LMapper => GetMappersSettings();
 
 
+        //If you’re back to the meper again, remember,
+        //check first if you called in your method where you want to use it,
+        //the method itself with all the settings of the meper
         private List<IMapper> GetMappersSettings()  
         {
-            var conf = new MapperConfiguration(cnf =>
+            var conf = new MapperConfiguration(cfg =>
             {
-                cnf.CreateMap<MovieDbTable, MovieTemplateInfE>()
+                cfg.CreateMap<MovieDbTable, MovieTemplateInfE>()
+                    .ForMember(dest => dest.Genre,
+                        opt => opt.MapFrom(src => JsonConvert.DeserializeObject<List<string>>(src.Genres)))
+                    .ForMember(dest => dest.DurationJ,
+                        opt => opt.MapFrom(src => src.Duration.ToString(CultureInfo.InvariantCulture)))
                     .ForMember(dist =>
                         dist.InterestingFacts, src =>
                         src.Ignore())
@@ -48,7 +56,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     .ForMember(dist =>
                         dist.MovieCards, src =>
                         src.Ignore());
-                cnf.CreateMap<MovieTemplateInfE, MovieDbTable>()
+                cfg.CreateMap<MovieTemplateInfE, MovieDbTable>()
+                    .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => JsonConvert.SerializeObject(src.Genre)))
+                    .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => DateTime.Parse(src.DurationJ)))
                     .ForMember(dist =>
                         dist.InterestingFacts, src =>
                         src.Ignore())
@@ -56,8 +66,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         dist.CastMembers, src => src.Ignore())
                     .ForMember(dist =>
                         dist.MovieCards, src =>
-                        src.Ignore());
-
+                        src.Ignore())
+                    .ForMember(dist => dist.BookmarkDbTables, src => src.Ignore())
+                    .ForMember(dist => dist.ViewListEntries, src => src.Ignore());
             });
             MapperFilm = conf.CreateMapper();
             var confInterFact = new MapperConfiguration(config =>
@@ -646,9 +657,29 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         }
         
         #endregion
-        
-        
-        
+
+
+        protected List<MovieTemplateInfE> GetListMovieDb()
+        {
+            GetMappersSettings();
+            try
+            {
+                using (var dbMovie = new MovieContext())
+                {
+                    var movieDb = dbMovie.MovieDb.ToList();
+
+                    var movieList = MapperFilm.Map<List<MovieTemplateInfE>>(movieDb);
+                    
+                    return movieList;
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return new List<MovieTemplateInfE>();
+            }
+        }
         
     }
 }

@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.Web;
-using MovieNight.Domain.Entities.UserId;
 using MovieNight.Web.Models;
 using MovieNight.Web.Models.Movie;
 using MovieNight.Web.Models.SortingSearchingFiltering;
@@ -83,8 +82,23 @@ namespace MovieNight.Web.Infrastructure
 
         
         #endregion
-       
+
+        #region ListFilm
         
+
+        public static List<MovieTemplateInfModel> GetListFilmS(this HttpContext current)
+        {
+            return current?.Session["__ListFilmSearch"] as List<MovieTemplateInfModel>;
+        }
+        
+        public static void SetListFilmS(this HttpContext current, List<MovieTemplateInfModel> list)
+        {
+            current.Session.Add("__ListFilmHSearch", list);
+        }
+        
+        
+
+        #endregion
         
 
         #endregion

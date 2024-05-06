@@ -102,7 +102,19 @@ namespace MovieNight.Web.Controllers
 
         public ActionResult MovieSearch()
         {
-            return View();
+            
+            
+                //add cache 
+                var movieList = _movie.GetListMovie();
+                var partList = movieList.Take(30).ToList();
+
+                var partListM = _mapper.Map<List<MovieTemplateInfModel>>(partList);
+                
+            
+            
+            
+            
+            return View(partListM);
         }
 
         public ActionResult SerialsSearch()
@@ -362,10 +374,9 @@ namespace MovieNight.Web.Controllers
     //     }
     // }
     //
-    // // Метод для отмены всех ожидающих запросов
     // public void CancelRequests()
     // {
-    //     cancellationTokenSource.Cancel(); // Отменяем токен
+    //     cancellationTokenSource.Cancel(); 
     //     cancellationTokenSource.Dispose(); // Освобождаем ресурсы CancellationTokenSource
     //     cancellationTokenSource = new CancellationTokenSource(); // Создаем новый CancellationTokenSource для следующих запросов
     // }
@@ -435,6 +446,15 @@ namespace MovieNight.Web.Controllers
                 }
             
         
+    }
+
+    public ActionResult SortCurrFilm(FilmCommandSort command)
+    {
+        
+
+
+        
+        return View("MovieSearch");
     }
     
 

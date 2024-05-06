@@ -55,11 +55,10 @@ namespace MovieNight.BusinessLogic.Session.Service
             return  await GetNewViewListDb(transCommand);
         }
 
-
-      
-        
-        
-
+        public List<MovieTemplateInfE> GetListMovie()
+        {
+            return GetListMovieDb();
+        }
     }
 
     

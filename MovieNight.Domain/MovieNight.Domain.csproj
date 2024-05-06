@@ -54,6 +54,7 @@
     <Compile Include="enams\LevelOfAccess.cs" />
     <Compile Include="enams\SelectField.cs" />
     <Compile Include="enams\SortDirection.cs" />
+    <Compile Include="enams\SortingOption.cs" />
     <Compile Include="Entities\DifferentE\PhoneNumE.cs" />
     <Compile Include="Entities\DifferentE\Tag.cs" />
     <Compile Include="Entities\Friends\FriendsListD.cs" />
