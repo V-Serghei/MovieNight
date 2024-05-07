@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Web;
 using MovieNight.Web.Models;
 using MovieNight.Web.Models.Movie;
+using MovieNight.Web.Models.Movie.SearchPages;
 using MovieNight.Web.Models.SortingSearchingFiltering;
 
 namespace MovieNight.Web.Infrastructure
@@ -86,18 +87,16 @@ namespace MovieNight.Web.Infrastructure
         #region ListFilm
         
 
-        public static List<MovieTemplateInfModel> GetListFilmS(this HttpContext current)
+        public static FilmsListModel GetListFilmS(this HttpContext current)
         {
-            return current?.Session["__ListFilmSearch"] as List<MovieTemplateInfModel>;
+            return current?.Session["__ListFilmSearch"] as FilmsListModel;
         }
         
-        public static void SetListFilmS(this HttpContext current, List<MovieTemplateInfModel> list)
+        public static void SetListFilmS(this HttpContext current, FilmsListModel list)
         {
             current.Session.Add("__ListFilmHSearch", list);
         }
         
-        
-
         #endregion
         
 

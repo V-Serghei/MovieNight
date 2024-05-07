@@ -1,4 +1,6 @@
-﻿@model List<MovieNight.Web.Models.Movie.MovieTemplateInfModel>
+﻿@using MovieNight.Domain.enams
+@using SortDirection = MovieNight.Domain.enams.SortDirection
+@model MovieNight.Web.Models.Movie.SearchPages.FilmsListModel
 
 @{
     ViewBag.Title = "Movie search";
@@ -9,62 +11,72 @@
     <div class="content">
 
         <!-- Start Content-->
-        @using (Html.BeginForm("SortCurrFilm", "SearchSortAdd", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            <div class="container-fluid">
+       
+        <div class="container-fluid">
 
-                <!-- start page title -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="page-title-box">
-                            <div class="page-title-right">
-                                <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">MovieNight</a></li>
-                                    <li class="breadcrumb-item" name="Category" value="1"><a href="javascript: void(0);">Films</a></li>
-                                </ol>
-                            </div>
-                            <h4 class="page-title">Films</h4>
+            @using (Html.BeginForm("SortCurrFilm", "SearchSortAdd", FormMethod.Post, new { enctype = "multipart/form-data", id = "sortForm" }))            {
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">MovieNight</a></li>
+                                <li class="breadcrumb-item" name="Category" value="1"><a href="javascript: void(0);">Films</a></li>
+                                <input type="hidden"  name="Category" value="1"/>
+                            </ol>
                         </div>
+                        <h4 class="page-title">Films</h4>
                     </div>
                 </div>
-                <!-- end page title -->
+            </div>
+            <!-- end page title -->
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card-box">
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <form class="form-inline">
-                                        <div class="form-group mx-sm-3">
-                                            <label for="status-select" class="mr-2">Sort By</label>
-                                            <select class="custom-select" id="status-select">
-                                                <option selected="">All</option>
-                                                <option value="1">release date</option>
-                                                <option value="2">popularity</option>
-                                                <option value="3">grade</option>
-                                                <option value="4">views</option>
-                                            </select>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="text-lg-right mt-3 mt-lg-0">
-                                        <a href="#custom-modal" class="btn btn-danger waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlayColor="#38414a"><i class="mdi mdi-plus-circle mr-1"></i> Add New</a>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card-box">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <!-- Removed the inner form here -->
+                                <div class="form-inline">
+                                    <div class="form-group mx-sm-3">
+                                        <label for="status-select" class="mr-2" name="SortPar">Sort By</label>
+                                        <select name="SortPar" class="custom-select" id="status-select" required>
+                                            <option value="0" @(Model.CommandSort.SortPar == 0 ? "selected" : "")>All</option>
+                                            <option value="1" @(Model.CommandSort.SortPar == SortingOption.ReleaseDate ? "selected" : "")>release date</option>
+                                            <option value="2" @(Model.CommandSort.SortPar == SortingOption.Popularity ? "selected" : "")>popularity</option>
+                                            <option value="3" @(Model.CommandSort.SortPar == SortingOption.Grade ? "selected" : "")>grade</option>
+                                            <option value="4" @(Model.CommandSort.SortPar == SortingOption.Views ? "selected" : "")>views</option>
+                                        </select>
                                     </div>
-                                </div><!-- end col-->
-                            </div> <!-- end row -->
-                        </div> <!-- end card-box -->
-                    </div><!-- end col-->
-                </div>
+
+                                    <div class="form-group">
+                                        <input type="hidden" id="sortDirection" name="SortingDirection" value="@Model.CommandSort.SortPar" />
+                                        <button type="button" class="btn btn-outline-secondary ml-2 SortingDirection" onclick="toggleSortDirection()" name="SortingDirection">
+                                            <i id="sortIcon" class="fa @(Model.CommandSort.SortingDirection == SortDirection.Ascending ? "fa-sort-up" : Model.CommandSort.SortingDirection == SortDirection.Descending ? "fa-sort-down" : "fa-sort")"></i>
+
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="text-lg-right mt-3 mt-lg-0">
+                                    <a href="#custom-modal" class="btn btn-danger waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlayColor="#38414a"><i class="mdi mdi-plus-circle mr-1"></i> Add New</a>
+                                </div>
+                            </div><!-- end col-->
+                        </div> <!-- end row -->
+                    </div> <!-- end card-box -->
+                </div><!-- end col-->
+            </div>
                 <!-- end row -->
 
-                @for (var index = 0; index < Model.Count; index += 3)
+                for (var index = 0; index < Model.ListFilm.Count; index += 3)
                 {
                     <div class="row">
 
                         @for (var currIndex = 0; currIndex < 3; currIndex++)
                         {
-                            if (currIndex + index < Model.Count)
+                            if (currIndex + index < Model.ListFilm.Count)
                             {
                                 <div class="col-lg-4">
                                     <div class="text-center card-box ribbon-box">
@@ -73,7 +85,7 @@
                                         <div class="pt-2 pb-2">
                                             <img src="~/images/Movie/the_green_mie.png" class="fa-times-rectangle img-thumbnail " alt="movie-poster">
 
-                                            <h4 class="mt-3 font-17"><a href="@Url.Action("MovieTemplatePage", "InformationSynchronization")" class="text-dark">@Model[index + currIndex].Title</a></h4>
+                                            <h4 class="mt-3 font-17"><a href="@Url.Action("MovieTemplatePage", "InformationSynchronization")" class="text-dark">@Model.ListFilm[index + currIndex].Title</a></h4>
                                             <p class="text-muted">Дата выхода: 01.01.2024</p>
                                             <p class="text-muted">Оценка: 8.5</p>
                                             <p class="text-muted">Жанры: Драма, Боевик, Фантастика</p>
@@ -106,43 +118,117 @@
                     </div>
 
                 }
+            }
 
 
 
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="text-right">
-                            <ul class="pagination pagination-rounded justify-content-end">
-                                <li class="page-item">
-                                    <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                        <span aria-hidden="true">«</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-right">
+                        <ul class="pagination pagination-rounded justify-content-end">
+                            <li class="page-item">
+                                <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                    <span aria-hidden="true">«</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            @if (Model.CommandSort.PageNom <= 3)
+                            {
+                                <li class="page-item active">
+                                    <form id="pageForm1" action="/SearchSortAdd/SetNewPageFromNumber" method="post">
+                                        <input type="hidden" name="pageNumber" value="1">
+                                        <a class="page-link" href="javascript:void(0);" onclick="document.getElementById('pageForm1').submit(); return false;">1</a>
+                                    </form>
                                 </li>
-                                <li class="page-item active"><a class="page-link" href="javascript: void(0);">1</a></li>
-                                <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                                <li class="page-item"><a class="page-link" href="javascript: void(0);">3</a></li>
-                                <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                                <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
                                 <li class="page-item">
-                                    <a class="page-link" href="javascript: void(0);" aria-label="Next">
-                                        <span aria-hidden="true">»</span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
+                                    <form id="pageForm2" action="/SearchSortAdd/SetNewPageFromNumber" method="post">
+                                        <input type="hidden" name="pageNumber" value="2">
+                                        <a class="page-link" href="javascript:void(0);" onclick="document.getElementById('pageForm2').submit(); return false;">2</a>
+                                    </form>
                                 </li>
-                            </ul>
-                        </div>
+                                <li class="page-item">
+                                    <form id="pageForm3" action="/SearchSortAdd/SetNewPageFromNumber" method="post">
+                                        <input type="hidden" name="pageNumber" value="3">
+                                        <a class="page-link" href="javascript:void(0);" onclick="document.getElementById('pageForm3').submit(); return false;">3</a>
+                                    </form>
+                                </li>
+                                <li class="page-item">
+                                    <form id="pageForm4" action="/SearchSortAdd/SetNewPageFromNumber" method="post">
+                                        <input type="hidden" name="pageNumber" value="4">
+                                        <a class="page-link" href="javascript:void(0);" onclick="document.getElementById('pageForm4').submit(); return false;">4</a>
+                                    </form>
+                                </li>
+                                <li class="page-item">
+                                    <form id="pageForm5" action="/SearchSortAdd/SetNewPageFromNumber" method="post">
+                                        <input type="hidden" name="pageNumber" value="5">
+                                        <a class="page-link" href="javascript:void(0);" onclick="document.getElementById('pageForm5').submit(); return false;">5</a>
+                                    </form>
+                                </li>
+
+                                
+                                
+                            }
+                            else
+                            {
+                                <li class="page-item active"><a class="page-link" href="javascript: void(0);">@Model.CommandSort.PageNom - 2</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript: void(0);">@Model.CommandSort.PageNom - 1</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript: void(0);">@Model.CommandSort.PageNom </a></li>
+                                <li class="page-item"><a class="page-link" href="javascript: void(0);">@Model.CommandSort.PageNom + 1</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript: void(0);">@Model.CommandSort.PageNom + 2</a></li>
+                                
+                            }
+                           
+                            <li class="page-item">
+                                <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                    <span aria-hidden="true">»</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <!-- end row -->
-
-
             </div>
+            <!-- end row -->
+
+
+        </div>
             <!-- container -->
-        }
+        
     </div> <!-- content -->
 
 
 </div>
+
+<script>
+    
+    function toggleSortDirection() {
+        var sortIcon = document.getElementById("sortIcon");
+        var sortDirectionField = document.getElementById("sortDirection");
+
+        if (sortIcon.classList.contains("fa-sort")) {
+            sortIcon.classList.remove("fa-sort");
+            sortIcon.classList.add("fa-sort-up");
+            sortDirectionField.value = "1";
+        } else if (sortIcon.classList.contains("fa-sort-up")) {
+            sortIcon.classList.remove("fa-sort-up");
+            sortIcon.classList.add("fa-sort-down");
+            sortDirectionField.value = "2";
+        } else {
+            sortIcon.classList.remove("fa-sort-down");
+            sortIcon.classList.add("fa-sort");
+            sortDirectionField.value = "0";
+        }
+        document.forms["sortForm"].submit();
+    }
+
+    window.onload = function() {
+        var statusSelect = document.getElementById('status-select');
+        statusSelect.addEventListener('change', function() {
+            document.forms["sortForm"].submit();
+        });
+    };
+
+</script>
 

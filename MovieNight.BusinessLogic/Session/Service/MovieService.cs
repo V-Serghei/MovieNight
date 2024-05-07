@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MovieNight.BusinessLogic.Core.ServiceApi;
 using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 
 namespace MovieNight.BusinessLogic.Session.Service
@@ -55,9 +56,9 @@ namespace MovieNight.BusinessLogic.Session.Service
             return  await GetNewViewListDb(transCommand);
         }
 
-        public List<MovieTemplateInfE> GetListMovie()
+        public List<MovieTemplateInfE> GetListMovie(FilmsCommandS filmSCommand)
         {
-            return GetListMovieDb();
+            return GetListMovieDb(filmSCommand);
         }
     }
 

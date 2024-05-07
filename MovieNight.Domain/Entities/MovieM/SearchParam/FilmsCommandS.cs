@@ -1,8 +1,8 @@
 ﻿using MovieNight.Domain.enams;
 
-namespace MovieNight.Web.Models.Movie
+namespace MovieNight.Domain.Entities.MovieM.SearchParam
 {
-    public class FilmCommandSort
+    public class FilmsCommandS
     {
         public FilmCategory Category { get; set; }
         public SortingOption SortPar { get; set; }
@@ -10,6 +10,5 @@ namespace MovieNight.Web.Models.Movie
         public SortDirection SortingDirection { get; set; }
         public Direction Direction { get; set; }
         public int SkipParameter { get; set; }
-        
     }
 }

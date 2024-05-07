@@ -9,11 +9,13 @@ using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.Friends;
 using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Models;
 using MovieNight.Web.Models.Friends;
 using MovieNight.Web.Models.Movie;
+using MovieNight.Web.Models.Movie.SearchPages;
 using MovieNight.Web.Models.PersonalP;
 using MovieNight.Web.Models.SortingSearchingFiltering;
 
@@ -71,7 +73,10 @@ namespace MovieNight.Web.Controllers
                 cfg.CreateMap<ViewingHistoryModel,ViewingHistoryM>();
                 cfg.CreateMap<ViewListSort, ViewListSortCommandE>();
                 cfg.CreateMap<ViewListSortCommandE,ViewListSort>();
+                cfg.CreateMap<FilmCommandSort, FilmsCommandS>();
+                cfg.CreateMap<FilmsCommandS, FilmCommandSort>();
                 
+
 
             });
 
@@ -100,22 +105,7 @@ namespace MovieNight.Web.Controllers
 
        
 
-        public ActionResult MovieSearch()
-        {
-            
-            
-                //add cache 
-                var movieList = _movie.GetListMovie();
-                var partList = movieList.Take(30).ToList();
-
-                var partListM = _mapper.Map<List<MovieTemplateInfModel>>(partList);
-                
-            
-            
-            
-            
-            return View(partListM);
-        }
+        
 
         public ActionResult SerialsSearch()
         {
@@ -448,14 +438,63 @@ namespace MovieNight.Web.Controllers
         
     }
 
+    
+    [HttpGet]
+    public ActionResult MovieSearch()
+    {
+        var filmsListModel = new FilmsListModel
+        {
+            CommandSort = new FilmCommandSort
+            {
+                PageNom = 1,
+                Category = FilmCategory.Film,
+                Direction = Direction.Non,
+                SortingDirection = SortDirection.Ascending,
+                SortPar = SortingOption.All
+            }
+        };
+        var filmSCommand = _mapper.Map<FilmsCommandS>(filmsListModel.CommandSort);
+        var movieList = _movie.GetListMovie(filmSCommand);
+        filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
+        System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
+        var partList = movieList.Take(30).ToList();
+        filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(partList);
+        return View(filmsListModel);
+    }
+
+    [HttpPost]
     public ActionResult SortCurrFilm(FilmCommandSort command)
     {
-        
 
+        var filmsListModel = new FilmsListModel
+        {
+            CommandSort = new FilmCommandSort
+            {
+                PageNom = 1,
+                Category = command.Category,
+                Direction = command.Direction,
+                SortingDirection = command.SortingDirection,
+                SortPar = command.SortPar
+            }
+        };
+        var filmSCommand = _mapper.Map<FilmsCommandS>(filmsListModel.CommandSort);
+        var movieList = _movie.GetListMovie(filmSCommand);
+        var partList = movieList.Take(30).ToList();
 
+        filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(partList);
         
-        return View("MovieSearch");
+        return View("MovieSearch",filmsListModel);
     }
+
+    [HttpPost]
+    public Task<JsonResult> SetNewPageFromNumber(int numberPage)
+    {
+
+
+        return Task.FromResult(Json(null));
+    }
+    
+    
     
 
 

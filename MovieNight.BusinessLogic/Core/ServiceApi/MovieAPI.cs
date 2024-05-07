@@ -16,6 +16,7 @@ using MovieNight.BusinessLogic.Migrations.User;
 using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
+using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 using Newtonsoft.Json;
 using EntityState = System.Data.Entity.EntityState;
@@ -659,19 +660,46 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         #endregion
 
 
-        protected List<MovieTemplateInfE> GetListMovieDb()
+        protected List<MovieTemplateInfE> GetListMovieDb(FilmsCommandS filmSCommand)
         {
             GetMappersSettings();
             try
             {
                 using (var dbMovie = new MovieContext())
                 {
-                    var movieDb = dbMovie.MovieDb.ToList();
+                    IQueryable<MovieDbTable> query = dbMovie.MovieDb;
 
+                    if (filmSCommand.Category != FilmCategory.Non)
+                    {
+                        query = query.Where(m => m.Category == filmSCommand.Category);
+                    }
+
+                    switch (filmSCommand.SortPar)
+                    {
+                        case SortingOption.ReleaseDate:
+                            query = query.OrderBy(m => m.ProductionYear);
+                            break;
+                        case SortingOption.Popularity:
+                            query = query.OrderByDescending(m => m.ViewListEntries.Count())
+                                .ThenByDescending(m => m.MovieNightGrade);
+                            break;
+                        case SortingOption.Grade:
+                            query = query.OrderByDescending(m => m.MovieNightGrade);
+                            break;
+                        case SortingOption.Views:
+                            query = query.OrderByDescending(m => m.ViewListEntries.Count());
+                            break;
+                    }
+
+                    if (filmSCommand.SortingDirection == SortDirection.Descending)
+                    {
+                        query = query.Reverse();
+                    }
+
+                    var movieDb = query.ToList();
                     var movieList = MapperFilm.Map<List<MovieTemplateInfE>>(movieDb);
                     
                     return movieList;
-                    
                 }
             }
             catch (Exception ex)
@@ -680,6 +708,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 return new List<MovieTemplateInfE>();
             }
         }
+
         
     }
 }

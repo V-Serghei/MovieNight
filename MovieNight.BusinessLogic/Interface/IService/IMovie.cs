@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 
 namespace MovieNight.BusinessLogic.Interface.IService
@@ -18,6 +19,6 @@ namespace MovieNight.BusinessLogic.Interface.IService
         Task<bool> SetReteMovieAndView((int Id, int movieId, int rating) valueTuple);
         List<ViewingHistoryM> GetViewingList(int? userId);
         Task<IEnumerable<ViewingHistoryM>> GetNewViewList(ViewListSortCommandE transCommand);
-        List<MovieTemplateInfE> GetListMovie();
+        List<MovieTemplateInfE> GetListMovie(FilmsCommandS filmSCommand);
     }
 }

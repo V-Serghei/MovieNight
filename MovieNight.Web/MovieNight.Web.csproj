@@ -825,6 +825,7 @@
     <Content Include="vendor\x-editable\bootstrap-editable.min.js" />
     <Content Include="Views\Error\Error404Page.cshtml" />
     <Content Include="Views\SearchSortAdd\FindFriends.cshtml" />
+    <Content Include="Views\SearchSortAdd\MovieSearch.cshtml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -866,6 +867,7 @@
     <Compile Include="Models\Movie\MovieCard.cs" />
     <Compile Include="Models\Movie\MovieTemplateInfModel.cs" />
     <Compile Include="Models\Movie\PosterModel.cs" />
+    <Compile Include="Models\Movie\SearchPages\FilmsListModel.cs" />
     <Compile Include="Models\Movie\UploadMovieFileModel.cs" />
     <Compile Include="Models\Movie\ViewingHistoryModel.cs" />
     <Compile Include="Models\PersonalP\Bookmark\BookmarkModel.cs" />
@@ -948,7 +950,6 @@
     <Content Include="Views\Setting\ProfileConfiguration.cshtml" />
     <Content Include="Views\InformationSynchronization\UserTemplatePage.cshtml" />
     <Content Include="Views\InformationSynchronization\MovieTemplatePage.cshtml" />
-    <Content Include="Views\SearchSortAdd\MovieSearch.cshtml" />
     <Content Include="Views\MainPage\News.cshtml" />
     <Content Include="Views\MainPage\Top.cshtml" />
     <Content Include="Views\MainPage\AreWatching.cshtml" />
