@@ -235,12 +235,16 @@ namespace MovieNight.Web.Controllers
         
         
         [HttpGet]
-        public ActionResult MovieTemplatePage()
+        public ActionResult MovieTemplatePage(int? id)
         {
+            int idU = 0;
+            if (id != null)
+            {
+                idU = (int)id;
+            }
+
             try
             {
-                Random random = new Random();
-                int id = random.Next(1, 501);
                 var movie = _movie.GetMovieInf(id);
                 if (movie != null)
                 {
@@ -250,15 +254,15 @@ namespace MovieNight.Web.Controllers
                     movieModel.InterestingFacts = _mapper.Map<List<InterestingFact>>(movie.InterestingFacts);
                     movieModel.Genre = new List<string>();
                     movieModel.Bookmark = _movie.GetInfBookmark((System.Web.HttpContext.
-                        Current.GetMySessionObject().Id,id));
+                        Current.GetMySessionObject().Id,idU));
                     movieModel.UserRating =
-                        _movie.GetUserRating((System.Web.HttpContext.Current.GetMySessionObject().Id, id));
+                        _movie.GetUserRating((System.Web.HttpContext.Current.GetMySessionObject().Id, idU));
                     foreach (var GEN in movie.Genre)
                     {
                         movieModel.Genre.Add(GEN);
                     }
 
-                    movieModel.Id = id;
+                    movieModel.Id = idU;
                     return View(movieModel);
                 }
 

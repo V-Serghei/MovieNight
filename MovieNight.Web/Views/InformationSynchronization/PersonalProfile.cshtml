@@ -260,19 +260,24 @@
 
 
                                     <ul class="list-unstyled timeline-sm">
+                                        
                                         @foreach (var viewingHistory in Model.ViewingHistory)
                                         {
+                                            string[] parts = viewingHistory.ReviewDate.Split(' ');
+                                            string datePart = parts[0];
+                                            string timePart = parts[1];
+                                            
                                             <li class="timeline-sm-item">
                                                 <span class="timeline-sm-date">
-                                                    @viewingHistory.ReviewDate
+                                                    @datePart
                                                 </span>
                                                 <div class="dropdown notification-list">
                                                     <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                                           
 
-                                                            <span class="pro-user-name ml-1">
-                                                              <i class="mdi mdi-chevron-down"></i>
-                                                     </span>
+
+                                                        <span class="pro-user-name ml-1">
+                                                            <i class="mdi mdi-chevron-down"></i>
+                                                        </span>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right profile-dropdown " style=width:400px!important;>
                                                         <div class="dropdown-header noti-title">
@@ -280,33 +285,45 @@
                                                             </h6>
                                                         </div>
 
-                                                        @if(viewingHistory.Description!=null){ <a class="dropdown-item notify-item">
-                                                            <i class=" remixicon-device-line"></i>
-                                                            <span>Description:</span><br/>
-                                                            <p style="white-space: pre-wrap;">@viewingHistory.Description</p>
-                                                        </a>}
+                                                        @if (viewingHistory.Description != null)
+                                                        {
+                                                            <a class="dropdown-item notify-item">
+                                                                <i class=" remixicon-device-line"></i>
+                                                                <span>Description:</span><br/>
+                                                                <p style="white-space: pre-wrap;">@viewingHistory.Description</p>
+                                                            </a>
+                                                        }
 
-                                                        @if(viewingHistory.TimeSpent!=null) {<a class="dropdown-item notify-item">
-                                                            <i class="remixicon-time-fill"></i>
-                                                            <span>Time Spent:</span><br/>
-                                                            <p>
-                                                                @viewingHistory.ReviewDate
-                                                            </p>
+                                                        @if (viewingHistory.TimeSpent != null)
+                                                        {
+                                                            <a class="dropdown-item notify-item">
+                                                                <i class="remixicon-time-fill"></i>
+                                                                <span>Time Spent:</span><br/>
+                                                                <p>
+                                                                    @timePart
+                                                                </p>
 
-                                                        </a>}
+                                                            </a>
+                                                        }
 
-                                                        @if(viewingHistory.UserComment!=null){ <a class="dropdown-item notify-item">
-                                                            <i class=" remixicon-edit-2-line"></i>
+                                                        @if (viewingHistory.UserComment != null)
+                                                        {
+                                                            <a class="dropdown-item notify-item">
+                                                                <i class=" remixicon-edit-2-line"></i>
 
-                                                            <span> Your Comment:</span><br/>
-                                                            <p>@viewingHistory.UserComment</p>
-                                                        </a>}
+                                                                <span> Your Comment:</span><br/>
+                                                                <p>@viewingHistory.UserComment</p>
+                                                            </a>
+                                                        }
 
-                                                        @if(viewingHistory.UserViewCount!=null){ <a  class="dropdown-item notify-item">
-                                                            <i class="remixicon-gradienter-line"></i>
-                                                            <span>Your View Count:</span><br/>
-                                                            <p>@viewingHistory.UserViewCount</p>
-                                                        </a>}
+                                                        @if (viewingHistory.UserViewCount != null)
+                                                        {
+                                                            <a class="dropdown-item notify-item">
+                                                                <i class="remixicon-gradienter-line"></i>
+                                                                <span>Your View Count:</span><br/>
+                                                                <p>@viewingHistory.UserViewCount</p>
+                                                            </a>
+                                                        }
 
                                                         <div class="dropdown-divider"></div>
 
@@ -362,22 +379,22 @@
                                                             }
                                                         </div>
 
-                                                       
-                                                     
-                                                           
-                                                      
-                                            
+
+
+
+
+
                                                     </div>
-                                                   
+
                                                     <div class="col-md-6 col-xl-3">
                                                         <img src="@Url.Content(@viewingHistory.Poster)" class="rounded-circle avatar-xl img-thumbnail"
                                                              alt="profile-image">
                                                     </div>
-                                                  
+
                                                 </div>
 
                                             </li>
-                                            
+
                                         }
                                     </ul>
                                     

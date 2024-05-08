@@ -73,8 +73,8 @@ namespace MovieNight.Web.Controllers
                 cfg.CreateMap<ViewingHistoryModel,ViewingHistoryM>();
                 cfg.CreateMap<ViewListSort, ViewListSortCommandE>();
                 cfg.CreateMap<ViewListSortCommandE,ViewListSort>();
-                cfg.CreateMap<FilmCommandSort, FilmsCommandS>();
-                cfg.CreateMap<FilmsCommandS, FilmCommandSort>();
+                cfg.CreateMap<FilmCommandSort, MovieCommandS>();
+                cfg.CreateMap<MovieCommandS, FilmCommandSort>();
                 
 
 
@@ -109,15 +109,98 @@ namespace MovieNight.Web.Controllers
 
         public ActionResult SerialsSearch()
         {
-            return View();
+            if(TempData["MovieListModel"] == null){
+                var filmsListModel = new MovieListModel
+                {
+                    CommandSort = new FilmCommandSort
+                    {
+                        PageNom = 1,
+                        Category = FilmCategory.Serial,
+                        Direction = Direction.Non,
+                        SortingDirection = SortDirection.Non,
+                        SortPar = SortingOption.All,
+                        UserId = System.Web.HttpContext.Current.GetMySessionObject().Id
+                    }
+                };
+                var filmSCommand = _mapper.Map<MovieCommandS>(filmsListModel.CommandSort);
+                var movieList = _movie.GetListMovie(filmSCommand);
+                filmsListModel.CommandSort.MaxPage = movieList.Count / 30;
+                filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
+                System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
+                var partList = movieList.Take(30).ToList();
+                var listModel = new MovieListModel
+                {
+                    CommandSort = filmsListModel.CommandSort,
+                    ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(partList)
+                };
+                return View(listModel);
+            }
+            var model = TempData["MovieListModel"] as MovieListModel;
+            return View(model);
         }
         public ActionResult CartoonsSearch()
         {
-            return View();
+            if(TempData["MovieListModel"] == null){
+                var filmsListModel = new MovieListModel
+                {
+                    CommandSort = new FilmCommandSort
+                    {
+                        PageNom = 1,
+                        Category = FilmCategory.Cartoon,
+                        Direction = Direction.Non,
+                        SortingDirection = SortDirection.Non,
+                        SortPar = SortingOption.All,
+                        UserId = System.Web.HttpContext.Current.GetMySessionObject().Id
+
+                    }
+                };
+                var filmSCommand = _mapper.Map<MovieCommandS>(filmsListModel.CommandSort);
+                var movieList = _movie.GetListMovie(filmSCommand);
+                filmsListModel.CommandSort.MaxPage = movieList.Count / 30;
+                filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
+                System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
+                var partList = movieList.Take(30).ToList();
+                var listModel = new MovieListModel
+                {
+                    CommandSort = filmsListModel.CommandSort,
+                    ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(partList)
+                };
+                return View(listModel);
+            }
+            var model = TempData["MovieListModel"] as MovieListModel;
+            return View(model);
         }
         public ActionResult AnimeSearch()
         {
-            return View();
+            if(TempData["MovieListModel"] == null){
+                var filmsListModel = new MovieListModel
+                {
+                    CommandSort = new FilmCommandSort
+                    {
+                        PageNom = 1,
+                        Category = FilmCategory.Anime,
+                        Direction = Direction.Non,
+                        SortingDirection = SortDirection.Non,
+                        SortPar = SortingOption.All,
+                        UserId = System.Web.HttpContext.Current.GetMySessionObject().Id
+
+                    }
+                };
+                var filmSCommand = _mapper.Map<MovieCommandS>(filmsListModel.CommandSort);
+                var movieList = _movie.GetListMovie(filmSCommand);
+                filmsListModel.CommandSort.MaxPage = movieList.Count / 30;
+                filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
+                System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
+                var partList = movieList.Take(30).ToList();
+                var listModel = new MovieListModel
+                {
+                    CommandSort = filmsListModel.CommandSort,
+                    ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(partList)
+                };
+                return View(listModel);
+            }
+            var model = TempData["MovieListModel"] as MovieListModel;
+            return View(model);
         }
 
         public ActionResult RandomFilm()
@@ -438,35 +521,46 @@ namespace MovieNight.Web.Controllers
         
     }
 
-    
+
     [HttpGet]
     public ActionResult MovieSearch()
     {
-        var filmsListModel = new FilmsListModel
-        {
-            CommandSort = new FilmCommandSort
+        if(TempData["MovieListModel"] == null){
+            var filmsListModel = new MovieListModel
             {
-                PageNom = 1,
-                Category = FilmCategory.Film,
-                Direction = Direction.Non,
-                SortingDirection = SortDirection.Ascending,
-                SortPar = SortingOption.All
-            }
-        };
-        var filmSCommand = _mapper.Map<FilmsCommandS>(filmsListModel.CommandSort);
-        var movieList = _movie.GetListMovie(filmSCommand);
-        filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
-        System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
-        var partList = movieList.Take(30).ToList();
-        filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(partList);
-        return View(filmsListModel);
+                CommandSort = new FilmCommandSort
+                {
+                    PageNom = 1,
+                    Category = FilmCategory.Film,
+                    Direction = Direction.Non,
+                    SortingDirection = SortDirection.Non,
+                    SortPar = SortingOption.All,
+                    UserId = System.Web.HttpContext.Current.GetMySessionObject().Id
+
+                }
+            };
+            var filmSCommand = _mapper.Map<MovieCommandS>(filmsListModel.CommandSort);
+            var movieList = _movie.GetListMovie(filmSCommand);
+            filmsListModel.CommandSort.MaxPage = movieList.Count / 30;
+            filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
+            System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
+            var partList = movieList.Take(30).ToList();
+            var listModel = new MovieListModel
+            {
+                CommandSort = filmsListModel.CommandSort,
+                ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(partList)
+            };
+            return View(listModel);
+        }
+        var model = TempData["MovieListModel"] as MovieListModel;
+        return View(model);
     }
 
     [HttpPost]
     public ActionResult SortCurrFilm(FilmCommandSort command)
     {
 
-        var filmsListModel = new FilmsListModel
+        var filmsListModel = new MovieListModel
         {
             CommandSort = new FilmCommandSort
             {
@@ -474,25 +568,105 @@ namespace MovieNight.Web.Controllers
                 Category = command.Category,
                 Direction = command.Direction,
                 SortingDirection = command.SortingDirection,
-                SortPar = command.SortPar
+                SortPar = command.SortPar,
+                UserId = System.Web.HttpContext.Current.GetMySessionObject().Id
+
             }
         };
-        var filmSCommand = _mapper.Map<FilmsCommandS>(filmsListModel.CommandSort);
+        var filmSCommand = _mapper.Map<MovieCommandS>(filmsListModel.CommandSort);
         var movieList = _movie.GetListMovie(filmSCommand);
+        filmsListModel.CommandSort.MaxPage = movieList.Count/30;
+        filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
+        System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
         var partList = movieList.Take(30).ToList();
+        var listModel = new MovieListModel
+        {
+            CommandSort = filmsListModel.CommandSort,
+            ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(partList)
+        };
 
-        filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(partList);
-        
-        return View("MovieSearch",filmsListModel);
+        TempData["MovieListModel"] = listModel;
+
+
+        switch (command.Category)
+        {
+            case FilmCategory.Anime:
+                return RedirectToAction("AnimeSearch","SearchSortAdd");
+            case FilmCategory.Cartoon:
+                return RedirectToAction("CartoonsSearch","SearchSortAdd");
+            case FilmCategory.Film:
+                return RedirectToAction("MovieSearch","SearchSortAdd");
+            case FilmCategory.Serial:
+                return RedirectToAction("SerialsSearch","SearchSortAdd");
+            case FilmCategory.Non:
+            default:
+                return RedirectToAction("Error404Page", "Error");
+        }
     }
 
     [HttpPost]
-    public Task<JsonResult> SetNewPageFromNumber(int numberPage)
+    public ActionResult SetNewPageFromNumber(int pageNumber)
     {
 
+        var filmsListModel = System.Web.HttpContext.Current.GetListFilmS();
+        filmsListModel.CommandSort.PageNom = pageNumber;
+        System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
+        var partList = filmsListModel.ListFilm.Skip(
+            30 * pageNumber - 1).Take(30).ToList();
+        var listModel = new MovieListModel
+        {
+            CommandSort = filmsListModel.CommandSort,
+            ListFilm = partList
+        };
+        TempData["MovieListModel"] = listModel;
 
-        return Task.FromResult(Json(null));
+       // return RedirectToAction("MovieSearch","SearchSortAdd");
+       return Json(listModel);
+
     }
+    
+    [HttpPost]
+    public ActionResult LeftStepPage()
+    {
+        var filmsListModel = System.Web.HttpContext.Current.GetListFilmS();
+        if(filmsListModel.CommandSort.PageNom-1>=1)filmsListModel.CommandSort.PageNom -= 1;
+        System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
+        var partList = filmsListModel.ListFilm.Skip(
+            30 * filmsListModel.CommandSort.PageNom - 1).Take(30).ToList();
+        var listModel = new MovieListModel
+        {
+            CommandSort = filmsListModel.CommandSort,
+            ListFilm = partList
+        };
+        TempData["MovieListModel"] = listModel;
+
+       // return RedirectToAction("MovieSearch","SearchSortAdd");
+       return Json(listModel);
+
+
+    }
+
+    [HttpPost]
+    public ActionResult RightStepPage()
+    {
+        var filmsListModel = System.Web.HttpContext.Current.GetListFilmS();
+        if(filmsListModel.CommandSort.PageNom+1<filmsListModel.ListFilm.Count)filmsListModel.CommandSort.PageNom += 1;
+        System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
+        var partList = filmsListModel.ListFilm.Skip(
+            30 * filmsListModel.CommandSort.PageNom - 1).Take(30).ToList();
+        var listModel = new MovieListModel
+        {
+            CommandSort = filmsListModel.CommandSort,
+            ListFilm = partList
+        };
+        TempData["MovieListModel"] = listModel;
+        
+        //return RedirectToAction("MovieSearch","SearchSortAdd");
+        return Json(listModel);
+
+    }
+
+    
     
     
     

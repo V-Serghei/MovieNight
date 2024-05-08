@@ -56,9 +56,9 @@ namespace MovieNight.BusinessLogic.Session.Service
             return  await GetNewViewListDb(transCommand);
         }
 
-        public List<MovieTemplateInfE> GetListMovie(FilmsCommandS filmSCommand)
+        public List<MovieTemplateInfE> GetListMovie(MovieCommandS movieSCommand)
         {
-            return GetListMovieDb(filmSCommand);
+            return GetListMovieDb(movieSCommand);
         }
     }
 

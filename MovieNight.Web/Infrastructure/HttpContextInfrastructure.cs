@@ -87,14 +87,14 @@ namespace MovieNight.Web.Infrastructure
         #region ListFilm
         
 
-        public static FilmsListModel GetListFilmS(this HttpContext current)
+        public static MovieListModel GetListFilmS(this HttpContext current)
         {
-            return current?.Session["__ListFilmSearch"] as FilmsListModel;
+            return current?.Session["__ListFilmSearch"] as MovieListModel;
         }
         
-        public static void SetListFilmS(this HttpContext current, FilmsListModel list)
+        public static void SetListFilmS(this HttpContext current, MovieListModel list)
         {
-            current.Session.Add("__ListFilmHSearch", list);
+            current.Session.Add("__ListFilmSearch", list);
         }
         
         #endregion

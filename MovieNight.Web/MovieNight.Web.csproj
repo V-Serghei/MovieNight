@@ -867,7 +867,7 @@
     <Compile Include="Models\Movie\MovieCard.cs" />
     <Compile Include="Models\Movie\MovieTemplateInfModel.cs" />
     <Compile Include="Models\Movie\PosterModel.cs" />
-    <Compile Include="Models\Movie\SearchPages\FilmsListModel.cs" />
+    <Compile Include="Models\Movie\SearchPages\MovieListModel.cs" />
     <Compile Include="Models\Movie\UploadMovieFileModel.cs" />
     <Compile Include="Models\Movie\ViewingHistoryModel.cs" />
     <Compile Include="Models\PersonalP\Bookmark\BookmarkModel.cs" />

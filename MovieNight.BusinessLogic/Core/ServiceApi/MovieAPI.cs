@@ -660,7 +660,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         #endregion
 
 
-        protected List<MovieTemplateInfE> GetListMovieDb(FilmsCommandS filmSCommand)
+        protected List<MovieTemplateInfE> GetListMovieDb(MovieCommandS movieSCommand)
         {
             GetMappersSettings();
             try
@@ -669,12 +669,12 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     IQueryable<MovieDbTable> query = dbMovie.MovieDb;
 
-                    if (filmSCommand.Category != FilmCategory.Non)
+                    if (movieSCommand.Category != FilmCategory.Non)
                     {
-                        query = query.Where(m => m.Category == filmSCommand.Category);
+                        query = query.Where(m => m.Category == movieSCommand.Category);
                     }
 
-                    switch (filmSCommand.SortPar)
+                    switch (movieSCommand.SortPar)
                     {
                         case SortingOption.ReleaseDate:
                             query = query.OrderBy(m => m.ProductionYear);
@@ -691,14 +691,23 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             break;
                     }
 
-                    if (filmSCommand.SortingDirection == SortDirection.Descending)
+                  
+                    var movieDb = query.ToList();
+                    if (movieSCommand.SortingDirection == SortDirection.Descending)
                     {
-                        query = query.Reverse();
+                        movieDb.Reverse();
                     }
 
-                    var movieDb = query.ToList();
-                    var movieList = MapperFilm.Map<List<MovieTemplateInfE>>(movieDb);
                     
+                   
+                    var movieList = MapperFilm.Map<List<MovieTemplateInfE>>(movieDb);
+                    using (var  user = new UserContext())
+                    {
+                        foreach (var movie in movieList)
+                        {
+                            movie.Bookmark = user.Bookmark.Any(u => u.UserId == movieSCommand.UserId && u.MovieId == movie.Id);
+                        }
+                    }
                     return movieList;
                 }
             }

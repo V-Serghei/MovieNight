@@ -9,7 +9,10 @@ namespace MovieNight.Web.Models.Movie
         public int PageNom { get; set; }
         public SortDirection SortingDirection { get; set; }
         public Direction Direction { get; set; }
-        public int SkipParameter { get; set; }
+        public int MaxPage { get; set; }
+        
+        public int UserId { get; set; }
+
         
     }
 }
