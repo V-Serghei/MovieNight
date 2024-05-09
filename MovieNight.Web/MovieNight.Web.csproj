@@ -823,7 +823,9 @@
     <Content Include="vendor\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="vendor\x-editable\bootstrap-editable.css" />
     <Content Include="vendor\x-editable\bootstrap-editable.min.js" />
+    <Content Include="Video\viedeo_Test.mp4" />
     <Content Include="Views\Error\Error404Page.cshtml" />
+    <Content Include="Views\InformationSynchronization\MoviePlayer.cshtml" />
     <Content Include="Views\SearchSortAdd\FindFriends.cshtml" />
     <Content Include="Views\SearchSortAdd\MovieSearch.cshtml" />
     <Content Include="Web.config" />

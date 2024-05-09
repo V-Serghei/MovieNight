@@ -178,7 +178,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
                         movieDb.Genre = new List<string>();
                         
-                            movieDb.Genre.Add(movieS.Genres);
+                            movieDb.Genre = JsonConvert.DeserializeObject<List<string>>(movieS.Genres);
                         
                     }
 
@@ -204,7 +204,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     try
                     {
-                        // Создаем новый объект MovieDbTable
+                        
                         var movieDb = new MovieDbTable
                         {
                             Title = movieTemplate.Title,
@@ -405,7 +405,11 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             {
                 using (var db = new UserContext())
                 {
-                    var dbList = db.Bookmark.Where(l => l.UserId == userId).ToList();
+                    var dbList = db.Bookmark
+                        .Where(l => l.UserId == userId)
+                        .OrderByDescending(l => l.TimeAdd) 
+                        .Take(5) 
+                        .ToList();
                     foreach (var bookmarkDbTable in dbList)
                     {
                         using (var movie = new MovieContext())
@@ -530,7 +534,12 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             {
                 using (var db = new UserContext())
                 {
-                    var dbList = db.ViewList.Where(l => l.UserId == userId).ToList();
+                    var dbList = db.ViewList
+                        .Where(l => l.UserId == userId)
+                        .OrderByDescending(l => l.Id) 
+                        .Take(5) 
+                        .ToList();
+
                     foreach (var viewList in dbList)
                     {
                         using (var movie = new MovieContext())
