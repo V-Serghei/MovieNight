@@ -48,8 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="enams\Direction.cs" />
     <Compile Include="enams\EventColor.cs" />
+    <Compile Include="enams\FilmCategory.cs" />
     <Compile Include="enams\LevelOfAccess.cs" />
+    <Compile Include="enams\SelectField.cs" />
+    <Compile Include="enams\SortDirection.cs" />
+    <Compile Include="enams\SortingOption.cs" />
     <Compile Include="Entities\DifferentE\PhoneNumE.cs" />
     <Compile Include="Entities\DifferentE\Tag.cs" />
     <Compile Include="Entities\Friends\FriendsListD.cs" />
@@ -61,15 +66,17 @@
     <Compile Include="Entities\MovieM\EfDbEntities\MovieCardDbTable.cs" />
     <Compile Include="Entities\MovieM\EfDbEntities\MovieDbTable.cs" />
     <Compile Include="Entities\MovieM\InterestingFactE.cs" />
-    <Compile Include="Entities\MovieM\ListOfFilms.cs" />
-    <Compile Include="Entities\MovieM\MovieBbTable.cs" />
+    <Compile Include="Entities\MovieM\ListOfFilmsE.cs" />
     <Compile Include="Entities\MovieM\MovieCardE.cs" />
     <Compile Include="Entities\MovieM\MovieTemplateInfE.cs" />
     <Compile Include="Entities\MovieM\Poster.cs" />
+    <Compile Include="Entities\MovieM\SearchParam\MovieCommandS.cs" />
     <Compile Include="Entities\MovieM\ViewingHistoryM.cs" />
+    <Compile Include="Entities\MovieM\ViewListSortCommandE.cs" />
     <Compile Include="Entities\PersonalP\PEdBdTable.cs" />
     <Compile Include="Entities\PersonalP\PersonalInfoDbTable.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkDbTable.cs" />
+    <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkE.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\ViewListDbTable.cs" />
     <Compile Include="Entities\Notification\EventDbTable.cs" />
     <Compile Include="Entities\Notification\EventE.cs" />

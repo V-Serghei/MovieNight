@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Dnx.Compilation.Abstractions</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Dnx.Compilation.CompilationFailure">
+            <summary>
+            Describes a failure compiling a specific file. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.Dnx.Compilation.CompilationFailure.SourceFilePath">
+            <summary>
+            Path of the file that produced the compilation failure.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Dnx.Compilation.CompilationFailure.SourceFileContent">
+            <summary>
+            Contents of the file.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Dnx.Compilation.CompilationFailure.CompiledContent">
+            <summary>
+            Contents being compiled.
+            </summary>
+            <remarks>
+            For templated files, the <see cref="P:Microsoft.Dnx.Compilation.CompilationFailure.SourceFileContent"/> represents the original content and
+            <see cref="P:Microsoft.Dnx.Compilation.CompilationFailure.CompiledContent"/> represents the transformed content. This property can be null if
+            the exception is encountered during transformation.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.Dnx.Compilation.CompilationFailure.Messages">
+            <summary>
+            Gets a sequence of <see cref="T:Microsoft.Extensions.PlatformAbstractions.DiagnosticMessage"/> produced as a result of compilation.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Dnx.Compilation.CompilationFiles">
+            <summary>
+            Represents the resolved collection of files used for compilation
+            </summary>
+        </member>
+        <member name="T:Microsoft.Dnx.Compilation.CompilationProjectContext">
+            <summary>
+            Represents the information needed to compile a project.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Dnx.Compilation.CompilationTarget">
+            <summary>
+            Provides the identity of a specific target for a compilation.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Dnx.Compilation.ICompilationException">
+            <summary>
+            Specifies the contract for an exception representing compilation failure.
+            </summary>
+            <remarks>
+            This interface is implemented on exceptions thrown during compilation to enable consumers
+            to read compilation-related data out of the exception
+            </remarks>
+        </member>
+        <member name="P:Microsoft.Dnx.Compilation.ICompilationException.CompilationFailures">
+            <summary>
+            Gets a sequence of <see cref="T:Microsoft.Dnx.Compilation.CompilationFailure"/> with compilation failures.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Dnx.Compilation.ICompilerOptionsProvider">
+            <summary>
+            Specifies the contracts for a type that provides the <see cref="T:Microsoft.Extensions.PlatformAbstractions.ICompilerOptions"/> for
+            a <c>project.json</c> file.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Dnx.Compilation.ICompilerOptionsProvider.GetCompilerOptions(System.String,System.Runtime.Versioning.FrameworkName,System.String)">
+            <summary>
+            Returns the parsed <see cref="T:Microsoft.Extensions.PlatformAbstractions.ICompilerOptions"/> for a project file specified by
+            <paramref name="projectName"/>.
+            </summary>
+            <param name="projectName">Name or path of the project to read compilation settings from.</param>
+            <param name="targetFramework">The <see cref="T:System.Runtime.Versioning.FrameworkName"/> to read framework-specific options from.
+            When non-null, options for the specified framework are merged in to the result.</param>
+            <param name="configurationName">The configuration to read configuration-specific options from.
+            When non-null, options for the specified configuration are merged in to the result.</param>
+            <returns>The parsed <see cref="T:Microsoft.Extensions.PlatformAbstractions.ICompilerOptions"/>.</returns>
+        </member>
+        <member name="T:Microsoft.Dnx.Compilation.ILibraryExporter">
+            <summary>
+            Provides access to the complete graph of dependencies for the application.
+            </summary>
+        </member>
+    </members>
+</doc>

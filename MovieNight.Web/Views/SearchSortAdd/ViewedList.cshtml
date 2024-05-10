@@ -1,175 +1,260 @@
-﻿
+﻿@using MovieNight.Web.Infrastructure
+@model List<MovieNight.Web.Models.Movie.ViewingHistoryModel>
+
 @{
-    ViewBag.Title = "ViewedList";
+ViewBag.Title = "ViewedList";
+
 }
 
-<div>
-
-
-    <div class="content">
-
-
-        <!-- Start Content-->
-        <div class="container-fluid">
-
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box">
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Movie Night</a></li>
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">My Account</a></li>
-                                <li class="breadcrumb-item active">My viewed list</li>
-                            </ol>
-                        </div>
-                        <h4 class="page-title">My viewed list</h4>
+<div class="content">
+    <!-- Start Content-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Movie Night</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">My Account</a></li>
+                            <li class="breadcrumb-item active">My viewed list</li>
+                        </ol>
                     </div>
+                    <h4 class="page-title">My viewed list</h4>
                 </div>
             </div>
         </div>
+    </div>
+    @using (Ajax.BeginForm("CurrentSortingAndFilteringAction", "SearchSortAdd", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                UpdateTargetId = "tableContainer", 
+                OnSuccess = "handleSuccess", 
+                OnFailure = "handleFailure" 
+            }))
+    {
+
 
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="header-title">List of what was reviewed</h4>
-                       
-                        
+
+                        <div class="row">
+                            <!-- Category Selector -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="categorySelector">Select Category:</label>
+                                    <select id="categorySelector" class="form-control" name="Category">
+                                        <option value="0">Non</option>
+                                        <option value="1">Film</option>
+                                        <option value="2">Serial</option>
+                                        <option value="3">Cartoon</option>
+                                        <option value="4">Anime</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Field Selector -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="fieldSelector">Select Field:</label>
+                                    <select id="fieldSelector" class="form-control" name="Field">
+                                        <option value="0">Non</option>
+                                        <option value="1">Title</option>
+                                        <option value="2">Year of release</option>
+                                        <option value="3">Review Date</option>
+                                        <option value="4"> Movie Night</option>
+                                        <option value="5">User Grade</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Sorting Direction Selector -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="sortDirectionSelector">Sort Direction:</label>
+                                    <select id="sortDirectionSelector" class="form-control" name="SortingDirection">
+                                        <option value="0">Non</option>
+                                        <option value="1">Ascending</option>
+                                        <option value="2">Descending</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <!-- Search Field -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="searchField">Search:</label>
+                                    <input type="text" class="form-control" id="searchField" name="SearchParameter" placeholder="Enter search term">
+                                </div>
+                            </div>
+                        </div>
+
+
                         <table id="alternative-page-datatable" class="table dt-responsive nowrap movie-table">
                             <thead>
-                                <tr >
-                                    <th>Title of the film</th>
-                                    <th>Year of release</th>
-                                    <th>Review date</th>
-                                    <th>Movie Night</th>
-                                    <th >Your grade</th>
-                                </tr>   
+                            <tr>
+                                <th>Title of the film</th>
+                                <th>Year of release</th>
+                                <th>Review date</th>
+                                <th>Movie Night</th>
+                                <th>Your grade</th>
+                            </tr>
                             </thead>
-
-
                             <tbody>
-                            <tr>
-                                <td>The Shawshank Redemption</td>
-                                <td>1994</td>
-                                <td>2024-02-20</td>
-                                <td>9,28</td>
-                                <td>10</td>
-                            </tr>
-                            <tr>
-                                <td>The Godfather</td>
-                                <td>1972</td>
-                                <td>2024-02-15</td>
-                                <td>9,15</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>The Dark Knight</td>
-                                <td>2008</td>
-                                <td>2024-02-10</td>
-                                <td>8,23</td>
-                                <td>8</td>
-                            </tr>
-                            <tr>
-                                <td>Forrest Gump</td>
-                                <td>1994</td>
-                                <td>2024-02-05</td>
-                                <td>8.8</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>The Matrix</td>
-                                <td>1999</td>
-                                <td>2024-02-12</td>
-                                <td>8.7</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>Pulp Fiction</td>
-                                <td>1994</td>
-                                <td>2024-02-18</td>
-                                <td>8.9</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>Schindler's List</td>
-                                <td>1993</td>
-                                <td>2024-02-14</td>
-                                <td>8.9</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>Inception</td>
-                                <td>2010</td>
-                                <td>2024-02-09</td>
-                                <td>8.8</td>
-                                <td>9</td>
-                            </tr><tr>
-                                <td>The Shawshank Redemption</td>
-                                <td>1994</td>
-                                <td>2024-02-20</td>
-                                <td>9,28</td>
-                                <td>10</td>
-                            </tr>
-                            <tr>
-                                <td>The Godfather</td>
-                                <td>1972</td>
-                                <td>2024-02-15</td>
-                                <td>9,15</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>The Dark Knight</td>
-                                <td>2008</td>
-                                <td>2024-02-10</td>
-                                <td>8,23</td>
-                                <td>8</td>
-                            </tr>
-                            <tr>
-                                <td>Forrest Gump</td>
-                                <td>1994</td>
-                                <td>2024-02-05</td>
-                                <td>8.8</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>The Matrix</td>
-                                <td>1999</td>
-                                <td>2024-02-12</td>
-                                <td>8.7</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>Pulp Fiction</td>
-                                <td>1994</td>
-                                <td>2024-02-18</td>
-                                <td>8.9</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>Schindler's List</td>
-                                <td>1993</td>
-                                <td>2024-02-14</td>
-                                <td>8.9</td>
-                                <td>9</td>
-                            </tr>
-                            <tr>
-                                <td>Inception</td>
-                                <td>2010</td>
-                                <td>2024-02-09</td>
-                                <td>8.8</td>
-                                <td>9</td>
-                            </tr>
+                            @foreach (var movie in Model)
+                            {
+                                <tr>
+                                    <td>@movie.Title</td>
+                                    <td>@movie.YearOfRelease</td>
+                                    <td>@movie.ReviewDate</td>
+                                    <td>@movie.MovieNightGrade</td>
+                                    <td>@movie.UserValues</td>
+                                </tr>
+                            }
                             </tbody>
                         </table>
+                        <style>
+                        
+                        .page-link .icon {
+                            border-radius: 50%; 
+                            background-color: #2b387c;
+                            color: white;
+                            width: 30px;
+                            height: 30px;
+                            display: inline-flex;
+                            justify-content: center;
+                            align-items: center;
+                            transition: transform 0.3s ease;
+                            margin-right: 5px;
+                            margin-left: 5px;
+                            border: none; 
+                            outline: none; 
+                        }
+
+                       
+                        .page-link:hover .icon {
+                            transform: scale(1.2);
+                            background-color: #2b387c;
+                            border-radius: 50%; 
+                            outline: none; 
+                        }
+
+                      
+                        .page-number {
+                            transition: background-color 0.3s ease;
+                            border: 1px solid #0a3622; 
+                            background-color: #2b387c;
+                            color: white;
+                            border-radius: 20px; 
+                            padding: 5px 10px;
+                            margin-right: 5px; 
+                            
+                        }
+
+                        
+                        .page-number:hover {
+                            background-color: #e46af9; 
+                        }
+
+                    </style>
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <button style="border: none; background: none" type="submit" name="DirectionStep" value="1" id="previousButton">
+                                    <div style="margin-right: 10px">
+                                        <a class="page-link page-number previous" href="#" aria-label="Previous">
+                                            <span class="icon" aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    </div>
+                                </button>
+                                <li value="@ViewBag.CurrentPageNumber" name="PageNumber" class="page-item">
+                                    <input style="width: 30px" type="text" class="form-control page-link page-number"
+                                           id="pageNumber" name="PageNumber" value="@ViewBag.CurrentPageNumber"> 
+                                </li>
+                                <!-- Add more page numbers as needed -->
+                                <button style="border: none; background: none" type="submit" name="DirectionStep" value="2" id="nextButton">
+                                    <div style="margin-left: 10px">
+                                        <a class="page-link page-number next" href="#" aria-label="Next">
+                                            <span class="icon" aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </div>
+                                </button>
+
+                            </ul>
+                        </nav>
+                       
+
 
                     </div> <!-- end card body-->
                 </div> <!-- end card -->
             </div><!-- end col-->
         </div>
-
-
-
-    </div>
+    }
 </div>
 
+<script>
+
+    $(document).ready(function() {
+        $('form').submit(function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            var form = $(this);
+            var submitButton = $('button[type="submit"]'); // Get the submit button
+            submitButton.prop('disabled', true); // Disable submit button
+
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                success: function(data) {
+                    handleSuccess(data);
+                    submitButton.prop('disabled', false); // Enable submit button after success
+                },
+                error: function() {
+                    handleFailure();
+                    submitButton.prop('disabled', false); // Enable submit button on error
+                }
+            });
+        });
+
+        // Button click handlers (prevent default submission)
+        $('#previousButton').click(function(event) {
+            event.preventDefault();
+            $('#DirectionStep').val(1);
+            $('form').submit();
+        });
+
+        $('#nextButton').click(function(event) {
+            event.preventDefault();
+            $('#DirectionStep').val(2);
+            $('form').submit();
+        });
+    });
+    function handleSuccess(data) {
+        if (data.success) {
+            const newTableBody = data.newListV.map(item => (
+                `<tr>
+            <td>${item.Title}</td>
+            <td>${item.YearOfRelease}</td>
+            <td>${item.ReviewDate}</td>
+            <td>${item.MovieNightGrade}</td>
+            <td>${item.UserValues}</td>
+        </tr>`
+            )).join('');
+            $('table.movie-table tbody').html(newTableBody);
+
+            $('#pageNumber').val(data.pageNumber);
+        } else {
+            console.error('Operation failed');
+        }
+    }
+
+    
+
+
+</script>

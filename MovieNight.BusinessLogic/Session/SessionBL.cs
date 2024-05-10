@@ -71,6 +71,11 @@ namespace MovieNight.BusinessLogic.Session
         {
             return GetIdCurrUserDb(userName);
         }
+        
+       public bool DelSessionCurrUser(string userCurrent){
+            return DelSessionCurrUserDb(userCurrent);
+        }
+
         //  - > user data update
         //...
 

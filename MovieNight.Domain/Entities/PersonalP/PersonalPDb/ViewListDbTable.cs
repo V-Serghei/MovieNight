@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
 using MovieNight.Domain.Entities.UserId;
 
@@ -16,7 +17,9 @@ namespace MovieNight.Domain.Entities.PersonalP.PersonalPDb
         public virtual UserDbTable User { get; set; } 
         public virtual MovieDbTable Movie { get; set; }
         
-        public int UserValues { get; set; }           
+        public int UserValues { get; set; }      
+        
+        public string Title { get; set; }
                                                
         public DateTime ReviewDate { get; set; }      
                                                
@@ -24,7 +27,9 @@ namespace MovieNight.Domain.Entities.PersonalP.PersonalPDb
                                                
         public int UserViewCount { get; set; }        
                                                
-        public TimeSpan TimeSpent { get; set; }       
+        public DateTime TimeSpent { get; set; }  
+        
+        public FilmCategory Category { get; set; }
         
         // //Resolve the conflict table
         // // Navigation property to represent the associated movie for this view list entry

@@ -1,0 +1,268 @@
+﻿@model MovieNight.Web.Models.Movie.MovieTemplateInfModel
+
+@{
+ViewBag.Title = @Model.Title;
+}
+
+<div>
+    <div class="content">
+
+        <!-- Start Content-->
+
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">MovieNight</a></li>
+                                <li class="breadcrumb-item" name="Category" value="1"><a href="javascript: void(0);">@Model.Title</a></li>
+                                <input type="hidden" name="Category" value="1"/>
+                            </ol>
+                        </div>
+                        <h4 class="page-title">@Model.Title</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+            <style>
+
+                video {
+                    width: 100%;
+                    max-width: 100%;
+                    height: auto;
+                    background-color: #000;
+                    border-radius: 10px;
+                    border-color: #2b387c;
+
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+                }
+
+                /* Стили для кнопок управления */
+                .video-controls {
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-top: -50px;
+                }
+
+
+
+                .play-pause-btn, .volume-btn, .more-btn {
+                    background-color: rgba(255, 255, 255, 0.8);
+                    color: #333;
+                    border: none;
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    font-size: 20px;
+                    margin: 0 10px;
+                    cursor: pointer;
+                }
+
+                .play-pause-btn:hover, .volume-btn:hover {
+                    background-color: rgba(255, 255, 255, 1);
+                }
+
+                .video-title {
+                    text-align: center;
+                    font-size: 18px;
+                    color: #fff;
+                    margin-top: 10px;
+                }
+                .playback-rate-btn,
+                .pip-btn,
+                .fullscreen-btn,
+                .download-btn {
+                    background-color: #007bff;
+                    color: #fff;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 8px 16px;
+                    font-size: 16px;
+                    margin: 0 10px;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+                }
+
+                .playback-rate-btn:hover,
+                .pip-btn:hover,
+                .fullscreen-btn:hover,
+                .download-btn:hover {
+                    background-color: #0056b3;
+                }
+
+                .playback-rate-btn:focus,
+                .pip-btn:focus,
+                .fullscreen-btn:focus,
+                .download-btn:focus {
+                    outline: none;
+                }
+
+                .download-btn {
+                    background-color: #28a745;
+                }
+
+                .download-btn:hover {
+                    background-color: #218838;
+                }
+                .additional-controls {
+                    display: none;
+                }
+
+                .additional-controls.show {
+                    display: flex;
+                }
+                .dropdown-menu {
+                    background-color: #fff;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    padding: 5px;
+                    display: none;
+                    position: absolute;
+                    top: calc(50% + 20px);
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    z-index: 1000;
+                }
+
+
+                .dropdown-menu.show {
+                    display: block;
+                }            </style>
+
+            <!-- Inserting the player iframe -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="video-wrapper">
+                        <video id="videoPlayer" width="100%"  poster="@Url.Content(Model.PosterImage)">
+                            <source src="~/Video/viedeo_Test.mp4" type="video/mp4">
+                            <!--<source src="your-video.webm" type="video/webm">-->
+                            <!--<source src="your-video.ogv" type="video/ogg">-->
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="video-controls">
+                            <button id="playPauseBtn" class="play-pause-btn"><i class="fas fa-play"></i></button>
+                            <button id="volumeBtn" class="volume-btn"><i class="fas fa-volume-up"></i></button>
+                            <button id="moreBtn" class="more-btn"><i class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                        <div class="additional-controls">
+                            <div id="dropdownMenu" class="dropdown-menu">
+                                <button onclick="changePlaybackRate(0.5)" class="playback-rate-btn">0.5x</button>
+                                <button onclick="changePlaybackRate(1)" class="playback-rate-btn">1x</button>
+                                <button onclick="changePlaybackRate(1.5)" class="playback-rate-btn">1.5x</button>
+                                <button onclick="togglePiP()" class="pip-btn">PiP</button>
+                                <button onclick="toggleFullScreen()" class="fullscreen-btn">Fullscreen</button>
+                                <a href="~/Video/viedeo_Test.mp4" download class="download-btn">Download</a>
+                            </div>
+                        </div>
+                        <div class="video-title">@Model.Title</div>
+                    </div>
+                </div>
+            </div>
+            <!-- End player iframe -->
+
+        </div>
+        <!-- container -->
+
+    </div> <!-- content -->
+</div>
+
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+<script>
+    var moreBtn = document.getElementById("moreBtn");
+    var dropdownMenu = document.getElementById("dropdownMenu");
+
+    moreBtn.addEventListener("click", function() {
+        if (dropdownMenu.classList.contains("show")) {
+            dropdownMenu.classList.remove("show");
+        } else {
+            dropdownMenu.classList.add("show");
+        }
+    });
+    var video = document.getElementById("videoPlayer");
+    var playPauseBtn = document.getElementById("playPauseBtn");
+    var volumeBtn = document.getElementById("volumeBtn");
+    var additionalControls = document.getElementsByClassName("additional-controls")[0];
+    var videoControls = document.querySelector(".video-controls");
+
+    playPauseBtn.addEventListener("click", function() {
+        if (video.paused || video.ended) {
+            video.play();
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        } else {
+            video.pause();
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+        }
+    });
+
+    volumeBtn.addEventListener("click", function() {
+        if (video.muted) {
+            video.muted = false;
+            volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+        } else {
+            video.muted = true;
+            volumeBtn.innerHTML = '<i class="fas fa-volume-off"></i>';
+        }
+    });
+
+    moreBtn.addEventListener("click", function() {
+        if (additionalControls.classList.contains("show")) {
+            additionalControls.classList.remove("show");
+        } else {
+            additionalControls.classList.add("show");
+        }
+    });
+
+    function changePlaybackRate(rate) {
+        video.playbackRate = rate;
+    }
+
+    function togglePiP() {
+        if (document.pictureInPictureElement) {
+            document.exitPictureInPicture();
+        } else {
+            video.requestPictureInPicture();
+        }
+    }
+
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            video.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    var controlsTimeout;
+    var controls = document.querySelector('.video-controls');
+
+    function hideControls() {
+        controls.style.opacity = 0;
+        controls.style.transition = "opacity 0.5s";
+    }
+
+    function showControls() {
+        controls.style.opacity = 1;
+    }
+
+    function resetControlsTimeout() {
+        clearTimeout(controlsTimeout);
+        hideControls();
+        controlsTimeout = setTimeout(hideControls, 5000);
+    }
+
+    videoControls.addEventListener("mouseenter", showControls);
+    videoControls.addEventListener("mouseleave", resetControlsTimeout);
+    additionalControls.addEventListener("mouseenter", showControls);
+    additionalControls.addEventListener("mouseleave", resetControlsTimeout);
+
+    showControls();
+
+
+</script>

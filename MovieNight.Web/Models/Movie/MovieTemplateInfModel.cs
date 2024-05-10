@@ -25,8 +25,11 @@ namespace MovieNight.Web.Models.Movie
         public List<CastMember> CastMembers { get; set; }
         public List<MovieCard> MovieCards { get; set; }
         public List<InterestingFact> InterestingFacts { get; set; }
-
-        public string Msg { get; set; } = "bookmark";
+        
+        public bool Bookmark { get; set; }
+        
+        public float UserRating { get; set; }
+        
     }
     
 }

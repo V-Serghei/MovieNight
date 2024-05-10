@@ -126,7 +126,7 @@
 
         </div>
     </li>
-@if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+@if(userModel!=null){if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
 {
     <li class="dropdown notification-list">
         <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
@@ -134,7 +134,16 @@
         </a>
     </li>
 }
-        <li class="dropdown notification-list">
+
+if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+{
+    <li class="dropdown notification-list">
+        <a class="nav-link dropdown-toggle  " href="@Url.Action("Index","Admin")">
+           <i class=" remixicon-file-add-fill" ></i>
+        </a>
+    </li>
+}}
+<li class="dropdown notification-list">
             <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                 <i class=" remixicon-bookmark-3-line"></i>
                 <span class="badge badge-danger rounded-bottom-pill noti-icon-badge">2</span>
@@ -234,7 +243,7 @@
 
                     <div class="dropdown-divider"></div>
 
-                    <a href=@Url.Action("Login","Identification") class="dropdown-item notify-item">
+                    <a href=@Url.Action("Logout","Identification") class="dropdown-item notify-item">
                         <i class="mdi mdi-logout"></i>
                         <span>Logout</span>
                     </a>

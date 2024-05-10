@@ -1,11 +1,11 @@
-﻿@model MovieNight.Web.Models.Movie.MovieTemplateInfModel
-    
+﻿@using System.Web.UI.WebControls
+@using MovieNight.Web.Models.PersonalP.Bookmark
+@model MovieNight.Web.Models.Movie.MovieTemplateInfModel
+
 
 @{
-    ViewBag.Title = @Model.Title;
-    
+    ViewBag.Title = Model == null ? "Movie" : @Model.Title;
 }
-
 
 
 @if(Model != null) {
@@ -33,6 +33,7 @@
             </div>
             <!-- end page title -->
 
+
             <div class="row">
                 <div class="col-lg-4 col-xl-4">
                     <div class="card-box text-center">
@@ -54,82 +55,178 @@
                         }
 
                         <button type="button" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Will watch</button>
-                        <button type="button" class="btn btn-danger btn-xs waves-effect mb-2 waves-light">Schedule</button><br>
-                        <button type="button" class="btn btn-primary btn-lg waves-effect mb-2 waves-light">Watch Now</button>
-                       
+                        <button type="button" class="btn btn-danger btn-xs waves-effect mb-2 waves-light">Looked</button><br>
+                        <a href="@Url.Action("MoviePlayer","InformationSynchronization", new { movieId = @Model.Id })"> <button type="button"  class="btn btn-primary btn-lg waves-effect mb-2 waves-light">Watch Now</button></a>
 
-                        @Ajax.ActionLink("Bookmark", "BookmarkMovie", "InformationSynchronization",
-                            new { movieId = Model.Id },
-                            new AjaxOptions
+                    <div id="bookmarkStatus">
+                     @{
+                         string buttonText = Model.Bookmark ? "Delete" : "Bookmark";
+                         string buttonColor = Model.Bookmark ? "btn-danger" : "btn-primary";
+                         var linkModel = new BookmarkModel()
+                         {
+                              
+                             IdMovie = Model.Id,
+                         };
+                     }
+                     @if (!Model.Bookmark)
+                     {
+                         @Ajax.ActionLink(
+                             buttonText,
+                             "BookmarkMovie",
+                             "InformationSynchronization",
+                             new
+                             {
+                                 movieId = linkModel.IdMovie
+                             },
+                             new AjaxOptions
+                             {
+                                 HttpMethod = "POST",
+                                 UpdateTargetId = "bookmarkStatus",
+                                 OnSuccess = @"function(response) {
+                                 $('#bookmarkStatus').html(response.statusMsg); 
+                                 if (response.bookM && response.bookM.newButtonTitle && response.bookM.newButtonColor) {
+                                     $('#bookmarkButton').text(response.bookM.newButtonTitle); 
+                                     $('#bookmarkButton').addClass(response.bookM.newButtonColor); 
+                                     $('#bookmarkButton').prop('disabled', true); 
+                                 }
+                             }"
+                             },
+                             new { @class = "btn btn-lg waves-effect mb-2 waves-light " + buttonColor, title = buttonText }
+                         )
+
+                     }
+                     else
+                     {
+                         @Ajax.ActionLink(
+                             buttonText,
+                             "DeleteBookmarkMovie",
+                             "InformationSynchronization",
+                             new
+                             {
+                                 movieId = linkModel.IdMovie
+                             },
+                             new AjaxOptions
+                             {
+                                 HttpMethod = "POST",
+                                 UpdateTargetId = "bookmarkStatus",
+                                 OnSuccess = @"function(response) {
+                                 $('#bookmarkStatus').html(response.statusMsg); 
+                                 if (response.bookM && response.bookM.newButtonTitle && response.bookM.newButtonColor) {
+                                     $('#bookmarkButton').text(response.bookM.newButtonTitle); 
+                                     $('#bookmarkButton').addClass(response.bookM.newButtonColor); 
+                                     $('#bookmarkButton').prop('disabled', true); 
+                                 }
+                             }"
+                             },
+                             new { @class = "btn btn-lg waves-effect mb-2 waves-light " + buttonColor, title = buttonText }
+                         )
+
+                     }
+                     
+
+                       </div>
+
+
+
+
+
+                   <style>
+                       .star-rating {
+                           display: flex;
+                           justify-content: center; 
+                           align-items: center; 
+                           width: 100%; 
+                       }
+                   
+                       .star-rating .star {
+                           width: 20px;
+                           height: 20px;
+                           cursor: pointer;
+                           font-size: 20px;
+                       }
+                   
+                       .star-rating .star.active {
+                           color: #f00;
+                       }
+                   </style>
+                   <h1>The film's score</h1>
+                        <div class="star-rating">
+                            @if (Model.UserRating != null)
                             {
-                                HttpMethod = "POST",
-                                UpdateTargetId = "bookmarkStatus",
-                                OnSuccess = "function(response) { $('#bookmarkStatus').html(response); if (response === 'Bookmarked') $('.btn').prop('disabled', true); }"
-                            },
-                            new { @class = "btn btn-primary btn-lg waves-effect mb-2 waves-light", title = ViewBag.Msg })
-
-
-                        
-                        
-                        <style>
-                            .star-rating {
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                                width: 200px;
+                                for (int i = 1; i <= 10; i++)
+                                {
+                                    if (i <= Model.UserRating)
+                                    {
+                                        <span class="star active" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-fill"></i></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="star" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-line"></i></span>
+                                    }
+                                }
                             }
+                            else
+                            {
+                                for (int i = 1; i <= 10; i++)
+                                {
+                                    <span class="star" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-line"></i></span>
+                                }
+                            }
+                        </div>
 
-                                .star-rating .star {
-                                    width: 20px;
-                                    height: 20px;
-                                    cursor: pointer;
-                                    font-size: 20px;
+                        <script>
+                            function rate(star, movieId) {
+                                let starElements = document.querySelectorAll('.star');
+                                for (let i = 0; i < starElements.length; i++) {
+                                    if (i < star) {
+                                        starElements[i].classList.add('active');
+                                    } else {
+                                        starElements[i].classList.remove('active');
+                                    }
                                 }
 
-                                    .star-rating .star.active {
-                                        color: #f00;
+                               
+                                fetch('/InformationSynchronization/RateMovie', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ rating: star,  movieId: movieId   })
+                                })
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Ошибка при отправке оценки на сервер');
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        console.log('Оценка успешно сохранена:', data);
+
+                                        
+                                        if (data.userRating) {
+                                            updateStarDisplay(data.userRating);
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Произошла ошибка:', error);
+                                    });
+                            }
+
+                            function updateStarDisplay(userRating) {
+                                let starElements = document.querySelectorAll('.star');
+                                for (let i = 0; i < starElements.length; i++) {
+                                    if (i < userRating) {
+                                        starElements[i].classList.add('active');
+                                    } else {
+                                        starElements[i].classList.remove('active');
                                     }
-                        </style>
-                       <h1>The film's score</h1>
-                       @if (Model.MovieNightGrade == 0)
-                       {
-                           <div class="star-rating" style="margin-left:60px">
-                               @for (int i = 1; i <= 10; i++)
-                               {
-                                   <span class="star" onclick="rate(@i)"><i class="remixicon-star-s-line"></i></span>
-                               }
-                           </div>
-                       }
-                       else
-                       {
-                           <div class="star-rating" style="margin-left:60px">
-                               @for (int i = 1; i <= 10; i++)
-                               {
-                                   if (i <= Model.MovieNightGrade)
-                                   {
-                                       <span class="star active" onclick="rate(@i)"><i class="remixicon-star-s-fill"></i></span>
-                                   }
-                                   else
-                                   {
-                                       <span class="star" onclick="rate(@i)"><i class="remixicon-star-s-line"></i></span>
-                                   }
-                               }
-                           </div>
-                       }
-                       <script>
-                           function rate(stars) {
-                               let starElements = document.querySelectorAll('.star');
-                               for (let i = 0; i < starElements.length; i++) {
-                                   if (i < stars) {
-                                       starElements[i].classList.add('active');
-                                       starElements[i].innerHTML = '<i class="remixicon-star-s-fill"></i>';
-                                   } else {
-                                       starElements[i].classList.remove('active');
-                                       starElements[i].innerHTML = '<i class="remixicon-star-s-line"></i>';
-                                   }
-                               }
-                           }
-                       </script>
+                                }
+                            }
+
+                        </script>
+
+
+
 
                         <div class="text-left mt-3">
                             
@@ -154,8 +251,9 @@
                                 <strong>Genre :</strong> 
                                 foreach (var gen in Model.Genre)
                                 {
-                                    <p class="text-bg-dark mb-1 font-12"> <span class="ml-2 ">@gen/ </span></p>
+                                    <span class="text-bg-dark mb-1 font-12 ml-2">@gen</span>
                                 }
+
                             }
 
                           @if (Model.Location != null)

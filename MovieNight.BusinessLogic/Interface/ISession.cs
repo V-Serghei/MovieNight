@@ -23,5 +23,6 @@ namespace MovieNight.BusinessLogic.Interface
         LogInData GetUserByCookie(string apiCookieValue,string agent);
 
         int? GetIdCurrUser(string userName);
+        bool DelSessionCurrUser(string userCurrent);
     }
 }

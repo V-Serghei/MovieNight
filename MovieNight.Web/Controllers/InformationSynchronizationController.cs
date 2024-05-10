@@ -1,22 +1,22 @@
 ﻿using System;
-using MovieNight.BusinessLogic.Interface;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using MovieNight.Domain.Entities.PersonalP;
-using MovieNight.Web.Models;
-using MovieNight.Web.Models.Different;
-using MovieNight.Web.Models.Movie;
-using MovieNight.Web.Models.PersonalP;
 using AutoMapper;
+using MovieNight.BusinessLogic.Interface;
 using MovieNight.BusinessLogic.Interface.IService;
-using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.Friends;
-using MovieNight.Domain.Entities.UserId;
+using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
+using MovieNight.Web.Models;
 using MovieNight.Web.Models.Friends;
+using MovieNight.Web.Models.Movie;
+using MovieNight.Web.Models.PersonalP;
+using MovieNight.Web.Models.PersonalP.Bookmark;
 
 namespace MovieNight.Web.Controllers
 {
@@ -59,6 +59,11 @@ namespace MovieNight.Web.Controllers
                 cfg.CreateMap<MovieCard, MovieCardE>();
                 cfg.CreateMap<CastMemberE, CastMember>();
                 cfg.CreateMap<CastMember, CastMemberE>();
+                cfg.CreateMap<ListOfFilmsE, ListOfFilmsModel>();
+                cfg.CreateMap<ListOfFilmsModel, ListOfFilmsE>();
+                cfg.CreateMap<ViewingHistoryM,ViewingHistoryModel>();
+                cfg.CreateMap<ViewingHistoryModel,ViewingHistoryM>();
+
 
                 cfg.CreateMap<FriendsPageD, FriendPageModel>()
                     .ForMember(dest=>dest.BUserE, 
@@ -71,12 +76,17 @@ namespace MovieNight.Web.Controllers
 
         // GET: InformationSynchronization
         [HttpGet]
+        [UserMod]
         public ActionResult PersonalProfile()
         {
 
             try
             {
                 SessionStatus();
+                if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+                {
+                    return View();
+                }
                 if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
                 {
                     return RedirectToAction("Login", "Identification");
@@ -93,6 +103,10 @@ namespace MovieNight.Web.Controllers
                         var userM = _mapper.Map<PersonalProfileModel>(user);
                         if (userM != null)
                         {
+                            var listInPl = _movie.GetListPlain(userId);
+                            userM.ListInThePlans = _mapper.Map<List<ListOfFilmsModel>>(listInPl);
+                            var lisrViewing = _movie.GetViewingList(userId);
+                            userM.ViewingHistory = _mapper.Map<List<ViewingHistoryModel>>(lisrViewing);
                             userM.BUserE = new UserModel
                             {
                                 Username = userHttp.Username,
@@ -219,12 +233,19 @@ namespace MovieNight.Web.Controllers
             return View();
         }
 
+        
+        
         [HttpGet]
-        public ActionResult MovieTemplatePage()
+        public ActionResult MovieTemplatePage(int? id)
         {
+            int idU = 0;
+            if (id != null)
+            {
+                idU = (int)id;
+            }
+
             try
             {
-                int id = 3;
                 var movie = _movie.GetMovieInf(id);
                 if (movie != null)
                 {
@@ -233,22 +254,32 @@ namespace MovieNight.Web.Controllers
                     movieModel.CastMembers = _mapper.Map<List<CastMember>>(movie.CastMembers);
                     movieModel.InterestingFacts = _mapper.Map<List<InterestingFact>>(movie.InterestingFacts);
                     movieModel.Genre = new List<string>();
+                    movieModel.Bookmark = _movie.GetInfBookmark((System.Web.HttpContext.
+                        Current.GetMySessionObject().Id,idU));
+                    movieModel.UserRating =
+                        _movie.GetUserRating((System.Web.HttpContext.Current.GetMySessionObject().Id, idU));
                     foreach (var GEN in movie.Genre)
                     {
                         movieModel.Genre.Add(GEN);
                     }
 
-                    movieModel.Id = id;
+                    movieModel.Id = idU;
                     return View(movieModel);
                 }
 
                 // return View("Error404", "Error");
 
             }
-            catch (Exception ex)
+            catch (DbEntityValidationException ex)
             {
-                Console.WriteLine(ex);
-                //return View("Error500", "Error");
+                foreach (var validationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        Console.WriteLine($@"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                    }
+                }
+                return null;
             }
 
             return View();
@@ -270,7 +301,7 @@ namespace MovieNight.Web.Controllers
                 };
             }
             if(model!=null) return View(model);
-            else return View(new PersonalProfileModel
+            return View(new PersonalProfileModel
             {
                 MsgResp = "Things go wrong!!!",
                 BUserE = new UserModel
@@ -302,36 +333,125 @@ namespace MovieNight.Web.Controllers
             {
                 return RedirectToAction("PersonalProfile", "InformationSynchronization");
             }
-            else
+
+            PersonalProfileModel resp = _mapper.Map<PersonalProfileModel>(success.InfOfUser);
+            if (resp != null)
             {
-                PersonalProfileModel resp = _mapper.Map<PersonalProfileModel>(success.InfOfUser);
-                if (resp != null)
-                {
-                    resp.MsgResp = success.Msg;
-                    return View("ProfileEditing",resp);
-                }
-                return View("ProfileEditing", new PersonalProfileModel
-                {
-                    MsgResp = success.Msg,
-                    BUserE = new UserModel
-                    {
-                        Username = userCurr.Username,
-                        Email = userCurr.Email
-                    }
-                });
+                resp.MsgResp = success.Msg;
+                return View("ProfileEditing",resp);
             }
+            return View("ProfileEditing", new PersonalProfileModel
+            {
+                MsgResp = success.Msg,
+                BUserE = new UserModel
+                {
+                    Username = userCurr.Username,
+                    Email = userCurr.Email
+                }
+            });
+        }
+
+        
+        [HttpPost]
+        public async Task<JsonResult> BookmarkMovie(int movieId)
+        {   
+            var bookMe = await _movie.SetNewBookmark((System.Web.HttpContext.
+                Current.GetMySessionObject().Id,movieId));
+                var bookM = new BookmarkModel
+            {
+                IdUser = bookMe.IdUser,
+                IdMovie = bookMe.IdMovie,
+                Msg = bookMe.Msg,
+                Success = bookMe.Success,
+                BookmarkTimeOf = false
+
+            };
+            
+            
+            
+            return Json(new { success = true, Msg = "StatusMsg", newButtonColor = "red", bookM}); 
+        }
+        
+        [HttpPost]
+        public async Task<JsonResult> DeleteBookmarkMovie(int movieId)
+        {   
+            var deleteBookmark = await _movie.DeleteBookmark((System.Web.HttpContext.
+                Current.GetMySessionObject().Id,movieId));
+
+            if (deleteBookmark)
+            {
+                return Json(new { success = true, Msg = "Deleted"}); 
+
+            }
+
+            return Json(new { success = false, Msg = "Error"});
+
+
+        }
+        
+        public async Task<JsonResult> AddToViewed(int movieid)
+        {
+            return Json(new { success = true, statusMsg = "StatusMsg", newButtonTitle = "Новое сообщение", newButtonColor = "red" }); 
+        }
+
+        public async Task<JsonResult> AddToGrade()
+        {
+            return Json(new { success = true, statusMsg = "StatusMsg", newButtonTitle = "Новое сообщение", newButtonColor = "red" }); 
         }
 
         [HttpPost]
-        public Task<JsonResult> BookmarkMovie(int movieid)
-        {   
-            string newMessage = "Новое сообщение";
+        public async Task<JsonResult> RateMovie(int rating, int movieId)
+        {
 
-            // Установка нового сообщения в ViewBag
-            ViewBag.Msg = newMessage;
-
-            return Task.FromResult(Json(new {}));
+            var resp =  await _movie.SetReteMovieAndView((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId,
+                rating));
+            
+            
+            
+            return (Json(new { star = rating }));
         }
-        
+
+        public ActionResult MoviePlayer(int? movieId)
+        {
+            int idU = 0;
+            if (movieId != null)
+            {
+                idU = (int)movieId;
+            }
+
+            try
+            {
+                var movie = _movie.GetMovieInf(movieId);
+                if (movie != null)
+                {
+                    var movieModel = _mapper.Map<MovieTemplateInfModel>(movie);
+                    movieModel.MovieCards = _mapper.Map<List<MovieCard>>(movie.MovieCards);
+                    movieModel.CastMembers = _mapper.Map<List<CastMember>>(movie.CastMembers);
+                    movieModel.InterestingFacts = _mapper.Map<List<InterestingFact>>(movie.InterestingFacts);
+                    movieModel.Genre = new List<string>();
+                    movieModel.Bookmark = _movie.GetInfBookmark((System.Web.HttpContext.
+                        Current.GetMySessionObject().Id,idU));
+                    movieModel.UserRating =
+                        _movie.GetUserRating((System.Web.HttpContext.Current.GetMySessionObject().Id, idU));
+                    foreach (var GEN in movie.Genre)
+                    {
+                        movieModel.Genre.Add(GEN);
+                    }
+
+                    movieModel.Id = idU;
+                    return View(movieModel);
+                }
+                return RedirectToAction("Error404Page", "Error");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return RedirectToAction("Error404Page", "Error");
+
+            }
+
+            return View();
+        }
     }
 }
