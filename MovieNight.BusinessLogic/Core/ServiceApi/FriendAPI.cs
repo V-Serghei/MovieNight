@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using AutoMapper;
 using MovieNight.BusinessLogic.DBModel;
 using MovieNight.Domain.Entities;
@@ -78,22 +79,25 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     foreach (var list9 in list9Users)
                     {
                         var userd = db.PEdBdTables.FirstOrDefault(p => p.UserDbTableId == list9.Id);
-                        if (userd != null)
+                        bool existsInFriendsDb = db.Friends.Any(f => f.IdFriend != list9.Id);
+                        if (userd != null && existsInFriendsDb)
                         {
                             var oneOfList = mapper.Map<FriendsPageD>(userd);
                             oneOfList.BUserE = new UserE
                             {
+                                Id = list9.Id,
                                 Username = list9.UserName,
                                 Email = list9.Email
                             };
                             friendsListD.ListOfFriends.Add(oneOfList);
                         }
-                        else
+                        else if(existsInFriendsDb)
                         {
                             var oneOfList = new FriendsPageD
                             {
                                 BUserE = new UserE
                                 {
+                                    Id = list9.Id,
                                     Username = list9.UserName,
                                     Email = list9.Email
                                 }
@@ -110,12 +114,15 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             return friendsListD;
         }
         
-        public FriendsListD getListOfFriendsD()
+        public FriendsListD getListOfFriendsD(int _skipParameter)
         {
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<PEdBdTable,FriendsPageD>()
                     .ForMember(dest => dest.BUserE, 
+                        opt => opt.Ignore());
+                c.CreateMap<FriendsPageD,PEdBdTable>()
+                    .ForMember(dest => dest.UserDbTableId, 
                         opt => opt.Ignore());
             });
             
@@ -126,28 +133,33 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             {
                 try
                 {
-                    var list10Users = db.UsersT.Take(10).ToList();
-                    foreach (var list10 in list10Users)
+                    var list9Users = db.UsersT.OrderBy(u => u.Id).Skip(_skipParameter*9).Take(9).ToList();
+                    foreach (var list9 in list9Users)
                     {
-                        var userd = db.PEdBdTables.FirstOrDefault(p => p.UserDbTableId == list10.Id);
-                        if (userd != null)
+                        var userId = (int)HttpContext.Current.Session["UserId"];
+                        var userd = db.PEdBdTables.FirstOrDefault(p => p.UserDbTableId == list9.Id);
+                        var friendd = db.Friends.FirstOrDefault(p => p.IdFriend == list9.Id 
+                                                                     && p.IdUser == userId);
+                        if (friendd != null && userd!=null)
                         {
                             var oneOfList = mapper.Map<FriendsPageD>(userd);
                             oneOfList.BUserE = new UserE
                             {
-                                Username = list10.UserName,
-                                Email = list10.Email
+                                Id = list9.Id,
+                                Username = list9.UserName,
+                                Email = list9.Email
                             };
                             friendsListD.ListOfFriends.Add(oneOfList);
                         }
-                        else
+                        else if (friendd != null)
                         {
                             var oneOfList = new FriendsPageD
                             {
                                 BUserE = new UserE
                                 {
-                                    Username = list10.UserName,
-                                    Email = list10.Email
+                                    Id = list9.Id,
+                                    Username = list9.UserName,
+                                    Email = list9.Email
                                 }
                             };
                             friendsListD.ListOfFriends.Add(oneOfList);
@@ -160,6 +172,67 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 }
             }
             return friendsListD;
+        }
+
+        protected bool setAddFriendD((int _userId, int? _friendId) valueTuple)
+        {
+            if (valueTuple._friendId == null) return false;
+            using (var db = new UserContext())
+            {
+                try
+                {
+                    var verifyFriend = db.Friends.FirstOrDefault(v =>
+                        v.IdFriend == valueTuple._friendId && v.IdUser == valueTuple._userId);
+                    if (verifyFriend == null)
+                    {
+                        var friendTable = new FriendsDbTable()
+                        {
+                            IdUser = valueTuple._userId,
+                            IdFriend = valueTuple._friendId,
+                            User = db.UsersT.FirstOrDefault(v=>v.Id==valueTuple._userId),
+                            Friend = db.UsersT.FirstOrDefault(g=>g.Id==valueTuple._friendId)
+                        };
+                        db.Friends.Add(friendTable);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    return false;
+                }
+            }
+        }
+        
+        protected bool setDeleteFriendD((int _userId, int? _friendId) valueTuple)
+        {
+            if (valueTuple._friendId == null) return false;
+            using (var db = new UserContext())
+            {
+                try
+                {
+                    var verifyFriend = db.Friends.FirstOrDefault(v =>
+                        v.IdFriend == valueTuple._friendId && v.IdUser == valueTuple._userId);
+                    if (verifyFriend != null)
+                    {
+                        db.Friends.Remove(verifyFriend);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    return false;
+                }
+            }
         }
     }
     

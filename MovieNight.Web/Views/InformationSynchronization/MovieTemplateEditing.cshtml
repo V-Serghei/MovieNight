@@ -1,0 +1,270 @@
+﻿@using System.Web.Optimization
+@model dynamic
+@using MovieNight.Domain.enams
+@using MovieNight.Web.Infrastructure
+
+@{
+var userModel = HttpContext.Current.GetMySessionObject();
+var movieModel = HttpContext.Current.GetMySessionObject();
+}
+
+<div>
+    <div class="content">
+
+        <!-- Start Content-->
+        @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+        {
+               <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Movie Night</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Movie</a></li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title">Movie editing</h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="">
+                    <div >
+                        <div class="card-box">
+                        <div class="tab-pane" id="settings">
+                        
+                 @using (Html.BeginForm("MovieTemplateEditing", "InformationSynchronization", FormMethod.Post,new { enctype = "multipart/form-data" }))
+                 {
+                     <div class="text-right">
+                         <button type="submit" name="submit" class="btn btn-primary waves-effect waves-light mt-2"><i class=" remixicon-brush-line"></i> Accept changes </button>
+                     </div>
+                     <div class="form-group col-md-6">
+                         <div class="form-group">
+                            
+                             <label for="AvatarFile"> Poster Image </label>
+                             <input type="file" class="form-control" id="AvatarFile" name="AvatarFile" accept="image/*">
+                            
+                         </div>
+                     </div>
+                     <div class="form-group">
+                         <label for="Title">Title</label>
+                         <input type="text" name="Title" class="form-control" id="Title" placeholder="Enter Title" value="">
+                     </div>
+                     <div class="row">
+                         <div class="col-12">
+                             <div class="form-group">
+                                 <label for="Brief">Brief description</label>
+                                 <textarea class="form-control" id="Description" rows="4"  placeholder="Write something..." name="Description" ></textarea>
+                             </div>
+                         </div> <!-- end col -->
+                     </div> <!-- end row -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                           <label for="firstname">Quote</label>
+                            <input type="text" class="form-control" id="firstname" placeholder="Enter Quote" name="FirstName" value="">
+                        </div>
+                    </div>
+                </div> <!-- end row -->
+                     
+                     <div class="form-group row">
+                         <label class="col-sm-2 col-form-label" for="example-date">Production Year</label>
+                         <div class="col-sm-10">
+                             <input class="form-control" type="date" name="DataBirth" id="example-date">
+                         </div>
+                   
+                     </div>
+                     
+                     <div class="form-group">
+                         <label for="country">Country:</label>
+                         <select id="country" name="Country" class="form-control">
+
+                             <option value="">Select the country...</option>
+                             <option value="Russia">Russia</option>
+                             <option value="Ukraine">Ukraine</option>
+                             <option value="Belarus">Belarus</option>
+                             <option value="Moldova">Moldova</option>
+                             <option value="UNITED STATES">UNITED STATES</option>
+                             <option value="Britain">Britain</option>
+                             <option value="OTHER">Other (Please Specify)</option>
+                             <input type="text" id="otherCountryInput" name="Country" class="form-control" style="display: none;" placeholder="Enter your country">
+                         </select>
+                         
+                         <script>
+                                document.getElementById("country").addEventListener("change", function () {
+                                    var countrySelect = document.getElementById("country");
+                                    var otherInput = document.getElementById("otherCountryInput");
+    
+                                    if (countrySelect.value === "OTHER") {
+                                        otherInput.style.display = "block";
+                                    } else {
+                                        otherInput.style.display = "none";
+                                    }
+                                });
+
+                            </script>
+                     </div>
+                     
+                     <div class="row">
+                         <div class="col-md-6">
+                             <div class="form-group">
+                            
+                                 <label for="Gender">Genre</label>
+                                 <select class="form-control" id="Gender" name="Gender" required>
+                                     <option value="horror">Horror</option>
+                                     <option value="comedy">Comedy</option>
+                                     <option value="drama">Drama</option>
+                                     <option value="documentary">Documentary</option>
+                                     <option value="romance">Romance</option>
+                                     <option value="romanticComedy">Romantic comedy</option>
+                                     <option value="musical">Musical</option>
+                                     <option value="detective">Detective</option>
+                                     <option value="action">Action</option>
+                                     <option value="thriller">Thriller</option>
+                                     <option value="disasterFilm">Disaster film</option>
+                                     <option value="scienceFiction">Science fiction</option>
+                                     <option value="fantasy">Fantasy</option>
+                                     <option value="western">Western</option>
+                                     <option value="art-houseFilm">Art-house film</option>
+                                 </select>
+                           
+                             </div>
+                         </div>
+                     </div> <!-- end row -->
+                     
+                     <div class="row">
+                         <div class="col-md-6">
+                             <div class="form-group">
+                                 <label for="firstname">Location</label>
+                                 <input type="text" class="form-control" id="firstname" placeholder="Enter Quote" name="FirstName" value="">
+                             </div>
+                         </div>
+                     </div> <!-- end row -->
+                     
+                     <div class="row">
+                         <div class="col-md-6">
+                             <div class="form-group">
+                                 <label for="firstname">Director</label>
+                                 <input type="text" class="form-control" id="firstname" placeholder="Enter Quote" name="FirstName" value="">
+                             </div>
+                         </div>
+                     </div> <!-- end row -->
+                     
+                     <div class="row">
+                         <div class="col-md-6">
+                             <div class="form-group">
+                                 <label for="hours">Hours</label>
+                                 <input type="number" class="form-control" id="hours" name="hours" min="0">
+                             </div>
+                         </div>
+                         <div class="col-md-6">
+                             <div class="form-group">
+                                 <label for="minutes">Minutes</label>
+                                 <input type="number" class="form-control" id="minutes" name="minutes" min="0" max="59">
+                             </div>
+                         </div>
+                     </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                             <label for="Description">Description</label>
+                                    <textarea class="form-control" id="Description" rows="4"  placeholder="Write something..." name="Description" ></textarea>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+                     
+                     <div class="row">
+                         <div class="col-md-6">
+                             <div class="form-group">
+
+                                 <label for="Certificate">General : Certificate</label>
+                                 <select class="form-control" id="Certificate" name="Certificate" required>
+                                     <option value="G">G</option>
+                                     <option value="PG">PG</option>
+                                     <option value="PG-13">PG-13</option>
+                                     <option value="R">R</option>
+                                     <option value="NC-17">NC-17</option>
+                                 </select>
+
+                                 <label for="Production">Starring : Production Company</label>
+                                 <select class="form-control" id="Production" name="Production" required>
+                                     <option value="WarnerBros">Warner Bros</option>
+                                     <option value="WaltDisneyStudios">Walt Disney Studios</option>
+                                     <option value="UniversalPictures">Universal Pictures</option>
+                                     <option value="SonyPicturesEntertainment">Sony Pictures Entertainment</option>
+                                     <option value="ParamountPictures">Paramount Pictures</option>
+                                     <option value="20thCenturyStudios">20th Century Studios</option>
+                                     <option value="Netflix">Netflix</option>
+                                 </select>
+                                 <label for="Budget">Starring : Budget</label>
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                         <label for="Budget">$</label>
+                                         <input type="number" class="form-control" id="Budget" name="Budget" min="0">
+                                     </div>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                     </div> <!-- end row -->
+                     <div class="row">
+                         <div class="col-12">
+                             <div class="form-group">
+                                 <label for="Interesting">Interesting facts</label>
+                                 <textarea class="form-control" id="Interesting" rows="4"  placeholder="Write something..." name="Interesting" ></textarea>
+                             </div>
+                         </div> <!-- end col -->
+                     </div> <!-- end row -->
+                     
+                <div class="row">
+                </div> <!-- end row -->
+                <br/>
+                <br/>
+            }
+            </div>
+                                <!-- end settings content-->
+                            </div>
+                        </div> <!-- end tab-content -->
+                    </div> <!-- end card-box-->
+
+                </div> <!-- end col -->
+        }
+    </div> <!-- container -->
+    
+</div> <!-- content --><div>
+    <div class="content">
+
+        <!-- Start Content-->
+        @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+        {
+            <div class="account-pages mt-5 mb-5">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 col-lg-6 col-xl-5">
+                            <div class="card">
+
+                                <div class="card-body p-4">
+
+
+                                    <div class="text-center w-75 m-auto">
+                                        <a href=@Url.Action("Error404","Error")>
+                                            <span><img src="~/images/logo_text.png" alt="" height="44"></span>
+                                        </a>
+                                    </div>
+                                </div> <!-- end card-body -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        }
+    </div> <!-- container -->
+    
+</div> <!-- content -->

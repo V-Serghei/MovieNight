@@ -39,7 +39,7 @@ namespace MovieNight.Web.Attributes
                 var profile = _sessionBL.GetUserByCookie(apiCookie.Value, agent);
                 var us = _mapper.Map<UserModel>(profile);
 
-                if (profile != null && profile.Role == LevelOfAccess.Moderator)
+                if (profile != null && (profile.Role == LevelOfAccess.Moderator || profile.Role == LevelOfAccess.Admin))
                 {
                     HttpContext.Current.SetMySessionObject(us);
                 }

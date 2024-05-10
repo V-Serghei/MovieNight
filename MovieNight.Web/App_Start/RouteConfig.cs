@@ -25,6 +25,7 @@ namespace MovieNight.Web
                 url: "InformationSynchronization/MovieTemplatePage/{id}",
                 defaults: new { controller = "InformationSynchronization", action = "MovieTemplatePage", id = UrlParameter.Optional }
             );
+            
         }
     }
 }
