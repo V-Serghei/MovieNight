@@ -16,3 +16,5 @@
 /MovieNight.Web/obj/Debug/MovieNight.Web.pdb
 /MovieNight/MovieNight.Web/obj/
 *.cache
+/MovieNight.Web/Views/web.config
+/.gitignore
