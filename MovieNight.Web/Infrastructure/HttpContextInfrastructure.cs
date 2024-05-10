@@ -2,9 +2,11 @@
 
 using System.Collections.Generic;
 using System.Web;
+using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 using MovieNight.Web.Models;
 using MovieNight.Web.Models.Movie;
 using MovieNight.Web.Models.Movie.SearchPages;
+using MovieNight.Web.Models.PersonalP.Bookmark;
 using MovieNight.Web.Models.SortingSearchingFiltering;
 
 namespace MovieNight.Web.Infrastructure
@@ -34,13 +36,23 @@ namespace MovieNight.Web.Infrastructure
             return request.Headers["User-Agent"];
         }
 
+        
+        
         #region CACHE
 
         /// <summary>
         /// Temporary storage of user action results for optimization
         /// by reducing the number of queries in the database
         /// </summary>
-
+        public static List<BookmarkModel> GetBookmarkTimeOf(this HttpContext current)
+        {
+            return current?.Session["__ListBookmarkTimeOf"] as List<BookmarkModel>;
+        }
+        
+        public static void SetBookmarkTimeOf(this HttpContext current, List<BookmarkModel> list)
+        {
+            current.Session.Add("__ListBookmarkTimeOf", list);
+        }
 
         #region ViewList
         //################################

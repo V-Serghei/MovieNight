@@ -1,13 +1,13 @@
 ﻿[
   {
     "Title": "Фильм 1",
-    "Tags": 2,
-    "PosterImage": "url1",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/no_image.jpg",
     "Quote": "Цитата 1",
     "Description": "Описание фильма 1",
     "ProductionYear": "2022-01-01",
     "Country": "Страна 1",
-    "Genre": ["Жанр 1", "Жанр 2", "Жанр 3"],
+    "Genre": [ "Жанр 1", "Жанр 2", "Жанр 3" ],
     "Location": "Локация 1",
     "Director": "Режиссер 1",
     "DurationJ": "02:30:00",
@@ -21,23 +21,23 @@
       {
         "Name": "Актер 1",
         "Role": "Роль 1",
-        "ImageUrl": "url1"
+        "ImageUrl": "~/images/Movie/no_image.jpg"
       },
       {
         "Name": "Актер 2",
         "Role": "Роль 2",
-        "ImageUrl": "url2"
+        "ImageUrl": "~/images/Movie/no_image.jpg"
       }
     ],
     "MovieCards": [
       {
         "Title": "Карточка 1",
-        "ImageUrl": "url3",
+        "ImageUrl": "~/images/Movie/no_image.jpg",
         "Description": "Описание карточки 1"
       },
       {
         "Title": "Карточка 2",
-        "ImageUrl": "url4",
+        "ImageUrl": "~/images/Movie/no_image.jpg",
         "Description": "Описание карточки 2"
       }
     ],
@@ -51,68 +51,85 @@
         "FactText": "Текст факта 2"
       }
     ]
-  }, {
-  "Title": "The Shawshank Redemption",
-  "Tags": 1,
-  "PosterImage": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SY1000_CR0,0,675,1000_AL_.jpg",
-  "Quote": "Hope is a good thing, maybe the best of things, and no good thing ever dies.",
-  "Description": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
-  "ProductionYear": "1994-09-23",
-  "Country": "USA",
-  "Genre": ["Drama", "Crime"],
-  "Location": "Shawshank State Penitentiary",
-  "Director": "Frank Darabont",
-  "DurationJ": "02:22:00",
-  "MovieNightGrade": 9.3,
-  "Certificate": "R",
-  "ProductionCompany": "Castle Rock Entertainment",
-  "Budget": "25,000,000",
-  "GrossWorldwide": "160,000,000",
-  "Language": "English",
-  "CastMembers": [
-    {
-      "Name": "Tim Robbins",
-      "Role": "Andy Dufresne",
-      "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTk3NjI2NTQ0Ml5BMl5BanBnXkFtZTcwNzE4Mjg3MQ@@._V1_SY1000_CR0,0,670,1000_AL_.jpg"
-    },
-    {
-      "Name": "Morgan Freeman",
-      "Role": "Ellis Boyd \"Red\" Redding",
-      "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTc0NjY1NTYxOV5BMl5BanBnXkFtZTcwMzI2MjA0Mg@@._V1_SY1000_CR0,0,672,1000_AL_.jpg"
-    }
-  ],
-  "MovieCards": [
-    {
-      "Title": "Card 1",
-      "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SY1000_CR0,0,675,1000_AL_.jpg",
-      "Description": "A story of hope and redemption."
-    },
-    {
-      "Title": "Card 2",
-      "ImageUrl": "https://m.media-amazon.com/images/M/MV5BZjgxMDg3NTEtNjZkOC00MDJmLTg2MjUtYzE5NjgxYzFhMzUxXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SY1000_CR0,0,674,1000_AL_.jpg",
-      "Description": "Two men find solace in prison."
-    }
-  ],
-  "InterestingFacts": [
-    {
-      "FactName": "Fact 1",
-      "FactText": "The Shawshank Redemption was filmed in an actual abandoned prison."
-    },
-    {
-      "FactName": "Fact 2",
-      "FactText": "Morgan Freeman's character, Red, was originally supposed to be played by Clint Eastwood."
-    }
-  ]
-},
+  },
+  {
+    "Title": "The Shawshank Redemption",
+    "Category": 1,
+    "PosterImage": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SY1000_CR0,0,675,1000_AL_.jpg",
+    "Quote": "Hope is a good thing, maybe the best of things, and no good thing ever dies.",
+    "Description": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
+    "ProductionYear": "1994-09-23",
+    "Country": "USA",
+    "Genre": [ "Drama", "Crime" ],
+    "Location": "Shawshank State Penitentiary",
+    "Director": "Frank Darabont",
+    "DurationJ": "02:22:00",
+    "MovieNightGrade": 9.3,
+    "Certificate": "R",
+    "ProductionCompany": "Castle Rock Entertainment",
+    "Budget": "25,000,000",
+    "GrossWorldwide": "160,000,000",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Tim Robbins",
+        "Role": "Andy Dufresne",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTk3NjI2NTQ0Ml5BMl5BanBnXkFtZTcwNzE4Mjg3MQ@@._V1_SY1000_CR0,0,670,1000_AL_.jpg"
+      },
+      {
+        "Name": "Morgan Freeman",
+        "Role": "Ellis Boyd \"Red\" Redding",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTc0NjY1NTYxOV5BMl5BanBnXkFtZTcwMzI2MjA0Mg@@._V1_SY1000_CR0,0,672,1000_AL_.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Card 1",
+        "ImageUrl": "~/images/cadr/cadr2.jpg",
+        "Description": "A story of hope and redemption."
+      },
+      {
+        "Title": "Card 2",
+        "ImageUrl": "~/images/cadr/cadr3.jpg",
+        "Description": "Two men find solace in prison."
+      },
+      {
+        "Title": "Card 3",
+        "ImageUrl": "~/images/cadr/cadr4.jpg",
+        "Description": "Two men find solace in prison."
+      },
+      {
+        "Title": "Card 4",
+        "ImageUrl": "~/images/cadr/cadr5.jpg",
+        "Description": "Two men find solace in prison."
+      },
+      {
+        "Title": "Card 5",
+        "ImageUrl": "~/images/cadr/card1.jpg",
+        "Description": "Two men find solace in prison."
+      }
+
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The Shawshank Redemption was filmed in an actual abandoned prison."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Morgan Freeman's character, Red, was originally supposed to be played by Clint Eastwood."
+      }
+    ]
+  },
   {
     "Title": "The Godfather",
-    "Tags": 1,
-    "PosterImage": "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlZWQ0NGVlMjE3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY1000_CR0,0,700,1000_AL_.jpg",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/elpadre.jpg",
     "Quote": "I'm gonna make him an offer he can't refuse.",
     "Description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
     "ProductionYear": "1972-03-15",
     "Country": "USA",
-    "Genre": ["Crime", "Drama"],
+    "Genre": [ "Crime", "Drama" ],
     "Location": "New York City",
     "Director": "Francis Ford Coppola",
     "DurationJ": "02:55:00",
@@ -137,12 +154,12 @@
     "MovieCards": [
       {
         "Title": "Card 1",
-        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlZWQ0NGVlMjE3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY1000_CR0,0,700,1000_AL_.jpg",
+        "ImageUrl": "~/images/cadr/cadr7.jpg",
         "Description": "A classic crime film."
       },
       {
         "Title": "Card 2",
-        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNThlNjY2MGEtZGM2ZC00NTE0LTk4YWMtMDYzYzY2ZmQ2NjY2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY1000_CR0,0,675,1000_AL_.jpg",
+        "ImageUrl": "~/images/cadr/cadr6.jpg",
         "Description": "A story of family and loyalty."
       }
     ],
@@ -159,13 +176,13 @@
   },
   {
     "Title": "Бэтмен",
-    "Tags": 1,
-    "PosterImage": "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTEtMDc2OS00NDZhLTk2N2MtODU0NjI4OTU2OTIxXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_Ratio0.6716_AL_.jpg",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/betman.jpg",
     "Quote": "Я - возмездие. Я - ночь. Я - Бэтмен.",
     "Description": "Брюс Уэйн, миллиардер и плейбой, ночью становится Бэтменом, защитником Готэм-сити от преступности.",
     "ProductionYear": "1972-03-15",
     "Country": "США",
-    "Genre": ["Боевик", "Детектив", "Триллер"],
+    "Genre": [ "Боевик", "Детектив", "Триллер" ],
     "Location": "Готэм-сити",
     "Director": "Мэтт Ривз",
     "DurationJ": "02:55:00",
@@ -217,21 +234,21 @@
   },
   {
     "Title": "Властелин колец: Братство кольца",
-    "Tags": 1,
-    "PosterImage": "https://example.com/posters/lotr-fellowship-of-the-ring.jpg",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/vlrings.jpg",
     "Quote": "Одно кольцо, чтобы всех поработить.",
     "Description": "Фродо Бэггинс, совсем не ведомый далеким странствиям, становится обладателем Всемогущего Кольца. С помощью Гэндальфа и других друзей, он отправляется на поиски таинственной Горы Одно Кольцо, чтобы уничтожить его и спасти Средиземье.",
     "ProductionYear": "2001-12-19",
     "Country": "США, Новая Зеландия",
-    "Genre": ["Эпическое фэнтези", "Приключение"],
+    "Genre": [ "Эпическое фэнтези", "Приключение" ],
     "Location": "Средиземье",
     "Director": "Питер Джексон",
     "DurationJ": "02:58:00",
     "MovieNightGrade": 9.0,
     "Certificate": "PG-13",
     "ProductionCompany": "New Line Cinema",
-    "Budget": "$93,000,000",
-    "GrossWorldwide": "$871,530,324",
+    "Budget": "93,000,000",
+    "GrossWorldwide": "871,530,324",
     "Language": "Английский",
     "CastMembers": [
       {
@@ -270,21 +287,21 @@
   },
   {
     "Title": "Интерстеллар",
-    "Tags": 1,
-    "PosterImage": "https://example.com/posters/interstellar.jpg",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/alberto_interstellar.jpg",
     "Quote": "Нам нужно больше пространства.",
     "Description": "В не очень удаленном будущем человечество сталкивается с катастрофическим изменением климата. Чтобы спасти человеческую расу, команда астронавтов отправляется в космос на поиски нового дома для человечества.",
     "ProductionYear": "2014-11-05",
     "Country": "США, Великобритания, Канада",
-    "Genre": ["Научная фантастика", "Приключение"],
+    "Genre": [ "Научная фантастика", "Приключение" ],
     "Location": "Космос",
     "Director": "Кристофер Нолан",
     "DurationJ": "02:49:00",
     "MovieNightGrade": 8.6,
     "Certificate": "PG-13",
     "ProductionCompany": "Paramount Pictures, Warner Bros. Pictures",
-    "Budget": "$165,000,000",
-    "GrossWorldwide": "$677,470,644",
+    "Budget": "165,000,000",
+    "GrossWorldwide": "677,470,644",
     "Language": "Английский",
     "CastMembers": [
       {
@@ -320,5 +337,2658 @@
         "FactText": "Саундтрек к фильму был написан известным композитором Хансом Циммером."
       }
     ]
+  },
+  {
+    "Title": "The Green Mile",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/the_green_mie.png",
+    "Quote": "At the end of every dark tunnel, there's a light waiting.",
+    "Description": "Set in 1935, in an American prison called 'Cold Mountain,' the story revolves around Paul Edgecomb, a corrections officer who encounters John Coffey, a mysterious inmate with extraordinary abilities.",
+    "ProductionYear": "1999-12-10",
+    "Country": "USA",
+    "Genre": [ "Drama", "Fantasy", "Mystery" ],
+    "Location": "Cold Mountain",
+    "Director": "Frank Darabont",
+    "DurationJ": "03:09:00",
+    "MovieNightGrade": 8.6,
+    "Certificate": "R",
+    "ProductionCompany": "Castle Rock Entertainment",
+    "Budget": "60,000,000",
+    "GrossWorldwide": "286,801,374",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Tom Hanks",
+        "Role": "Paul Edgecomb",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNjA4ODk5MTc2N15BMl5BanBnXkFtZTYwMDQ0Nzc5._V1_.jpg"
+      },
+      {
+        "Name": "Michael Clarke Duncan",
+        "Role": "John Coffey",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMjEzMzA1NDIyOF5BMl5BanBnXkFtZTcwNDEyMTUyMQ@@._V1_.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "~/images/cadr/card5.jpg",
+        "Description": "A gripping drama about hope and miracles."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "~/images/cadr/cadr1.jpg",
+        "Description": "Dive into the world of mystery and fantasy with this film."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The Green Mile is based on a novel by Stephen King."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The film received four Academy Award nominations."
+      }
+    ]
+  },
+  {
+    "Title": "The Matrix",
+    "Category": 1,
+    "PosterImage": "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SY1000_CR0,0,674,1000_AL_.jpg",
+    "Quote": "Understand, young man, that you don't choose the Matrix. The Matrix chooses you.",
+    "Description": "Thomas Anderson, also known as Neo, discovers that his reality is a computer program created by machines to keep humans under control. He joins a group of rebels to free humanity from the illusion and confront the machines.",
+    "ProductionYear": "1999-03-31",
+    "Country": "USA",
+    "Genre": [ "Action", "Sci-Fi" ],
+    "Location": "Matrix World",
+    "Director": "The Wachowskis",
+    "DurationJ": "02:16:00",
+    "MovieNightGrade": 8.7,
+    "Certificate": "R",
+    "ProductionCompany": "Village Roadshow Pictures",
+    "Budget": "63,000,000",
+    "GrossWorldwide": "463,517,383",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Keanu Reeves",
+        "Role": "Neo",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNjEyMzg2NDYxMl5BMl5BanBnXkFtZTYwNTUyNTc2._V1_.jpg"
+      },
+      {
+        "Name": "Laurence Fishburne",
+        "Role": "Morpheus",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTg1NDg3MDYzNl5BMl5BanBnXkFtZTYwNzI1NzY2._V1_.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SY1000_CR0,0,674,1000_AL_.jpg",
+        "Description": "An amazing sci-fi action thriller."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SY1000_CR0,0,674,1000_AL_.jpg",
+        "Description": "Unravel the mysteries of the Matrix."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The Matrix was originally conceived as a comic book."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Keanu Reeves underwent extensive training in martial arts for his role."
+      }
+    ]
+  },
+  {
+    "Title": "The Karate Kid",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/kararekid.jpg",
+    "Quote": "Life will knock us down, but we can choose whether or not to get back up.",
+    "Description": "When 12-year-old Dre Parker moves to China, he faces bullies at his new school. With the help of maintenance man Mr. Han, Dre learns kung fu to stand up to his tormentors.",
+    "ProductionYear": "2010-06-11",
+    "Country": "USA",
+    "Genre": [ "Action", "Drama", "Family" ],
+    "Location": "China",
+    "Director": "Harald Zwart",
+    "DurationJ": "02:20:00",
+    "MovieNightGrade": 7.2,
+    "Certificate": "PG",
+    "ProductionCompany": "Columbia Pictures",
+    "Budget": "40,000,000",
+    "GrossWorldwide": "359,126,022",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Jaden Smith",
+        "Role": "Dre Parker",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMjA5NDY5OTUyOV5BMl5BanBnXkFtZTcwNTgzMDM1MQ@@._V1_.jpg"
+      },
+      {
+        "Name": "Jackie Chan",
+        "Role": "Mr. Han",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTUwMzI5NTY4NF5BMl5BanBnXkFtZTcwNjgxODgxMw@@._V1_.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMjE5NzY0NjY5MF5BMl5BanBnXkFtZTcwMDE1MjA5MQ@@._V1_SY1000_SX675_AL_.jpg",
+        "Description": "A heartwarming tale of friendship and perseverance."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMjE5NzY0NjY5MF5BMl5BanBnXkFtZTcwMDE1MjA5MQ@@._V1_SY1000_SX675_AL_.jpg",
+        "Description": "Join Dre on his journey to master kung fu and overcome adversity."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "Jaden Smith underwent months of intensive martial arts training for his role."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Jackie Chan did most of his own stunts in the film."
+      }
+    ]
+  },
+  {
+    "Title": "The Accountant",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/acountaant.jpg",
+    "Quote": "Math is the language of the universe.",
+    "Description": "Christian Wolff, a math savant with high-functioning autism, works as a forensic accountant for criminal organizations. As he uncooks the books for a new client, he becomes the target of both the Treasury Department and dangerous assassins.",
+    "ProductionYear": "2016-10-14",
+    "Country": "USA",
+    "Genre": [ "Action", "Crime", "Drama" ],
+    "Location": "USA",
+    "Director": "Gavin O'Connor",
+    "DurationJ": "02:08:00",
+    "MovieNightGrade": 7.3,
+    "Certificate": "R",
+    "ProductionCompany": "Electric City Entertainment",
+    "Budget": "44,000,000",
+    "GrossWorldwide": "155,160,045",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Ben Affleck",
+        "Role": "Christian Wolff",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNzI2MzE0NDQyM15BMl5BanBnXkFtZTgwNzU3NzM5OTE@._V1_.jpg"
+      },
+      {
+        "Name": "Anna Kendrick",
+        "Role": "Dana Cummings",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTk4NTgzMTM3OV5BMl5BanBnXkFtZTgwMjA2NjQzMTI@._V1_.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNzc5NDYxNzgzMV5BMl5BanBnXkFtZTgwODkxNjk4NzE@._V1_.jpg",
+        "Description": "A gripping thriller that will keep you on the edge of your seat."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNzc5NDYxNzgzMV5BMl5BanBnXkFtZTgwODkxNjk4NzE@._V1_.jpg",
+        "Description": "Discover the hidden secrets behind Christian Wolff's extraordinary skills."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "Ben Affleck underwent rigorous training in martial arts and firearms for his role."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The character of Christian Wolff is inspired by real-life individuals with autism who excel in mathematics."
+      }
+    ]
+  },
+  {
+    "Title": "The Host",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/host.jpg",
+    "Quote": "You will be one of us.",
+    "Description": "When an unseen enemy threatens mankind by taking over their bodies and erasing their memories, Melanie Stryder risks everything to protect the people she cares about.",
+    "ProductionYear": "2013-03-29",
+    "Country": "USA",
+    "Genre": [ "Action", "Adventure", "Drama" ],
+    "Location": "USA",
+    "Director": "Andrew Niccol",
+    "DurationJ": "02:05:00",
+    "MovieNightGrade": 5.9,
+    "Certificate": "PG-13",
+    "ProductionCompany": "Chockstone Pictures",
+    "Budget": "40,000,000",
+    "GrossWorldwide": "63,327,201",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Saoirse Ronan",
+        "Role": "Melanie Stryder / Wanda",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMjExMzkwNjU4Ml5BMl5BanBnXkFtZTcwMjgyODQ3OA@@._V1_.jpg"
+      },
+      {
+        "Name": "Max Irons",
+        "Role": "Jared Howe",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMjA4MDgwNjA1MV5BMl5BanBnXkFtZTcwMDQ0MTM3OA@@._V1_.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTY0MTE1MzY1MV5BMl5BanBnXkFtZTcwMjQwMTM0Nw@@._V1_.jpg",
+        "Description": "A thrilling tale of survival in a world overtaken by an alien threat."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTY0MTE1MzY1MV5BMl5BanBnXkFtZTcwMjQwMTM0Nw@@._V1_.jpg",
+        "Description": "Join Melanie on her journey to save humanity from extinction."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The Host is based on the novel of the same name by Stephenie Meyer."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Saoirse Ronan had to wear colored contact lenses to match her character's eye color with the book's description."
+      }
+    ]
+  },
+  {
+    "Title": "Everything Everywhere All at Once",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/maxresdefault.jpg",
+    "Quote": "Embrace the chaos.",
+    "Description": "An aging Chinese immigrant is swept up in an insane adventure where she alone can save the world by exploring other universes connecting with the lives she could have led.",
+    "ProductionYear": "2021-03-27",
+    "Country": "USA",
+    "Genre": [ "Action", "Comedy", "Sci-Fi" ],
+    "Location": "USA",
+    "Director": "Daniel Kwan, Daniel Scheinert",
+    "DurationJ": "02:20:00",
+    "MovieNightGrade": 7.5,
+    "Certificate": "R",
+    "ProductionCompany": "A24, Likely Story, XYZ Films",
+    "Budget": "8,000,000",
+    "GrossWorldwide": "4,509,000",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Michelle Yeoh",
+        "Role": "Evelyn Wang",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BYjM0MjNjOTItYTc4MS00YzJhLThkN2UtZTU3NjI0YzhhN2I2XkEyXkFqcGdeQXVyMjMyNDYzNDA@._V1_.jpg"
+      },
+      {
+        "Name": "Stephanie Hsu",
+        "Role": "Joyce Wang",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BYjM0MjNjOTItYTc4MS00YzJhLThkN2UtZTU3NjI0YzhhN2I2XkEyXkFqcGdeQXVyMjMyNDYzNDA@._V1_.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BYjM0MjNjOTItYTc4MS00YzJhLThkN2UtZTU3NjI0YzhhN2I2XkEyXkFqcGdeQXVyMjMyNDYzNDA@._V1_.jpg",
+        "Description": "An exhilarating journey through multiple dimensions."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BYjM0MjNjOTItYTc4MS00YzJhLThkN2UtZTU3NjI0YzhhN2I2XkEyXkFqcGdeQXVyMjMyNDYzNDA@._V1_.jpg",
+        "Description": "Experience the chaos and wonder of parallel universes."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "Michelle Yeoh learned basic Mandarin for her role as Evelyn Wang."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The film features over 100 different versions of Michelle Yeoh's character."
+      }
+    ]
+  },
+  {
+    "Title": "Kick-Ass",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/kissass.jpg",
+    "Quote": "With no power comes no responsibility.",
+    "Description": "Dave Lizewski is an unnoticed high school student and comic book fan who one day decides to become a superhero, even though he has no powers, training, or meaningful reason to do so.",
+    "ProductionYear": "2010-04-16",
+    "Country": "USA",
+    "Genre": [ "Action", "Comedy", "Crime" ],
+    "Location": "USA",
+    "Director": "Matthew Vaughn",
+    "DurationJ": "01:57:00",
+    "MovieNightGrade": 7.6,
+    "Certificate": "R",
+    "ProductionCompany": "Marv Films, Plan B Entertainment",
+    "Budget": "28,000,000",
+    "GrossWorldwide": "96,188,903",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Aaron Taylor-Johnson",
+        "Role": "Dave Lizewski / Kick-Ass",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTc1ODU5MTc2NF5BMl5BanBnXkFtZTcwMzIwNjUwMw@@._V1_SY1000_CR0,0,675,1000_AL_.jpg"
+      },
+      {
+        "Name": "Chloë Grace Moretz",
+        "Role": "Mindy Macready / Hit-Girl",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNzU1MDU4NzUxMF5BMl5BanBnXkFtZTcwMDUyODgzMg@@._V1_SY1000_CR0,0,677,1000_AL_.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTc1ODU5MTc2NF5BMl5BanBnXkFtZTcwMzIwNjUwMw@@._V1_SY1000_CR0,0,675,1000_AL_.jpg",
+        "Description": "A hilarious take on the superhero genre."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTc1ODU5MTc2NF5BMl5BanBnXkFtZTcwMzIwNjUwMw@@._V1_SY1000_CR0,0,675,1000_AL_.jpg",
+        "Description": "Join Kick-Ass and Hit-Girl in their crusade against crime."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "Chloë Grace Moretz trained with a Navy SEAL for her role as Hit-Girl."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Nicolas Cage based his portrayal of Big Daddy on Adam West's Batman."
+      }
+    ]
+  },
+  {
+    "Title": "Asterix: The Secret of the Magic Potion",
+    "Category": 3,
+    "PosterImage": "~/images/Movie/asterix.jpg",
+    "Quote": "A potion to make all men equal.",
+    "Description": "Following a fall during mistletoe picking, Druid Getafix decides that it is time to secure the future of the village. Accompanied by Asterix and Obelix, he undertakes to travel the Gallic world in search of a talented young druid to transmit the Secret of the Magic Potion.",
+    "ProductionYear": "2018-12-05",
+    "Country": "France",
+    "Genre": [ "Animation", "Adventure", "Comedy" ],
+    "Location": "Gaul",
+    "Director": "Alexandre Astier, Louis Clichy",
+    "DurationJ": "01:25:00",
+    "MovieNightGrade": 6.9,
+    "Certificate": "PG",
+    "ProductionCompany": "M6 Studio, Mikros Image, Canal+",
+    "Budget": "31,700,000",
+    "GrossWorldwide": "38,600,000",
+    "Language": "French",
+    "CastMembers": [
+      {
+        "Name": "Christian Clavier",
+        "Role": "Asterix (voice)",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNjMwMDU1YzItYTlkOC00NjRhLTlmMTYtY2JiZjQzZGYwZTUzXkEyXkFqcGdeQXVyODUyNzI3OTE@._V1_.jpg"
+      },
+      {
+        "Name": "Guillaume Briat",
+        "Role": "Obelix (voice)",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNjMwMDU1YzItYTlkOC00NjRhLTlmMTYtY2JiZjQzZGYwZTUzXkEyXkFqcGdeQXVyODUyNzI3OTE@._V1_.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNjMwMDU1YzItYTlkOC00NjRhLTlmMTYtY2JiZjQzZGYwZTUzXkEyXkFqcGdeQXVyODUyNzI3OTE@._V1_.jpg",
+        "Description": "Join Asterix and Obelix on another hilarious adventure."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNjMwMDU1YzItYTlkOC00NjRhLTlmMTYtY2JiZjQzZGYwZTUzXkEyXkFqcGdeQXVyODUyNzI3OTE@._V1_.jpg",
+        "Description": "Discover the secrets of the magic potion."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The film is based on the comic book 'Asterix and the Secret of the Magic Potion' by René Goscinny and Albert Uderzo."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The character Dogmatix (Ideafix) is animated with more detail and expression than in previous films."
+      }
+    ]
+  },
+  {
+    "Title": "The Snow Queen",
+    "Category": 3,
+    "PosterImage": "~/images/Movie/snowqueen_1.jpg",
+    "Quote": "A heartwarming tale of friendship and bravery.",
+    "Description": "A powerful king nearly lost his family due to the Snow Queen's evil deeds. He finds a way to ban all the magic from the world - all the possessors of magic powers are now trapped in Mirrorlands. The only one who can stop him and keep the fairy-tale in our world is Gerda - as her own biggest power is not magic but her faith in kindness and friendship. In Gerda's new adventures, she will be helped by trolls, pirates and even the Snow Queen herself.",
+    "ProductionYear": "2012-12-11",
+    "Country": "Russia",
+    "Genre": [ "Animation", "Adventure", "Family" ],
+    "Location": "Frozen Kingdom",
+    "Director": "Vladlen Barbe, Maksim Sveshnikov",
+    "DurationJ": "01:16:00",
+    "MovieNightGrade": 6.2,
+    "Certificate": "PG",
+    "ProductionCompany": "Wizart Animation, InlayFilm",
+    "Budget": "7,000,000",
+    "GrossWorldwide": "14,841,932",
+    "Language": "Russian",
+    "CastMembers": [
+      {
+        "Name": "N/A",
+        "Role": "N/A",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNjUwMjQ4NzY2MF5BMl5BanBnXkFtZTcwOTg5NTgzMw@@._V1_.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNjUwMjQ4NzY2MF5BMl5BanBnXkFtZTcwOTg5NTgzMw@@._V1_.jpg",
+        "Description": "Enter the enchanting world of The Snow Queen."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://m.media-amazon.com/images/M/MV5BNjUwMjQ4NzY2MF5BMl5BanBnXkFtZTcwOTg5NTgzMw@@._V1_.jpg",
+        "Description": "Join Gerda on her journey to save her friend from the Snow Queen's icy grasp."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The Snow Queen is based on the fairy tale of the same name by Hans Christian Andersen."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The film was a box office success in Russia and received positive reviews for its animation and storytelling."
+      }
+    ]
+  },
+  {
+    "Title": "Don Quixote",
+    "Category": 3,
+    "PosterImage": "~/images/Movie/donkihat.jpg",
+    "Quote": "To dream the impossible dream.",
+    "Description": "An aging man sets out on a quest to revive chivalry and undo wrongs as he sees them, accompanied by his faithful squire.",
+    "ProductionYear": "2007-01-01",
+    "Country": "Spain",
+    "Genre": [ "Adventure", "Drama" ],
+    "Location": "Spain",
+    "Director": "Terry Gilliam",
+    "DurationJ": "02:12:00",
+    "MovieNightGrade": 7.8,
+    "Certificate": "PG",
+    "ProductionCompany": "Tornasol Films, Recorded Picture Company (RPC), Eurimages",
+    "Budget": "20,000,000",
+    "GrossWorldwide": "30,535,861",
+    "Language": "English, Spanish",
+    "CastMembers": [
+      {
+        "Name": "Johnny Depp",
+        "Role": "Toby Grisoni",
+        "ImageUrl": "https://example.com/actors/johnny-depp.jpg"
+      },
+      {
+        "Name": "Jean Rochefort",
+        "Role": "Don Quixote",
+        "ImageUrl": "https://example.com/actors/jean-rochefort.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/don-quixote.jpg",
+        "Description": "Embark on a whimsical journey with Don Quixote and his loyal squire."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/don-quixote.jpg",
+        "Description": "Experience the magic of Terry Gilliam's adaptation of the classic tale."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The film faced numerous production setbacks and was famously plagued by issues, including the documentary 'Lost in La Mancha' detailing its troubled production."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Johnny Depp was originally cast as Toby Grisoni but later took on a smaller role due to production delays."
+      }
+    ]
+  },
+  {
+    "Title": "The Legend of the Green Knight",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/greenknight_6.jpg",
+    "Quote": "Embark on a journey of honor and chivalry.",
+    "Description": "In this epic tale inspired by Arthurian legend, a young knight, Gawain, accepts a challenge from the mystical Green Knight. Bound by honor, Gawain sets out on a perilous journey to confront the Green Knight and prove his worth. Along the way, he encounters treacherous foes, tests of his courage, and the true meaning of chivalry. Will Gawain emerge victorious, or will the forces of darkness prevail?",
+    "ProductionYear": "2020-01-01",
+    "Country": "USA",
+    "Genre": [ "Adventure", "Fantasy" ],
+    "Location": "Arthurian Kingdoms",
+    "Director": "David Lowery",
+    "DurationJ": "02:10:00",
+    "MovieNightGrade": 7.8,
+    "Certificate": "PG-13",
+    "ProductionCompany": "A24, Ley Line Entertainment",
+    "Budget": "15,000,000",
+    "GrossWorldwide": "35,000,000",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Dev Patel",
+        "Role": "Sir Gawain",
+        "ImageUrl": "https://example.com/dev_patel_headshot.jpg"
+      },
+      {
+        "Name": "Alicia Vikander",
+        "Role": "Lady Bertilak",
+        "ImageUrl": "https://example.com/alicia_vikander_headshot.jpg"
+      },
+      {
+        "Name": "Joel Edgerton",
+        "Role": "The Green Knight",
+        "ImageUrl": "https://example.com/joel_edgerton_headshot.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/green_knight_poster.jpg",
+        "Description": "Experience the grandeur of The Legend of the Green Knight."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/green_knight_still.jpg",
+        "Description": "Join Gawain on his quest for honor and glory."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The Green Knight is a character from Arthurian legend, first appearing in the 14th-century poem 'Sir Gawain and the Green Knight.'"
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Director David Lowery aimed to create a visually stunning and thematically rich interpretation of the classic tale."
+      }
+    ]
+  },
+  {
+    "Title": "Men in Black: International",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/manbl.jpg",
+    "Quote": "The universe is expanding.",
+    "Description": "Agent H and Agent M are part of a top-secret organization that polices extraterrestrial affairs on Earth. As they uncover a mole in the organization, they embark on a globe-trotting adventure to save the world from a new alien threat.",
+    "ProductionYear": "2019-06-14",
+    "Country": "USA",
+    "Genre": [ "Action", "Adventure", "Comedy" ],
+    "Location": "Various locations across the globe",
+    "Director": "F. Gary Gray",
+    "DurationJ": "01:54:00",
+    "MovieNightGrade": 5.6,
+    "Certificate": "PG-13",
+    "ProductionCompany": "Columbia Pictures, Amblin Entertainment, Parkes+MacDonald Image Nation",
+    "Budget": "110,000,000",
+    "GrossWorldwide": "253,900,000",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Chris Hemsworth",
+        "Role": "Agent H",
+        "ImageUrl": "https://example.com/actors/chris-hemsworth.jpg"
+      },
+      {
+        "Name": "Tessa Thompson",
+        "Role": "Agent M",
+        "ImageUrl": "https://example.com/actors/tessa-thompson.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/men-in-black-international.jpg",
+        "Description": "Join Agent H and Agent M on an intergalactic adventure."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/men-in-black-international.jpg",
+        "Description": "Discover the secrets of the Men in Black in this thrilling installment."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "This film serves as a spin-off and sequel to the original 'Men in Black' film series."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The character of Agent M was originally written as a male, but was changed to a female character during development."
+      }
+    ]
+  },
+  {
+    "Title": "Dune",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/dune.jpg",
+    "Quote": "Fear is the mind-killer.",
+    "Description": "Paul Atreides, a brilliant and gifted young man born into a great destiny beyond his understanding, must travel to the most dangerous planet in the universe to ensure the future of his family and his people. As malevolent forces explode into conflict over the planet's exclusive supply of the most precious resource in existence—a commodity capable of unlocking humanity's greatest potential—only those who can conquer their fear will survive.",
+    "ProductionYear": "2021-10-22",
+    "Country": "USA, Canada, Hungary, United Arab Emirates, Norway",
+    "Genre": [ "Adventure", "Drama", "Sci-Fi" ],
+    "Location": "Arrakis",
+    "Director": "Denis Villeneuve",
+    "DurationJ": "02:35:00",
+    "MovieNightGrade": 8.3,
+    "Certificate": "PG-13",
+    "ProductionCompany": "Legendary Entertainment, Warner Bros. Pictures",
+    "Budget": "165,000,000",
+    "GrossWorldwide": "397,165,953",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Timothée Chalamet",
+        "Role": "Paul Atreides",
+        "ImageUrl": "https://example.com/actors/timothee-chalamet.jpg"
+      },
+      {
+        "Name": "Rebecca Ferguson",
+        "Role": "Lady Jessica",
+        "ImageUrl": "https://example.com/actors/rebecca-ferguson.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/dune.jpg",
+        "Description": "Journey to the desert planet of Arrakis in 'Dune.'"
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/dune.jpg",
+        "Description": "Experience the epic tale of betrayal, love, and redemption."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The film is based on the 1965 novel of the same name by Frank Herbert."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Denis Villeneuve described 'Dune' as 'Star Wars for adults.'"
+      }
+    ]
+  },
+  {
+    "Title": "Mud",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/mud.jpg",
+    "Quote": "You can't run from yourself.",
+    "Description": "Two boys encounter a fugitive and form a pact to help him evade the bounty hunters on his trail and to reunite him with his true love.",
+    "ProductionYear": "2013-05-26",
+    "Country": "USA",
+    "Genre": [ "Drama" ],
+    "Location": "Arkansas, USA",
+    "Director": "Jeff Nichols",
+    "DurationJ": "02:10:00",
+    "MovieNightGrade": 7.4,
+    "Certificate": "PG-13",
+    "ProductionCompany": "Everest Entertainment, FilmNation Entertainment",
+    "Budget": "10,000,000",
+    "GrossWorldwide": "32,000,000",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Matthew McConaughey",
+        "Role": "Mud",
+        "ImageUrl": "https://example.com/actors/matthew-mcconaughey.jpg"
+      },
+      {
+        "Name": "Tye Sheridan",
+        "Role": "Ellis",
+        "ImageUrl": "https://example.com/actors/tye-sheridan.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/mud.jpg",
+        "Description": "Explore the depths of friendship and loyalty in 'Mud.'"
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/mud.jpg",
+        "Description": "Join two boys on an unforgettable adventure with a mysterious fugitive."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The character of Mud is inspired by director Jeff Nichols' own experiences growing up in the South."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Matthew McConaughey prepared for his role by losing weight and growing a beard to reflect the character's rugged lifestyle."
+      }
+    ]
+  },
+  {
+    "Title": "Jeepers Creepers",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/JeepersCreepers.jpg",
+    "Quote": "What's eating you?",
+    "Description": "A brother and sister driving home through isolated countryside for spring break encounter a flesh-eating creature which is in the midst of its ritualistic eating spree.",
+    "ProductionYear": "2001-07-20",
+    "Country": "USA",
+    "Genre": [ "Horror", "Mystery", "Thriller" ],
+    "Location": "USA",
+    "Director": "Victor Salva",
+    "DurationJ": "01:30:00",
+    "MovieNightGrade": 6.2,
+    "Certificate": "R",
+    "ProductionCompany": "American Zoetrope, Myriad Pictures",
+    "Budget": "$10,000,000",
+    "GrossWorldwide": "$59,217,789",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Gina Philips",
+        "Role": "Trish Jenner",
+        "ImageUrl": "https://example.com/actors/gina-philips.jpg"
+      },
+      {
+        "Name": "Justin Long",
+        "Role": "Darry Jenner",
+        "ImageUrl": "https://example.com/actors/justin-long.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/jeepers-creepers.jpg",
+        "Description": "Experience the terror of 'Jeepers Creepers' as a brother and sister encounter a horrifying creature on a desolate road."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/jeepers-creepers.jpg",
+        "Description": "Join Trish and Darry on their harrowing journey as they face the terror of the flesh-eating Creeper."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The film's director, Victor Salva, drew inspiration from a childhood nightmare for the character of the Creeper."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Despite mixed reviews, 'Jeepers Creepers' was a commercial success, spawning two sequels."
+      }
+    ]
+  },
+  {
+    "Title": "Hereditary",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/Hereditary.jpg",
+    "Quote": "Every family tree hides a secret.",
+    "Description": "After the death of her secretive grandmother, a family begins to unravel cryptic and increasingly terrifying secrets about their ancestry.",
+    "ProductionYear": "2018-06-08",
+    "Country": "USA",
+    "Genre": [ "Drama", "Horror", "Mystery" ],
+    "Location": "USA",
+    "Director": "Ari Aster",
+    "DurationJ": "02:07:00",
+    "MovieNightGrade": 7.3,
+    "Certificate": "R",
+    "ProductionCompany": "A24, PalmStar Media",
+    "Budget": "10,000,000",
+    "GrossWorldwide": "79,274,773",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Toni Collette",
+        "Role": "Annie Graham",
+        "ImageUrl": "https://example.com/actors/toni-collette.jpg"
+      },
+      {
+        "Name": "Alex Wolff",
+        "Role": "Peter Graham",
+        "ImageUrl": "https://example.com/actors/alex-wolff.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/hereditary.jpg",
+        "Description": "Unravel the horrifying secrets of the Graham family in 'Hereditary' as they confront their dark and mysterious ancestry."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/hereditary.jpg",
+        "Description": "Experience the chilling tale of 'Hereditary' and delve into the depths of familial horror."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Hereditary' marks Ari Aster's feature film directorial debut, earning critical acclaim for its unsettling atmosphere and powerful performances."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The film's shocking moments and intricate storytelling have made it a standout in the horror genre, prompting discussions and analysis among viewers."
+      }
+    ]
+  },
+  {
+    "Title": "You're Next",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/YoureNext.jpeg",
+    "Quote": "Home is where the hunt is.",
+    "Description": "When the Davison family comes under attack during their wedding anniversary getaway, the gang of mysterious killers soon learns that one of the victims harbors a secret talent for fighting back.",
+    "ProductionYear": "2013-08-23",
+    "Country": "USA",
+    "Genre": [ "Horror", "Thriller" ],
+    "Location": "USA",
+    "Director": "Adam Wingard",
+    "DurationJ": "01:35:00",
+    "MovieNightGrade": 6.6,
+    "Certificate": "R",
+    "ProductionCompany": "Snoot Entertainment, HanWay Films",
+    "Budget": "1,000,000",
+    "GrossWorldwide": "26,887,177",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Sharni Vinson",
+        "Role": "Erin",
+        "ImageUrl": "https://example.com/actors/sharni-vinson.jpg"
+      },
+      {
+        "Name": "Nicholas Tucci",
+        "Role": "Felix Davison",
+        "ImageUrl": "https://example.com/actors/nicholas-tucci.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/youre-next.jpg",
+        "Description": "Prepare for a thrilling battle for survival as the Davison family fights back against masked assailants in 'You're Next!'"
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/youre-next.jpg",
+        "Description": "Experience the tension and terror as Erin proves to be an unexpected force to be reckoned with in 'You're Next!'"
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'You're Next!' received praise for its clever subversion of home invasion tropes and its strong, resourceful female lead."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The film was shot in chronological order, allowing the actors to experience the escalating tension of the story in real time."
+      }
+    ]
+  },
+  {
+    "Title": "Spider-Man: Homecoming",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/SpiderManHomecoming.jpg",
+    "Quote": "Homework can wait. The city can't.",
+    "Description": "Peter Parker balances his life as an ordinary high school student in Queens with his superhero alter-ego Spider-Man, and finds himself on the trail of a new menace prowling the skies of New York City.",
+    "ProductionYear": "2017-07-07",
+    "Country": "USA",
+    "Genre": [ "Action", "Adventure", "Sci-Fi" ],
+    "Location": "USA",
+    "Director": "Jon Watts",
+    "DurationJ": "02:13:00",
+    "MovieNightGrade": 7.4,
+    "Certificate": "PG-13",
+    "ProductionCompany": "Marvel Studios, Columbia Pictures, Pascal Pictures",
+    "Budget": "175,000,000",
+    "GrossWorldwide": "880,166,924",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Tom Holland",
+        "Role": "Peter Parker / Spider-Man",
+        "ImageUrl": "https://example.com/actors/tom-holland.jpg"
+      },
+      {
+        "Name": "Michael Keaton",
+        "Role": "Adrian Toomes / Vulture",
+        "ImageUrl": "https://example.com/actors/michael-keaton.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/spider-man-homecoming.jpg",
+        "Description": "Swing into action with 'Spider-Man: Homecoming' as Peter Parker faces off against the menacing Vulture."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/spider-man-homecoming.jpg",
+        "Description": "Experience the thrills of high school life and superhero duty in 'Spider-Man: Homecoming.'"
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Spider-Man: Homecoming' is the first solo Spider-Man film set within the Marvel Cinematic Universe (MCU)."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Tom Holland, who portrays Spider-Man, was only 19 years old when he was cast in the role."
+      }
+    ]
+  },
+  {
+    "Title": "Demon Slayer: Mugen Train",
+    "Category": 4,
+    "PosterImage": "~/images/Movie/DemonSlayerMugenTrain.jpg",
+    "Quote": "Let's all get stronger together.",
+    "Description": "Tanjiro Kamado and his friends from the Demon Slayer Corps accompany the Flame Hashira, Kyojuro Rengoku, on a mission aboard the Mugen Train to investigate a series of mysterious disappearances.",
+    "ProductionYear": "2020-10-16",
+    "Country": "Japan",
+    "Genre": [ "Animation", "Action", "Adventure" ],
+    "Location": "Japan",
+    "Director": "Haruo Sotozaki",
+    "DurationJ": "01:57:00",
+    "MovieNightGrade": 8.3,
+    "Certificate": "R",
+    "ProductionCompany": "ufotable",
+    "Budget": "10,000,000",
+    "GrossWorldwide": "51,000,000",
+    "Language": "Japanese",
+    "CastMembers": [
+      {
+        "Name": "Natsuki Hanae",
+        "Role": "Tanjiro Kamado",
+        "ImageUrl": "https://example.com/actors/natsuki-hanae.jpg"
+      },
+      {
+        "Name": "Akari Kito",
+        "Role": "Nezuko Kamado",
+        "ImageUrl": "https://example.com/actors/akari-kito.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/demon-slayer-mugen-train.jpg",
+        "Description": "Embark on a thrilling journey aboard the Mugen Train with Tanjiro and his companions in 'Demon Slayer: Mugen Train.'"
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/demon-slayer-mugen-train.jpg",
+        "Description": "Join the Demon Slayer Corps as they confront sinister forces aboard the perilous Mugen Train."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Demon Slayer: Mugen Train' is a direct continuation of the anime series 'Demon Slayer: Kimetsu no Yaiba.'"
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The film broke numerous box office records in Japan, becoming the highest-grossing film of all time in the country."
+      }
+    ]
+  },
+  {
+    "Title": "Pirates of the Caribbean: Dead Men Tell No Tales",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/PiratesoftheCaribbeanDeadMenTellNoTales.jpg",
+    "Quote": "The dead have taken command of the sea.",
+    "Description": "Captain Jack Sparrow searches for the Trident of Poseidon while being pursued by an undead sea captain and his crew.",
+    "ProductionYear": "2017-05-26",
+    "Country": "USA",
+    "Genre": [ "Action", "Adventure", "Fantasy" ],
+    "Location": "USA",
+    "Director": "Joachim Rønning, Espen Sandberg",
+    "DurationJ": "02:09:00",
+    "MovieNightGrade": 6.5,
+    "Certificate": "PG-13",
+    "ProductionCompany": "Walt Disney Pictures, Jerry Bruckheimer Films",
+    "Budget": "230,000,000",
+    "GrossWorldwide": "794,861,794",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Johnny Depp",
+        "Role": "Captain Jack Sparrow",
+        "ImageUrl": "https://example.com/actors/johnny-depp.jpg"
+      },
+      {
+        "Name": "Javier Bardem",
+        "Role": "Captain Armando Salazar",
+        "ImageUrl": "https://example.com/actors/javier-bardem.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/pirates-of-the-caribbean-dead-men-tell-no-tales.jpg",
+        "Description": "Set sail with Captain Jack Sparrow in search of the Trident of Poseidon in 'Pirates of the Caribbean: Dead Men Tell No Tales.'"
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/pirates-of-the-caribbean-dead-men-tell-no-tales.jpg",
+        "Description": "Experience the swashbuckling adventure and supernatural thrills in 'Pirates of the Caribbean: Dead Men Tell No Tales.'"
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "This film is the fifth installment in the 'Pirates of the Caribbean' film series and serves as a soft reboot of the franchise."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Javier Bardem's portrayal of Captain Armando Salazar received praise for its menacing presence and visual effects."
+      }
+    ]
+  },
+  {
+    "Title": "Ivan Tsarevich and the Grey Wolf 4",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/IvanTsarevichandtheGreyWolf.jpg",
+    "Quote": "Adventures await beyond the horizon.",
+    "Description": "Ivan Tsarevich, the Firebird, and the Gray Wolf embark on a new adventure to save Princess Vasilisa, who has been kidnapped by the evil Baba Yaga.",
+    "ProductionYear": "2019-04-04",
+    "Country": "Russia",
+    "Genre": [ "Animation", "Adventure", "Comedy" ],
+    "Location": "Russia",
+    "Director": "Darina Schmidt, Vladimir Toropchin",
+    "DurationJ": "01:23:00",
+    "MovieNightGrade": 6.9,
+    "Certificate": "PG",
+    "ProductionCompany": "Melnitsa Animation Studio",
+    "Budget": "100,000",
+    "GrossWorldwide": "366,000",
+    "Language": "Russian",
+    "CastMembers": [
+      {
+        "Name": "Sergey Bezrukov",
+        "Role": "Ivan Tsarevich",
+        "ImageUrl": "https://example.com/actors/sergey-bezrukov.jpg"
+      },
+      {
+        "Name": "Ivan Okhlobystin",
+        "Role": "Grey Wolf",
+        "ImageUrl": "https://example.com/actors/ivan-okhlobystin.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/ivan-tsarevich-and-the-grey-wolf-4.jpg",
+        "Description": "Join Ivan Tsarevich and the Grey Wolf on their latest quest to rescue Princess Vasilisa in 'Ivan Tsarevich and the Grey Wolf 4.'"
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/ivan-tsarevich-and-the-grey-wolf-4.jpg",
+        "Description": "Experience the magic and humor of Russian folklore in 'Ivan Tsarevich and the Grey Wolf 4.'"
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "This animated film is the fourth installment in the 'Ivan Tsarevich' series and continues the adventures of the beloved characters."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The film incorporates elements of Russian folklore and fairy tales, making it popular among audiences of all ages."
+      }
+    ]
+  },
+  {
+    "Title": "Venom",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/Venom.jpg",
+    "Quote": "We are Venom.",
+    "Description": "Journalist Eddie Brock discovers the symbiotic alien Venom and acquires superhuman abilities. Together, they must confront the sinister inventor Carlton Drake, who seeks to exploit the alien symbiotes for his own gain.",
+    "ProductionYear": "2018-10-05",
+    "Country": "USA",
+    "Genre": [ "Action", "Adventure", "Sci-Fi" ],
+    "Location": "San Francisco, California, USA",
+    "Director": "Ruben Fleischer",
+    "DurationJ": "01:52:00",
+    "MovieNightGrade": 6.7,
+    "Certificate": "PG-13",
+    "ProductionCompany": "Columbia Pictures, Marvel Entertainment, Tencent Pictures",
+    "Budget": "100,000,000",
+    "GrossWorldwide": "856,085,151",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Tom Hardy",
+        "Role": "Eddie Brock / Venom",
+        "ImageUrl": "https://example.com/actors/tom-hardy.jpg"
+      },
+      {
+        "Name": "Michelle Williams",
+        "Role": "Anne Weying",
+        "ImageUrl": "https://example.com/actors/michelle-williams.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/venom.jpg",
+        "Description": "Embrace your inner anti-hero with 'Venom.'"
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/venom.jpg",
+        "Description": "Witness the symbiotic bond between man and alien."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "Venom made his first appearance in the comic book 'The Amazing Spider-Man #300' in 1988."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Tom Hardy, known for his intense method acting, spent months preparing for the role both physically and psychologically."
+      }
+    ]
+  },
+  {
+    "Title": "Venom 2",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/Venom2.jpg",
+    "Quote": "We are Venom.",
+    "Description": "Journalist Eddie Brock discovers the symbiotic alien Venom and acquires superhuman abilities. Together, they must confront the sinister inventor Carlton Drake, who seeks to exploit the alien symbiotes for his own gain.",
+    "ProductionYear": "2021-08-25",
+    "Country": "USA",
+    "Genre": [ "Action", "Adventure", "Sci-Fi" ],
+    "Location": "San Francisco, California, USA",
+    "Director": "Ruben Fleischer",
+    "DurationJ": "01:52:00",
+    "MovieNightGrade": 6.7,
+    "Certificate": "PG-13",
+    "ProductionCompany": "Columbia Pictures, Marvel Entertainment, Tencent Pictures",
+    "Budget": "100,000,000",
+    "GrossWorldwide": "856,085,151",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Tom Hardy",
+        "Role": "Eddie Brock / Venom",
+        "ImageUrl": "https://example.com/actors/tom-hardy.jpg"
+      },
+      {
+        "Name": "Michelle Williams",
+        "Role": "Anne Weying",
+        "ImageUrl": "https://example.com/actors/michelle-williams.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/venom.jpg",
+        "Description": "Embrace your inner anti-hero with 'Venom.'"
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/venom.jpg",
+        "Description": "Witness the symbiotic bond between man and alien."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "Venom made his first appearance in the comic book 'The Amazing Spider-Man #300' in 1988."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Tom Hardy, known for his intense method acting, spent months preparing for the role both physically and psychologically."
+      }
+    ]
+  },
+  {
+    "Title": "Ant-Man",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/AntMan.jpg",
+    "Quote": "Heroes don't get any bigger.",
+    "Description": "Scott Lang, a master thief, must embrace his inner hero and help his mentor, Dr. Hank Pym, protect the Ant-Man suit from falling into the wrong hands. With the ability to shrink in size but increase in strength, Lang must pull off a heist that will save the world.",
+    "ProductionYear": "2015-07-17",
+    "Country": "USA",
+    "Genre": [ "Action", "Adventure", "Comedy" ],
+    "Location": "Atlanta, Georgia, USA",
+    "Director": "Peyton Reed",
+    "DurationJ": "01:57:00",
+    "MovieNightGrade": 7.3,
+    "Certificate": "PG-13",
+    "ProductionCompany": "Marvel Studios",
+    "Budget": "130,000,000",
+    "GrossWorldwide": "519,311,965",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Paul Rudd",
+        "Role": "Scott Lang / Ant-Man",
+        "ImageUrl": "https://example.com/actors/paul-rudd.jpg"
+      },
+      {
+        "Name": "Michael Douglas",
+        "Role": "Dr. Hank Pym",
+        "ImageUrl": "https://example.com/actors/michael-douglas.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/ant-man.jpg",
+        "Description": "Get ready for a pint-sized adventure in 'Ant-Man.'"
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/ant-man.jpg",
+        "Description": "Witness the incredible shrinking hero in action."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "Before Paul Rudd was cast as Ant-Man, other actors considered for the role included Joseph Gordon-Levitt and Simon Pegg."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The character of Ant-Man first appeared in 'Tales to Astonish #27' in 1962."
+      }
+    ]
+  },
+  {
+    "Title": "My Little Pony: Friendship Is Magic",
+    "Category": 3,
+    "PosterImage": "~/images/Movie/MyLittlePonyFriendshipIsMagic.jpg",
+    "Quote": "Friendship is magic.",
+    "Description": "Follow the adventures of Twilight Sparkle and her friends as they learn about the magic of friendship and defend the land of Equestria from various threats.",
+    "ProductionYear": "2010-10-10",
+    "Country": "USA",
+    "Genre": [ "Animation", "Adventure", "Comedy" ],
+    "Location": "USA",
+    "Director": "Various",
+    "DurationJ": "00:22:00",
+    "MovieNightGrade": 7.6,
+    "Certificate": "TV-Y",
+    "ProductionCompany": "Hasbro Studios, DHX Media",
+    "Budget": "130,000,000",
+    "GrossWorldwide": "519,311,965",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Tara Strong",
+        "Role": "Twilight Sparkle",
+        "ImageUrl": "https://example.com/actors/tara-strong.jpg"
+      },
+      {
+        "Name": "Ashleigh Ball",
+        "Role": "Rainbow Dash / Applejack",
+        "ImageUrl": "https://example.com/actors/ashleigh-ball.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/my-little-pony-friendship-is-magic.jpg",
+        "Description": "Discover the enchanting world of Equestria with 'My Little Pony: Friendship Is Magic' and join Twilight Sparkle and her friends on their adventures."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/my-little-pony-friendship-is-magic.jpg",
+        "Description": "Experience the magic of friendship and the wonders of Equestria in 'My Little Pony: Friendship Is Magic.'"
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'My Little Pony: Friendship Is Magic' gained a significant adult fanbase known as 'bronies,' who appreciated its positive themes and characterization."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The series received critical acclaim for its animation quality, voice acting, and storytelling, becoming a cultural phenomenon beyond its target demographic."
+      }
+    ]
+  },
+  {
+    "Title": "Hunter x Hunter",
+    "Category": 4,
+    "PosterImage": "~/images/Movie/HunterxHunter.jpg",
+    "Quote": "The journey to become a Hunter.",
+    "Description": "Gon Freecss, a young boy, aspires to become a Hunter, an elite class of adventurers capable of tackling dangerous tasks and discovering hidden treasures. Alongside his friends, Gon embarks on a perilous journey to achieve his dream.",
+    "ProductionYear": "2011-10-02",
+    "Country": "Japan",
+    "Genre": [ "Animation", "Action", "Adventure" ],
+    "Location": "Japan",
+    "Director": "Various",
+    "DurationJ": "00:23:00",
+    "MovieNightGrade": 9.1,
+    "Certificate": "TV-14",
+    "ProductionCompany": "Madhouse",
+    "Budget": "130,000,000",
+    "GrossWorldwide": "519,311,965",
+    "Language": "Japanese",
+    "CastMembers": [
+      {
+        "Name": "Megumi Han",
+        "Role": "Gon Freecss",
+        "ImageUrl": "https://example.com/actors/megumi-han.jpg"
+      },
+      {
+        "Name": "Mariya Ise",
+        "Role": "Killua Zoldyck",
+        "ImageUrl": "https://example.com/actors/mariya-ise.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/hunter-x-hunter.jpg",
+        "Description": "Embark on an epic adventure to become a Hunter in 'Hunter x Hunter,' as Gon and his friends brave danger and uncover secrets."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/hunter-x-hunter.jpg",
+        "Description": "Experience the excitement and challenges of the Hunter Exam alongside Gon and his companions in 'Hunter x Hunter.'"
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Hunter x Hunter' is based on the manga series of the same name written by Yoshihiro Togashi, known for its intricate world-building and complex characters."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The series has received widespread acclaim for its compelling storyline, well-developed characters, and exhilarating action sequences, making it a favorite among anime fans."
+      }
+    ]
+  },
+  {
+    "Title": "The Secret World of Arrietty",
+    "Category": 4,
+    "PosterImage": "~/images/Movie/TheSecretWorldofArrietty.jpg",
+    "Quote": "Do not be seen by humans. That's been the law of the borrowers for centuries.",
+    "Description": "Arrietty, a tiny borrower, and her family live hidden beneath the floorboards of a suburban home. When Arrietty is discovered by a human boy named Shawn, their unlikely friendship sets off a series of extraordinary events that will change their lives forever.",
+    "ProductionYear": "2011-07-17",
+    "Country": "Japan",
+    "Genre": [ "Animation", "Adventure", "Family" ],
+    "Location": "Tokyo, Japan",
+    "Director": "Hiromasa Yonebayashi",
+    "DurationJ": "01:34:00",
+    "MovieNightGrade": 7.6,
+    "Certificate": "G",
+    "ProductionCompany": "Studio Ghibli, Toho Company, Dentsu",
+    "Budget": "100,570,827",
+    "GrossWorldwide": "145,570,827",
+    "Language": "Japanese",
+    "CastMembers": [
+      {
+        "Name": "Bridgit Mendler",
+        "Role": "Arrietty (English version)",
+        "ImageUrl": "https://example.com/actors/bridgit-mendler.jpg"
+      },
+      {
+        "Name": "Amy Poehler",
+        "Role": "Homily (English version)",
+        "ImageUrl": "https://example.com/actors/amy-poehler.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/secret-world-of-arrietty.jpg",
+        "Description": "Discover 'The Secret World of Arrietty,' where little people live big adventures."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/secret-world-of-arrietty.jpg",
+        "Description": "Experience the magic of Studio Ghibli in this enchanting tale of friendship."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The film is based on the novel 'The Borrowers' by Mary Norton."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Composer Cécile Corbel provided the film's enchanting soundtrack, featuring the song 'Arrietty's Song.'"
+      }
+    ]
+  },
+  {
+    "Title": "Three Heroes and the Sea King",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/ThreeHeroesandtheSeaKing.webp",
+    "Quote": "The sea doesn't forgive mistakes.",
+    "Description": "Three brave warriors - Dobrynya, Alyosha Popovich, and Ilya Muromets - embark on a perilous quest to rescue the kidnapped princess from the clutches of the evil Sea King. Along the way, they encounter mythical creatures, daunting challenges, and test the limits of their courage and friendship.",
+    "ProductionYear": "2016-12-29",
+    "Country": "Russia",
+    "Genre": [ "Animation", "Adventure", "Comedy" ],
+    "Location": "Moscow, Russia",
+    "Director": "Konstantin Feoktistov",
+    "DurationJ": "01:09:00",
+    "MovieNightGrade": 5.8,
+    "Certificate": "PG",
+    "ProductionCompany": "Melnitsa Animation Studio",
+    "Budget": "953,262",
+    "GrossWorldwide": "16,953,262",
+    "Language": "Russian",
+    "CastMembers": [
+      {
+        "Name": "Sergey Makovetskiy",
+        "Role": "Ilya Muromets (voice)",
+        "ImageUrl": "https://example.com/actors/sergey-makovetskiy.jpg"
+      },
+      {
+        "Name": "Konstantin Khabenskiy",
+        "Role": "Dobrynya Nikitich (voice)",
+        "ImageUrl": "https://example.com/actors/konstantin-khabenskiy.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/three-heroes-and-the-sea-king.jpg",
+        "Description": "Join the Three Heroes on a swashbuckling adventure to save the day."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/three-heroes-and-the-sea-king.jpg",
+        "Description": "Experience the excitement of Russian folklore in 'Three Heroes and the Sea King.'"
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Three Heroes and the Sea King' is part of the popular Russian animated film franchise 'Three Heroes,' based on Slavic folklore."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The film features stunning animation and imaginative character designs that bring Russian legends to life."
+      }
+    ]
+  },
+  {
+    "Title": "Sandman",
+    "Category": 2,
+    "PosterImage": "~/images/Movie/Sandman.jpg",
+    "Quote": "Enter the dream world.",
+    "Description": "Based on Neil Gaiman's groundbreaking comic book series, 'Sandman' follows Dream, also known as Morpheus, the Lord of Dreams, as he navigates the realm of dreams and encounters various mythical beings.",
+    "ProductionYear": "2022-11-02",
+    "Country": "USA",
+    "Genre": [ "Fantasy", "Drama" ],
+    "Location": "USA",
+    "Director": "Various",
+    "DurationJ": "00:45:00",
+    "MovieNightGrade": 8.1,
+    "Certificate": "TBA",
+    "ProductionCompany": "Warner Bros. Television",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "160,953,262",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Tom Sturridge",
+        "Role": "Dream (Morpheus)",
+        "ImageUrl": "https://example.com/actors/tom-sturridge.jpg"
+      },
+      {
+        "Name": "Gwendoline Christie",
+        "Role": "Lucifer Morningstar",
+        "ImageUrl": "https://example.com/actors/gwendoline-christie.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/sandman.jpg",
+        "Description": "Explore the captivating world of dreams and mythology with 'Sandman,' as Dream embarks on a journey through the realms of imagination."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/sandman.jpg",
+        "Description": "Experience the enchanting and surreal tales of 'Sandman' as Dream navigates the boundaries between reality and the subconscious."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Sandman' has been in development as a television series for many years, with Netflix finally announcing its production in 2019."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Neil Gaiman, the creator of 'Sandman,' is actively involved in the adaptation, ensuring that the essence of the beloved comic series is faithfully translated to the screen."
+      }
+    ]
+  },
+  {
+    "Title": "Midnight Mass",
+    "Category": 2,
+    "PosterImage": "~/images/Movie/MidnightMass.jpg",
+    "Quote": "And so it begins...",
+    "Description": "The arrival of a charismatic priest to a small island community coincides with the emergence of mysterious events and unsettling phenomena, leading to a clash between faith and reason.",
+    "ProductionYear": "2021-09-24",
+    "Country": "USA",
+    "Genre": [ "Drama", "Horror", "Mystery" ],
+    "Location": "USA",
+    "Director": "Mike Flanagan",
+    "DurationJ": "07:15:00",
+    "MovieNightGrade": 8.4,
+    "Certificate": "TV-MA",
+    "ProductionCompany": "Intrepid Pictures, FlanaganFilm",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "160,953,262",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Hamish Linklater",
+        "Role": "Father Paul Hill",
+        "ImageUrl": "https://example.com/actors/hamish-linklater.jpg"
+      },
+      {
+        "Name": "Kate Siegel",
+        "Role": "Erin Greene",
+        "ImageUrl": "https://example.com/actors/kate-siegel.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/midnight-mass.jpg",
+        "Description": "Witness the chilling events unfold in 'Midnight Mass,' as a community grapples with faith, miracles, and horrors beyond comprehension."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/midnight-mass.jpg",
+        "Description": "Experience the gripping tale of 'Midnight Mass' and delve into the depths of human belief and the unknown."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Midnight Mass' is the latest collaboration between creator Mike Flanagan and Netflix, known for their successful horror series such as 'The Haunting of Hill House.'"
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The series explores themes of faith, guilt, and redemption, while delivering supernatural scares and thought-provoking storytelling."
+      }
+    ]
+  },
+  {
+    "Title": "Rick and Morty",
+    "Category": 3,
+    "PosterImage": "~/images/Movie/RickandMorty.jpg",
+    "Quote": "Wubba lubba dub dub!",
+    "Description": "Follow the interdimensional adventures of an eccentric and alcoholic scientist named Rick Sanchez and his good-hearted but easily influenced grandson Morty Smith.",
+    "ProductionYear": "2013-12-02",
+    "Country": "USA",
+    "Genre": [ "Animation", "Adventure", "Comedy" ],
+    "Location": "USA",
+    "Director": "Various",
+    "DurationJ": "00:22:00",
+    "MovieNightGrade": 9.2,
+    "Certificate": "TV-14",
+    "ProductionCompany": "Williams Street, Harmonious Claptrap, Justin Roiland's Solo Vanity Card Productions",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "160,953,262",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Justin Roiland",
+        "Role": "Rick Sanchez / Morty Smith",
+        "ImageUrl": "https://example.com/actors/justin-roiland.jpg"
+      },
+      {
+        "Name": "Chris Parnell",
+        "Role": "Jerry Smith",
+        "ImageUrl": "https://example.com/actors/chris-parnell.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/rick-and-morty.jpg",
+        "Description": "Join Rick and Morty on their hilarious and mind-bending adventures across the multiverse in 'Rick and Morty.'"
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/rick-and-morty.jpg",
+        "Description": "Prepare for laughter, chaos, and existential crises with 'Rick and Morty' as they traverse dimensions and challenge reality itself."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Rick and Morty' is created by Justin Roiland and Dan Harmon, known for its dark humor, complex plots, and exploration of existential themes."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The series has gained a dedicated fanbase and critical acclaim for its creativity, wit, and willingness to push the boundaries of animation."
+      }
+    ]
+  },
+  {
+    "Title": "Lucifer",
+    "Category": 2,
+    "PosterImage": "~/images/Movie/Lucifer.jpg",
+    "Quote": "It's good to be bad.",
+    "Description": "Lucifer Morningstar, bored and unhappy as the Lord of Hell, resigns his throne and abandons his kingdom for Los Angeles, where he indulges in his newfound passion for helping others and running a nightclub.",
+    "ProductionYear": "2016-01-25",
+    "Country": "USA",
+    "Genre": [ "Crime", "Drama", "Fantasy" ],
+    "Location": "USA",
+    "Director": "Various",
+    "DurationJ": "00:42:00",
+    "MovieNightGrade": 8.1,
+    "Certificate": "TV-14",
+    "ProductionCompany": "Jerry Bruckheimer Television, DC Entertainment, Warner Bros. Television",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "160,953,262",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Tom Ellis",
+        "Role": "Lucifer Morningstar",
+        "ImageUrl": "https://example.com/actors/tom-ellis.jpg"
+      },
+      {
+        "Name": "Lauren German",
+        "Role": "Chloe Decker",
+        "ImageUrl": "https://example.com/actors/lauren-german.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/lucifer.jpg",
+        "Description": "Indulge in the devilishly delightful adventures of 'Lucifer' as he navigates the complexities of life in Los Angeles."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/lucifer.jpg",
+        "Description": "Experience the charm, wit, and intrigue of 'Lucifer' as he teams up with Detective Chloe Decker to solve crimes and dispense justice."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Lucifer' is based on the DC Comics character created by Neil Gaiman, Sam Kieth, and Mike Dringenberg."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Despite its cancellation by Fox after three seasons, 'Lucifer' was revived by Netflix due to fan demand and enjoyed further success with subsequent seasons."
+      }
+    ]
+  },
+  {
+    "Title": "Howls",
+    "Category": 4,
+    "PosterImage": "~/images/Movie/Howls.jpg",
+    "Quote": "Do not be seen by humans. That's been the law of the borrowers for centuries.",
+    "Description": "Arrietty, a tiny borrower, and her family live hidden beneath the floorboards of a suburban home. When Arrietty is discovered by a human boy named Shawn, their unlikely friendship sets off a series of extraordinary events that will change their lives forever.",
+    "ProductionYear": "2010-07-17",
+    "Country": "Japan",
+    "Genre": [ "Animation", "Adventure", "Family" ],
+    "Location": "Tokyo, Japan",
+    "Director": "Hiromasa Yonebayashi",
+    "DurationJ": "01:34:00",
+    "MovieNightGrade": 7.6,
+    "Certificate": "G",
+    "ProductionCompany": "Studio Ghibli, Toho Company, Dentsu",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "Japanese",
+    "CastMembers": [
+      {
+        "Name": "Bridgit Mendler",
+        "Role": "Arrietty (English version)",
+        "ImageUrl": "https://example.com/actors/bridgit-mendler.jpg"
+      },
+      {
+        "Name": "Amy Poehler",
+        "Role": "Homily (English version)",
+        "ImageUrl": "https://example.com/actors/amy-poehler.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/secret-world-of-arrietty.jpg",
+        "Description": "Discover 'The Secret World of Arrietty,' where little people live big adventures."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/secret-world-of-arrietty.jpg",
+        "Description": "Experience the magic of Studio Ghibli in this enchanting tale of friendship."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "The film is based on the novel 'The Borrowers' by Mary Norton."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Composer Cécile Corbel provided the film's enchanting soundtrack, featuring the song 'Arrietty's Song.'"
+      }
+    ]
+  },
+  {
+    "Title": "Anne with an E",
+    "Category": 2,
+    "PosterImage": "~/images/Movie/AnnewithanE.jpg",
+    "Quote": "Dear old world, you are very lovely, and I am glad to be alive in you.",
+    "Description": "Follow the adventures of Anne Shirley, an imaginative and spirited orphan, as she navigates the ups and downs of life in the late 19th century. With her vivid imagination and unwavering optimism, Anne touches the hearts of everyone she meets, transforming the lives of those around her.",
+    "ProductionYear": "2017-03-19",
+    "Country": "Canada",
+    "Genre": [ "Drama", "Family" ],
+    "Location": "Prince Edward Island, Canada",
+    "Director": "Various",
+    "DurationJ": "00:45:00",
+    "MovieNightGrade": 8.7,
+    "Certificate": "TV-PG",
+    "ProductionCompany": "CBC Television, Netflix",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Amybeth McNulty",
+        "Role": "Anne Shirley",
+        "ImageUrl": "https://example.com/actors/amybeth-mcnulty.jpg"
+      },
+      {
+        "Name": "Geraldine James",
+        "Role": "Marilla Cuthbert",
+        "ImageUrl": "https://example.com/actors/geraldine-james.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/anne-with-an-e.jpg",
+        "Description": "Embark on a journey to Avonlea with 'Anne with an E.'"
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/anne-with-an-e.jpg",
+        "Description": "Experience the charm and wonder of Anne's world in this heartwarming series."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Anne with an E' is based on the classic novel 'Anne of Green Gables' by Lucy Maud Montgomery."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The series has garnered praise for its captivating performances and faithful adaptation of the source material."
+      }
+    ]
+  },
+  {
+    "Title": "Mr. Robot",
+    "Category": 2,
+    "PosterImage": "~/images/Movie/MrRobot.png",
+    "Quote": "Hello, friend.",
+    "Description": "Follow Elliot Alderson, a cybersecurity engineer and hacker, as he becomes involved in the underground hacker group fsociety, led by the mysterious Mr. Robot. Together, they aim to take down corrupt corporations and disrupt the status quo.",
+    "ProductionYear": "2015-06-24",
+    "Country": "USA",
+    "Genre": [ "Crime", "Drama", "Thriller" ],
+    "Location": "USA",
+    "Director": "Sam Esmail",
+    "DurationJ": "00:49:00",
+    "MovieNightGrade": 9.0,
+    "Certificate": "TV-MA",
+    "ProductionCompany": "Universal Cable Productions, Anonymous Content",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Rami Malek",
+        "Role": "Elliot Alderson",
+        "ImageUrl": "https://example.com/actors/rami-malek.jpg"
+      },
+      {
+        "Name": "Christian Slater",
+        "Role": "Mr. Robot",
+        "ImageUrl": "https://example.com/actors/christian-slater.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/mr-robot.jpg",
+        "Description": "Dive into the world of cybercrime and conspiracy with 'Mr. Robot,' as Elliot Alderson navigates a complex web of deceit and manipulation."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/mr-robot.jpg",
+        "Description": "Experience the thrilling journey of 'Mr. Robot' as Elliot Alderson battles against powerful adversaries and his own inner demons."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Mr. Robot' received critical acclaim for its realistic portrayal of hacking and cybersecurity, as well as its exploration of themes such as mental health and societal inequality."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The series won multiple awards, including the Golden Globe for Best Television Drama Series, and Rami Malek received an Emmy Award for his performance as Elliot Alderson."
+      }
+    ]
+  },
+  {
+    "Title": "The Miracle Workers",
+    "Category": 2,
+    "PosterImage": "~/images/Movie/TheMiracleWorkers.jpg",
+    "Quote": "Not your average office job.",
+    "Description": "Join a group of low-level angels working in the Department of Answered Prayers as they try to save humanity from destruction by answering a seemingly impossible prayer request.",
+    "ProductionYear": "2021-01-26",
+    "Country": "USA",
+    "Genre": [ "Comedy", "Drama", "Fantasy" ],
+    "Location": "USA",
+    "Director": "Various",
+    "DurationJ": "00:21:00",
+    "MovieNightGrade": 7.8,
+    "Certificate": "TV-14",
+    "ProductionCompany": "Broadway Video, Studio T",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Daniel Radcliffe",
+        "Role": "Craig Bog",
+        "ImageUrl": "https://example.com/actors/daniel-radcliffe.jpg"
+      },
+      {
+        "Name": "Steve Buscemi",
+        "Role": "God",
+        "ImageUrl": "https://example.com/actors/steve-buscemi.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/miracle-workers.jpg",
+        "Description": "Experience the heavenly chaos of 'The Miracle Workers' as a group of angels must pull off a miracle to save humanity."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/miracle-workers.jpg",
+        "Description": "Laugh along with the misadventures of angels and humans in 'The Miracle Workers' as they attempt the impossible to prevent the end of the world."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'The Miracle Workers' is based on the novel 'What in God's Name' by Simon Rich and offers a humorous take on the concept of divine intervention."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The series received praise for its unique premise, clever writing, and standout performances from its cast, particularly Daniel Radcliffe and Steve Buscemi."
+      }
+    ]
+  },
+  {
+    "Title": "Stalker",
+    "Category": 2,
+    "PosterImage": "~/images/Movie/Stalker.jfif",
+    "Quote": "Some secrets should stay buried.",
+    "Description": "Follow LAPD detectives as they investigate stalking crimes in Los Angeles, delving into the dark and often dangerous world of obsessive behavior and the victims who are targeted.",
+    "ProductionYear": "2019-10-02",
+    "Country": "USA",
+    "Genre": [ "Crime", "Drama", "Mystery" ],
+    "Location": "USA",
+    "Director": "Various",
+    "DurationJ": "00:43:00",
+    "MovieNightGrade": 7.5,
+    "Certificate": "TV-14",
+    "ProductionCompany": "Warner Bros. Television, Outerbanks Entertainment",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Dylan McDermott",
+        "Role": "Jack Larsen",
+        "ImageUrl": "https://example.com/actors/dylan-mcdermott.jpg"
+      },
+      {
+        "Name": "Maggie Q",
+        "Role": "Beth Davis",
+        "ImageUrl": "https://example.com/actors/maggie-q.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/stalker.jpg",
+        "Description": "Explore the chilling world of stalking and obsession with 'Stalker,' as detectives confront the darkest corners of the human psyche."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/stalker.jpg",
+        "Description": "Get drawn into the suspense and intrigue of 'Stalker' as LAPD detectives hunt down perpetrators and protect the innocent."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Stalker' was praised for its intense storytelling, gripping suspense, and realistic portrayal of the psychological toll of stalking on both victims and law enforcement."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The series tackled sensitive topics surrounding stalking and provided insight into the methods used by both perpetrators and those trying to stop them."
+      }
+    ]
+  },
+  {
+    "Title": "Stalk",
+    "Category": 2,
+    "PosterImage": "~/images/Movie/Stalker.jpg",
+    "Quote": "Some secrets should stay buried.",
+    "Description": "Follow LAPD detectives as they investigate stalking crimes in Los Angeles, delving into the dark and often dangerous world of obsessive behavior and the victims who are targeted.",
+    "ProductionYear": "2019-10-02",
+    "Country": "USA",
+    "Genre": [ "Crime", "Drama", "Mystery" ],
+    "Location": "USA",
+    "Director": "Various",
+    "DurationJ": "00:43:00",
+    "MovieNightGrade": 9.5,
+    "Certificate": "TV-14",
+    "ProductionCompany": "Warner Bros. Television, Outerbanks Entertainment",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Dylan McDermott",
+        "Role": "Jack Larsen",
+        "ImageUrl": "https://example.com/actors/dylan-mcdermott.jpg"
+      },
+      {
+        "Name": "Maggie Q",
+        "Role": "Beth Davis",
+        "ImageUrl": "https://example.com/actors/maggie-q.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/stalker.jpg",
+        "Description": "Explore the chilling world of stalking and obsession with 'Stalker,' as detectives confront the darkest corners of the human psyche."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/stalker.jpg",
+        "Description": "Get drawn into the suspense and intrigue of 'Stalker' as LAPD detectives hunt down perpetrators and protect the innocent."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Stalker' was praised for its intense storytelling, gripping suspense, and realistic portrayal of the psychological toll of stalking on both victims and law enforcement."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The series tackled sensitive topics surrounding stalking and provided insight into the methods used by both perpetrators and those trying to stop them."
+      }
+    ]
+  },
+  {
+    "Title": "Tom and Jerry",
+    "Category": 3,
+    "PosterImage": "~/images/Movie/TomandJerry.jpg",
+    "Quote": "Meow!",
+    "Description": "Join the mischievous cat Tom and the clever mouse Jerry in their timeless rivalry filled with slapstick comedy, outrageous chases, and endless pranks. From the classic hand-drawn animation of the 1940s to the colorful adventures of the 1990s, 'Tom and Jerry' has delighted audiences of all ages for generations.",
+    "ProductionYear": "1940-02-10",
+    "Country": "United States",
+    "Genre": [ "Animation", "Comedy", "Family" ],
+    "Location": "Hollywood, California, USA",
+    "Director": "Various",
+    "DurationJ": "00:10:00",
+    "MovieNightGrade": 9.0,
+    "Certificate": "TV-G",
+    "ProductionCompany": "Metro-Goldwyn-Mayer Cartoon Studio",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "William Hanna",
+        "Role": "Tom (voice)",
+        "ImageUrl": "https://example.com/actors/william-hanna.jpg"
+      },
+      {
+        "Name": "Mel Blanc",
+        "Role": "Jerry (voice)",
+        "ImageUrl": "https://example.com/actors/mel-blanc.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/tom-and-jerry.jpg",
+        "Description": "Relive the classic antics of 'Tom and Jerry' in this timeless cartoon series."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/tom-and-jerry.jpg",
+        "Description": "Laugh along with the iconic duo as they chase and outsmart each other in every hilarious episode."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Tom and Jerry' is one of the longest-running and most beloved animated series in history."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The series has won multiple Academy Awards for Best Animated Short Film."
+      }
+    ]
+  },
+  {
+    "Title": "Arcane",
+    "Category": 2,
+    "PosterImage": "~/images/Movie/Arcane.jpg",
+    "Quote": "Welcome to the undercity.",
+    "Description": "Set in the utopian city of Piltover and the oppressed underground of Zaun, 'Arcane' follows the intertwined stories of two iconic League of Legends champions, exploring their origins, ambitions, and the power struggles that threaten to tear their world apart.",
+    "ProductionYear": "2021-11-06",
+    "Country": "USA",
+    "Genre": [ "Animation", "Action", "Adventure" ],
+    "Location": "USA",
+    "Director": "Various",
+    "DurationJ": "00:40:00",
+    "MovieNightGrade": 9.3,
+    "Certificate": "TV-MA",
+    "ProductionCompany": "Fortiche Productions, Riot Games",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Hailee Steinfeld",
+        "Role": "Vi",
+        "ImageUrl": "https://example.com/actors/hailee-steinfeld.jpg"
+      },
+      {
+        "Name": "Ella Purnell",
+        "Role": "Jinx",
+        "ImageUrl": "https://example.com/actors/ella-purnell.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/arcane.jpg",
+        "Description": "Immerse yourself in the vibrant world of 'Arcane' as it explores the origins and struggles of beloved League of Legends champions."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/arcane.jpg",
+        "Description": "Experience the epic tale of 'Arcane' as it delves into the depths of the League of Legends universe, revealing the secrets of Piltover and Zaun."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Arcane' received widespread acclaim for its stunning animation, complex characters, and engaging storyline, earning praise from both fans and critics alike."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The series explores themes of identity, power, and sacrifice, offering a fresh perspective on the lore of League of Legends and its iconic champions."
+      }
+    ]
+  },
+  {
+    "Title": "Money Heist",
+    "Category": 2,
+    "PosterImage": "~/images/Movie/MoneyHeist.jpg",
+    "Quote": "Bella ciao!",
+    "Description": "Follow the mastermind known as The Professor as he recruits a group of uniquely skilled individuals to carry out the biggest heist in recorded history: the robbery of the Royal Mint of Spain. As tensions rise and plans unravel, the robbers find themselves entangled in a thrilling game of cat and mouse with the authorities.",
+    "ProductionYear": "2017-05-02",
+    "Country": "Spain",
+    "Genre": [ "Action", "Crime", "Mystery" ],
+    "Location": "Spain",
+    "Director": "Álex Pina",
+    "DurationJ": "00:50:00",
+    "MovieNightGrade": 8.4,
+    "Certificate": "TV-MA",
+    "ProductionCompany": "Vancouver Media",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "Spanish",
+    "CastMembers": [
+      {
+        "Name": "Úrsula Corberó",
+        "Role": "Tokyo",
+        "ImageUrl": "https://example.com/actors/ursula-corbero.jpg"
+      },
+      {
+        "Name": "Álvaro Morte",
+        "Role": "The Professor",
+        "ImageUrl": "https://example.com/actors/alvaro-morte.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/money-heist.jpg",
+        "Description": "Join The Professor and his team of skilled robbers in 'Money Heist' as they execute a daring plan to rob the Royal Mint of Spain and outwit the authorities."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/money-heist.jpg",
+        "Description": "Experience the adrenaline-fueled thrills of 'Money Heist' as the robbers face off against the police in a high-stakes game of strategy and deception."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Money Heist' became a global phenomenon after being released on Netflix, gaining a massive international fanbase and critical acclaim for its suspenseful storytelling and charismatic characters."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The series was originally intended to be a limited series, but its immense popularity led to the production of additional seasons, extending the story beyond the initial heist."
+      }
+    ]
+  },
+  {
+    "Title": "Gypsy",
+    "Category": 2,
+    "PosterImage": "~/images/Movie/Gypsy.jpg",
+    "Quote": "Some desires can't be controlled.",
+    "Description": "Therapist Jean Holloway develops dangerous and intimate relationships with the people in her patients' lives, blurring the lines between professional detachment and personal involvement. As Jean's own life begins to unravel, she becomes increasingly entangled in a web of lies and desire.",
+    "ProductionYear": "2017-06-30",
+    "Country": "USA",
+    "Genre": [ "Drama", "Thriller" ],
+    "Location": "USA",
+    "Director": "Various",
+    "DurationJ": "00:56:00",
+    "MovieNightGrade": 6.9,
+    "Certificate": "TV-MA",
+    "ProductionCompany": "Netflix",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Naomi Watts",
+        "Role": "Jean Holloway",
+        "ImageUrl": "https://example.com/actors/naomi-watts.jpg"
+      },
+      {
+        "Name": "Billy Crudup",
+        "Role": "Michael Holloway",
+        "ImageUrl": "https://example.com/actors/billy-crudup.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/gypsy.jpg",
+        "Description": "Delve into the dark and seductive world of 'Gypsy' as therapist Jean Holloway explores the forbidden desires lurking beneath the surface of her seemingly perfect life."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/gypsy.jpg",
+        "Description": "Experience the intoxicating allure of 'Gypsy' as Jean Holloway's professional and personal boundaries blur, leading her down a dangerous path of obsession and deception."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Gypsy' was praised for Naomi Watts' compelling performance and its exploration of complex themes such as identity, desire, and the consequences of betrayal."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "Despite its critical acclaim, 'Gypsy' was canceled after one season, leaving many fans disappointed by the unresolved storylines and unanswered questions."
+      }
+    ]
+  },
+  {
+    "Title": "Violet Evergarden",
+    "Category": 4,
+    "PosterImage": "~/images/Movie/VioletEvergarden.jpg",
+    "Quote": "I will run as fast as I can to wherever my customer desires. I am the Auto Memories Doll, Violet Evergarden.",
+    "Description": "In the aftermath of a great war, Violet Evergarden, a former soldier trained as a Auto Memories Doll, takes on a new role as a ghostwriter, tasked with transcribing people's thoughts and feelings into letters. Through her work, Violet seeks to understand the meaning of love and emotions, as she grapples with her own past and identity.",
+    "ProductionYear": "2018-01-11",
+    "Country": "Japan",
+    "Genre": [ "Animation", "Drama", "Fantasy" ],
+    "Location": "Japan",
+    "Director": "Taichi Ishidate",
+    "DurationJ": "00:24:00",
+    "MovieNightGrade": 8.4,
+    "Certificate": "TV-14",
+    "ProductionCompany": "Kyoto Animation",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "Japanese",
+    "CastMembers": [
+      {
+        "Name": "Yui Ishikawa",
+        "Role": "Violet Evergarden",
+        "ImageUrl": "https://example.com/actors/yui-ishikawa.jpg"
+      },
+      {
+        "Name": "Daisuke Namikawa",
+        "Role": "Gilbert Bougainvillea",
+        "ImageUrl": "https://example.com/actors/daisuke-namikawa.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/violet-evergarden.jpg",
+        "Description": "Embark on an emotional journey with 'Violet Evergarden' as she learns the true power of words and the depth of human emotions."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/violet-evergarden.jpg",
+        "Description": "Experience the breathtaking beauty and heartfelt stories of 'Violet Evergarden' as she navigates the complexities of love, loss, and redemption."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Violet Evergarden' received critical acclaim for its stunning animation, compelling storytelling, and emotional depth, becoming a beloved series among anime fans worldwide."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The series won numerous awards, including the Best Animation award at the 2019 Crunchyroll Anime Awards, and was praised for its exploration of themes such as trauma, healing, and the power of empathy."
+      }
+    ]
+  },
+  {
+    "Title": "9",
+    "Category": 3,
+    "PosterImage": "~/images/Movie/nine.jpg",
+    "Quote": "Hope survives.",
+    "Description": "In a post-apocalyptic world, a ragdoll named 9 comes to life and discovers a community of other small creatures like him. Together, they must confront a mechanical threat that aims to destroy them all and uncover the secrets of their existence.",
+    "ProductionYear": "2009-08-19",
+    "Country": "USA",
+    "Genre": [ "Animation", "Action", "Adventure" ],
+    "Location": "USA",
+    "Director": "Shane Acker",
+    "DurationJ": "01:19:00",
+    "MovieNightGrade": 7.1,
+    "Certificate": "PG-13",
+    "ProductionCompany": "Focus Features, Relativity Media, Starz Animation",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Elijah Wood",
+        "Role": "9",
+        "ImageUrl": "https://example.com/actors/elijah-wood.jpg"
+      },
+      {
+        "Name": "Jennifer Connelly",
+        "Role": "7",
+        "ImageUrl": "https://example.com/actors/jennifer-connelly.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/9.jpg",
+        "Description": "Embark on a thrilling adventure with '9' as he leads a group of small creatures in a post-apocalyptic world, fighting against a mechanical menace."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/9.jpg",
+        "Description": "Discover the power of hope and courage in '9' as a ragdoll leads a band of survivors in a battle for survival against overwhelming odds."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'9' is a feature-length expansion of Shane Acker's Academy Award-nominated short film of the same name."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The film received praise for its stunning animation and unique visual style, as well as its exploration of themes such as survival, identity, and the consequences of technology."
+      }
+    ]
+  },
+  {
+    "Title": "Hotel Transylvania",
+    "Category": 3,
+    "PosterImage": "~/images/Movie/HotelTransylvania.jpg",
+    "Quote": "Where monsters go to get away from it all.",
+    "Description": "Welcome to Hotel Transylvania, a lavish resort where monsters can relax and be themselves without any human interference. Dracula, the owner, organizes a special party to celebrate his daughter Mavis' 118th birthday, but everything changes when a human stumbles upon the hotel and falls in love with Mavis.",
+    "ProductionYear": "2012-09-08",
+    "Country": "USA",
+    "Genre": [ "Animation", "Comedy", "Family" ],
+    "Location": "USA",
+    "Director": "Genndy Tartakovsky",
+    "DurationJ": "01:31:00",
+    "MovieNightGrade": 7.1,
+    "Certificate": "PG",
+    "ProductionCompany": "Sony Pictures Animation",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Adam Sandler",
+        "Role": "Dracula",
+        "ImageUrl": "https://example.com/actors/adam-sandler.jpg"
+      },
+      {
+        "Name": "Selena Gomez",
+        "Role": "Mavis",
+        "ImageUrl": "https://example.com/actors/selena-gomez.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/hotel-transylvania.jpg",
+        "Description": "Enter the fantastical world of 'Hotel Transylvania' and join Dracula and his monstrous friends for a hilarious adventure filled with laughs, love, and spooky surprises."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/hotel-transylvania.jpg",
+        "Description": "Experience the ultimate monster vacation in 'Hotel Transylvania', where you'll discover that even the scariest monsters need a break from the hustle and bustle of the human world."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Hotel Transylvania' was a commercial success, spawning multiple sequels and spin-offs, as well as a television series, merchandise, and theme park attractions."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The film features an ensemble cast of comedic talents, including Adam Sandler, Andy Samberg, Selena Gomez, and Kevin James, who bring the colorful characters to life with their distinctive voices."
+      }
+    ]
+  },
+  {
+    "Title": "Kung Fu Panda 3",
+    "Category": 3,
+    "PosterImage": "~/images/Movie/KungFuPanda3.jpg",
+    "Quote": "The weight is over.",
+    "Description": "Join Po, the Dragon Warrior, as he faces his biggest challenge yet when a supernatural villain threatens to destroy kung fu and conquer China. With the help of his long-lost father and the Furious Five, Po must train a village of clumsy pandas to become martial arts masters and save the day.",
+    "ProductionYear": "2016-01-29",
+    "Country": "USA",
+    "Genre": [ "Animation", "Action", "Adventure" ],
+    "Location": "USA",
+    "Director": "Jennifer Yuh Nelson, Alessandro Carloni",
+    "DurationJ": "01:35:00",
+    "MovieNightGrade": 7.1,
+    "Certificate": "PG",
+    "ProductionCompany": "DreamWorks Animation",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Jack Black",
+        "Role": "Po",
+        "ImageUrl": "https://example.com/actors/jack-black.jpg"
+      },
+      {
+        "Name": "Bryan Cranston",
+        "Role": "Li Shan",
+        "ImageUrl": "https://example.com/actors/bryan-cranston.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/kung-fu-panda-3.jpg",
+        "Description": "Prepare for the ultimate kung fu showdown in 'Kung Fu Panda 3' as Po teams up with his long-lost father and a village of clumsy pandas to take on a supernatural villain threatening China."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/kung-fu-panda-3.jpg",
+        "Description": "Experience the epic conclusion to the 'Kung Fu Panda' trilogy in 'Kung Fu Panda 3', where Po must embrace his destiny and lead a new generation of warriors to victory against overwhelming odds."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Kung Fu Panda 3' is the highest-grossing animated film directed by a woman, Jennifer Yuh Nelson, who also directed the previous installment in the franchise."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The film explores themes of family, identity, and self-discovery, as Po grapples with his dual role as the Dragon Warrior and a son reconnecting with his past."
+      }
+    ]
+  },
+  {
+    "Title": "Zootopia",
+    "Category": 3,
+    "PosterImage": "~/images/Movie/Zootopia.jpg",
+    "Quote": "Welcome to the urban jungle.",
+    "Description": "In the bustling city of Zootopia, a rookie bunny cop teams up with a cynical con artist fox to solve a mysterious case involving the disappearance of predators. As they delve deeper into the conspiracy, they uncover shocking truths that challenge their beliefs and shake the city to its core.",
+    "ProductionYear": "2016-02-10",
+    "Country": "USA",
+    "Genre": [ "Animation", "Adventure", "Comedy" ],
+    "Location": "USA",
+    "Director": "Byron Howard, Rich Moore, Jared Bush",
+    "DurationJ": "01:48:00",
+    "MovieNightGrade": 8.0,
+    "Certificate": "PG",
+    "ProductionCompany": "Walt Disney Pictures, Walt Disney Animation Studios",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "English",
+    "CastMembers": [
+      {
+        "Name": "Ginnifer Goodwin",
+        "Role": "Judy Hopps",
+        "ImageUrl": "https://example.com/actors/ginnifer-goodwin.jpg"
+      },
+      {
+        "Name": "Jason Bateman",
+        "Role": "Nick Wilde",
+        "ImageUrl": "https://example.com/actors/jason-bateman.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/zootopia.jpg",
+        "Description": "Explore the vibrant metropolis of 'Zootopia', where predators and prey live side by side, and join Judy Hopps and Nick Wilde on a thrilling adventure to uncover the city's darkest secrets."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/zootopia.jpg",
+        "Description": "Dive into the sprawling world of 'Zootopia', a city like no other, where anyone can be anything, and experience the ultimate buddy cop comedy featuring a bunny cop and a sly fox."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'Zootopia' received widespread acclaim for its richly detailed world-building, timely social commentary, and engaging storyline, winning the Academy Award for Best Animated Feature."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The film's themes of prejudice, discrimination, and tolerance resonate with audiences of all ages, sparking important conversations about diversity and inclusion."
+      }
+    ]
+  },
+  {
+    "Title": "Смешарики",
+    "Category": 3,
+    "PosterImage": "~/images/Movie/smasarici.jpg",
+    "Quote": "Веселые истории из Заповедника.",
+    "Description": "Приключения веселых животных из Заповедника, каждый из которых обладает уникальными характеристиками и хобби. Вместе они исследуют мир, решают задачи и помогают друг другу в различных ситуациях.",
+    "ProductionYear": "2003-09-07",
+    "Country": "Россия",
+    "Genre": [ "Мультсериал", "Комедия", "Семейный" ],
+    "Location": "Россия",
+    "Director": "Иван Усольцев",
+    "DurationJ": "00:06:00",
+    "MovieNightGrade": 8.3,
+    "Certificate": "0+",
+    "ProductionCompany": "Петербург",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "Русский",
+    "CastMembers": [
+      {
+        "Name": "Иван Тихонов",
+        "Role": "Кар-Карыч",
+        "ImageUrl": "https://example.com/actors/ivan-tikhonov.jpg"
+      },
+      {
+        "Name": "Антон Виноградов",
+        "Role": "Бараш",
+        "ImageUrl": "https://example.com/actors/anton-vinogradov.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Постер",
+        "ImageUrl": "https://example.com/posters/smeshariki.jpg",
+        "Description": "Погрузитесь в веселый и удивительный мир 'Смешариков', где каждый персонаж уникален и интересен, а приключения никогда не заканчиваются!"
+      },
+      {
+        "Title": "Показать время",
+        "ImageUrl": "https://example.com/posters/smeshariki.jpg",
+        "Description": "Присоединяйтесь к веселым животным из Заповедника в их захватывающих приключениях и невероятных историях в мультсериале 'Смешарики'!"
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Факт 1",
+        "FactText": "'Смешарики' стали одним из самых популярных мультсериалов в России благодаря своему яркому и забавному стилю, а также интересным и увлекательным сюжетам."
+      },
+      {
+        "FactName": "Факт 2",
+        "FactText": "Сериал получил признание зрителей и критиков за свой положительный вклад в детское развитие, включая обучение дружбе, сотрудничеству и решению проблем."
+      }
+    ]
+  },
+  {
+    "Title": "Walking with Dinosaurs: The Movie",
+    "Category": 1,
+    "PosterImage": "~/images/Movie/Walking.jpg",
+    "Quote": "История о дружбе, смелости и выживании.",
+    "Description": "Присоединяйтесь к Патчи Пахиринозавру в его эпическом путешествии по доисторическому миру в 'Walking with Dinosaurs: The Movie', где он узнает настоящий смысл смелости, дружбы и лидерства.",
+    "ProductionYear": "2013-12-18",
+    "Country": "США, Великобритания, Австралия",
+    "Genre": [ "Мультфильм", "Приключения", "Семейный" ],
+    "Location": "США, Великобритания, Австралия",
+    "Director": "Нил Найфолд, Барри Кук",
+    "DurationJ": "01:27:00",
+    "MovieNightGrade": 7.2,
+    "Certificate": "6+",
+    "ProductionCompany": "BBC Earth, Evergreen Films",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "Английский",
+    "CastMembers": [
+      {
+        "Name": "Джастин Лонг",
+        "Role": "Патчи",
+        "ImageUrl": "https://example.com/actors/justin-long.jpg"
+      },
+      {
+        "Name": "Тьерри Рагобер",
+        "Role": "Скар",
+        "ImageUrl": "https://example.com/actors/thierry-ragobert.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Постер",
+        "ImageUrl": "https://example.com/posters/walking-with-dinosaurs.jpg",
+        "Description": "Пройдите по дороге в доисторическую эпоху вместе с Патчи Пахиринозавром в 'Walking with Dinosaurs: The Movie', где он учится настоящей смелости, дружбе и лидерству."
+      },
+      {
+        "Title": "Показать время",
+        "ImageUrl": "https://example.com/posters/walking-with-dinosaurs.jpg",
+        "Description": "Ощутите весь величественный мир мезозойской эпохи в 'Walking with Dinosaurs: The Movie', визуально захватывающее приключение, которое оживляет мир динозавров, как никогда прежде."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Факт 1",
+        "FactText": "'Walking with Dinosaurs: The Movie' объединяет современную компьютерную анимацию с живыми съемками, чтобы создать визуально захватывающий опыт, переносящий зрителей в эпоху динозавров."
+      },
+      {
+        "FactName": "Факт 2",
+        "FactText": "Фильм содержит образовательный аспект, в котором фактическая информация о динозаврах вплетена в повествование, предоставляя зрителям увлекательный и информативный опыт."
+      }
+    ]
+  },
+  {
+    "Title": "The Mystery of the Third Planet",
+    "Category": 3,
+    "PosterImage": "~/images/Movie/TheMysteryoftheThirdPlanet.jpeg",
+    "Quote": "A delightful space adventure for the whole family.",
+    "Description": "Join Alice, Captain Zelyonyy, and Professor Seleznyov as they embark on a thrilling journey through space in search of unique animals for the Moscow Zoo. Along the way, they encounter strange creatures, hostile aliens, and unexpected challenges, making for an unforgettable adventure.",
+    "ProductionYear": "1981-11-01",
+    "Country": "Soviet Union",
+    "Genre": [ "Animation", "Adventure", "Family" ],
+    "Location": "Soviet Union",
+    "Director": "Roman Kachanov",
+    "DurationJ": "01:20:00",
+    "MovieNightGrade": 8.5,
+    "Certificate": "0+",
+    "ProductionCompany": "Soyuzmultfilm",
+    "Budget": "20,953,262",
+    "GrossWorldwide": "145,570,827",
+    "Language": "Russian",
+    "CastMembers": [
+      {
+        "Name": "Olga Gromova",
+        "Role": "Alice Seleznyova (voice)",
+        "ImageUrl": "https://example.com/actors/olga-gromova.jpg"
+      },
+      {
+        "Name": "Vasili Livanov",
+        "Role": "Captain Zelyonyy (voice)",
+        "ImageUrl": "https://example.com/actors/vasili-livanov.jpg"
+      }
+    ],
+    "MovieCards": [
+      {
+        "Title": "Poster",
+        "ImageUrl": "https://example.com/posters/mystery-of-the-third-planet.jpg",
+        "Description": "Embark on a delightful space adventure with 'The Mystery of the Third Planet', where Alice, Captain Zelyonyy, and Professor Seleznyov journey through the cosmos in search of rare creatures for the Moscow Zoo."
+      },
+      {
+        "Title": "Showtime",
+        "ImageUrl": "https://example.com/posters/mystery-of-the-third-planet.jpg",
+        "Description": "Join Alice and her companions on a thrilling space odyssey in 'The Mystery of the Third Planet', encountering strange aliens, solving mysteries, and discovering the wonders of the universe."
+      }
+    ],
+    "InterestingFacts": [
+      {
+        "FactName": "Fact 1",
+        "FactText": "'The Mystery of the Third Planet' is based on a novel by Kir Bulychev and is considered one of the most beloved Soviet animated films, captivating audiences with its imaginative storytelling and colorful animation."
+      },
+      {
+        "FactName": "Fact 2",
+        "FactText": "The film received numerous awards and accolades for its creative vision and contribution to Soviet animation, becoming a cherished classic for generations of viewers."
+      }
+    ]
   }
+
+
+
 ]

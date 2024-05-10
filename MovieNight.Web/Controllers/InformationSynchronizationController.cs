@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -269,10 +270,16 @@ namespace MovieNight.Web.Controllers
                 // return View("Error404", "Error");
 
             }
-            catch (Exception ex)
+            catch (DbEntityValidationException ex)
             {
-                Console.WriteLine(ex);
-                //return View("Error500", "Error");
+                foreach (var validationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        Console.WriteLine($@"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                    }
+                }
+                return null;
             }
 
             return View();
@@ -355,7 +362,8 @@ namespace MovieNight.Web.Controllers
                 IdUser = bookMe.IdUser,
                 IdMovie = bookMe.IdMovie,
                 Msg = bookMe.Msg,
-                Success = bookMe.Success
+                Success = bookMe.Success,
+                BookmarkTimeOf = false
 
             };
             

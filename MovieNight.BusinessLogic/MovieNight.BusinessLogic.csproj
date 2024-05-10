@@ -72,19 +72,15 @@
     <Compile Include="Interface\IService\IFriendsService.cs" />
     <Compile Include="Interface\IService\IMovie.cs" />
     <Compile Include="Interface\ISession.cs" />
-    <Compile Include="Migrations\Movie\202404151835349_Moviee.cs" />
-    <Compile Include="Migrations\Movie\202404151835349_Moviee.designer.cs">
-      <DependentUpon>202404151835349_Moviee.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Movie\Configuration.cs" />
-    <Compile Include="Migrations\Session\202404151836060_Session.cs" />
-    <Compile Include="Migrations\Session\202404151836060_Session.designer.cs">
-      <DependentUpon>202404151836060_Session.cs</DependentUpon>
+    <Compile Include="Migrations\Session\202405100959037_movie.cs" />
+    <Compile Include="Migrations\Session\202405100959037_movie.Designer.cs">
+      <DependentUpon>202405100959037_movie.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Session\Configuration.cs" />
-    <Compile Include="Migrations\User\202404151831372_Movie.cs" />
-    <Compile Include="Migrations\User\202404151831372_Movie.designer.cs">
-      <DependentUpon>202404151831372_Movie.cs</DependentUpon>
+    <Compile Include="Migrations\User\202405100958034_userm.cs" />
+    <Compile Include="Migrations\User\202405100958034_userm.Designer.cs">
+      <DependentUpon>202405100958034_userm.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\User\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -114,14 +110,11 @@
     <Content Include="DBModel\Seed\SeedData.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\Movie\202404151835349_Moviee.resx">
-      <DependentUpon>202404151835349_Moviee.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Session\202405100959037_movie.resx">
+      <DependentUpon>202405100959037_movie.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Session\202404151836060_Session.resx">
-      <DependentUpon>202404151836060_Session.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\User\202404151831372_Movie.resx">
-      <DependentUpon>202404151831372_Movie.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\User\202405100958034_userm.resx">
+      <DependentUpon>202405100958034_userm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

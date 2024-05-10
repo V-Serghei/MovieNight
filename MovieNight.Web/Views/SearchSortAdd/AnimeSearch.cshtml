@@ -85,8 +85,8 @@
                                         <div class="clearfix"></div>
                                         <div class="pt-2 pb-2">
                                             <img src="@Url.Content(Model.ListFilm[index + currIndex].PosterImage)" class="fa-times-rectangle img-thumbnail " alt="movie-poster">
+                                            <h4 class="mt-3 font-17"><a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = Model.ListFilm[index + currIndex].Id })" class="text-dark">@Model.ListFilm[index + currIndex].Title</a></h4>
 
-                                            <h4 class="mt-3 font-17"><a href="@Url.Action("MovieTemplatePage", "InformationSynchronization",Model.ListFilm[index+currIndex].Id)" class="text-dark">@Model.ListFilm[index + currIndex].Title</a></h4>
                                             <p class="text-muted">Production Year: @Model.ListFilm[index + currIndex].ProductionYear.ToString("dd/MM/yyyy")</p>
                                             <p class="text-muted">Grade: @Model.ListFilm[index + currIndex].MovieNightGrade</p>
                                                 @foreach (var gen in Model.ListFilm[index + currIndex].Genre)

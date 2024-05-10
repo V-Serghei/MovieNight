@@ -8,6 +8,8 @@
         public int IdUser { get; set; }
         
         public int IdMovie { get; set; }
-        
+
+        public bool BookmarkTimeOf { get; set; } = false;
+
     }
 }

@@ -131,9 +131,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         {
             GetMappersSettings();
             var movieDb = new MovieTemplateInfE();
-            //var op = ReadMoviesFromJson("D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
+            var op = ReadMoviesFromJson("D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
 
-            //PopulateDatabase(op);
+            PopulateDatabase(op);
             // conf.CreateMapper();
             // var maper = conf.CreateMapper();
             using (var db = new MovieContext())
@@ -298,16 +298,32 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         
         private List<MovieTemplateInfE> ReadMoviesFromJson(string url)
         {
-            //string jsonFileName = "SeedData.json";
-            //string jsonFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, jsonFileName);
-            string jsonFilePath = url;
-            List<MovieTemplateInfE> moviess;
+            try
+            {
+                //string jsonFileName = "SeedData.json";
+                //string jsonFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, jsonFileName);
+                string jsonFilePath = url;
+                List<MovieTemplateInfE> moviess;
 
-            string json = File.ReadAllText(jsonFilePath);
+                string json = File.ReadAllText(jsonFilePath);
+                Console.WriteLine(json);
 
-            moviess = JsonConvert.DeserializeObject<List<MovieTemplateInfE>>(json);
+                moviess = JsonConvert.DeserializeObject<List<MovieTemplateInfE>>(json);
 
-            return moviess;
+                return moviess;
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                foreach (var validationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        Console.WriteLine($@"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                    }
+                }
+                return null;
+            }
         }
 
         protected async Task<BookmarkE> SetNewBookmarkDb((int user,int movie) idAdd)
@@ -325,7 +341,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         {
                             UserId = idAdd.user,
                             MovieId = idAdd.movie,
-                            TimeAdd = DateTime.Now
+                            TimeAdd = DateTime.Now,
+                            BookmarkTimeOf = false
                         };
                         db.Bookmark.Add(addBookmarkE);
                         await db.SaveChangesAsync();
@@ -406,7 +423,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 using (var db = new UserContext())
                 {
                     var dbList = db.Bookmark
-                        .Where(l => l.UserId == userId)
+                        .Where(l => l.UserId == userId && !l.BookmarkTimeOf)
                         .OrderByDescending(l => l.TimeAdd) 
                         .Take(5) 
                         .ToList();
@@ -479,20 +496,29 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     var ms = new MasterContext();
 
                     var movieC = ms.Movies.FirstOrDefaultAsync(m => m.Id == valueTuple.movieId);
-                    if (verify == null )
+                    
+                    if (verify == null && movieC.Result != null )
                     {
                         if (movieC.Result != null)
                         {
-                            var addBookmarkE = new ViewListDbTable()
-                            {
-                                UserId = valueTuple.user,
-                                MovieId = valueTuple.movieId,
-                                ReviewDate = DateTime.Now,
-                                TimeSpent = movieC.Result.Duration,
-                                UserValues = valueTuple.rating,
-                                UserViewCount = db.ViewList.Count()
-                            };
-                            db.ViewList.Add(addBookmarkE);
+                            
+
+
+                                var addBookmarkE = new ViewListDbTable()
+                                {
+                                    UserId = valueTuple.user,
+                                    MovieId = valueTuple.movieId,
+                                    ReviewDate = DateTime.Now,
+                                    TimeSpent = movieC.Result.Duration,
+                                    UserValues = valueTuple.rating,
+                                    UserViewCount = db.ViewList.Count(),
+                                    Title = movieC.Result.Title,
+                                    Category = movieC.Result.Category
+                                };
+
+
+                                db.ViewList.Add(addBookmarkE);
+                            
                         }
 
                         await db.SaveChangesAsync();

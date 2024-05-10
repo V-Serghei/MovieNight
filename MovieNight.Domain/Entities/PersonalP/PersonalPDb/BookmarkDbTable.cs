@@ -21,6 +21,8 @@ namespace MovieNight.Domain.Entities.PersonalP.PersonalPDb
         
         public DateTime TimeAdd { get; set; }
         
+        public bool BookmarkTimeOf { get; set; } = false;
+        
         
     }
 }
