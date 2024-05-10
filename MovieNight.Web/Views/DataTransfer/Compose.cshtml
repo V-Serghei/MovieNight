@@ -1,8 +1,9 @@
-﻿
+﻿@model MovieNight.Web.Models.Mail.InboxModel
+
+
 @{
     ViewBag.Title = "Compose";
 }
-@model List<MovieNight.Web.Models.Mail.InboxModel>
 <div>
     <div class="content">
 
@@ -44,53 +45,31 @@
 
                         <div class="inbox-rightbar">
                             <div class="mt-4">
-                                @using (Ajax.BeginForm("ComposeAdd", "DataTransfer", new AjaxOptions
-                                        {
-                                            HttpMethod = "POST",
-                                            InsertionMode = InsertionMode.Replace,
-                                            UpdateTargetId = "result",
-                                            OnSuccess = "onSuccess",
-                                            OnFailure = "onFailure"
-                                        }, new
-                                        {
-                                            id = "registrationForm",
-                                            autocomplete = "off"
-                                        }))
+                                @using (Html.BeginForm("ComposeAdd", "DataTransfer", FormMethod.Post ))
                                 {
-                                    @* <div class="alert alert-danger" style="display:none;"></div> *@
-                                    @* *@
-                                    @* if (Model is { SuccessUniq: false }) *@
-                                    @* { *@
-                                    @*     <div class="alert alert-danger"> *@
-                                    @*         @if (!Model.SuccessUniq) *@
-                                    @*         { *@
-                                    @*             <p>@Model.StatusMsg</p> *@
-                                    @*         } *@
-                                    @*     </div> *@
-                                    @* } *@
-                                    <div class="form-group">
-                                        <label for="RecipientName">User name</label>
-                                        <input type="text" name="RecipientName" class="form-control" id="RecipientName" placeholder="To" value="">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Theme">Theme</label>
-                                        <input type="text" name="Theme" class="form-control" id="Theme" placeholder="Enter Title" value="">
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <label for="Message">Message</label>
-                                                <textarea class="form-control" name="Message" id="Message" rows="4"  placeholder="Write something..." value=""></textarea>
-                                            </div>
-                                        </div> <!-- end col -->
-                                    </div>
-                                    <!-- end row -->
+                                @Html.AntiForgeryToken()
 
-                                    <div class="form-group m-b-0">
-                                        <div class="text-right">
-                                            <button type="submit" name="submit" class="btn btn-primary waves-effect waves-light"> <span>Send</span> <i class="mdi mdi-send ml-2"></i> </button>
-                                        </div>
-                                    </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.RecipientName)
+                                    @Html.TextBoxFor(m => m.RecipientName, new { @class = "form-control", placeholder = "To" })
+                                    @Html.ValidationMessageFor(m => m.RecipientName)
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Theme)
+                                    @Html.TextBoxFor(m => m.Theme, new { @class = "form-control", placeholder = "Enter Title" })
+                                    @Html.ValidationMessageFor(m => m.Theme)
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Message)
+                                    @Html.TextAreaFor(m => m.Message, new { @class = "form-control", rows = "4", placeholder = "Write something..." })
+                                    @Html.ValidationMessageFor(m => m.Message)
+                                </div>
+
+                                <button type="submit" name="submit" class="btn btn-primary waves-effect waves-light">
+                                    <span>Send</span> <i class="mdi mdi-send ml-2"></i>
+                                </button>
                                 }
                             </div> <!-- end card-->
 

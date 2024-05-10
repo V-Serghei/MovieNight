@@ -43,15 +43,16 @@ namespace MovieNight.Web.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public ActionResult ComposeAdd(InboxModel message)
+        public ActionResult ComposeAdd(InboxModel model)
         {
             var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             var messageDb = new InboxD
             {
-                Theme = message.Theme,
-                Message = message.Message,
-                RecipientName = message.RecipientName,
+                Theme = model.Theme,
+                Message = model.Message,
+                RecipientName = model.RecipientName,
                 Date = DateTime.Now,
                 IsChecked = false,
                 IsStarred = false,
