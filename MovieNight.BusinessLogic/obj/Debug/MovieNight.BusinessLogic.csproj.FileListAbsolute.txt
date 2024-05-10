@@ -19,6 +19,6 @@ D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.Bu
 D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.Migrations.User.Movie.resources
 D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.csproj.GenerateResource.cache
 D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.csproj.CoreCompileInputs.cache
-D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.csproj.CopyComplete
 D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.dll
 D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.pdb
+D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNig.E67086DB.Up2Date
