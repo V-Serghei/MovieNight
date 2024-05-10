@@ -881,6 +881,8 @@
     <Content Include="vendor\x-editable\bootstrap-editable.min.js" />
     <Content Include="Video\viedeo_Test.mp4" />
     <Content Include="Views\Error\Error404Page.cshtml" />
+    <Content Include="Views\InformationSynchronization\MovieTemplateEditing.cshtml" />
+    <Content Include="Views\InformationSynchronization\ReviewPage.cshtml" />
     <Content Include="Views\InformationSynchronization\MoviePlayer.cshtml" />
     <Content Include="Views\SearchSortAdd\FindFriends.cshtml" />
     <Content Include="Views\SearchSortAdd\MovieSearch.cshtml" />
@@ -1025,7 +1027,6 @@
     <Content Include="Views\DataTransfer\Starred.cshtml" />
     <Content Include="Views\DataTransfer\SentMail.cshtml" />
     <Content Include="Views\DataTransfer\Trash.cshtml" />
-    <Content Include="Views\SearchSortAdd\FriendsMovies.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\InformationSynchronization\ProfileEditing.cshtml" />
     <None Include="Web.Debug.config">

@@ -129,7 +129,7 @@
 @if(userModel!=null){if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
 {
     <li class="dropdown notification-list">
-        <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="@Url.Action("MovieTemplateEditing","InformationSynchronization")" role="button" >
            <i class=" remixicon-quill-pen-line" ></i>
         </a>
     </li>

@@ -5,9 +5,7 @@
 }
 
 <div>
-    <div class="content">
-
-        <!-- Start Content-->
+    <!-- Start Content-->
         <div class="container-fluid">
 
             <!-- start page title -->
@@ -27,138 +25,105 @@
             <!-- end page title -->
 
             <div class="row">
-                <div class="col-12">
+                <div class="col-sm-12">
+                    <div class="card-box">
+                        <style>
+                            /* Увеличение размеров календаря и его содержимого */
+                            .datepicker {
+                                width: 500px; 
+                                height: 600px; 
+                                font-size: 35px; 
+                            }
 
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <a href="#" data-toggle="modal" data-target="#add-category" class="btn btn-lg font-16 btn-primary btn-block  ">
-                                        <i class="mdi mdi-plus-circle-outline"></i> Add a category
-                                    </a>
-                                    <div id="external-events" class="m-t-20">
-                                        <br>
-                                        <p class="text-muted">Drag and drop your event or click in the calendar</p>
-                                        <div class="external-event bg-success" data-class="bg-success">
-                                            <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>Film
-                                        </div>
-                                        <div class="external-event bg-info" data-class="bg-info">
-                                            <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>Serial
-                                        </div>
-                                        <div class="external-event bg-warning" data-class="bg-warning">
-                                            <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>Cartoon
-                                        </div>
-                                        <div class="external-event bg-dark" data-class="bg-dark">
-                                            <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>Anime
-                                        </div>
-                                    </div>
+                            /* Увеличение размеров заголовков и текста внутри календаря */
+                            .datepicker th,
+                            .datepicker td {
+                                font-size: 35px; 
+                            }
+                            /* Увеличение расстояния между числами и названиями дней недели */
+                            .datepicker th,
+                            .datepicker td {
+                                padding: 10px;
+                            }
+                            /* Увеличение размера текста только для класса larger-text */
+                            .larger-text {
+                                font-size: 20px; 
+                            }
+                        </style>
+                        <div class="row">
 
-                                    <!-- checkbox -->
-                                    <div class="custom-control custom-checkbox mt-3">
-                                        <input type="checkbox" class="custom-control-input" id="drop-remove">
-                                        <label class="custom-control-label " for="drop-remove">Remove after drop</label>
-                                    </div>
-
-                                    <div class="mt-5 d-none d-xl-block">
-                                        <h5 class="text-center">What to do?</h5>
-
-                                        <ul class="pl-3">
-                                            <li class="text-muted mb-3">
-                                                Schedule viewing for a day, a week, a month or the whole year!
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                </div> <!-- end col-->
-
-                                <div class="col-lg-9">
-                                    <div id="calendar"></div>
-                                </div> <!-- end col -->
-
-                            </div>  <!-- end row -->
-                        </div> <!-- end card body-->
-                    </div> <!-- end card -->
-                    <!-- Add New Event MODAL -->
-                    <div class="modal fade" id="event-modal" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Schedule a viewing</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <div class="col-lg-6">
+                                <div class="p-2">
+                                    <label class="larger-text text-purple">New movie releases on our website</label>
+                                    <div class="input-group">
+                                        <div data-provide="datepicker-inline"></div>
+                                    </div><!-- input-group -->
                                 </div>
-                                <div class="modal-body p-3">
-                                </div>
-                                <div class="text-right p-3">
-                                    <button type="button" class="btn btn-light " data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-success save-event  ">Create</button>
-                                    <button type="button" class="btn btn-danger delete-event  " data-dismiss="modal">Delete</button>
-                                </div>
-                            </div> <!-- end modal-content-->
-                        </div> <!-- end modal dialog-->
-                    </div>
-                    <!-- end modal-->
-                    <!-- Modal Add Category -->
-                    <div class="modal fade" id="add-category" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Add a category</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                </div>
-                                <div class="modal-body p-3">
-                                    <form>
-                                        <div class="form-group">
-                                            <label class="control-label">Category Username</label>
-                                            <input class="form-control form-white" placeholder="Enter name" type="text" name="category-name" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Choose Category Color</label>
-                                            <select class="form-control form-white" data-placeholder="Choose a color..." name="category-color">
-                                                <option value="primary">I want to see it</option>
-                                                <option value="success">I need to see it</option>
-                                                <option value="info">Maybe</option>
-                                                <option value="warning">I don't want to see it</option>
-                                                <option value="dark">I really want to see it</option>
-                                            </select>
-                                        </div>
+                            </div>
+                            
+                            <div class="col-lg-6">
+                                <div class="p-2 text-center mt-5">
+                                    <form action="#" class="form-horizontal">
+                                        @* <div class="form-group row mb-3"> *@
+                                        @*     <label class="larger-text text-purple col-sm-4">Default Functionality</label> *@
+                                        @*     <div> *@
+                                        @*         <div class="input-group larger-text"> *@
+                                        @*             <input type="text" class="form-control" data-provide="datepicker"> *@
+                                        @*             <div class="input-group-append"> *@
+                                        @*                 <span class="input-group-text"><i class="ti-calendar"></i></span> *@
+                                        @*             </div> *@
+                                        @*         </div> *@
+                                        @*         <!-- input-group --> *@
+                                        @*     </div> *@
+                                        @* </div> *@
 
+                                        <div class="form-group row mb-3">
+                                            <label class="larger-text text-purple col-sm-4">Choose a date</label>
+                                            <div>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control larger-text text-purple" data-provide="datepicker" data-date-autoclose="true">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text"><i class="ti-calendar"></i></span>
+                                                    </div>
+                                                </div><!-- input-group -->
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-3">
+                                            <label class="larger-text text-purple col-sm-4">Month View</label>
+                                            <div>
+                                                <div class="input-group larger-text">
+                                                    <input type="text" class="form-control larger-text text-purple" data-provide="datepicker" data-date-format="MM yyyy" data-date-min-view-mode="1">
+                                                </div><!-- input-group -->
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group row mb-0">
+                                            <label class="larger-text text-purple col-sm-4">Year View</label>
+                                            <div>
+                                                <div class="input-group larger-text">
+                                                    <input type="text" class="form-control larger-text text-purple" data-provide="datepicker" data-date-min-view-mode="2">
+                                                </div><!-- input-group -->
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8 mt-5">
+                                                <div class="form-group larger-text">
+                                                    <label class="larger-text text-purple col-sm-4" for="event">Event name</label>
+                                                    <input type="text" class="form-control" id="event" placeholder="Enter the name of the event" name="event" value="">
+                                                </div>
+                                            </div>
+                                        </div> <!-- end row -->
                                     </form>
-                                    <div class="text-right pt-2">
-                                        <button type="button" class="btn btn-light " data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary ml-1   save-category" data-dismiss="modal">Save</button>
-                                    </div>
+                                </div>
+                            </div>
 
-                                </div> <!-- end modal-body-->
-                            </div> <!-- end modal-content-->
-                        </div> <!-- end modal dialog-->
-                    </div>
-                    <!-- end modal-->
-                </div>
-                <!-- end col-12 -->
-            </div> <!-- end row -->
-
-        </div> <!-- container -->
-
-    </div> <!-- content -->
-    <!-- Footer Start -->
-    <!--<footer class="footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-6">
-                    2016 - 2019 &copy; Minton theme by <a href="">Coderthemes</a>
-                </div>
-                <div class="col-md-6">
-                    <div class="text-md-right footer-links d-none d-sm-block">
-                        <a href="javascript:void(0);">About Us</a>
-                        <a href="javascript:void(0);">Help</a>
-                        <a href="javascript:void(0);">Contact Us</a>
-                    </div>
-                </div>
+                        </div>
+                    </div> <!-- end card-box -->
+                </div> <!-- end col -->
             </div>
         </div>
-    </footer>-->
-    <!-- end Footer -->
-
 </div>
+
+
 
 

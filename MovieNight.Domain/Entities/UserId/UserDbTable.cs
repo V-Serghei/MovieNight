@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MovieNight.Domain.enams;
+using MovieNight.Domain.Entities.Friends;
 using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 
@@ -45,6 +46,7 @@ namespace MovieNight.Domain.Entities.UserId
         public PEdBdTable PEdBdTable { get; set; }
         
         public ICollection<ViewListDbTable> ViewListEntries { get; set; }
+        public ICollection<FriendsDbTable> FriendsDbTables { get; set; }
         
         public ICollection<BookmarkDbTable> Bookmark { get; set; }
         

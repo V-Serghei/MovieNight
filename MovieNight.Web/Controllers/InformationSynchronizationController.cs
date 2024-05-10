@@ -14,6 +14,7 @@ using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Models;
 using MovieNight.Web.Models.Friends;
+using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Web.Models.Movie;
 using MovieNight.Web.Models.PersonalP;
 using MovieNight.Web.Models.PersonalP.Bookmark;
@@ -216,6 +217,7 @@ namespace MovieNight.Web.Controllers
         }
 
         [HttpGet]
+        [UserMod]
         public ActionResult UserTemplatePage()
         {
             int? id = 1;
@@ -286,6 +288,7 @@ namespace MovieNight.Web.Controllers
         }
 
         [HttpGet]
+        [UserMod]
         public ActionResult ProfileEditing()
         {
             var used = _sessionUser.GetPersonalProfileM(HttpContextInfrastructure.GetGlobalParam());
@@ -451,6 +454,19 @@ namespace MovieNight.Web.Controllers
 
             }
 
+            return View();
+        }
+            return Task.FromResult(Json(new {}));
+        }
+
+        public ActionResult ReviewPage()
+        {
+            return View();
+        }
+
+        [ModeratorMod]
+        public ActionResult MovieTemplateEditing()
+        {
             return View();
         }
     }
