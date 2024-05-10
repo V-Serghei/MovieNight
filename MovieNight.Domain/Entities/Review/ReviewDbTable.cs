@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities.MovieM.EfDbEntities;
 using MovieNight.Domain.Entities.UserId;
 
 namespace MovieNight.Domain.Entities.Review
@@ -15,7 +16,7 @@ namespace MovieNight.Domain.Entities.Review
         [Required]
         public int FilmId { get; set; }
         [Required]
-        public MovieBbTable Film { get; set; }
+        public MovieDbTable Film { get; set; }
         [Required]
         public int UserId { get; set; }
         [Required]
