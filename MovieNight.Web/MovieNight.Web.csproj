@@ -1026,6 +1026,7 @@
     <Content Include="Views\DataTransfer\Trash.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\InformationSynchronization\ProfileEditing.cshtml" />
+    <Content Include="Views\InformationSynchronization\MoviePlayer.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

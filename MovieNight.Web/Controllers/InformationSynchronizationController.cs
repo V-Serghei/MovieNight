@@ -432,8 +432,8 @@ namespace MovieNight.Web.Controllers
                     movieModel.CastMembers = _mapper.Map<List<CastMember>>(movie.CastMembers);
                     movieModel.InterestingFacts = _mapper.Map<List<InterestingFact>>(movie.InterestingFacts);
                     movieModel.Genre = new List<string>();
-                    movieModel.Bookmark = _movie.GetInfBookmark((System.Web.HttpContext.
-                        Current.GetMySessionObject().Id,idU));
+                    movieModel.Bookmark =
+                        _movie.GetInfBookmark((System.Web.HttpContext.Current.GetMySessionObject().Id, idU));
                     movieModel.UserRating =
                         _movie.GetUserRating((System.Web.HttpContext.Current.GetMySessionObject().Id, idU));
                     foreach (var GEN in movie.Genre)
@@ -444,6 +444,7 @@ namespace MovieNight.Web.Controllers
                     movieModel.Id = idU;
                     return View(movieModel);
                 }
+
                 return RedirectToAction("Error404Page", "Error");
 
             }
@@ -452,7 +453,7 @@ namespace MovieNight.Web.Controllers
                 Console.WriteLine(ex);
                 return RedirectToAction("Error404Page", "Error");
 
-            
+            }
         }
 
         public ActionResult ReviewPage()
