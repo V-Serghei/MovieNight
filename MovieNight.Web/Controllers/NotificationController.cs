@@ -22,6 +22,7 @@ namespace MovieNight.Web.Controllers
             EventSession = bl.Session();
         }
         [HttpPost]
+        [Route("Notification/EventSave")]
         public ActionResult EventSave(EventDataModel eventDataModel)
         {
             EventE eventE = new EventE()

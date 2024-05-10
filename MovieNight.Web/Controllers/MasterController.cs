@@ -28,6 +28,8 @@ namespace MovieNight.Web.Controllers
         public void SessionStatus()
         {
             var apiCookie = Request.Cookies["X-KEY"];
+            
+            
             if (apiCookie != null)
             {
                 var profile = _session.GetUserByCookie(apiCookie.Value,HttpContextInfrastructure.GetUserAgentInfo(Request));
@@ -56,7 +58,7 @@ namespace MovieNight.Web.Controllers
             }
             else
             {
-                System.Web.HttpContext.Current.Session["LoginStatus"] = "logout";
+                System.Web.HttpContext.Current.Session["LoginStatus"] = "zero";
             }
         }
     }

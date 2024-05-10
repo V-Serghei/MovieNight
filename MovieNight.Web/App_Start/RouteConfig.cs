@@ -20,6 +20,11 @@ namespace MovieNight.Web
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "MainPage", action = "Index", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+                name: "MovieTemplate",
+                url: "InformationSynchronization/MovieTemplatePage/{id}",
+                defaults: new { controller = "InformationSynchronization", action = "MovieTemplatePage", id = UrlParameter.Optional }
+            );
         }
     }
 }

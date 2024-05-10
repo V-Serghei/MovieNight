@@ -29,6 +29,7 @@ namespace MovieNight.Web.Controllers
         }
 
         [HttpGet]
+        [AdminMod]
         public ActionResult Index()
         {
 

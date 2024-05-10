@@ -55,7 +55,7 @@
                             <div class="text-center card-box ribbon-box">
                                 <div class="clearfix"></div>
                                 <div class="pt-2 pb-2">
-                                    <img src="~/images/Nelea/Richi.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                                    <img src=@person.BUserE.Avatar class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
 
                                     <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">@person.BUserE.Username</a></h4>
                                     <p> <span> <a href="#" class="text-pink">@person.BUserE.Email</a> </span></p>
@@ -69,23 +69,18 @@
                                             <i class="mdi mdi-email mr-1"></i> Message
                                         </button>
                                     </a>
+                                    @* submit *@
+                                    <form action="@Url.Action("SetNewFriendPage", "SearchSortAdd")" method="get">
+                                        <button type="submit" class="btn btn-outline-warning btn-sm waves-effect" name="_friendId" value="@person.BUserE.Id">
+                                            <i class="fe-star-on"></i> Add as a friend
+                                        </button>
+                                    </form>
+
                                     <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", person.BUserE.Id)>
-                                        <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                        <button type="button" class="btn btn-warning btn-sm waves-effect">
                                             <i class="remixicon-account-pin-box-fill"></i> Go to profile
                                         </button>
                                     </a>
-
-                                    <ul class="social-list list-inline mt-3 mb-0">
-                                        <li class="list-inline-item">
-                                            <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github-circle"></i></a>
-                                        </li>
-                                    </ul>
 
                                 </div> <!-- end .padding -->
                             </div> <!-- end card-box-->
@@ -99,7 +94,7 @@
                             <div class="text-center card-box ribbon-box">
                                 <div class="clearfix"></div>
                                 <div class="pt-2 pb-2">
-                                    <img src="~/images/Nelea/Richi.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                                    <img src=@person.BUserE.Avatar class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
 
                                     <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">@nextPerson.BUserE.Username</a></h4>
                                     <p> <span> <a href="#" class="text-pink">@nextPerson.BUserE.Email</a> </span></p>
@@ -113,23 +108,16 @@
                                             <i class="mdi mdi-email mr-1"></i> Message
                                         </button>
                                     </a>
-                                    <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", nextPerson.BUserE.Id)>
-                                        <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
-                                            <i class="remixicon-account-pin-box-fill"></i> Go to profile
+                                    <a href=@Url.Action("SetNewFriendPage", "SearchSortAdd", nextPerson.BUserE.Id)>
+                                        <button type="button" class="btn btn-outline-warning btn-sm waves-effect ">
+                                            <i class="fe-star-on"></i> Add as a friend
                                         </button>
                                     </a>
-
-                                    <ul class="social-list list-inline mt-3 mb-0">
-                                        <li class="list-inline-item">
-                                            <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github-circle"></i></a>
-                                        </li>
-                                    </ul>
+                                    <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", nextPerson.BUserE.Id)>
+                                        <button type="button" class="btn btn-warning btn-sm waves-effect">
+                                            <i class="remixicon-account-pin-box-fill "></i> Go to profile
+                                        </button>
+                                    </a>
 
                                 </div> <!-- end .padding -->
                             </div> <!-- end card-box-->
@@ -144,7 +132,7 @@
                             <div class="text-center card-box ribbon-box">
                                 <div class="clearfix"></div>
                                 <div class="pt-2 pb-2">
-                                    <img src="~/images/Nelea/Richi.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                                    <img src=@person.BUserE.Avatar class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
 
                                     <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">@nextnextPerson.BUserE.Username</a></h4>
                                     <p> <span> <a href="#" class="text-pink">@person.BUserE.Email</a> </span></p>
@@ -158,23 +146,16 @@
                                             <i class="mdi mdi-email mr-1"></i> Message
                                         </button>
                                     </a>
-                                    <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", nextnextPerson.BUserE.Id)>
+                                    <a href=@Url.Action("SetNewFriendPage", "SearchSortAdd", nextnextPerson.BUserE.Id)>
                                         <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
+                                            <i class="fe-star-on"></i> Add as a friend
+                                        </button>
+                                    </a>
+                                    <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", nextnextPerson.BUserE.Id)>
+                                        <button type="button" class="btn btn-warning btn-sm waves-effect">
                                             <i class="remixicon-account-pin-box-fill"></i> Go to profile
                                         </button>
                                     </a>
-
-                                    <ul class="social-list list-inline mt-3 mb-0">
-                                        <li class="list-inline-item">
-                                            <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i class="mdi mdi-facebook"></i></a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github-circle"></i></a>
-                                        </li>
-                                    </ul>
 
                                 </div> <!-- end .padding -->
                             </div> <!-- end card-box-->

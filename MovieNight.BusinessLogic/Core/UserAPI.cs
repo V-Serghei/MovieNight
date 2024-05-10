@@ -107,6 +107,7 @@ namespace MovieNight.BusinessLogic.Core
                     userL.LogInData.Username = userExists.UserName;
                     userL.LogInData.Email = userExists.Email;
                     userL.LogInData.Role = userExists.Role;
+                    userL.LogInData.Id = userExists.Id;
                     
                     var userD = db.PEdBdTables.FirstOrDefault(u => u.UserDbTableId == userExists.Id);
                     if(userD?.Avatar != null) userL.LogInData.Avatar = userD.Avatar;
@@ -308,13 +309,13 @@ namespace MovieNight.BusinessLogic.Core
             //               "Cook, sew, draw, sculpt. I can learn everything. The main thing is to want.",
             //     Location = "Moldova",
             //     ViewingHistory = new List<ViewingHistoryM>(),
-            //     ListInThePlans = new List<ListOfFilms>()
+            //     ListInThePlans = new List<ListOfFilmsE>()
             //
             // };
             // //Get out of the movie database
             // for (int i = 0; i < 5; i++)
             // {
-            //     personalProfileM.ListInThePlans.Add(new ListOfFilms
+            //     personalProfileM.ListInThePlans.Add(new ListOfFilmsE
             //     {
             //         Date = new TimeD
             //         {
@@ -552,6 +553,29 @@ namespace MovieNight.BusinessLogic.Core
             }
 
             return userLog;
+        }
+
+        protected bool DelSessionCurrUserDb(string userN)
+        {
+            SessionCookie session;
+            UserDbTable currentUser;
+
+            using (var db = new SessionContext())
+            {
+                session = db.Sessions.FirstOrDefault(s => s.UserName == userN);
+                if (session != null)
+                {
+                    db.Sessions.Remove(session);
+                    db.SaveChanges();
+                    return true;
+                }
+            }
+            
+
+          
+
+
+            return false;
         }
 
     }
