@@ -6,6 +6,7 @@
 @{
 var userModel = HttpContext.Current.GetMySessionObject();
 }
+@model List<MovieNight.Web.Models.Review.ReviewModel>
 
 <div>
 <div class="content">
@@ -30,146 +31,165 @@ var userModel = HttpContext.Current.GetMySessionObject();
     <!-- end page title -->
 
 
-<div class="row">
-<div class="col-lg-4">
-    <div class="card-box">
-        @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
-        {
-            <a class href="" role="button" >
-                <i class="remixicon-delete-bin-3-line" ></i>
-            </a>
-        }
-        <h4 class="header-title">
-            That's great!
-        </h4>
-        <p class="sub-header">
-            Write your positive feedback here.
-        </p>
-
-        <ul class="sortable-list tasklist list-unstyled" id="upcoming">
-            <li id="task1" class="task-medium">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card-box">
                 @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
                 {
-                <div class="checkbox checkbox-blue mb-2 checkbox-single float-right">
-                    <input type="checkbox">
-                    <label></label>
-                </div>
+                    <a class href="" role="button">
+                        <i class="remixicon-delete-bin-3-line"></i>
+                    </a>
                 }
+                <h4 class="header-title">
+                    That's great!
+                </h4>
+                <p class="sub-header">
+                    Write your positive feedback here.
+                </p>
 
-                <h5 class="mt-0"><a href="javascript: void(0);" class="text-dark">Flopa</a></h5>
+                <ul class="sortable-list tasklist list-unstyled" id="upcoming">
+                    <li id="task1" class="task-medium">
+                        @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+                        {
+                            <div class="checkbox checkbox-blue mb-2 checkbox-single float-right">
+                                <input type="checkbox">
+                                <label></label>
+                            </div>
+                        }
 
-                <p>Oh yeah, what a movie!</p>
-                <div class="clearfix"></div>
-                <div class="row">
-                    <div class="col-auto">
-                        <a href="javascript: void(0);" class="text-muted">
-                            <img src="~/images/Nelea/Pooh.jpg" alt="task-user" class="avatar-sm img-thumbnail rounded-circle">
-                        </a>
-                    </div>
-                    <div class="col">
-                        <div class="text-right">
-                            <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i> 16.04.2024 </p>
-                        </div>
-                    </div>
-                </div>
-            </li>
+                        @foreach (var review in Model)
+                        {
+                            if(review.ReviewType == TypeOfReview.Great)
+                            {
+                                <h5 class="mt-0"><a href=@Url.Action("PersonalProfile", "InformationSynchronization") class="text-dark">@review.User</a></h5>
 
-        </ul>
-        <a href="javascript: void(0);" class="btn btn-primary btn-block mt-3 waves-effect waves-light"><i class="remixicon-quill-pen-line"></i> Add New </a>
+                                <p>@review.Text</p>
+                                <div class="clearfix"></div>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <a href="javascript: void(0);" class="text-muted">
+                                            <img src="@userModel.Avatar" alt="task-user" class="avatar-sm img-thumbnail rounded-circle">
+                                        </a>
+                                    </div>
+                                    <div class="col">
+                                        <div class="text-right">
+                                            <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i>@review.Date</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </li>
+
+                </ul>
+                <a href="javascript: void(0);" class="btn btn-primary btn-block mt-3 waves-effect waves-light"><i class="remixicon-quill-pen-line"></i> Add New </a>
+            </div>
+        </div> <!-- end col -->
+
+        <div class="col-lg-4">
+            <div class="card-box">
+                @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+                {
+                    <a class href="" role="button">
+                        <i class="remixicon-delete-bin-3-line"></i>
+                    </a>
+                }
+                <h4 class="header-title">
+                    It's fine.
+                </h4>
+                <ul class="sortable-list tasklist list-unstyled" id="inprogress">
+                    <li id="task6" class="task-low">
+                        @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+                        {
+                            <div class="checkbox checkbox-blue mb-2 checkbox-single float-right">
+                                <input type="checkbox">
+                                <label></label>
+                            </div>
+                        }
+
+                        @foreach (var review in Model)
+                        {
+                            if (review.ReviewType == TypeOfReview.Fine)
+                            {
+                                <h5 class="mt-0"><a href=@Url.Action("PersonalProfile", "InformationSynchronization") class="text-dark">@review.User</a></h5>
+
+                                <p>@review.Text</p>
+                                <div class="clearfix"></div>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <a href="javascript: void(0);" class="text-muted">
+                                            <img src="@userModel.Avatar" alt="task-user" class="avatar-sm img-thumbnail rounded-circle">
+                                        </a>
+                                    </div>
+                                    <div class="col">
+                                        <div class="text-right">
+                                            <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i>@review.Date</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </li>
+
+                </ul>
+                <a href="javascript: void(0);" class="btn btn-primary btn-block mt-3 waves-effect waves-light"><i class="remixicon-quill-pen-line"></i> Add New </a>
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+
+        <div class="col-lg-4">
+            <div class="card-box">
+                @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+                {
+                    <a class href="" role="button">
+                        <i class="remixicon-delete-bin-3-line"></i>
+                    </a>
+                }
+                <h4 class="header-title">
+                    Waste of time!
+                </h4>
+                <p class="sub-header">
+                    Write your negative reviews here (only decently please).
+                </p>
+
+                <ul class="sortable-list tasklist list-unstyled" id="completed">
+                    <li id="task10" class="task-low">
+
+                        @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+                        {
+                            <div class="checkbox checkbox-blue mb-2 checkbox-single float-right">
+                                <input type="checkbox">
+                                <label></label>
+                            </div>
+                        }
+                        @foreach (var review in Model)
+                        {
+                            if (review.ReviewType == TypeOfReview.Waste)
+                            {
+                                <h5 class="mt-0"><a href=@Url.Action("PersonalProfile", "InformationSynchronization") class="text-dark">@review.User</a></h5>
+
+                                <p>@review.Text</p>
+                                <div class="clearfix"></div>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <a href="javascript: void(0);" class="text-muted">
+                                            <img src="@userModel.Avatar" alt="task-user" class="avatar-sm img-thumbnail rounded-circle">
+                                        </a>
+                                    </div>
+                                    <div class="col">
+                                        <div class="text-right">
+                                            <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i>@review.Date</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </li>
+                </ul>
+                <a href="javascript: void(0);" class="btn btn-primary btn-block mt-3 waves-effect waves-light"><i class="remixicon-quill-pen-line"></i> Add New</a>
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+
     </div>
-</div> <!-- end col -->
-
-<div class="col-lg-4">
-    <div class="card-box">
-        @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
-        {
-        <a class href="" role="button" >
-            <i class="remixicon-delete-bin-3-line" ></i>
-        </a>
-        }
-        <h4 class="header-title">
-             It's fine.
-        </h4>
-        <ul class="sortable-list tasklist list-unstyled" id="inprogress">
-            <li id="task6" class="task-low">
-                @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
-                {
-                <div class="checkbox checkbox-blue mb-2 checkbox-single float-right">
-                    <input type="checkbox">
-                    <label></label>
-                </div>
-                }
-
-                <h5 class="mt-0"><a href="javascript: void(0);" class="text-dark">Plovdiva</a></h5>
-
-                <p>Uh, I don't know.</p>
-                <div class="clearfix"></div>
-                <div class="row">
-                    <div class="col-auto">
-                        <a href="javascript: void(0);" class="text-muted">
-                            <img src="~/images/Nelea/Nelea.png" alt="task-user" class="avatar-sm img-thumbnail rounded-circle">
-                        </a>
-                    </div>
-                    <div class="col">
-                        <div class="text-right">
-                            <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i>16.04.2024</p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-
-        </ul>
-        <a href="javascript: void(0);" class="btn btn-primary btn-block mt-3 waves-effect waves-light"><i class="remixicon-quill-pen-line"></i> Add New </a>
-    </div> <!-- end card-box -->
-</div> <!-- end col -->
-
-<div class="col-lg-4">
-    <div class="card-box">
-        @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
-        {
-        <a class href="" role="button" >
-            <i class="remixicon-delete-bin-3-line" ></i>
-        </a>
-        }
-        <h4 class="header-title">
-             Waste of time!
-        </h4>
-        <p class="sub-header">
-            Write your negative reviews here (only decently please).
-        </p>
-
-        <ul class="sortable-list tasklist list-unstyled" id="completed">
-            <li id="task10" class="task-low">
-
-                @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
-                {
-                    <div class="checkbox checkbox-blue mb-2 checkbox-single float-right">
-                        <input type="checkbox">
-                        <label></label>
-                    </div>
-                }
-                <h5 class="mt-0"><a href="javascript: void(0);" class="text-dark">Anastasiea</a></h5>
-                <p>How do I erase it from my memory?</p>
-                <div class="clearfix"></div>
-                <div class="row">
-                    <div class="col-auto">
-                        <a href="javascript: void(0);" class="text-muted">
-                            <img src="~/images/Nelea/Richi.jpg" alt="task-user" class="avatar-sm img-thumbnail rounded-circle">
-                        </a>
-                    </div>
-                    <div class="col">
-                        <div class="text-right">
-                            <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i>16.04.2024</p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-        <a href="javascript: void(0);" class="btn btn-primary btn-block mt-3 waves-effect waves-light"><i class="remixicon-quill-pen-line"></i> Add New</a>
-    </div> <!-- end card-box -->
-</div> <!-- end col -->
-
-</div>
 <!-- end row -->
                         
 </div> <!-- container -->

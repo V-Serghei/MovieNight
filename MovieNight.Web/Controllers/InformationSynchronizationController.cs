@@ -18,6 +18,7 @@ using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Models.Friends;
 using MovieNight.BusinessLogic.Interface.IService;
+using MovieNight.Web.Models.Review;
 
 namespace MovieNight.Web.Controllers
 {
@@ -30,6 +31,7 @@ namespace MovieNight.Web.Controllers
         private readonly IMapper _mapper;
         
         private readonly IFriendsService _serviceFriend;
+        
         public InformationSynchronizationController()
         {
             var sesControlBl = new BusinessLogic.BusinessLogic();
@@ -338,6 +340,18 @@ namespace MovieNight.Web.Controllers
         }
 
         public ActionResult ReviewPage()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult ReviewsPage()
+        {
+            //var listReviews = _movie.getListOfReviews();
+            ReviewModel review = new ReviewModel();
+            
+            return View();
+        }
+        public ActionResult ReviewPageWrite()
         {
             return View();
         }

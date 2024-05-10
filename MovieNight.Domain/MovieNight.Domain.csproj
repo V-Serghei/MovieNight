@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="enams\EventColor.cs" />
     <Compile Include="enams\LevelOfAccess.cs" />
+    <Compile Include="enams\TypeOfReview.cs" />
     <Compile Include="Entities\DifferentE\PhoneNumE.cs" />
     <Compile Include="Entities\DifferentE\Tag.cs" />
     <Compile Include="Entities\Friends\FriendsDbTable.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Entities\Notification\EventE.cs" />
     <Compile Include="Entities\PersonalP\PersonalProfileM.cs" />
     <Compile Include="Entities\PersonalP\ProfEditingE.cs" />
+    <Compile Include="Entities\Review\ReviewDbTable.cs" />
     <Compile Include="Entities\TimeD.cs" />
     <Compile Include="Entities\UserE.cs" />
     <Compile Include="Entities\UserId\LogInData.cs" />
