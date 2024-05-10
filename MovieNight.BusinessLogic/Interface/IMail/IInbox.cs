@@ -10,6 +10,9 @@ namespace MovieNight.BusinessLogic.Interface.IMail
 {
     public interface IInbox
     {
-        List<InboxD> InboxEquipment();
+        List<InboxD> InboxEquipment(int? userId);
+        bool SetAddMessage(InboxD message);
+        List<InboxD> InboxSent(int? userId);
+        List<InboxD> InboxStarred(int? userId);
     }
 }

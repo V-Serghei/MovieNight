@@ -56,6 +56,7 @@
     <Compile Include="Entities\Friends\FriendsListD.cs" />
     <Compile Include="Entities\Friends\FriendsPageD.cs" />
     <Compile Include="Entities\MailE\InboxD.cs" />
+    <Compile Include="Entities\MailE\MailDbTable.cs" />
     <Compile Include="Entities\MovieM\CastMemberE.cs" />
     <Compile Include="Entities\MovieM\EfDbEntities\CastMemDbTable.cs" />
     <Compile Include="Entities\MovieM\EfDbEntities\InterestingFactDbTable.cs" />

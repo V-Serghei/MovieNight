@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
+using MovieNight.Web.Infrastructure;
 
 namespace MovieNight.Web.Controllers
 {
@@ -21,28 +23,17 @@ namespace MovieNight.Web.Controllers
             сompleteInbox = MailBL.GetInbox();
         }
         // GET: DataTransfer
-        public ActionResult Inbox()
+        [HttpGet]
+        public ActionResult Inbox(int? userId)
         {
-            List<InboxModel> Message = new List<InboxModel>();
-            List<InboxD> MessageD = сompleteInbox.InboxEquipment();
-            foreach (var TMP in MessageD) 
+            var config = new MapperConfiguration(c =>
             {
-                Message.Add(new InboxModel
-                {
-                    IsChecked = TMP.IsChecked,
-                    SenderName = TMP.SenderName,
-                    Theme = TMP.Theme,
-                    Message = TMP.Message,
-                    Date = new TimeModel
-                    {
-                        Year = TMP.Date.Year,
-                        Month = TMP.Date.Month,
-                        Day = TMP.Date.Day, 
-                    },
-                }
-            );
-            }
-            return View(Message);
+                c.CreateMap<InboxD, InboxModel>();
+            });
+            var mapper = config.CreateMapper();
+            List<InboxD> messageD = сompleteInbox.InboxEquipment(userId);
+            var message = mapper.Map<List<InboxModel>>(messageD);
+            return View(message);
         }
         public ActionResult Read()
         {
@@ -52,13 +43,52 @@ namespace MovieNight.Web.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult ComposeAdd(InboxModel message)
+        {
+            var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+            var messageDb = new InboxD
+            {
+                Theme = message.Theme,
+                Message = message.Message,
+                RecipientName = message.RecipientName,
+                Date = DateTime.Now,
+                IsChecked = false,
+                IsStarred = false,
+                SenderName = System.Web.HttpContext.Current.GetMySessionObject().Username
+            };
+            var sendMail = сompleteInbox.SetAddMessage(messageDb);
+            return RedirectToAction("SentMail");
+        }
         public ActionResult Starred()
         {
             return View();
         }
+        public ActionResult StarredList(int? userId)
+        {
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<InboxD, InboxModel>();
+            });
+            var mapper = config.CreateMapper();
+            List<InboxD> messageD = сompleteInbox.InboxStarred(userId);
+            var message = mapper.Map<List<InboxModel>>(messageD);
+            return View(message);
+        }
         public ActionResult SentMail()
         {
             return View();
+        }
+        public ActionResult SentMailList(int? userId)
+        {
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<InboxD, InboxModel>();
+            });
+            var mapper = config.CreateMapper();
+            List<InboxD> messageD = сompleteInbox.InboxSent(userId);
+            var message = mapper.Map<List<InboxModel>>(messageD);
+            return View(message);
         }
         public ActionResult Trash()
         {

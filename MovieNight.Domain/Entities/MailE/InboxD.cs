@@ -14,7 +14,7 @@ namespace MovieNight.Domain.Entities.MailE
         public string RecipientName { get; set; }
         public string Theme { get; set; }
         public string Message { get; set; }
-        public TimeD Date { get; set; }
+        public DateTime Date { get; set; }
         
         public bool IsStarred { get; set; }
     }
