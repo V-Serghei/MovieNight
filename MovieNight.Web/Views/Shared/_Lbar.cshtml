@@ -47,7 +47,7 @@
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
                         <i class=" remixicon-movie-2-fill"></i>
-                        <span> Movie </span>
+                        <span> Cinema </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
@@ -77,10 +77,7 @@
                     </a>
                     <ul class="nav-second-level" aria-expanded="false">
                         <li>
-                            <a href=@Url.Action("Inbox","DataTransfer")>Inbox</a>
-                        </li>
-                        <li>
-                            <a href=@Url.Action("Read","DataTransfer")>Read Email</a>
+                            <a href=@Url.Action("Inbox","DataTransfer", new { skipParametr = 0 })>Inbox</a>
                         </li>
                         <li>
                             <a href=@Url.Action("Compose","DataTransfer")>Compose Email</a>
@@ -89,20 +86,10 @@
                 </li>
 
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
+                    <a href=@Url.Action("FriendsPage","SearchSortAdd", new { _skipParametr = 0 }) class="waves-effect">
                         <i class="remixicon-user-smile-fill"></i>
-                        <span> Friends </span>
-                        <span class="menu-arrow"></span>
+                        <span> My friends </span>
                     </a>
-                    <ul class="nav-second-level" aria-expanded="false">
-                        <li>
-                            <a href=@Url.Action("FriendsPage","SearchSortAdd")>My friends</a>
-                        </li>
-                        <li>
-                            <a href=@Url.Action("FriendsMovies","SearchSortAdd")>Friend’s movie</a>
-                        </li>
-                        
-                    </ul>
                 </li>
 
                 <li>
