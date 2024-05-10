@@ -391,6 +391,22 @@ namespace MovieNight.Web.Controllers
 
 
         }
+
+        public async Task<JsonResult> AddToBookmarkTimeOf(int movieId)
+        {
+            var resp = await _movie.SetNewBookmarkTimeOf((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId));
+
+            var model = new BookmarkModel();
+            //model.BookmarkTimeOf.Add
+            //System.Web.HttpContext.Current.SetBookmarkTimeOf();
+            
+            
+            
+            
+            
+            return Json(new { success = resp.IsSuccese, Msg = resp.RespMsg, newButtonTitle = "Delete", newButtonColor = "red" }); 
+
+        }
         
         public async Task<JsonResult> AddToViewed(int movieid)
         {
@@ -454,7 +470,6 @@ namespace MovieNight.Web.Controllers
 
             }
 
-            return View();
         }
             
         

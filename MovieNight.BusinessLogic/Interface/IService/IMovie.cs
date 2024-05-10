@@ -20,5 +20,6 @@ namespace MovieNight.BusinessLogic.Interface.IService
         List<ViewingHistoryM> GetViewingList(int? userId);
         Task<IEnumerable<ViewingHistoryM>> GetNewViewList(ViewListSortCommandE transCommand);
         List<MovieTemplateInfE> GetListMovie(MovieCommandS movieSCommand);
+        Task<RespToAddBookmarkTimeOf>  SetNewBookmarkTimeOf((int Id, int movieId) valueTuple);
     }
 }

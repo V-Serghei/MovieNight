@@ -60,6 +60,11 @@ namespace MovieNight.BusinessLogic.Session.Service
         {
             return GetListMovieDb(movieSCommand);
         }
+
+        public async Task<RespToAddBookmarkTimeOf> SetNewBookmarkTimeOf((int Id, int movieId) valueTuple)
+        {
+            return await SetNewBookmarkTimeOfDb(valueTuple);
+        }
     }
 
     

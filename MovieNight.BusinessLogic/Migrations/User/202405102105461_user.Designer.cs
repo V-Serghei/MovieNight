@@ -7,13 +7,13 @@ namespace MovieNight.BusinessLogic.Migrations.User
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class userm : IMigrationMetadata
+    public sealed partial class user : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(userm));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(user));
         
         string IMigrationMetadata.Id
         {
-            get { return "202405100958034_userm"; }
+            get { return "202405102105461_user"; }
         }
         
         string IMigrationMetadata.Source

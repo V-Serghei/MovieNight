@@ -28,6 +28,8 @@ namespace MovieNight.Web.Models.Movie
         
         public bool Bookmark { get; set; }
         
+        public bool BookmarkTomeOf { get; set; }
+        
         public float UserRating { get; set; }
         
     }

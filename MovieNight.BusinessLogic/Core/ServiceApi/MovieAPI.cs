@@ -334,7 +334,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 using (var db = new UserContext())
                 {
                     var verify = await db.Bookmark.FirstOrDefaultAsync(b => b.UserId == idAdd.user && b.MovieId == idAdd.movie);
-            
+                    
                     if (verify == null )
                     {
                         var addBookmarkE = new BookmarkDbTable
@@ -352,6 +352,13 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     }
                     else
                     {
+                        if (verify.BookmarkTimeOf)
+                        {
+                            verify.BookmarkTimeOf = false;
+                            resp.Msg = "Have already been added!";
+                            resp.Success = true;
+                            return  resp;
+                        }
                         resp.Msg = "Have already been added!";
                         resp.Success = false;
                         return  resp;
@@ -752,6 +759,57 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 return new List<MovieTemplateInfE>();
             }
         }
+
+        protected async Task<RespToAddBookmarkTimeOf> SetNewBookmarkTimeOfDb((int Id, int movieId) valueTuple)
+        {
+            GetMappersSettings();
+            var respAdd = new RespToAddBookmarkTimeOf();
+            var resp = new BookmarkE();
+            var movie = new MovieContext().MovieDb.FirstOrDefault(m => m.Id == valueTuple.movieId);
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var verify = await db.Bookmark.FirstOrDefaultAsync(b => b.UserId == valueTuple.Id && b.MovieId == valueTuple.movieId);
+            
+                    if (verify == null )
+                    {
+                        var addBookmarkE = new BookmarkDbTable
+                        {
+                            UserId = valueTuple.Id,
+                            MovieId = valueTuple.movieId,
+                            TimeAdd = DateTime.Now,
+                            BookmarkTimeOf = true
+                        };
+                        db.Bookmark.Add(addBookmarkE);
+                        await db.SaveChangesAsync();
+                        respAdd.RespMsg = resp.Msg = "Success";
+                        respAdd.IsSuccese =  resp.Success = true;
+                        respAdd.Bookmark = resp;
+                        respAdd.MovieInTimeOfBookmark = MapperFilm.Map<MovieTemplateInfE>(movie);
+                        
+                        return respAdd;
+                    }
+                    else
+                    {
+                        resp.Msg = "Have already been added!";
+                        resp.Success = false;
+                        respAdd.Bookmark = resp;
+                        respAdd.MovieInTimeOfBookmark = MapperFilm.Map<MovieTemplateInfE>(movie);
+                        return  respAdd;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respAdd.RespMsg = resp.Msg = "Error: " + ex.Message;
+                respAdd.IsSuccese = resp.Success = false;
+                respAdd.Bookmark = resp;
+                return  respAdd;
+            }
+
+        }
+
 
         
     }

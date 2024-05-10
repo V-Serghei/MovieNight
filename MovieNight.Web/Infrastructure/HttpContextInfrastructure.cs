@@ -44,15 +44,7 @@ namespace MovieNight.Web.Infrastructure
         /// Temporary storage of user action results for optimization
         /// by reducing the number of queries in the database
         /// </summary>
-        public static List<BookmarkModel> GetBookmarkTimeOf(this HttpContext current)
-        {
-            return current?.Session["__ListBookmarkTimeOf"] as List<BookmarkModel>;
-        }
         
-        public static void SetBookmarkTimeOf(this HttpContext current, List<BookmarkModel> list)
-        {
-            current.Session.Add("__ListBookmarkTimeOf", list);
-        }
 
         #region ViewList
         //################################

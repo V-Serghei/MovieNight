@@ -906,6 +906,7 @@
     <Compile Include="Infrastructure\CacheI\ViewListCacheKey.cs" />
     <Compile Include="Infrastructure\Different\ValidationStr.cs" />
     <Compile Include="Infrastructure\HttpContextInfrastructure.cs" />
+    <Compile Include="Infrastructure\SessionExchanges.cs" />
     <Compile Include="Models\Achievement\Achievement.cs" />
     <Compile Include="Models\Calendar\EventDataModel.cs" />
     <Compile Include="Models\Different\PhoneNumModel.cs" />
@@ -925,6 +926,7 @@
     <Compile Include="Models\Movie\UploadMovieFileModel.cs" />
     <Compile Include="Models\Movie\ViewingHistoryModel.cs" />
     <Compile Include="Models\PersonalP\Bookmark\BookmarkModel.cs" />
+    <Compile Include="Models\PersonalP\Bookmark\BookmarkTimeOf.cs" />
     <Compile Include="Models\PersonalP\PEditingM.cs" />
     <Compile Include="Models\PersonalP\PersonalProfilModel.cs" />
     <Compile Include="Models\RegistViewModel.cs" />
