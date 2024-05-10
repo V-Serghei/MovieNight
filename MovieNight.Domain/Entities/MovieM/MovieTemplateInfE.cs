@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using MovieNight.Domain.enams;
 using Newtonsoft.Json;
 
 namespace MovieNight.Domain.Entities.MovieM
 {
     public class MovieTemplateInfE
     {
+        
+        public int Id { get; set; }
         public string Title { get; set; }
+        public FilmCategory Category { get; set; }
         public string PosterImage { get; set; }
         public string Quote { get; set; }
         public string Description { get; set; }
@@ -16,7 +20,6 @@ namespace MovieNight.Domain.Entities.MovieM
         public string Location { get; set; }
         public string Director { get; set; }
         public string DurationJ { get; set; }
-
         [JsonIgnore] 
         public DateTime Duration { get; set; }
         public float MovieNightGrade { get; set; }
@@ -28,6 +31,8 @@ namespace MovieNight.Domain.Entities.MovieM
         public List<CastMemberE> CastMembers { get; set; }
         public List<MovieCardE> MovieCards { get; set; }
         public List<InterestingFactE> InterestingFacts { get; set; }
+        public bool Bookmark { get; set; }
+
     }
 
     
