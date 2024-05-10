@@ -456,8 +456,8 @@ namespace MovieNight.Web.Controllers
 
             return View();
         }
-            return Task.FromResult(Json(new {}));
-        }
+            
+        
 
         public ActionResult ReviewPage()
         {

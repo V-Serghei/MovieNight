@@ -4,6 +4,6 @@ D:\web project\Movie\MovieNight\MovieNight.Helpers\bin\Debug\AutoMapper.dll
 D:\web project\Movie\MovieNight\MovieNight.Helpers\bin\Debug\AutoMapper.xml
 D:\web project\Movie\MovieNight\MovieNight.Helpers\obj\Debug\MovieNight.Helpers.csproj.AssemblyReference.cache
 D:\web project\Movie\MovieNight\MovieNight.Helpers\obj\Debug\MovieNight.Helpers.csproj.CoreCompileInputs.cache
+D:\web project\Movie\MovieNight\MovieNight.Helpers\obj\Debug\MovieNig.98667EFB.Up2Date
 D:\web project\Movie\MovieNight\MovieNight.Helpers\obj\Debug\MovieNight.Helpers.dll
 D:\web project\Movie\MovieNight\MovieNight.Helpers\obj\Debug\MovieNight.Helpers.pdb
-D:\web project\Movie\MovieNight\MovieNight.Helpers\obj\Debug\MovieNig.98667EFB.Up2Date

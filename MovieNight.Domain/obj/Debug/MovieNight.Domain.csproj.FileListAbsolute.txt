@@ -8,6 +8,6 @@ D:\web project\Movie\MovieNight\MovieNight.Domain\bin\Debug\AutoMapper.xml
 D:\web project\Movie\MovieNight\MovieNight.Domain\bin\Debug\Newtonsoft.Json.xml
 D:\web project\Movie\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.csproj.AssemblyReference.cache
 D:\web project\Movie\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.csproj.CoreCompileInputs.cache
+D:\web project\Movie\MovieNight\MovieNight.Domain\obj\Debug\MovieNig.5527C952.Up2Date
 D:\web project\Movie\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.dll
 D:\web project\Movie\MovieNight\MovieNight.Domain\obj\Debug\MovieNight.Domain.pdb
-D:\web project\Movie\MovieNight\MovieNight.Domain\obj\Debug\MovieNig.5527C952.Up2Date
