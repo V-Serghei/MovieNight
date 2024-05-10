@@ -13,6 +13,12 @@ D:\Projects\MovieNight\MovieNight.BusinessLogic\bin\Debug\EntityFramework.xml
 D:\Projects\MovieNight\MovieNight.BusinessLogic\bin\Debug\EntityFramework.SqlServer.xml
 D:\Projects\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.csproj.AssemblyReference.cache
 D:\Projects\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.csproj.CoreCompileInputs.cache
-D:\Projects\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.csproj.CopyComplete
 D:\Projects\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.dll
 D:\Projects\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.pdb
+D:\Projects\MovieNight\MovieNight.BusinessLogic\bin\Debug\Newtonsoft.Json.dll
+D:\Projects\MovieNight\MovieNight.BusinessLogic\bin\Debug\Newtonsoft.Json.xml
+D:\Projects\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.Migrations.Movie.Moviee.resources
+D:\Projects\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.Migrations.Session.Session.resources
+D:\Projects\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.Migrations.User.Movie.resources
+D:\Projects\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.csproj.GenerateResource.cache
+D:\Projects\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNig.E67086DB.Up2Date
