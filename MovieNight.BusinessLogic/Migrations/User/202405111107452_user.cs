@@ -183,17 +183,17 @@
                 .Index(t => t.RecipientId);
             
             CreateTable(
-                "dbo.CastMemDbTableMovieDbTables",
+                "dbo.MovieCastMembers",
                 c => new
                     {
-                        CastMemDbTable_Id = c.Int(nullable: false),
-                        MovieDbTable_Id = c.Int(nullable: false),
+                        CastMemberId = c.Int(nullable: false),
+                        MovieId = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => new { t.CastMemDbTable_Id, t.MovieDbTable_Id })
-                .ForeignKey("dbo.CastMemDbTables", t => t.CastMemDbTable_Id, cascadeDelete: true)
-                .ForeignKey("dbo.MovieDbTables", t => t.MovieDbTable_Id, cascadeDelete: true)
-                .Index(t => t.CastMemDbTable_Id)
-                .Index(t => t.MovieDbTable_Id);
+                .PrimaryKey(t => new { t.CastMemberId, t.MovieId })
+                .ForeignKey("dbo.CastMemDbTables", t => t.CastMemberId, cascadeDelete: true)
+                .ForeignKey("dbo.MovieDbTables", t => t.MovieId, cascadeDelete: true)
+                .Index(t => t.CastMemberId)
+                .Index(t => t.MovieId);
             
         }
         
@@ -209,11 +209,11 @@
             DropForeignKey("dbo.ViewListDbTables", "MovieId", "dbo.MovieDbTables");
             DropForeignKey("dbo.MovieCardDbTables", "MovieId", "dbo.MovieDbTables");
             DropForeignKey("dbo.InterestingFactDbTables", "MovieId", "dbo.MovieDbTables");
-            DropForeignKey("dbo.CastMemDbTableMovieDbTables", "MovieDbTable_Id", "dbo.MovieDbTables");
-            DropForeignKey("dbo.CastMemDbTableMovieDbTables", "CastMemDbTable_Id", "dbo.CastMemDbTables");
+            DropForeignKey("dbo.MovieCastMembers", "MovieId", "dbo.MovieDbTables");
+            DropForeignKey("dbo.MovieCastMembers", "CastMemberId", "dbo.CastMemDbTables");
             DropForeignKey("dbo.BookmarkDbTables", "MovieId", "dbo.MovieDbTables");
-            DropIndex("dbo.CastMemDbTableMovieDbTables", new[] { "MovieDbTable_Id" });
-            DropIndex("dbo.CastMemDbTableMovieDbTables", new[] { "CastMemDbTable_Id" });
+            DropIndex("dbo.MovieCastMembers", new[] { "MovieId" });
+            DropIndex("dbo.MovieCastMembers", new[] { "CastMemberId" });
             DropIndex("dbo.MailDbTables", new[] { "RecipientId" });
             DropIndex("dbo.MailDbTables", new[] { "SenderId" });
             DropIndex("dbo.PEdBdTables", new[] { "UserDbTableId" });
@@ -225,7 +225,7 @@
             DropIndex("dbo.InterestingFactDbTables", new[] { "MovieId" });
             DropIndex("dbo.BookmarkDbTables", new[] { "UserId" });
             DropIndex("dbo.BookmarkDbTables", new[] { "MovieId" });
-            DropTable("dbo.CastMemDbTableMovieDbTables");
+            DropTable("dbo.MovieCastMembers");
             DropTable("dbo.MailDbTables");
             DropTable("dbo.PEdBdTables");
             DropTable("dbo.FriendsDbTables");

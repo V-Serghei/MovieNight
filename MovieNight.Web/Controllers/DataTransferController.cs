@@ -14,7 +14,7 @@ using MovieNight.Web.Infrastructure;
 
 namespace MovieNight.Web.Controllers
 {
-    public class DataTransferController : Controller
+    public class DataTransferController : MasterController
     {
         internal IInbox сompleteInbox;
         public DataTransferController()

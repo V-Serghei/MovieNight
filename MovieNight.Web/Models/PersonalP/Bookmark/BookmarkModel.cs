@@ -1,4 +1,6 @@
-﻿namespace MovieNight.Web.Models.PersonalP.Bookmark
+﻿using System;
+
+namespace MovieNight.Web.Models.PersonalP.Bookmark
 {
     public class BookmarkModel
     {
@@ -10,6 +12,12 @@
         public int IdMovie { get; set; }
 
         public bool BookmarkTimeOf { get; set; } = false;
+        
+        public bool BookMark { get; set; } = false;
+        
+        public DateTime TimeAdd { get; set; }
+
+
 
     }
 }

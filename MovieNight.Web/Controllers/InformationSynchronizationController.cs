@@ -366,7 +366,8 @@ namespace MovieNight.Web.Controllers
                 IdMovie = bookMe.IdMovie,
                 Msg = bookMe.Msg,
                 Success = bookMe.Success,
-                BookmarkTimeOf = false
+                BookmarkTimeOf = bookMe.BookmarkTimeOf,
+                BookMark = bookMe.BookMark
 
             };
             
@@ -391,18 +392,63 @@ namespace MovieNight.Web.Controllers
 
 
         }
+        public async Task<JsonResult> DeleteBookmarkTimeOf(int movieId)
+        {   
+            var deleteBookmark = await _movie.DeleteBookmarkTimeOf((System.Web.HttpContext.
+                Current.GetMySessionObject().Id,movieId));
+            
+            if (System.Web.HttpContext.Current.VerifyExistBookmark(new BookmarkModel{IdMovie = movieId}))
+            {
+                System.Web.HttpContext.Current.RemoveBookmark(new BookmarkModel{IdMovie = movieId});
+            }
+            if (deleteBookmark)
+            {
+                return Json(new { success = true, Msg = "Deleted"}); 
+
+            }
+
+            return Json(new { success = false, Msg = "Error"});
+
+
+        }
 
         public async Task<JsonResult> AddToBookmarkTimeOf(int movieId)
         {
             var resp = await _movie.SetNewBookmarkTimeOf((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId));
-
-            var model = new BookmarkModel();
-            //model.BookmarkTimeOf.Add
-            //System.Web.HttpContext.Current.SetBookmarkTimeOf();
-            
-            
-            
-            
+            // if (System.Web.HttpContext.Current.GetBookmarkTimeOf() == null)
+            // {
+                var bookmarkTest = new BookmarkModel
+                {
+                    IdUser = resp.Bookmark.IdUser,
+                    IdMovie = resp.Bookmark.IdMovie,
+                    BookmarkTimeOf = resp.Bookmark.BookmarkTimeOf,
+                    TimeAdd = resp.Bookmark.TimeAdd
+                };
+                
+                if (!System.Web.HttpContext.Current.VerifyExistBookmark(bookmarkTest))
+                {
+                    var getLostB = System.Web.HttpContext.Current.GetBookmarkTimeOf();
+                    getLostB.MovieInTimeOfBookmark.Add(_mapper.Map<MovieTemplateInfModel>(resp.MovieInTimeOfBookmark));
+                    getLostB.Bookmark.Add(bookmarkTest);
+                    System.Web.HttpContext.Current.SetBookmarkTimeOf(getLostB);
+                }
+                
+                
+            // }
+            // else
+            // {
+            //     var bookmarkTimeOf = System.Web.HttpContext.Current.GetBookmarkTimeOf();
+            //     bookmarkTimeOf.MovieInTimeOfBookmark.Add(_mapper.Map<MovieTemplateInfModel>(resp.MovieInTimeOfBookmark));
+            //     bookmarkTimeOf.Bookmark.Add(new BookmarkModel
+            //     {
+            //         IdUser = resp.Bookmark.IdUser,
+            //         IdMovie = resp.Bookmark.IdMovie,
+            //         BookmarkTimeOf = resp.Bookmark.BookmarkTimeOf,
+            //         TimeAdd = resp.Bookmark.TimeAdd
+            //
+            //     });
+            //     System.Web.HttpContext.Current.SetBookmarkTimeOf(bookmarkTimeOf);
+            // }
             
             return Json(new { success = resp.IsSuccese, Msg = resp.RespMsg, newButtonTitle = "Delete", newButtonColor = "red" }); 
 

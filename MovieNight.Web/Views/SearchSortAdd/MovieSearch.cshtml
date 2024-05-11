@@ -94,7 +94,7 @@
                                                      <span class="text-bg-dark mb-1 font-12 ml-2">@gen</span>
                                                 }
                                             <br>
-                                            
+
 
                                             @if (!Model.ListFilm[index + currIndex].Bookmark)
                                             {
@@ -106,6 +106,18 @@
                                             {
                                             <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" onclick="toggleBookmark('@Model.ListFilm[index + currIndex].Id', false)">
                                                 <i class="mdi mdi-bookmark-plus mr-1"></i> Delete Bookmark
+                                            </button>
+                                            }
+                                            @if (!Model.ListFilm[currIndex+index].BookmarkTomeOf)
+                                            {
+                                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="toggleBookmarkTimeOf('@Model.ListFilm[index + currIndex].Id', true)">
+                                                <i class="mdi mdi-bookmark-plus mr-1"></i> Maybe I’ll watch!
+                                            </button>
+                                            }
+                                            else
+                                            {
+                                            <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" onclick="toggleBookmarkTimeOf('@Model.ListFilm[index + currIndex].Id', false)">
+                                                <i class=" remixicon-bookmark-3-line"></i> Cancel
                                             </button>
                                             }
 
@@ -305,6 +317,25 @@
         console.error('Error:', error);
     });
     }
+    function toggleBookmarkTimeOf(movieId, isAddBookmark) {
+        var url = isAddBookmark ? '/InformationSynchronization/AddToBookmarkTimeOf' : '/InformationSynchronization/DeleteBookmarkTimeOf';
+        var button = event.target;
 
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ movieId: movieId }),
+        })
+            .then(response => response.json())
+            .then(data => {
+
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 </script>
 

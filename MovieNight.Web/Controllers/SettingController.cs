@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace MovieNight.Web.Controllers
 {
-    public class SettingController : Controller
+    public class SettingController : MasterController
     {
         // GET: Setting
         public ActionResult ProfileConfiguration()

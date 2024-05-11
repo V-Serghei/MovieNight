@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace MovieNight.Web.Controllers
 {
-    public class StatisticController : Controller
+    public class StatisticController : MasterController
     {
         // GET: Statistic
         public ActionResult PersonalPromotionStatistics()

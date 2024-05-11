@@ -32,6 +32,9 @@ namespace MovieNight.Domain.Entities.MovieM
         public List<MovieCardE> MovieCards { get; set; }
         public List<InterestingFactE> InterestingFacts { get; set; }
         public bool Bookmark { get; set; }
+        
+        public bool BookmarkTomeOf { get; set; }
+
 
     }
 

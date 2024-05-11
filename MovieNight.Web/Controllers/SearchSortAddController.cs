@@ -23,7 +23,7 @@ using MovieNight.Web.Models.SortingSearchingFiltering;
 
 namespace MovieNight.Web.Controllers
 {
-    public class SearchSortAddController : Controller
+    public class SearchSortAddController : MasterController
     {
         
         private readonly IFriendsService _serviceFriend;
@@ -116,6 +116,8 @@ namespace MovieNight.Web.Controllers
 
         public ActionResult SerialsSearch()
         {
+            SessionStatus();
+           
             if(TempData["MovieListModel"] == null){
                 var filmsListModel = new MovieListModel
                 {
@@ -126,7 +128,8 @@ namespace MovieNight.Web.Controllers
                         Direction = Direction.Non,
                         SortingDirection = SortDirection.Non,
                         SortPar = SortingOption.All,
-                        UserId = System.Web.HttpContext.Current.GetMySessionObject().Id
+                        UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
+
                     }
                 };
                 var filmSCommand = _mapper.Map<MovieCommandS>(filmsListModel.CommandSort);
@@ -143,10 +146,20 @@ namespace MovieNight.Web.Controllers
                 return View(listModel);
             }
             var model = TempData["MovieListModel"] as MovieListModel;
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+            {
+                return View(model);
+            }
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Login", "Identification");
+            }
             return View(model);
         }
         public ActionResult CartoonsSearch()
         {
+            SessionStatus();
+           
             if(TempData["MovieListModel"] == null){
                 var filmsListModel = new MovieListModel
                 {
@@ -157,7 +170,7 @@ namespace MovieNight.Web.Controllers
                         Direction = Direction.Non,
                         SortingDirection = SortDirection.Non,
                         SortPar = SortingOption.All,
-                        UserId = System.Web.HttpContext.Current.GetMySessionObject().Id
+                        UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
 
                     }
                 };
@@ -175,10 +188,20 @@ namespace MovieNight.Web.Controllers
                 return View(listModel);
             }
             var model = TempData["MovieListModel"] as MovieListModel;
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+            {
+                return View(model);
+            }
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Login", "Identification");
+            }
             return View(model);
         }
         public ActionResult AnimeSearch()
         {
+            SessionStatus();
+           
             if(TempData["MovieListModel"] == null){
                 var filmsListModel = new MovieListModel
                 {
@@ -189,7 +212,7 @@ namespace MovieNight.Web.Controllers
                         Direction = Direction.Non,
                         SortingDirection = SortDirection.Non,
                         SortPar = SortingOption.All,
-                        UserId = System.Web.HttpContext.Current.GetMySessionObject().Id
+                        UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
 
                     }
                 };
@@ -207,6 +230,14 @@ namespace MovieNight.Web.Controllers
                 return View(listModel);
             }
             var model = TempData["MovieListModel"] as MovieListModel;
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+            {
+                return View(model);
+            }
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Login", "Identification");
+            }
             return View(model);
         }
 
@@ -556,6 +587,8 @@ namespace MovieNight.Web.Controllers
     [HttpGet]
     public ActionResult MovieSearch()
     {
+        SessionStatus();
+           
         if(TempData["MovieListModel"] == null){
             var filmsListModel = new MovieListModel
             {
@@ -566,7 +599,7 @@ namespace MovieNight.Web.Controllers
                     Direction = Direction.Non,
                     SortingDirection = SortDirection.Non,
                     SortPar = SortingOption.All,
-                    UserId = System.Web.HttpContext.Current.GetMySessionObject().Id
+                    UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
 
                 }
             };
@@ -584,6 +617,14 @@ namespace MovieNight.Web.Controllers
             return View(listModel);
         }
         var model = TempData["MovieListModel"] as MovieListModel;
+        if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+        {
+            return View(model);
+        }
+        if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+        {
+            return RedirectToAction("Login", "Identification");
+        }
         return View(model);
     }
 

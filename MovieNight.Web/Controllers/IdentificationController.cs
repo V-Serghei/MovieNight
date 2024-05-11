@@ -16,7 +16,7 @@ using MovieNight.Web.Infrastructure.Different;
 
 namespace MovieNight.Web.Controllers
 {
-    public class IdentificationController : Controller
+    public class IdentificationController : MasterController
     {
         private readonly ISession _sessionUser;
         private readonly IMapper _mapper;

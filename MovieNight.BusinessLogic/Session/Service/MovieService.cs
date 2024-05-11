@@ -24,11 +24,21 @@ namespace MovieNight.BusinessLogic.Session.Service
         {
             return GetInfBookmarkDb(movieid);
         }
+        public bool GetInfBookmarkTimeOf((int,int) movieid)
+        {
+            return GetInfBookmarkTimeOfDb(movieid);
+        }
 
         public List<ListOfFilmsE> GetListPlain(int? userId)
         {
             return GetListPlainDb(userId);
         }
+
+        public BookmarkTimeOfE GetListBookmarksTimeOf(int? userId)
+        {
+            return GetListBookmarksTimeOfDb(userId);
+        }
+
 
         public async Task<bool> DeleteBookmark((int Id, int movieId) valueTuple)
         {
@@ -64,6 +74,16 @@ namespace MovieNight.BusinessLogic.Session.Service
         public async Task<RespToAddBookmarkTimeOf> SetNewBookmarkTimeOf((int Id, int movieId) valueTuple)
         {
             return await SetNewBookmarkTimeOfDb(valueTuple);
+        }
+
+        public async Task<bool> DeleteBookmarkTimeOf((int Id, int movieId) valueTuple)
+        {
+            return await DeleteBookmarkTimeOfDb(valueTuple);
+        }
+
+        public void BookmarkStatusCheck()
+        {
+            BookmarkStatusCheckDb();
         }
     }
 

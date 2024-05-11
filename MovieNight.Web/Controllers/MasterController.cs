@@ -1,28 +1,69 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
 using MovieNight.BusinessLogic.Interface;
+using MovieNight.BusinessLogic.Interface.IService;
+using MovieNight.Domain.Entities.Friends;
+using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities.PersonalP;
+using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 using MovieNight.Domain.Entities.UserId;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Models;
+using MovieNight.Web.Models.Friends;
+using MovieNight.Web.Models.Movie;
+using MovieNight.Web.Models.PersonalP;
+using MovieNight.Web.Models.PersonalP.Bookmark;
 
 namespace MovieNight.Web.Controllers
 {
-    public class MasterController:Controller
+    public class MasterController : Controller
     {
         private readonly ISession _session;
         private readonly IMapper _mapper;
+        private readonly IMovie _movie;
         public MasterController()
         {
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<LogInData,UserModel >();
+                cfg.CreateMap<PEditingM, ProfEditingE>();
+                cfg.CreateMap<PEditingM, PersonalProfileModel>();
+                cfg.CreateMap<PersonalProfileM, PersonalProfileModel>()
+                    .ForMember(dist => dist.BUserE,
+                        src => src.Ignore());
+                cfg.CreateMap<MovieTemplateInfE, MovieTemplateInfModel>()
+                    .ForMember(cnf => cnf.CastMembers,
+                        src => src.Ignore())
+                    .ForMember(cnf => cnf.InterestingFacts,
+                        src => src.Ignore())
+                    .ForMember(cnf => cnf.MovieCards,
+                        src => src.Ignore());
+                cfg.CreateMap<InterestingFact, InterestingFactE>();
+                cfg.CreateMap<InterestingFactE, InterestingFact>();
+                cfg.CreateMap<MovieCardE, MovieCard>();
+                cfg.CreateMap<MovieCard, MovieCardE>();
+                cfg.CreateMap<CastMemberE, CastMember>();
+                cfg.CreateMap<CastMember, CastMemberE>();
+                cfg.CreateMap<ListOfFilmsE, ListOfFilmsModel>();
+                cfg.CreateMap<ListOfFilmsModel, ListOfFilmsE>();
+                cfg.CreateMap<ViewingHistoryM,ViewingHistoryModel>();
+                cfg.CreateMap<ViewingHistoryModel,ViewingHistoryM>();
+                cfg.CreateMap<BookmarkE, BookmarkModel>();
+                cfg.CreateMap<BookmarkModel, BookmarkE>();
 
+
+                cfg.CreateMap<FriendsPageD, FriendPageModel>()
+                    .ForMember(dest=>dest.BUserE, 
+                        opt=>opt.Ignore());
             });
+            
             _mapper = config.CreateMapper();
             var bl = new BusinessLogic.BusinessLogic();
             _session = bl.Session();
+            _movie = bl.GetMovieService();
         }
 
         public void SessionStatus()
@@ -39,6 +80,7 @@ namespace MovieNight.Web.Controllers
 
                     System.Web.HttpContext.Current.SetMySessionObject(us);
                     System.Web.HttpContext.Current.Session["LoginStatus"] = "login";
+                    GetInfoOnTheCurrStateBookmarkTimeOf();
                 }
                 else
                 {
@@ -61,5 +103,31 @@ namespace MovieNight.Web.Controllers
                 System.Web.HttpContext.Current.Session["LoginStatus"] = "zero";
             }
         }
+
+        #region Temporary Data
+        /// <summary>
+        /// Update and obtain information on temporary bookmarks
+        /// </summary>
+
+        public void GetInfoOnTheCurrStateBookmarkTimeOf()
+        {
+            if (System.Web.HttpContext.Current.GetBookmarkTimeOf() == null)
+            {
+                var listBookmarkE =
+                    _movie.GetListBookmarksTimeOf(System.Web.HttpContext.Current.GetMySessionObject().Id);
+                var listBookmark = new BookmarkTimeOf
+                {
+                    Bookmark = _mapper.Map<List<BookmarkModel>>(listBookmarkE.Bookmark),
+                    MovieInTimeOfBookmark = _mapper.Map<List<MovieTemplateInfModel>>(listBookmarkE.MovieInTimeOfBookmark)
+                };
+                System.Web.HttpContext.Current.SetBookmarkTimeOf(listBookmark);
+            }
+
+            _movie.BookmarkStatusCheck();
+        }
+        
+
+        #endregion
+
     }
 }

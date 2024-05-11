@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Threading.Tasks;
 using System.Web.Caching;
 using System.Web.UI;
@@ -131,7 +132,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         {
             GetMappersSettings();
             var movieDb = new MovieTemplateInfE();
-            var op = ReadMoviesFromJson("D:\\Projects\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
+            var op = ReadMoviesFromJson("D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
 
             PopulateDatabase(op);
             // conf.CreateMapper();
@@ -334,7 +335,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 using (var db = new UserContext())
                 {
                     var verify = await db.Bookmark.FirstOrDefaultAsync(b => b.UserId == idAdd.user && b.MovieId == idAdd.movie);
-                    
+            
                     if (verify == null )
                     {
                         var addBookmarkE = new BookmarkDbTable
@@ -342,7 +343,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             UserId = idAdd.user,
                             MovieId = idAdd.movie,
                             TimeAdd = DateTime.Now,
-                            BookmarkTimeOf = false
+                            BookmarkTimeOf = false,
+                            BookMark = true
                         };
                         db.Bookmark.Add(addBookmarkE);
                         await db.SaveChangesAsync();
@@ -354,14 +356,19 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     {
                         if (verify.BookmarkTimeOf)
                         {
-                            verify.BookmarkTimeOf = false;
+                            verify.BookMark = true;
                             resp.Msg = "Have already been added!";
                             resp.Success = true;
-                            return  resp;
                         }
-                        resp.Msg = "Have already been added!";
-                        resp.Success = false;
-                        return  resp;
+                        else
+                        {
+                            resp.Msg = "Have already been added!";
+                            resp.Success = false;
+                        }
+                
+                        await db.SaveChangesAsync();
+                
+                        return resp;
                     }
                 }
             }
@@ -369,9 +376,10 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             {
                 resp.Msg = "Error: " + ex.Message;
                 resp.Success = false;
-                return  resp;
+                return resp;
             }
         }
+
 
         protected async Task<bool> DeleteBookmarkDb((int user,int movie) idAdd)
         {
@@ -383,6 +391,12 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
                     if (bookmarkToDelete != null)
                     {
+                        if (bookmarkToDelete.BookmarkTimeOf)
+                        {
+                            bookmarkToDelete.BookMark = false;
+                            await db.SaveChangesAsync();
+                            return true;
+                        }
                         db.Bookmark.Remove(bookmarkToDelete);
 
                         await db.SaveChangesAsync();
@@ -410,12 +424,29 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     var verify =  db.Bookmark.FirstOrDefault(b => b.UserId == movieid.user && b.MovieId == movieid.movie);
 
-                    return verify != null;
+                    return verify != null && verify.BookMark;
                 }
             }
             catch (Exception ex)
             {
-                
+                Console.WriteLine($@"Error deleting bookmark: {ex.Message}");
+                return  false ;
+            }
+        }
+        protected bool GetInfBookmarkTimeOfDb((int user,int movie) movieid)
+        {
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var verify =  db.Bookmark.FirstOrDefault(b => b.UserId == movieid.user && b.MovieId == movieid.movie);
+
+                    return verify != null && verify.BookmarkTimeOf;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($@"Error deleting bookmark: {ex.Message}");
                 return  false ;
             }
         }
@@ -468,6 +499,53 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 return listBookmark;
             }
         }
+
+        protected BookmarkTimeOfE GetListBookmarksTimeOfDb(int? userId)
+        {
+
+            var listBookmark = new BookmarkTimeOfE();
+            GetMappersSettings();
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var dbList = db.Bookmark
+                        .Where(l => l.UserId == userId && l.BookmarkTimeOf)
+                        .OrderByDescending(l => l.TimeAdd) 
+                        .ToList();
+                    foreach (var bookmarkDbTable in dbList)
+                    {
+                        using (var movie = new MovieContext())
+                        {
+                            var movieS = movie.MovieDb.FirstOrDefault(m => m.Id == bookmarkDbTable.MovieId);
+                            if (movieS != null)
+                            {
+                                listBookmark.MovieInTimeOfBookmark.Add(MapperFilm.Map<MovieTemplateInfE>(movieS));
+                                listBookmark.Bookmark.Add(new BookmarkE
+                                {
+                                    BookMark = bookmarkDbTable.BookMark,
+                                    BookmarkTimeOf = bookmarkDbTable.BookmarkTimeOf,
+                                    IdMovie = bookmarkDbTable.MovieId,
+                                    IdUser = bookmarkDbTable.UserId,
+                                    TimeAdd = bookmarkDbTable.TimeAdd
+                                });
+                            }
+                            
+                        }
+                       
+                    }
+
+                    return listBookmark;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                return listBookmark;
+            }
+        }
+
 
         protected float GetUserRatingDb((int user, int movie) valueTuple)
         {
@@ -745,9 +823,21 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     var movieList = MapperFilm.Map<List<MovieTemplateInfE>>(movieDb);
                     using (var  user = new UserContext())
                     {
-                        foreach (var movie in movieList)
+                        if (movieSCommand.UserId != null)
                         {
-                            movie.Bookmark = user.Bookmark.Any(u => u.UserId == movieSCommand.UserId && u.MovieId == movie.Id);
+
+                            foreach (var movie in movieList)
+                            {
+                                var bookmarkDbTable = user.Bookmark
+                                    .FirstOrDefaultAsync(u => u.UserId == movieSCommand.UserId && u.MovieId == movie.Id)
+                                    .Result;
+                                if (bookmarkDbTable != null)
+                                {
+                                    movie.BookmarkTomeOf = bookmarkDbTable.BookmarkTimeOf;
+                                    movie.Bookmark = bookmarkDbTable.BookMark;
+                                }
+
+                            }
                         }
                     }
                     return movieList;
@@ -776,10 +866,10 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     {
                         var addBookmarkE = new BookmarkDbTable
                         {
-                            UserId = valueTuple.Id,
-                            MovieId = valueTuple.movieId,
-                            TimeAdd = DateTime.Now,
-                            BookmarkTimeOf = true
+                            UserId = resp.IdUser = valueTuple.Id,
+                            MovieId = resp.IdMovie = valueTuple.movieId,
+                            TimeAdd = resp.TimeAdd = DateTime.Now,
+                            BookmarkTimeOf = resp.BookmarkTimeOf = true
                         };
                         db.Bookmark.Add(addBookmarkE);
                         await db.SaveChangesAsync();
@@ -788,12 +878,31 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         respAdd.Bookmark = resp;
                         respAdd.MovieInTimeOfBookmark = MapperFilm.Map<MovieTemplateInfE>(movie);
                         
+                        
                         return respAdd;
                     }
                     else
                     {
+                        if (verify.BookMark)
+                        {
+                            verify.BookmarkTimeOf = resp.BookmarkTimeOf = true;
+                            verify.TimeAdd = resp.TimeAdd = DateTime.Now;
+                            resp.IdUser = valueTuple.Id;
+                            resp.IdMovie = valueTuple.movieId;
+                            resp.BookMark = verify.BookMark;
+
+                        }
+                        else
+                        {
+                            resp.Msg = "Have already been added! Error!";
+                            resp.Success = false;
+                            respAdd.Bookmark = resp;
+                            respAdd.MovieInTimeOfBookmark = MapperFilm.Map<MovieTemplateInfE>(movie);
+                            return respAdd;
+                        }
+                        await db.SaveChangesAsync();
                         resp.Msg = "Have already been added!";
-                        resp.Success = false;
+                        resp.Success = true;
                         respAdd.Bookmark = resp;
                         respAdd.MovieInTimeOfBookmark = MapperFilm.Map<MovieTemplateInfE>(movie);
                         return  respAdd;
@@ -809,7 +918,67 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             }
 
         }
+        protected async Task<bool> DeleteBookmarkTimeOfDb((int user,int movie) idAdd)
+        {
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var bookmarkToDelete = await db.Bookmark.FirstOrDefaultAsync(b => b.UserId == idAdd.user && b.MovieId == idAdd.movie);
 
+                    if (bookmarkToDelete != null)
+                    {
+                        if (bookmarkToDelete.BookmarkTimeOf && bookmarkToDelete.BookMark)
+                        {
+                            bookmarkToDelete.BookmarkTimeOf = false;
+                            await db.SaveChangesAsync();
+                            return true;
+                        }else if (bookmarkToDelete.BookmarkTimeOf)
+                        {
+                            db.Bookmark.Remove(bookmarkToDelete);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    
+                }
+            }catch (Exception ex)
+            {
+                Console.WriteLine($@"Error deleting bookmark: {ex.Message}");
+                return  false;
+            }
+
+            return true;
+        }
+
+        protected void BookmarkStatusCheckDb()
+        {
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var currentTime = DateTime.Now;
+                    var timeThreshold = currentTime.AddHours(-24);
+                    
+                    var expiredBookmarks = db.Bookmark
+                        .Where(b => b.BookmarkTimeOf && !b.BookMark && b.TimeAdd < timeThreshold)
+                        .ToList();
+                    
+                    db.Bookmark.RemoveRange(expiredBookmarks);
+                    db.SaveChanges();
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
 
         
     }

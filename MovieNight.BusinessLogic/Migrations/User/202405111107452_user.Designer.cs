@@ -13,7 +13,7 @@ namespace MovieNight.BusinessLogic.Migrations.User
         
         string IMigrationMetadata.Id
         {
-            get { return "202405102105461_user"; }
+            get { return "202405111107452_user"; }
         }
         
         string IMigrationMetadata.Source

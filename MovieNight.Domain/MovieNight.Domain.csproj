@@ -79,6 +79,7 @@
     <Compile Include="Entities\PersonalP\PersonalInfoDbTable.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkDbTable.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkE.cs" />
+    <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkTimeOfE.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\RespToAddBookmarkTimeOf.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\ViewListDbTable.cs" />
     <Compile Include="Entities\Notification\EventDbTable.cs" />

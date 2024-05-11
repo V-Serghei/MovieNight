@@ -12,8 +12,10 @@ namespace MovieNight.BusinessLogic.Interface.IService
 
         Task<BookmarkE> SetNewBookmark((int,int) movieid);
         bool GetInfBookmark((int,int) movieid);
+        bool GetInfBookmarkTimeOf((int, int) movieid);
 
-        List<ListOfFilmsE> GetListPlain(int? userId);
+        List<ListOfFilmsE> GetListPlain(int? userId); 
+        BookmarkTimeOfE GetListBookmarksTimeOf(int? userId);
         Task<bool> DeleteBookmark((int Id, int movieId) valueTuple);
         float GetUserRating((int Id, int id) valueTuple);
         Task<bool> SetReteMovieAndView((int Id, int movieId, int rating) valueTuple);
@@ -21,5 +23,7 @@ namespace MovieNight.BusinessLogic.Interface.IService
         Task<IEnumerable<ViewingHistoryM>> GetNewViewList(ViewListSortCommandE transCommand);
         List<MovieTemplateInfE> GetListMovie(MovieCommandS movieSCommand);
         Task<RespToAddBookmarkTimeOf>  SetNewBookmarkTimeOf((int Id, int movieId) valueTuple);
+        Task<bool> DeleteBookmarkTimeOf((int Id, int movieId) valueTuple);
+        void BookmarkStatusCheck();
     }
 }

@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace MovieNight.Web.Controllers
 {
-    public class NotificationController : Controller
+    public class NotificationController : MasterController
     {
         // GET: Notification
         private readonly ISession EventSession;

@@ -107,19 +107,19 @@
                                                 <i class="mdi mdi-bookmark-plus mr-1"></i> Delete Bookmark
                                             </button>
                                             }
-                                            @if (!Model.ListFilm[index + currIndex].Bookmark && !Model.ListFilm[currIndex+index].BookmarkTomeOf)
+                                            @if (!Model.ListFilm[currIndex+index].BookmarkTomeOf)
                                             {
                                             <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="toggleBookmarkTimeOf('@Model.ListFilm[index + currIndex].Id', true)">
-                                                <i class="mdi mdi-bookmark-plus mr-1"></i> Bookmark
+                                                <i class="mdi mdi-bookmark-plus mr-1"></i> Maybe I’ll watch!
                                             </button>
                                             }
                                             else
                                             {
                                             <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" onclick="toggleBookmarkTimeOf('@Model.ListFilm[index + currIndex].Id', false)">
-                                                <i class="mdi mdi-bookmark-plus mr-1"></i> Delete Bookmark
+                                                <i class=" remixicon-bookmark-3-line"></i> Cancel
                                             </button>
                                             }
-                                            <a hhref="@Url.Action("MoviePlayer","InformationSynchronization", new { movie = Model.ListFilm[index+currIndex] })" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-movie-open mr-1"></i> Watch</a>
+                                            <a hhref="@Url.Action("MoviePlayer","InformationSynchronization", new { movie = Model.ListFilm[index+currIndex] })" class="btn btn-light btn-sm waves-effect"><<i class="mdi mdi-movie mr-1"></i> Watch</a>
                                         </div> <!-- end .padding -->
                                     </div> <!-- end card-box-->
 
@@ -291,9 +291,7 @@
         sendPostRequest('/SearchSortAdd/LeftStepPage', null);
     }
 
-    function rightStepPage() {
-        sendPostRequest('/SearchSortAdd/RightStepPage', null);
-    }
+    
     function rightStepPage() {
         sendPostRequest('/SearchSortAdd/RightStepPage', null);
     }
@@ -319,7 +317,7 @@
             });
     }
     function toggleBookmarkTimeOf(movieId, isAddBookmark) {
-        var url = isAddBookmark ? '/InformationSynchronization/AddToBookmarkTimeOf' : '/InformationSynchronization/DeleteBookmarkMovie';
+        var url = isAddBookmark ? '/InformationSynchronization/AddToBookmarkTimeOf' : '/InformationSynchronization/DeleteBookmarkTimeOf';
         var button = event.target;
 
         fetch(url, {
