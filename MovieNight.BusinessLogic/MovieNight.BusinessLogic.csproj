@@ -78,9 +78,9 @@
       <DependentUpon>202405100959037_movie.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Session\Configuration.cs" />
-    <Compile Include="Migrations\User\202405100958034_userm.cs" />
-    <Compile Include="Migrations\User\202405100958034_userm.Designer.cs">
-      <DependentUpon>202405100958034_userm.cs</DependentUpon>
+    <Compile Include="Migrations\User\202405101946425_Movie.cs" />
+    <Compile Include="Migrations\User\202405101946425_Movie.Designer.cs">
+      <DependentUpon>202405101946425_Movie.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\User\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -113,8 +113,8 @@
     <EmbeddedResource Include="Migrations\Session\202405100959037_movie.resx">
       <DependentUpon>202405100959037_movie.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\User\202405100958034_userm.resx">
-      <DependentUpon>202405100958034_userm.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\User\202405101946425_Movie.resx">
+      <DependentUpon>202405101946425_Movie.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
+using MovieNight.Domain.Entities.Review;
 
 namespace MovieNight.BusinessLogic.Interface.IService
 {
@@ -20,5 +21,7 @@ namespace MovieNight.BusinessLogic.Interface.IService
         List<ViewingHistoryM> GetViewingList(int? userId);
         Task<IEnumerable<ViewingHistoryM>> GetNewViewList(ViewListSortCommandE transCommand);
         List<MovieTemplateInfE> GetListMovie(MovieCommandS movieSCommand);
+        ReviewE getListOfReviews(int? filmId);
+
     }
 }

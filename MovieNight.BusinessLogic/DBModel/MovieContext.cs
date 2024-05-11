@@ -17,6 +17,7 @@ namespace MovieNight.BusinessLogic.DBModel
         public DbSet<CastMemDbTable> CastDbTables { get; set; }
         
         public DbSet<InterestingFactDbTable> InterestingFact { get; set; }
+        
  
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

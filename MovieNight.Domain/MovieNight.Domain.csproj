@@ -86,6 +86,7 @@
     <Compile Include="Entities\PersonalP\PersonalProfileM.cs" />
     <Compile Include="Entities\PersonalP\ProfEditingE.cs" />
     <Compile Include="Entities\Review\ReviewDbTable.cs" />
+    <Compile Include="Entities\Review\ReviewE.cs" />
     <Compile Include="Entities\TimeD.cs" />
     <Compile Include="Entities\UserE.cs" />
     <Compile Include="Entities\UserId\LogInData.cs" />

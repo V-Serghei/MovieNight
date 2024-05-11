@@ -61,15 +61,22 @@ var userModel = HttpContext.Current.GetMySessionObject();
                         {
                             if(review.ReviewType == TypeOfReview.Great)
                             {
-                                <h5 class="mt-0"><a href=@Url.Action("PersonalProfile", "InformationSynchronization") class="text-dark">@review.User</a></h5>
+                                <h5 class="mt-0"><a href="@Url.Action("UserTemplatePage", "InformationSynchronization", new { id = review.UserId })" class="text-dark">@review.User</a></h5>
 
                                 <p>@review.Text</p>
                                 <div class="clearfix"></div>
                                 <div class="row">
                                     <div class="col-auto">
                                         <a href="javascript: void(0);" class="text-muted">
-                                            <img src="@userModel.Avatar" alt="task-user" class="avatar-sm img-thumbnail rounded-circle">
-                                        </a>
+                                            @if(userModel.Avatar!=null)
+                                            {
+                                            <img src=@Url.Content(userModel.Avatar) class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                                            }
+                                            else
+                                            {
+                                            <img src="~/images/users/default_avatar.png" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                                            }
+                                             </a>
                                     </div>
                                     <div class="col">
                                         <div class="text-right">
@@ -111,15 +118,21 @@ var userModel = HttpContext.Current.GetMySessionObject();
                         {
                             if (review.ReviewType == TypeOfReview.Fine)
                             {
-                                <h5 class="mt-0"><a href=@Url.Action("PersonalProfile", "InformationSynchronization") class="text-dark">@review.User</a></h5>
+                                <h5 class="mt-0"><a href="@Url.Action("UserTemplatePage", "InformationSynchronization", new { id = review.UserId })" class="text-dark">@review.User</a></h5>
 
                                 <p>@review.Text</p>
                                 <div class="clearfix"></div>
                                 <div class="row">
                                     <div class="col-auto">
                                         <a href="javascript: void(0);" class="text-muted">
-                                            <img src="@userModel.Avatar" alt="task-user" class="avatar-sm img-thumbnail rounded-circle">
-                                        </a>
+                                            @if(userModel.Avatar!=null)
+                                            {
+                                            <img src=@Url.Content(userModel.Avatar) class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                                            }
+                                            else
+                                            {
+                                            <img src="~/images/users/default_avatar.png" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                                            }</a>
                                     </div>
                                     <div class="col">
                                         <div class="text-right">
@@ -165,15 +178,21 @@ var userModel = HttpContext.Current.GetMySessionObject();
                         {
                             if (review.ReviewType == TypeOfReview.Waste)
                             {
-                                <h5 class="mt-0"><a href=@Url.Action("PersonalProfile", "InformationSynchronization") class="text-dark">@review.User</a></h5>
+                                <h5 class="mt-0"><a href="@Url.Action("UserTemplatePage", "InformationSynchronization", new { id = review.UserId })" class="text-dark">@review.User</a></h5>
 
                                 <p>@review.Text</p>
                                 <div class="clearfix"></div>
                                 <div class="row">
                                     <div class="col-auto">
                                         <a href="javascript: void(0);" class="text-muted">
-                                            <img src="@userModel.Avatar" alt="task-user" class="avatar-sm img-thumbnail rounded-circle">
-                                        </a>
+                                            @if(userModel.Avatar!=null)
+                                            {
+                                            <img src=@Url.Content(userModel.Avatar) class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                                            }
+                                            else
+                                            {
+                                            <img src="~/images/users/default_avatar.png" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                                            }</a>
                                     </div>
                                     <div class="col">
                                         <div class="text-right">

@@ -1,9 +1,9 @@
 ﻿using System;
 using MovieNight.Domain.enams;
 
-namespace MovieNight.Web.Models.Review
+namespace MovieNight.Domain.Entities.Review
 {
-    public class ReviewModel
+    public class ReviewE
     {
         public int? FilmId { get; set; }
         public string User { get; set; }

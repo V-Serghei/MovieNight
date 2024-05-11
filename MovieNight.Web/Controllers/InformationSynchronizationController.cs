@@ -220,9 +220,8 @@ namespace MovieNight.Web.Controllers
 
         [HttpGet]
         [UserMod]
-        public ActionResult UserTemplatePage()
+        public ActionResult UserTemplatePage(int? id)
         {
-            int? id = 1;
             var friendsDate = _serviceFriend.getFriendDate(id);
             var friendmodel = _mapper.Map<FriendPageModel>(friendsDate);
             if (friendmodel != null)
@@ -462,9 +461,9 @@ namespace MovieNight.Web.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult ReviewsPage()
+        public ActionResult ReviewsPage(int? filmId)
         {
-            //var listReviews = _movie.getListOfReviews();
+            var listReviews = _movie.getListOfReviews(filmId);
             ReviewModel review = new ReviewModel();
             
             return View();

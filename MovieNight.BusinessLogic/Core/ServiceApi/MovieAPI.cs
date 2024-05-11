@@ -18,6 +18,7 @@ using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
+using MovieNight.Domain.Entities.Review;
 using Newtonsoft.Json;
 using EntityState = System.Data.Entity.EntityState;
 
@@ -753,6 +754,10 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             }
         }
 
-        
+        public ReviewE getListOfReviewsDb(int? filmId)
+        {
+            
+            return null;
+        }
     }
 }

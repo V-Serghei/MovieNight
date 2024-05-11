@@ -5,6 +5,7 @@ using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
+using MovieNight.Domain.Entities.Review;
 
 namespace MovieNight.BusinessLogic.Session.Service
 {
@@ -59,6 +60,11 @@ namespace MovieNight.BusinessLogic.Session.Service
         public List<MovieTemplateInfE> GetListMovie(MovieCommandS movieSCommand)
         {
             return GetListMovieDb(movieSCommand);
+        }
+
+        public ReviewE getListOfReviews(int? filmId)
+        {
+            return getListOfReviewsDb(filmId);
         }
     }
 

@@ -29,5 +29,25 @@ namespace MovieNight.BusinessLogic.Session.MailS
         {
             return InboxStarredFromData(userId);
         }
+
+        public InboxD InboxRead(int? mailId)
+        {
+            return InboxReadFromData(mailId);
+        }
+
+        public bool SetMailStar(int? mailId)
+        {
+            return SetStarMailDb(mailId);
+        }
+        
+        public bool DeleteMailStar(int? mailId)
+        {
+            return DeleteMailStarDb(mailId);
+        }
+        
+        public bool DeleteMail(int? mailId)
+        {
+            return DeleteMailDb(mailId);
+        }
     }
 }
