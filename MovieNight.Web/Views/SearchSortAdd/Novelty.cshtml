@@ -4,7 +4,7 @@
 @model MovieNight.Web.Models.Movie.SearchPages.MovieListModel
 
 @{
-ViewBag.Title = "Cartoons";
+ViewBag.Title = "Novelty";
 
 }
 
@@ -24,11 +24,11 @@ ViewBag.Title = "Cartoons";
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">MovieNight</a></li>
-                                <li class="breadcrumb-item" name="Category" value="3"><a href="javascript: void(0);">Cartoons</a></li>
-                                <input type="hidden" name="Category" value="3"/>
+                                <li class="breadcrumb-item" name="Direction" value="4"><a href="javascript: void(0);">Novelty</a></li>
+                                <input type="hidden" name="Direction" value="5"/>
                             </ol>
                         </div>
-                        <h4 class="page-title">Cartoons</h4>
+                        <h4 class="page-title">Novelty</h4>
                     </div>
                 </div>
             </div>
@@ -42,22 +42,12 @@ ViewBag.Title = "Cartoons";
                                 <!-- Removed the inner form here -->
                                 <div class="form-inline">
                                     <div class="form-group mx-sm-3">
-                                        <label for="status-select" class="mr-2" name="SortPar">Sort By</label>
-                                        <select name="SortPar" class="custom-select" id="status-select" required>
-                                            <option value="0" @(Model.CommandSort.SortPar == 0 ? "selected" : "")>All</option>
-                                            <option value="1" @(Model.CommandSort.SortPar == SortingOption.ReleaseDate ? "selected" : "")>release date</option>
-                                            <option value="2" @(Model.CommandSort.SortPar == SortingOption.Popularity ? "selected" : "")>popularity</option>
-                                            <option value="3" @(Model.CommandSort.SortPar == SortingOption.Grade ? "selected" : "")>grade</option>
-                                            <option value="4" @(Model.CommandSort.SortPar == SortingOption.Views ? "selected" : "")>views</option>
-                                        </select>
+                                        <input type="hidden" name="SortPar" value="1"/>
+                                        <h3 class="display-4 text-primary font-weight-bold">What happened just recently</h3>
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="hidden" id="sortDirection" name="SortingDirection" value="@Model.CommandSort.SortPar"/>
-                                        <button type="button" class="btn btn-outline-secondary ml-2 SortingDirection" onclick="toggleSortDirection()" name="SortingDirection">
-                                            <i id="sortIcon" class="fa @(Model.CommandSort.SortingDirection == SortDirection.Ascending ? "fa-sort-up" : Model.CommandSort.SortingDirection == SortDirection.Descending ? "fa-sort-down" : "fa-sort")"></i>
-
-                                        </button>
+                                        <input type="hidden" id="sortDirection" name="SortingDirection" value="2"/>
                                     </div>
                                 </div>
                             </div>
@@ -86,15 +76,14 @@ ViewBag.Title = "Cartoons";
                         <div class="clearfix"></div>
                         <div class="pt-2 pb-2">
                             <img src="@Url.Content(Model.ListFilm[index + currIndex].PosterImage)" class="fa-times-rectangle img-thumbnail " alt="movie-poster">
-
                             <h4 class="mt-3 font-17"><a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = Model.ListFilm[index + currIndex].Id })" class="text-dark">@Model.ListFilm[index + currIndex].Title</a></h4>
-                            
+
                             <p class="text-muted">Production Year: @Model.ListFilm[index + currIndex].ProductionYear.ToString("dd/MM/yyyy")</p>
                             <p class="text-muted">Grade: @Model.ListFilm[index + currIndex].MovieNightGrade</p>
-                                @foreach (var gen in Model.ListFilm[index + currIndex].Genre)
-                                {
-                                <span class="text-bg-dark mb-1 font-12 ml-2">@gen</span>
-                                }
+                            @foreach (var gen in Model.ListFilm[index + currIndex].Genre)
+                            {
+                            <span class="text-bg-dark mb-1 font-12 ml-2">@gen</span>
+                            }
                             <br>
 
                             @if(System.Web.HttpContext.Current.GetBookmarkTimeOf()!=null){ if (!Model.ListFilm[index + currIndex].Bookmark)
@@ -121,7 +110,7 @@ ViewBag.Title = "Cartoons";
                                 <i class=" remixicon-bookmark-3-line"></i> Cancel
                             </button>
                             }}
-                            <a href="@Url.Action("MoviePlayer","InformationSynchronization", new { movieId = Model.ListFilm[index+currIndex].Id })" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-movie mr-1"></i> Watch</a>
+                            <a hhref="@Url.Action("MoviePlayer","InformationSynchronization", new { movieId = Model.ListFilm[index+currIndex].Id })" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-movie mr-1"></i> Watch</a>
                         </div> <!-- end .padding -->
                     </div> <!-- end card-box-->
 
@@ -136,11 +125,6 @@ ViewBag.Title = "Cartoons";
 
             }
 
-
-
-
-
-
             <div class="row">
                 <div class="col-12">
                     <div class="text-right">
@@ -151,7 +135,7 @@ ViewBag.Title = "Cartoons";
 
                             @if (Model.CommandSort.PageNom <= 3)
                             {
-                                for (var i = 1; i <= 5 && i<Model.CommandSort.MaxPage; i++)
+                            for (var i = 1; i <= 5 && i<Model.CommandSort.MaxPage; i++)
 
                             {
                             if (i < 5)
@@ -293,9 +277,7 @@ ViewBag.Title = "Cartoons";
         sendPostRequest('/SearchSortAdd/LeftStepPage', null);
     }
 
-    function rightStepPage() {
-        sendPostRequest('/SearchSortAdd/RightStepPage', null);
-    }
+
     function rightStepPage() {
         sendPostRequest('/SearchSortAdd/RightStepPage', null);
     }
@@ -313,7 +295,7 @@ ViewBag.Title = "Cartoons";
         })
             .then(response => response.json())
             .then(data => {
-                
+
                 location.reload();
             })
             .catch(error => {
@@ -340,6 +322,7 @@ ViewBag.Title = "Cartoons";
                 console.error('Error:', error);
             });
     }
+
 
 </script>
 

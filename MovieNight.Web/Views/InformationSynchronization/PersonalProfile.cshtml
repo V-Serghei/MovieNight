@@ -6,6 +6,16 @@
     @{
         ViewBag.Title = "Personal Profile";
     }
+    <style>
+        .poster-image {
+            width: 100%;
+            height: 0;
+            padding-top: 100%; 
+            background-size: cover;
+            background-position: center;
+        }
+
+    </style>
     <div>
         <div class="content">
 
@@ -386,9 +396,9 @@
 
                                                     </div>
 
+                                                    
                                                     <div class="col-md-6 col-xl-3">
-                                                        <img src="@Url.Content(@viewingHistory.Poster)" class="rounded-circle avatar-xl img-thumbnail"
-                                                             alt="profile-image">
+                                                        <div class="rounded-circle avatar-xl img-thumbnail poster-image" style="background-image: url('@Url.Content(@viewingHistory.Poster)')"></div>
                                                     </div>
 
                                                 </div>
@@ -581,17 +591,19 @@
                     if (!response.ok) {
                         throw new Error('Error sending evaluation to server');
                     }
+                    location.reload();
                     return response.json();
                 })
                 .then(data => {
                     console.log('Evaluation successfully saved:', data);
 
-
+                    location.reload();
                     if (data.userRating) {
                         updateStarDisplay(data.userRating);
                     }
                 })
                 .catch(error => {
+                    location.reload();
                     console.error('There was an error:', error);
                 });
         }

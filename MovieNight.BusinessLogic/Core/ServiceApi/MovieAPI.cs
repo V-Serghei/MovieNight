@@ -790,35 +790,103 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     IQueryable<MovieDbTable> query = dbMovie.MovieDb;
 
-                    if (movieSCommand.Category != FilmCategory.Non)
+                    if (movieSCommand.Direction != Direction.ForYou)
                     {
-                        query = query.Where(m => m.Category == movieSCommand.Category);
-                    }
+                        if (movieSCommand.Category != FilmCategory.Non)
+                        {
+                            query = query.Where(m => m.Category == movieSCommand.Category);
+                        }
 
-                    switch (movieSCommand.SortPar)
+                        switch (movieSCommand.SortPar)
+                        {
+                            case SortingOption.ReleaseDate:
+                                query = query.OrderBy(m => m.ProductionYear);
+                                break;
+                            case SortingOption.Popularity:
+                                query = query.OrderByDescending(m => m.ViewListEntries.Count())
+                                    .ThenByDescending(m => m.MovieNightGrade);
+                                break;
+                            case SortingOption.Grade:
+                                query = query.OrderByDescending(m => m.MovieNightGrade);
+                                break;
+                            case SortingOption.Views:
+                                query = query.OrderByDescending(m => m.ViewListEntries.Count());
+                                break;
+                        }
+                    }
+                    else if(movieSCommand.UserId != null)
                     {
-                        case SortingOption.ReleaseDate:
-                            query = query.OrderBy(m => m.ProductionYear);
-                            break;
-                        case SortingOption.Popularity:
-                            query = query.OrderByDescending(m => m.ViewListEntries.Count())
-                                .ThenByDescending(m => m.MovieNightGrade);
-                            break;
-                        case SortingOption.Grade:
-                            query = query.OrderByDescending(m => m.MovieNightGrade);
-                            break;
-                        case SortingOption.Views:
-                            query = query.OrderByDescending(m => m.ViewListEntries.Count());
-                            break;
-                    }
+                        using (var user = new UserContext())
+                        {
+                            var bookmarkedMovieIds = user.Bookmark
+                                .Where(u => u.UserId == movieSCommand.UserId)
+                                .Select(u => u.MovieId)
+                                .ToList();
 
-                  
+                            var bookmarkedGenres = dbMovie.MovieDb
+                                .Where(m => bookmarkedMovieIds.Contains(m.Id))
+                                .Select(m => m.Genres)
+                                .ToList();
+
+                            var viewedGenres = dbMovie.MovieDb
+                                .Where(m => m.ViewListEntries.Any(v => v.UserId == movieSCommand.UserId))
+                                .Select(m => m.Genres)
+                                .ToList();
+
+                            var allGenres = bookmarkedGenres.Concat(viewedGenres)
+                                .SelectMany(genres => JsonConvert.DeserializeObject<List<string>>(genres))
+                                .ToList();
+
+                            var topGenres = allGenres.GroupBy(genre => genre)
+                                .Select(group => new { Genre = group.Key, Count = group.Count() })
+                                .OrderByDescending(x => x.Count)
+                                .Take(5)
+                                .Select(x => x.Genre)
+                                .ToList();
+
+                            var similarMovies = dbMovie.MovieDb
+                                .AsEnumerable()
+                                .Where(m => {
+                                    var movieGenres = JsonConvert.DeserializeObject<List<string>>(m.Genres);
+                                    var commonGenresCount = movieGenres.Intersect(topGenres).Count();
+                                    return commonGenresCount >= 3; 
+                                })
+                                .Except(dbMovie.MovieDb.Where(m => bookmarkedMovieIds.Contains(m.Id) || m.ViewListEntries.Any(v => v.UserId == movieSCommand.UserId)))
+                                .ToList();
+
+
+
+                             
+                             
+                            if (movieSCommand.UserId != null)
+                            {
+                                var movieList1 = MapperFilm.Map<List<MovieTemplateInfE>>(similarMovies);
+                                foreach (var movie in movieList1)
+                                {
+                                    var bookmarkDbTable = user.Bookmark
+                                        .FirstOrDefaultAsync(u => u.UserId == movieSCommand.UserId && u.MovieId == movie.Id)
+                                        .Result;
+                                    if (bookmarkDbTable != null)
+                                    {
+                                        movie.BookmarkTomeOf = bookmarkDbTable.BookmarkTimeOf;
+                                        movie.Bookmark = bookmarkDbTable.BookMark;
+                                    }
+
+                                }
+
+                                return movieList1;
+                            }
+                            
+                        }
+                    }
+                    
                     var movieDb = query.ToList();
                     if (movieSCommand.SortingDirection == SortDirection.Descending)
                     {
                         movieDb.Reverse();
                     }
-
+                    
+                    
                     
                    
                     var movieList = MapperFilm.Map<List<MovieTemplateInfE>>(movieDb);

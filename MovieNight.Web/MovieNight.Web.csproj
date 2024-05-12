@@ -881,7 +881,9 @@
     <Content Include="Views\InformationSynchronization\ReviewPage.cshtml" />
     <Content Include="Views\InformationSynchronization\MoviePlayer.cshtml" />
     <Content Include="Views\SearchSortAdd\FindFriends.cshtml" />
+    <Content Include="Views\SearchSortAdd\ForYou.cshtml" />
     <Content Include="Views\SearchSortAdd\MovieSearch.cshtml" />
+    <Content Include="Views\SearchSortAdd\Novelty.cshtml" />
     <Content Include="Views\SearchSortAdd\_LoadingIndicator.cshtml" />
     <Content Include="Web.config" />
   </ItemGroup>

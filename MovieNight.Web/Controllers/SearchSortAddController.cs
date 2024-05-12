@@ -117,17 +117,23 @@ namespace MovieNight.Web.Controllers
         public ActionResult SerialsSearch()
         {
             SessionStatus();
-           
+            int numP = 1;
+            SessionStatus();
+            if (System.Web.HttpContext.Current.GetListFilmS() != null)
+            {
+                if(System.Web.HttpContext.Current.GetListFilmS().CommandSort.Category == FilmCategory.Serial)
+                    numP = System.Web.HttpContext.Current.GetListFilmS().CommandSort.PageNom;
+            }
             if(TempData["MovieListModel"] == null){
                 var filmsListModel = new MovieListModel
                 {
                     CommandSort = new FilmCommandSort
                     {
-                        PageNom = 1,
+                        PageNom = numP,
                         Category = FilmCategory.Serial,
-                        Direction = Direction.Non,
-                        SortingDirection = SortDirection.Non,
-                        SortPar = SortingOption.All,
+                        Direction = System.Web.HttpContext.Current.GetListFilmS() == null ?  Direction.Non: System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction,
+                        SortingDirection = System.Web.HttpContext.Current.GetListFilmS() == null ? SortDirection.Non : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortingDirection,
+                        SortPar = System.Web.HttpContext.Current.GetListFilmS() == null ? SortingOption.All : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortPar,
                         UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
 
                     }
@@ -137,7 +143,8 @@ namespace MovieNight.Web.Controllers
                 filmsListModel.CommandSort.MaxPage = movieList.Count / 30;
                 filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
                 System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
-                var partList = movieList.Take(30).ToList();
+                var partList = filmsListModel.ListFilm.Skip(
+                    30 * numP - 1).Take(30).ToList();
                 var listModel = new MovieListModel
                 {
                     CommandSort = filmsListModel.CommandSort,
@@ -159,17 +166,23 @@ namespace MovieNight.Web.Controllers
         public ActionResult CartoonsSearch()
         {
             SessionStatus();
-           
+            int numP = 1;
+            SessionStatus();
+            if (System.Web.HttpContext.Current.GetListFilmS() != null)
+            {
+                if(System.Web.HttpContext.Current.GetListFilmS().CommandSort.Category == FilmCategory.Cartoon)
+                    numP = System.Web.HttpContext.Current.GetListFilmS().CommandSort.PageNom;
+            }
             if(TempData["MovieListModel"] == null){
                 var filmsListModel = new MovieListModel
                 {
                     CommandSort = new FilmCommandSort
                     {
-                        PageNom = 1,
+                        PageNom = numP,
                         Category = FilmCategory.Cartoon,
-                        Direction = Direction.Non,
-                        SortingDirection = SortDirection.Non,
-                        SortPar = SortingOption.All,
+                        Direction = System.Web.HttpContext.Current.GetListFilmS() == null ?  Direction.Non: System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction,
+                        SortingDirection = System.Web.HttpContext.Current.GetListFilmS() == null ? SortDirection.Non : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortingDirection,
+                        SortPar = System.Web.HttpContext.Current.GetListFilmS() == null ? SortingOption.All : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortPar,
                         UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
 
                     }
@@ -179,7 +192,8 @@ namespace MovieNight.Web.Controllers
                 filmsListModel.CommandSort.MaxPage = movieList.Count / 30;
                 filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
                 System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
-                var partList = movieList.Take(30).ToList();
+                var partList = filmsListModel.ListFilm.Skip(
+                    30 * numP - 1).Take(30).ToList();
                 var listModel = new MovieListModel
                 {
                     CommandSort = filmsListModel.CommandSort,
@@ -201,17 +215,23 @@ namespace MovieNight.Web.Controllers
         public ActionResult AnimeSearch()
         {
             SessionStatus();
-           
+            int numP = 1;
+            SessionStatus();
+            if (System.Web.HttpContext.Current.GetListFilmS() != null)
+            {
+                if(System.Web.HttpContext.Current.GetListFilmS().CommandSort.Category == FilmCategory.Anime)
+                    numP = System.Web.HttpContext.Current.GetListFilmS().CommandSort.PageNom;
+            }
             if(TempData["MovieListModel"] == null){
                 var filmsListModel = new MovieListModel
                 {
                     CommandSort = new FilmCommandSort
                     {
-                        PageNom = 1,
+                        PageNom = numP,
                         Category = FilmCategory.Anime,
-                        Direction = Direction.Non,
-                        SortingDirection = SortDirection.Non,
-                        SortPar = SortingOption.All,
+                        Direction = System.Web.HttpContext.Current.GetListFilmS() == null ?  Direction.Non: System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction,
+                        SortingDirection = System.Web.HttpContext.Current.GetListFilmS() == null ? SortDirection.Non : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortingDirection,
+                        SortPar = System.Web.HttpContext.Current.GetListFilmS() == null ? SortingOption.All : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortPar,
                         UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
 
                     }
@@ -221,7 +241,8 @@ namespace MovieNight.Web.Controllers
                 filmsListModel.CommandSort.MaxPage = movieList.Count / 30;
                 filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
                 System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
-                var partList = movieList.Take(30).ToList();
+                var partList = filmsListModel.ListFilm.Skip(
+                    30 * numP - 1).Take(30).ToList();
                 var listModel = new MovieListModel
                 {
                     CommandSort = filmsListModel.CommandSort,
@@ -361,7 +382,7 @@ namespace MovieNight.Web.Controllers
 
         #endregion
         
-    [HttpPost]
+        [HttpPost]
 //     public async Task<ActionResult> CurrentSortingAndFilteringAction(ViewListSort command)
 //     {
 //         try
@@ -619,55 +640,64 @@ namespace MovieNight.Web.Controllers
     public ActionResult MovieSearch()
     {
         SessionStatus();
-           
-        if(TempData["MovieListModel"] == null){
-            var filmsListModel = new MovieListModel
+            int numP = 1;
+            SessionStatus();
+            if (System.Web.HttpContext.Current.GetListFilmS() != null)
             {
-                CommandSort = new FilmCommandSort
+                if(System.Web.HttpContext.Current.GetListFilmS().CommandSort.Category == FilmCategory.Film)
+                    numP = System.Web.HttpContext.Current.GetListFilmS().CommandSort.PageNom;
+            }
+            if(TempData["MovieListModel"] == null){
+                var filmsListModel = new MovieListModel
                 {
-                    PageNom = 1,
-                    Category = FilmCategory.Film,
-                    Direction = Direction.Non,
-                    SortingDirection = SortDirection.Non,
-                    SortPar = SortingOption.All,
-                    UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
+                    CommandSort = new FilmCommandSort
+                    {
+                        PageNom = numP,
+                        Category = FilmCategory.Film,
+                        Direction = System.Web.HttpContext.Current.GetListFilmS() == null ?  Direction.Non: System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction,
+                        SortingDirection = System.Web.HttpContext.Current.GetListFilmS() == null ? SortDirection.Non : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortingDirection,
+                        SortPar = System.Web.HttpContext.Current.GetListFilmS() == null ? SortingOption.All : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortPar,
+                        UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
 
-                }
-            };
-            var filmSCommand = _mapper.Map<MovieCommandS>(filmsListModel.CommandSort);
-            var movieList = _movie.GetListMovie(filmSCommand);
-            filmsListModel.CommandSort.MaxPage = movieList.Count / 30;
-            filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
-            System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
-            var partList = movieList.Take(30).ToList();
-            var listModel = new MovieListModel
+                    }
+                };
+                var filmSCommand = _mapper.Map<MovieCommandS>(filmsListModel.CommandSort);
+                var movieList = _movie.GetListMovie(filmSCommand);
+                filmsListModel.CommandSort.MaxPage = movieList.Count / 30;
+                filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
+                System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
+                var partList = filmsListModel.ListFilm.Skip(
+                    30 * numP - 1).Take(30).ToList();
+                var listModel = new MovieListModel
+                {
+                    CommandSort = filmsListModel.CommandSort,
+                    ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(partList)
+                };
+                return View(listModel);
+            }
+            var model = TempData["MovieListModel"] as MovieListModel;
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
             {
-                CommandSort = filmsListModel.CommandSort,
-                ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(partList)
-            };
-            return View(listModel);
-        }
-        var model = TempData["MovieListModel"] as MovieListModel;
-        if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
-        {
+                return View(model);
+            }
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Login", "Identification");
+            }
             return View(model);
-        }
-        if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
-        {
-            return RedirectToAction("Login", "Identification");
-        }
-        return View(model);
     }
 
     [HttpPost]
     public ActionResult SortCurrFilm(FilmCommandSort command)
     {
-
+        int numP = 1;
+        SessionStatus();
+        
         var filmsListModel = new MovieListModel
         {
             CommandSort = new FilmCommandSort
             {
-                PageNom = 1,
+                PageNom = numP,
                 Category = command.Category,
                 Direction = command.Direction,
                 SortingDirection = command.SortingDirection,
@@ -702,6 +732,11 @@ namespace MovieNight.Web.Controllers
             case FilmCategory.Serial:
                 return RedirectToAction("SerialsSearch","SearchSortAdd");
             case FilmCategory.Non:
+                if(command.Direction == Direction.Novelty)
+                    return RedirectToAction("Novelty","SearchSortAdd");
+                if(command.Direction == Direction.ForYou)
+                    return RedirectToAction("ForYou","SearchSortAdd");
+                return RedirectToAction("Error404Page", "Error");
             default:
                 return RedirectToAction("Error404Page", "Error");
         }
@@ -753,7 +788,7 @@ namespace MovieNight.Web.Controllers
     public ActionResult RightStepPage()
     {
         var filmsListModel = System.Web.HttpContext.Current.GetListFilmS();
-        if(filmsListModel.CommandSort.PageNom+1<filmsListModel.ListFilm.Count)filmsListModel.CommandSort.PageNom += 1;
+        if(filmsListModel.CommandSort.PageNom+1<filmsListModel.ListFilm.Count/30)filmsListModel.CommandSort.PageNom += 1;
         System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
         var partList = filmsListModel.ListFilm.Skip(
             30 * filmsListModel.CommandSort.PageNom - 1).Take(30).ToList();
@@ -769,6 +804,103 @@ namespace MovieNight.Web.Controllers
 
     }
 
+    public ActionResult Novelty()
+    {
+        int numP = 1;
+        SessionStatus();
+        if (System.Web.HttpContext.Current.GetListFilmS() != null)
+        {
+            if(System.Web.HttpContext.Current.GetListFilmS().CommandSort.Category == FilmCategory.Non)
+                numP = System.Web.HttpContext.Current.GetListFilmS().CommandSort.PageNom;
+        }
+        if(TempData["MovieListModel"] == null){
+            var filmsListModel = new MovieListModel
+            {
+                CommandSort = new FilmCommandSort
+                {
+                    PageNom = numP,
+                    Category = FilmCategory.Non,
+                    Direction = Direction.Non,
+                    SortingDirection = SortDirection.Descending,
+                    SortPar = SortingOption.ReleaseDate,
+                    UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
+
+                }
+            };
+            var filmSCommand = _mapper.Map<MovieCommandS>(filmsListModel.CommandSort);
+            var movieList = _movie.GetListMovie(filmSCommand);
+            filmsListModel.CommandSort.MaxPage = movieList.Count / 30;
+            filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
+            System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
+            var partList = filmsListModel.ListFilm.Skip(
+                30 * numP - 1).Take(30).ToList();
+            var listModel = new MovieListModel
+            {
+                CommandSort = filmsListModel.CommandSort,
+                ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(partList)
+            };
+            return View(listModel);
+        }
+        var model = TempData["MovieListModel"] as MovieListModel;
+        if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+        {
+            return View(model);
+        }
+        if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+        {
+            return RedirectToAction("Login", "Identification");
+        }
+        return View(model);
+    }
+
+    public ActionResult ForYou()
+    {
+        int numP = 1;
+        SessionStatus();
+        if (System.Web.HttpContext.Current.GetListFilmS() != null)
+        {
+            if(System.Web.HttpContext.Current.GetListFilmS().CommandSort.Category == FilmCategory.Non)
+                numP = System.Web.HttpContext.Current.GetListFilmS().CommandSort.PageNom;
+        }
+        if(TempData["MovieListModel"] == null){
+            var filmsListModel = new MovieListModel
+            {
+                CommandSort = new FilmCommandSort
+                {
+                    PageNom = numP,
+                    Category = FilmCategory.Non,
+                    Direction = Direction.ForYou,
+                    SortingDirection = SortDirection.Descending,
+                    SortPar = SortingOption.ReleaseDate,
+                    UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
+
+                }
+            };
+            var filmSCommand = _mapper.Map<MovieCommandS>(filmsListModel.CommandSort);
+            var movieList = _movie.GetListMovie(filmSCommand);
+            filmsListModel.CommandSort.MaxPage = movieList.Count / 30;
+            filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
+            System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
+            var partList = filmsListModel.ListFilm.Skip(
+                30 * numP - 1).Take(30).ToList();
+            var listModel = new MovieListModel
+            {
+                CommandSort = filmsListModel.CommandSort,
+                ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(partList)
+            };
+            return View(listModel);
+        }
+        var model = TempData["MovieListModel"] as MovieListModel;
+        if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+        {
+            return View(model);
+        }
+        if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+        {
+            return RedirectToAction("Login", "Identification");
+        }
+        return View(model);
+    }
     
     
     
