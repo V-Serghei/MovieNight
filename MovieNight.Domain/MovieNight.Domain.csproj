@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="enams\AchievementType.cs" />
     <Compile Include="enams\Direction.cs" />
     <Compile Include="enams\EventColor.cs" />
     <Compile Include="enams\FilmCategory.cs" />
@@ -55,6 +56,9 @@
     <Compile Include="enams\SelectField.cs" />
     <Compile Include="enams\SortDirection.cs" />
     <Compile Include="enams\SortingOption.cs" />
+    <Compile Include="Entities\AchievementE\AchievementDbTable.cs" />
+    <Compile Include="Entities\AchievementE\AchievementE.cs" />
+    <Compile Include="Entities\AchievementE\UserAchievementDbTable.cs" />
     <Compile Include="Entities\DifferentE\PhoneNumE.cs" />
     <Compile Include="Entities\DifferentE\Tag.cs" />
     <Compile Include="Entities\Friends\FriendsDbTable.cs" />

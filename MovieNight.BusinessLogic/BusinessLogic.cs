@@ -32,5 +32,10 @@ namespace MovieNight.BusinessLogic
         {
             return new FriendService();
         }
+
+        public IAchievements GetAchievementsService()
+        {
+            return new AchievementsService();
+        }
     }
 }

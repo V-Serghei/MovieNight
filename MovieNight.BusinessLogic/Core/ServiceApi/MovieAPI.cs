@@ -819,7 +819,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         using (var user = new UserContext())
                         {
                             var bookmarkedMovieIds = user.Bookmark
-                                .Where(u => u.UserId == movieSCommand.UserId)
+                                .Where(u => u.UserId == movieSCommand.UserId && !u.BookmarkTimeOf)
                                 .Select(u => u.MovieId)
                                 .ToList();
 

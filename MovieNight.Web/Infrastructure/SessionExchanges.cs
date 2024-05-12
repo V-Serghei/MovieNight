@@ -5,6 +5,7 @@ using MovieNight.Web.Models.PersonalP.Bookmark;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using MovieNight.Web.Models.Achievement;
 using HttpContext = System.Web.HttpContext;
 
 namespace MovieNight.Web.Infrastructure
@@ -50,6 +51,40 @@ namespace MovieNight.Web.Infrastructure
             }
         }
 
+
+        #endregion
+
+        #region AchievementModel
+
+        public static List<AchievementModel> GetListAchievement(this HttpContext current)
+        {
+            return current?.Session["__Achievement"] as List<AchievementModel>;;
+        }
+        
+        public static void SetListAchievement(this HttpContext current, AchievementModel source)
+        {
+            if (HttpContext.Current.GetListAchievement() != null)
+            {
+                var add =  HttpContext.Current.GetListAchievement();
+                add.Add(source);
+                current.Session.Add("__Achievement", add);
+            }
+            else
+            {
+                var newListA = new List<AchievementModel> { source };
+                current.Session.Add("__Achievement", newListA);
+            }
+        }
+
+        public static void RemoveAchievementFirst(this HttpContext current)
+        {
+            if (HttpContext.Current.GetListAchievement() != null)
+            {
+                var list = HttpContext.Current.GetListAchievement();
+                list.RemoveAt(0);
+            }
+        }
+        
 
         #endregion
        

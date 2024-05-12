@@ -486,6 +486,8 @@
     <Content Include="fonts\themify.svg" />
     <Content Include="fonts\weathericons-regular-webfont.svg" />
     <Content Include="Global.asax" />
+    <Content Include="images\Achievement\rec.png" />
+    <Content Include="images\Achievement\reg.png" />
     <Content Include="images\animat-diamond-color.gif" />
     <Content Include="images\animat-rocket-color.gif" />
     <Content Include="images\attached-files\img-1.jpg" />
@@ -885,6 +887,7 @@
     <Content Include="Views\SearchSortAdd\MovieSearch.cshtml" />
     <Content Include="Views\SearchSortAdd\Novelty.cshtml" />
     <Content Include="Views\SearchSortAdd\_LoadingIndicator.cshtml" />
+    <Content Include="Views\Shared\_AchievementL.cshtml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -912,7 +915,7 @@
     <Compile Include="Infrastructure\Different\ValidationStr.cs" />
     <Compile Include="Infrastructure\HttpContextInfrastructure.cs" />
     <Compile Include="Infrastructure\SessionExchanges.cs" />
-    <Compile Include="Models\Achievement\Achievement.cs" />
+    <Compile Include="Models\Achievement\AchievementModel.cs" />
     <Compile Include="Models\Calendar\EventDataModel.cs" />
     <Compile Include="Models\Different\PhoneNumModel.cs" />
     <Compile Include="Models\Different\TagModel.cs" />

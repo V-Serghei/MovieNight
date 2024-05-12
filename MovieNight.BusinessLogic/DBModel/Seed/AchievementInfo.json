@@ -1,0 +1,22 @@
+﻿[
+  {
+    "Name": "Registration",
+    "AchievementType": 0,
+    "ImgA":"~/images/Achievement/reg.png",
+    "Description": "You are now a registered user!",
+    "Condition": "Become a registered user!",
+    "AdditionalRecords": "Do good, and enjoy the movie!",
+    "SuccessСount": 0,
+    "Unlocked": false
+  },
+  {
+    "Name": "Full profile",
+    "AchievementType": 1,
+    "ImgA":"~/images/Achievement/rec.png",
+    "Description": "You have successfully added all data about yourself!",
+    "Condition": "Add all data so users can see you as a friend",
+    "AdditionalRecords": "Add all data so users can see you as a friend",
+    "SuccessСount": 0,
+    "Unlocked": false
+  }
+]
