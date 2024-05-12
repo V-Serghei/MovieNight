@@ -11,7 +11,7 @@ namespace MovieNight.BusinessLogic.Interface.IService
         MovieTemplateInfE GetMovieInf(int? id);
 
         Task<BookmarkE> SetNewBookmark((int,int) movieid);
-        bool GetInfBookmark((int,int) movieid);
+        bool GetInfBookmark((int?,int) movieid);
         bool GetInfBookmarkTimeOf((int, int) movieid);
 
         List<ListOfFilmsE> GetListPlain(int? userId); 
@@ -25,5 +25,6 @@ namespace MovieNight.BusinessLogic.Interface.IService
         Task<RespToAddBookmarkTimeOf>  SetNewBookmarkTimeOf((int Id, int movieId) valueTuple);
         Task<bool> DeleteBookmarkTimeOf((int Id, int movieId) valueTuple);
         void BookmarkStatusCheck();
+        Task<MovieTemplateInfE> GetRandomFilm();
     }
 }

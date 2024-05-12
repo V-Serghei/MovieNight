@@ -241,10 +241,41 @@ namespace MovieNight.Web.Controllers
             return View(model);
         }
 
-        public ActionResult RandomFilm()
+        public async Task<ViewResult> RandomFilm()
         {
-            return View();
+            SessionStatus();
+
+            var randomMovie = await _movie.GetRandomFilm();
+            
+            var film = _mapper.Map<MovieTemplateInfModel>( randomMovie);
+                
+                
+            return View(film);
         }
+
+        [HttpPost]
+        public async Task<JsonResult> GenRandomMovie()
+        {
+            SessionStatus();
+
+            var randomMovie = await _movie.GetRandomFilm();
+            var film = _mapper.Map<MovieTemplateInfModel>(randomMovie);
+            return Json(new
+            {
+                success = true,
+                title = film.Title,
+                posterImage = Url.Content(film.PosterImage),
+                productionYear = film.ProductionYear.ToString("dd/MM/yyyy"),
+                movieGrade = film.MovieNightGrade,
+                genre = film.Genre,
+                bookmarked = film.Bookmark,
+                bookmarkTimeOf = film.BookmarkTomeOf,
+                
+                
+            });
+        }
+        
+        
         [UserMod]
         [HttpGet]
         public ActionResult FindFriends(int _skipParametr)

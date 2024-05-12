@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Caching;
 using System.Web.UI;
 using AutoMapper;
@@ -416,7 +417,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             return true;
         }
 
-        protected bool GetInfBookmarkDb((int user,int movie) movieid)
+        protected bool GetInfBookmarkDb((int? user,int movie) movieid)
         {
             try
             {
@@ -978,6 +979,51 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        protected Task<MovieTemplateInfE> GetRandomFilmDb()
+        {
+            try
+            {
+                GetMappersSettings();
+                using (var movie = new MovieContext())
+                {
+                    var totalMoviesCount = movie.MovieDb.Count();
+                
+                    Random random = new Random();
+                    int randomIndex = random.Next(0, totalMoviesCount);
+                
+                    var randomMovie = movie.MovieDb.OrderBy(f => Guid.NewGuid()).Skip(randomIndex).FirstOrDefault();
+
+                    var movieR = MapperFilm.Map<MovieTemplateInfE>(randomMovie);
+
+                    using (var user = new UserContext())
+                    {
+                        var userId = HttpContext.Current.Session["UserId"] as int?;
+                        var bookmarkDbTable = user.Bookmark
+                            .FirstOrDefaultAsync(u => u.UserId == userId  && u.MovieId == movieR.Id)
+                            .Result;
+                        if (bookmarkDbTable != null)
+                        {
+                            movieR.BookmarkTomeOf = bookmarkDbTable.BookmarkTimeOf;
+                            movieR.Bookmark = bookmarkDbTable.BookMark;
+                        }
+                    }
+                    
+                    
+                    return Task.FromResult(movieR);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return Task.FromResult(new MovieTemplateInfE());
+                
+            }
+            
+            
+
+
         }
 
         

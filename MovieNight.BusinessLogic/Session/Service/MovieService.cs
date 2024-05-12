@@ -20,7 +20,7 @@ namespace MovieNight.BusinessLogic.Session.Service
             return await SetNewBookmarkDb(idAdd);
         }
 
-        public bool GetInfBookmark((int,int) movieid)
+        public bool GetInfBookmark((int?,int) movieid)
         {
             return GetInfBookmarkDb(movieid);
         }
@@ -84,6 +84,11 @@ namespace MovieNight.BusinessLogic.Session.Service
         public void BookmarkStatusCheck()
         {
             BookmarkStatusCheckDb();
+        }
+
+        public async Task<MovieTemplateInfE> GetRandomFilm()
+        {
+            return await GetRandomFilmDb();
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿@using System.Web.UI.WebControls
+@using MovieNight.Web.Infrastructure
 @using MovieNight.Web.Models.PersonalP.Bookmark
 @model MovieNight.Web.Models.Movie.MovieTemplateInfModel
 
@@ -58,7 +59,7 @@
                         <button type="button" class="btn btn-danger btn-xs waves-effect mb-2 waves-light">Looked</button><br>
                         <a href="@Url.Action("MoviePlayer","InformationSynchronization", new { movieId = @Model.Id })"> <button type="button"  class="btn btn-primary btn-lg waves-effect mb-2 waves-light">Watch Now</button></a>
 
-                    <div id="bookmarkStatus">
+                    @if(System.Web.HttpContext.Current.GetMySessionObject()!=null){<div id="bookmarkStatus">
                      @{
                          string buttonText = Model.Bookmark ? "Delete" : "Bookmark";
                          string buttonColor = Model.Bookmark ? "btn-danger" : "btn-primary";
@@ -124,7 +125,7 @@
                      }
                      
 
-                       </div>
+                       </div>}
 
 
 
@@ -150,7 +151,8 @@
                        }
                    </style>
                    <h1>The film's score</h1>
-                        <div class="star-rating">
+                       @if(HttpContext.Current.GetMySessionObject()!=null){ 
+                            <div class="star-rating">
                             @if (Model.UserRating != null)
                             {
                                 for (int i = 1; i <= 10; i++)
@@ -169,10 +171,33 @@
                             {
                                 for (int i = 1; i <= 10; i++)
                                 {
-                                    <span class="star" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-line"></i></span>
+                                    if (i <= Model.MovieNightGrade)
+                                    {
+                                        <span class="star active" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-fill"></i></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="star" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-line"></i></span>
+                                    }
                                 }
                             }
-                        </div>
+                            
+                        </div>}
+                        else if(Model.MovieNightGrade!=null){<div class="star-rating">
+                            @for (int i = 1; i <= 10; i++)
+                            {
+                            if (i <= Model.MovieNightGrade)
+                            {
+                            <span class="star active" ><i class="remixicon-star-s-fill"></i></span>
+                            }
+                            else
+                            {
+                            <span class="star" ><i class="remixicon-star-s-line"></i></span>
+                            }
+                            }
+                            
+                        </div>}
+                        
 
                         <script>
                             function rate(star, movieId) {
@@ -195,20 +220,22 @@
                                 })
                                     .then(response => {
                                         if (!response.ok) {
-                                            throw new Error('Ошибка при отправке оценки на сервер');
+                                            throw new Error('Error sending evaluation to server');
                                         }
+                                        location.reload();
                                         return response.json();
                                     })
                                     .then(data => {
-                                        console.log('Оценка успешно сохранена:', data);
+                                        console.log('Evaluation successfully saved:', data);
 
-                                        
+                                        location.reload();
                                         if (data.userRating) {
                                             updateStarDisplay(data.userRating);
                                         }
                                     })
                                     .catch(error => {
-                                        console.error('Произошла ошибка:', error);
+                                        location.reload();
+                                        console.error('There was an error:', error);
                                     });
                             }
 

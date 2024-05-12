@@ -628,6 +628,7 @@
     <Content Include="images\Movie\TheMiracleWorkers.jpg" />
     <Content Include="images\Movie\TheMysteryoftheThirdPlanet.jpeg" />
     <Content Include="images\Movie\TheSecretWorldofArrietty.jpg" />
+    <Content Include="images\Movie\ThreeHeroesandtheSeaKing.jpg" />
     <Content Include="images\Movie\TomandJerry.jpg" />
     <Content Include="images\Movie\Venom.jpg" />
     <Content Include="images\Movie\Venom2.jpg" />
@@ -649,6 +650,7 @@
     <Content Include="images\plugins\jstree.png" />
     <Content Include="images\plugins\loading.gif" />
     <Content Include="images\plugins\multiple-arrow.png" />
+    <Content Include="images\plugins\pngegg.png" />
     <Content Include="images\small\img-1.jpg" />
     <Content Include="images\small\img-2.jpg" />
     <Content Include="images\small\img-3.jpg" />
@@ -880,6 +882,7 @@
     <Content Include="Views\InformationSynchronization\MoviePlayer.cshtml" />
     <Content Include="Views\SearchSortAdd\FindFriends.cshtml" />
     <Content Include="Views\SearchSortAdd\MovieSearch.cshtml" />
+    <Content Include="Views\SearchSortAdd\_LoadingIndicator.cshtml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
