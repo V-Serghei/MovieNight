@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
+using MovieNight.Domain.Entities.Statistics;
 
 namespace MovieNight.BusinessLogic.Interface.IService
 {
@@ -26,5 +27,7 @@ namespace MovieNight.BusinessLogic.Interface.IService
         Task<bool> DeleteBookmarkTimeOf((int Id, int movieId) valueTuple);
         void BookmarkStatusCheck();
         Task<MovieTemplateInfE> GetRandomFilm();
+        Task<InfMovieScoresE> GetInfOnFilmScores(int? userId);
+        StatisticE GetDataStatisticPage(int? userId);
     }
 }

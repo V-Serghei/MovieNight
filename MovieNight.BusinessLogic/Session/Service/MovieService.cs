@@ -5,6 +5,7 @@ using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
+using MovieNight.Domain.Entities.Statistics;
 
 namespace MovieNight.BusinessLogic.Session.Service
 {
@@ -89,6 +90,16 @@ namespace MovieNight.BusinessLogic.Session.Service
         public async Task<MovieTemplateInfE> GetRandomFilm()
         {
             return await GetRandomFilmDb();
+        }
+
+        public async Task<InfMovieScoresE> GetInfOnFilmScores(int? userId)
+        {
+            return await GetInfOnFilmScoresDb(userId);
+        }
+
+        public StatisticE GetDataStatisticPage(int? userId)
+        {
+            return GetDataStatisticPageApi(userId);
         }
     }
 

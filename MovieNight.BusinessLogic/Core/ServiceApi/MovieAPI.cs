@@ -20,6 +20,7 @@ using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
+using MovieNight.Domain.Entities.Statistics;
 using Newtonsoft.Json;
 using EntityState = System.Data.Entity.EntityState;
 
@@ -1093,6 +1094,172 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
 
         }
+
+        protected async Task<InfMovieScoresE> GetInfOnFilmScoresDb(int? userId)
+        {
+            try
+            {
+                var listStatisticInf = new InfMovieScoresE();
+                using (var db = new UserContext())
+                {
+                    using (var movie = new MovieContext())
+                    {
+                        var takeL = db.ViewList.Count();
+                        if (takeL > 100) takeL = 100;
+                        var viewList = db.ViewList.OrderBy(u => u.ReviewDate).Where(u=>u.UserId == userId).Take(takeL).ToList();
+                        if (viewList != null)
+                        {
+                            foreach (var viewListDbTable in viewList)
+                            {
+                                listStatisticInf.IdMovie.Add(viewListDbTable.Id);
+                                var movieDbTable = movie.MovieDb
+                                    .FirstOrDefaultAsync(m => m.Id == viewListDbTable.MovieId).Result;
+                                if (movieDbTable !=
+                                    null)
+                                    listStatisticInf.MovieNightGrade.Add(movieDbTable
+                                        .MovieNightGrade);
+                                listStatisticInf.MyGrades.Add(viewListDbTable.UserValues);
+                                listStatisticInf.TitleMovie.Add(viewListDbTable.Title);
+                                listStatisticInf.DataAddGrade.Add(viewListDbTable.ReviewDate.ToString("MM/dd/yyyy"));
+                            }
+
+                            return listStatisticInf;
+                        }
+
+                        return null;
+
+
+                    }
+                }
+                
+                
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+            
+        }
+
+        protected StatisticE GetDataStatisticPageApi(int? userId)
+        {
+            try
+            {
+                var statisticData = new StatisticE();
+                if (userId != null)
+                {
+    
+
+                    using (var user = new UserContext())
+                    {
+                        using (var movie = new MovieContext())
+                        {
+                            var listView = user.ViewList.OrderByDescending(v => v.ReviewDate)
+                                .Include(viewListDbTable => viewListDbTable.Movie).ToList();
+                            foreach (var listDbTable in listView)
+                            {
+                                statisticData.ViewList.Add(new ViewingHistoryM
+                                {
+                                    Id = listDbTable.MovieId,
+                                    Title = listDbTable.Title,
+                                    ReviewDate = listDbTable.ReviewDate,
+                                    UserValues = listDbTable.UserValues,
+                                    MovieNightGrade = listDbTable.Movie.MovieNightGrade
+                                });
+                            }
+
+                            statisticData.AnimeCount = user.ViewList.Count(c =>
+                                c.Category == FilmCategory.Anime && c.UserId == userId);
+                            statisticData.AnimeTotal = movie.MovieDb.Count(c => c.Category == FilmCategory.Anime);
+                            statisticData.CartonsCount = user.ViewList.Count(c =>
+                                c.Category == FilmCategory.Cartoon && c.UserId == userId);
+                            statisticData.CartonTotal =  movie.MovieDb.Count(c => c.Category == FilmCategory.Cartoon);
+                            statisticData.FilmCount = user.ViewList.Count(c =>
+                                c.Category == FilmCategory.Film && c.UserId == userId);
+                            statisticData.FilTotal =  movie.MovieDb.Count(c => c.Category == FilmCategory.Film);
+                            statisticData.SerialsCount = user.ViewList.Count(c =>
+                                c.Category == FilmCategory.Serial && c.UserId == userId);
+                            statisticData.SerialTotal =  movie.MovieDb.Count(c => c.Category == FilmCategory.Serial);
+                            
+                            statisticData.ViewingCount = user.ViewList.Count(c => c.UserId == userId);
+                            statisticData.BookmarkCount =  user.Bookmark.Count(c => c.UserId == userId);
+                            
+                            var Genres = movie.MovieDb
+                                .Select(m => m.Genres)
+                                .ToList();
+
+                            var allGenres = Genres
+                                .SelectMany(genres => JsonConvert.DeserializeObject<List<string>>(genres))
+                                .Distinct()
+                                .ToList()
+                                .Count();
+                            statisticData.GenreTotal = allGenres;
+                            Genres = movie.MovieDb
+                                .Where(m => m.ViewListEntries.Any(v => v.UserId == userId))
+                                .Select(m => m.Genres)
+                                .ToList();
+
+                            allGenres = Genres
+                                .SelectMany(genres => JsonConvert.DeserializeObject<List<string>>(genres))
+                                .Distinct()
+                                .ToList()
+                                .Count();
+                            statisticData.YourGenrePrefer = allGenres;
+                            
+                            
+                            var viewedLocations = movie.MovieDb
+                                .Select(m => m.Location)
+                                .ToList();
+
+                            var allLocations = string.Join(",", viewedLocations).Split(',').Distinct().ToList();
+
+                            statisticData.CountryTotal = allLocations.Count;
+
+                            var userLocations = movie.MovieDb
+                                .Where(m => m.ViewListEntries.Any(v => v.UserId == userId))
+                                .Select(m => m.Location)
+                                .ToList();
+
+                            var userUniqueLocations = string.Join(",", userLocations).Split(',').Distinct().ToList();
+
+                            statisticData.YourCountryPrefer = userUniqueLocations.Count;
+
+                            statisticData.YourGradeCount = user.ViewList.Count(c => c.UserId == userId);
+                            var mostCommonRating = listView
+                                .Where(entry => entry.UserId == userId) 
+                                .GroupBy(entry => entry.UserValues) 
+                                .OrderByDescending(group => group.Count()) 
+                                .Select(group => group.Key) 
+                                .FirstOrDefault(); 
+                            statisticData.YourMostGrade = mostCommonRating;
+
+                                
+                            var averageRating = listView
+                                .Where(entry => entry.UserId == userId) 
+                                .Average(entry => entry.UserValues); 
+                            statisticData.YourAverageRating = averageRating;
+
+                            return statisticData;
+
+
+
+                        }
+
+                    }
+                }
+
+                return null;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            } 
+        }
+
 
         
     }

@@ -7,13 +7,15 @@
     var achievement = new AchievementModel();
     if(HttpContext.Current.GetListAchievement()!=null){
         achievement = HttpContext.Current.GetListAchievement()[0];
+        HttpContext.Current.RemoveAchievementFirst();
     }
-  HttpContext.Current.RemoveAchievementFirst();
+ 
 }
 
 
 
-<div id="achievementWindow" style="display: none; width: 300px; background-color: #fff; border: 1px solid #ccc; padding: 10px; position: fixed; bottom: 10px; left: 10px; z-index: 999999;">
+@if(achievement.ImgA!=null && achievement.Description!=null && achievement.Name!=null){
+    <div id="achievementWindow" style="display: none; width: 300px; background-color: #fff; border: 1px solid #ccc; padding: 10px; position: fixed; bottom: 10px; left: 10px; z-index: 999999;">
     <button type="button" class="close" style="position: absolute; top: 5px; right: 5px;" onclick="closeAchievement()">&times;</button>
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -26,7 +28,7 @@
             <p class="text-center">@achievement.Description</p>
         </div>
     </div>
-</div>
+</div>}
 
 
 <script>
