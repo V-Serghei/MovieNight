@@ -1260,6 +1260,136 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             } 
         }
 
+        protected async Task<GenresDataStatistic> GetInfOnFilmGenresDb(int? userId)
+        {
+               try
+               {
+                   var statisticData = new GenresDataStatistic();
+                   if (userId != null)
+                   {
+    
+
+                       using (var user = new UserContext())
+                       {
+                      
+                           var listView = user.ViewList.Where(u=>u.UserId == userId).ToList();
+                            
+                            
+                           var toListGenres = user.ViewList
+                               .Select(m => m.Movie.Genres)
+                               .ToList();
+
+                           var allGenres = toListGenres
+                               .SelectMany(genres => JsonConvert.DeserializeObject<List<string>>(genres))
+                               .ToList();
+                            
+                           var topGenres = allGenres.GroupBy(genre => genre)
+                               .Select(group => new { Genre = group.Key, Count = group.Count() })
+                               .OrderByDescending(x => x.Count)
+                               .ToList();
+                           if (topGenres.Count > 20)
+                           {
+                               var topNineteenGenres = topGenres.Take(19).ToList();
+    
+                               int otherCount = topGenres.Skip(19).Sum(x => x.Count);
+    
+                               topNineteenGenres.Add(new { Genre = "Other", Count = otherCount });
+    
+                               topGenres = topNineteenGenres;
+                           }
+
+
+                           foreach (var genre in topGenres)
+                           {
+                               statisticData.GenresOrCountry.Add(genre.Genre);
+                               statisticData.CountGenreOrCountry.Add(genre.Count);
+
+                           }
+                                
+                           return  statisticData;
+
+                        
+
+                       }
+                   }
+
+                   return null;
+                
+                
+               }
+               catch (Exception e)
+               {
+                   Console.WriteLine(e);
+                   return null;
+               }
+            
+         
+        }
+
+        protected async Task<GenresDataStatistic> GetInfOnFilmCountryDb(int userId)
+        {
+             try
+             {
+                
+                 var statisticData = new GenresDataStatistic();
+                 if (userId != null)
+                 {
+    
+
+                     using (var user = new UserContext())
+                     {
+                      
+                            
+                         var toListCountry = user.ViewList
+                             .Select(m => m.Movie.Location)
+                             .ToList();
+                            
+                         var userUniqueLocations = string.Join(",", toListCountry).Split(',').ToList();
+
+                           
+                            
+                         var countryList = userUniqueLocations.GroupBy(genre => genre)
+                             .Select(group => new { Country = group.Key, Count = group.Count() })
+                             .OrderByDescending(x => x.Count)
+                             .ToList();
+                         if (countryList.Count > 20)
+                         {
+                             var topNineteenGenres = countryList.Take(19).ToList();
+    
+                             int otherCount = countryList.Skip(19).Sum(x => x.Count);
+    
+                             topNineteenGenres.Add(new { Country = "Other", Count = otherCount });
+    
+                             countryList = topNineteenGenres;
+                         }
+
+
+                         foreach (var country in countryList)
+                         {
+                             statisticData.GenresOrCountry.Add(country.Country);
+                             statisticData.CountGenreOrCountry.Add(country.Count);
+
+                         }
+                                
+                         return  statisticData;
+
+                        
+
+                     }
+                 }
+
+                 return null;
+                
+                
+             }
+             catch (Exception e)
+             {
+                 Console.WriteLine(e);
+                 return null;
+             }
+        }
+
+
 
         
     }

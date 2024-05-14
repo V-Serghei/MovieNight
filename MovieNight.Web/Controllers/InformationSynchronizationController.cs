@@ -321,6 +321,7 @@ namespace MovieNight.Web.Controllers
         [UserMod]
         public ActionResult ProfileEdit(PEditingM profEd)
         {
+            SessionStatus();
             if (profEd.AvatarFile != null)
             {
                 

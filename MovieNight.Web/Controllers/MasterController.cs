@@ -80,6 +80,7 @@ namespace MovieNight.Web.Controllers
 
                     System.Web.HttpContext.Current.SetMySessionObject(us);
                     System.Web.HttpContext.Current.Session["LoginStatus"] = "login";
+                    System.Web.HttpContext.Current.Session["UserId"] = us.Id;
                     GetInfoOnTheCurrStateBookmarkTimeOf();
                 }
                 else

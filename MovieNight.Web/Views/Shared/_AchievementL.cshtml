@@ -5,7 +5,7 @@
 @{
     ViewBag.Title = "_AchievementL";
     var achievement = new AchievementModel();
-    if(HttpContext.Current.GetListAchievement()!=null){
+    if(HttpContext.Current.GetListAchievement()!=null  && HttpContext.Current.GetListAchievement().Count > 0 ){
         achievement = HttpContext.Current.GetListAchievement()[0];
         HttpContext.Current.RemoveAchievementFirst();
     }

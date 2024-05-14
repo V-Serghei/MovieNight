@@ -101,6 +101,16 @@ namespace MovieNight.BusinessLogic.Session.Service
         {
             return GetDataStatisticPageApi(userId);
         }
+
+        public async Task<GenresDataStatistic> GetInfOnFilmGenres(int? userId)
+        {
+            return await GetInfOnFilmGenresDb(userId);
+        }
+
+        public async Task<GenresDataStatistic> GetInfOnFilmCountry(int userId)
+        {
+            return await GetInfOnFilmCountryDb(userId);
+        }
     }
 
     

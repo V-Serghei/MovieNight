@@ -449,6 +449,7 @@ namespace MovieNight.BusinessLogic.Core
                     {
                         var newProfile = new PEdBdTable { User = existingUser };
                         mapper.Map(editing, newProfile);
+                        newProfile.Avatar = editing.Avatar;
                         db.PEdBdTables.Add(newProfile);
                     }
 

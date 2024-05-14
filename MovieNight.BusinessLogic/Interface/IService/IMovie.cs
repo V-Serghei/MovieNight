@@ -29,5 +29,7 @@ namespace MovieNight.BusinessLogic.Interface.IService
         Task<MovieTemplateInfE> GetRandomFilm();
         Task<InfMovieScoresE> GetInfOnFilmScores(int? userId);
         StatisticE GetDataStatisticPage(int? userId);
+        Task<GenresDataStatistic> GetInfOnFilmGenres(int? userId);
+        Task<GenresDataStatistic> GetInfOnFilmCountry(int userId);
     }
 }

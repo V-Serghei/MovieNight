@@ -122,12 +122,37 @@ var options = {
 
 
 
-var chart; 
+var chart;
+var colorStack = [
+    '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107',
+    '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#ffeb3b',
+    '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#ffeb3b', '#ffc107',
+    '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#ffeb3b',
+    '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336', '#e91e63', '#9c27b0', '#673ab7',
+    '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336', '#e91e63', '#9c27b0',
+    '#673ab7', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336', '#e91e63',
+    '#9c27b0', '#673ab7', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336',
+    '#e91e63', '#9c27b0', '#673ab7', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b',
+    '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e'
+];
+
+function generateColors(count) {
+    var colors = [];
+    for (var i = 0; i < count; i++) {
+        var color = colorStack.shift(); 
+        if (!color) {
+           
+            colorStack = colorStack.concat(colorStack.slice());
+            color = colorStack.shift(); 
+        }
+        colors.push(color);
+    }
+    return colors;
+}
 
 
-options = {
-    chart: { height: 320, type: "donut" },
-    series: [44, 55, 41, 15],
+var optionsGenres = {
+    chart: { height: 500, type: "donut" },
     legend: {
         show: !0,
         position: "bottom",
@@ -138,8 +163,64 @@ options = {
         offsetX: 0,
         offsetY: -10,
     },
-    labels: ["Series 1", "Series 2", "Series 3", "Series 4"],
-    colors: ["#3f51b5", "#009688", "#00bcd4", "#d1dee4"],
+    responsive: [
+        {
+            breakpoint: 600,
+            options: { chart: { height: 210 }, legend: { show: !1 } },
+        },
+    ],
+};
+$.ajax({
+    url: '/Statistic/GetChartDataGenre',
+    type: 'GET',
+    success: function (data1) {
+        if (data1) {
+            var countData = data1.countG;
+            var genresData = data1.genres;
+            var colorsData = generateColors(data1.countG.length);
+
+            optionsGenres.series = countData;
+            optionsGenres.labels = genresData;
+            optionsGenres.colors = colorsData;
+
+            var chartAreaGenres = new ApexCharts(document.querySelector("#apex-pie-2"), optionsGenres);
+            chartAreaGenres.render();
+        }
+    },
+    error: function () {
+    }
+});
+
+
+function generateColorsC(count) {
+    var colors = [];
+    for (var i = 20; i < count+20; i++) {
+        var color = colorStack.shift();
+        if (!color) {
+
+            colorStack = colorStack.concat(colorStack.slice());
+            color = colorStack.shift();
+        }
+        colors.push(color);
+    }
+    return colors;
+}
+
+
+
+
+var optionsCountry = {
+    chart: { height: 500, type: "donut" },
+    legend: {
+        show: !0,
+        position: "bottom",
+        horizontalAlign: "center",
+        verticalAlign: "middle",
+        floating: !1,
+        fontSize: "14px",
+        offsetX: 0,
+        offsetY: -10,
+    },
     responsive: [
         {
             breakpoint: 600,
@@ -151,36 +232,28 @@ options = {
 
 
 
+$.ajax({
+    url: '/Statistic/GetChartDataCountry',
+    type: 'GET',
+    success: function (data1) {
+        if (data1) {
+            var countData = data1.countC;
+            var genresData = data1.country;
+            var colorsData = generateColorsC(data1.countC.length);
 
+            optionsCountry.series = countData;
+            optionsCountry.labels = genresData;
+            optionsCountry.colors = colorsData;
 
-(chart = new ApexCharts(
-    document.querySelector("#apex-pie-2"),
-    options,
-)).render()
-options = {
-    chart: { height: 320, type: "donut" },
-    series: [44, 55, 41, 15],
-    legend: {
-        show: !0,
-        position: "bottom",
-        horizontalAlign: "center",
-        verticalAlign: "middle",
-        floating: !1,
-        fontSize: "14px",
-        offsetX: 0,
-        offsetY: -10,
+            var chartAreaCountry = new ApexCharts(document.querySelector("#apex-pie-4"), optionsCountry);
+            chartAreaCountry.render();
+        }
     },
-    labels: ["Series 1", "Series 2", "Series 3", "Series 4"],
-    colors: ["#3f51b5", "#009688", "#00bcd4", "#d1dee4"],
-    responsive: [
-        {
-            breakpoint: 600,
-            options: { chart: { height: 210 }, legend: { show: !1 } },
-        },
-    ],
-};
-(chart = new ApexCharts(
-    document.querySelector("#apex-pie-3"),
-    options,
-)).render()
-   
+    error: function () {
+    }
+});
+
+
+
+
+

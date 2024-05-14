@@ -90,6 +90,7 @@
     <Compile Include="Entities\Notification\EventE.cs" />
     <Compile Include="Entities\PersonalP\PersonalProfileM.cs" />
     <Compile Include="Entities\PersonalP\ProfEditingE.cs" />
+    <Compile Include="Entities\Statistics\GenresDataStatistic.cs" />
     <Compile Include="Entities\Statistics\InfMovieScoresE.cs" />
     <Compile Include="Entities\Statistics\StatisticE.cs" />
     <Compile Include="Entities\TimeD.cs" />
