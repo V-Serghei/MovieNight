@@ -62,9 +62,19 @@ namespace MovieNight.BusinessLogic.Session.Service
             return GetListMovieDb(movieSCommand);
         }
 
-        public ReviewE getListOfReviews(int? filmId)
+        public List<ReviewE> getListOfReviews(int? filmId)
         {
             return getListOfReviewsDb(filmId);
+        }
+
+        public bool setNewReview(ReviewE reviewE)
+        {
+            return SetReviewDb(reviewE);
+        }
+        
+        public int? DeleteReview(int? reviewE)
+        {
+            return DeleteReviewDb(reviewE);
         }
     }
 

@@ -21,7 +21,8 @@ namespace MovieNight.BusinessLogic.Interface.IService
         List<ViewingHistoryM> GetViewingList(int? userId);
         Task<IEnumerable<ViewingHistoryM>> GetNewViewList(ViewListSortCommandE transCommand);
         List<MovieTemplateInfE> GetListMovie(MovieCommandS movieSCommand);
-        ReviewE getListOfReviews(int? filmId);
-
+        List<ReviewE> getListOfReviews(int? filmId);
+        bool setNewReview(ReviewE reviewE);
+        int? DeleteReview(int? reviewE);
     }
 }

@@ -926,6 +926,7 @@
     <Compile Include="Models\PersonalP\PEditingM.cs" />
     <Compile Include="Models\PersonalP\PersonalProfilModel.cs" />
     <Compile Include="Models\RegistViewModel.cs" />
+    <Compile Include="Models\Review\ReviewPageModel.cs" />
     <Compile Include="Models\SortingSearchingFiltering\ViewListSort.cs" />
     <Compile Include="Models\Review\ReviewModel.cs" />
     <Compile Include="Models\TimeModel.cs" />

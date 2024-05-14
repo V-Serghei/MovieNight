@@ -112,12 +112,12 @@
                                                             <span class="remixicon-moon-fill text-warning"></span>
                                                         </a>
                                                     }
-                                                    <a href=@Url.Action("Read","DataTransfer",new { mailId = ms.Id }) class="title text-primary">@ms.SenderName</a>
+                                                    <a href=@Url.Action("Read","DataTransfer",new { mailId = ms.Id }) class="title text-warning">@ms.SenderName</a>
                                                 </div>
                                                 <div class="col-mail col-mail-2">
                                                     @if(ms.Theme!=null)
                                                     {
-                                                        <a href=@Url.Action("Read", "DataTransfer",new {mailId = ms.Id}) class="subject text-primary">
+                                                        <a href=@Url.Action("Read", "DataTransfer",new {mailId = ms.Id}) class="subject text-warning">
                                                             <span class="teaser">@ms.Theme</span>
                                                         </a>
                                                     }
@@ -127,7 +127,7 @@
                                                             <span class="teaser"></span>
                                                         </a>
                                                     }
-                                                    <div class="date text-primary">@ms.Date</div>
+                                                    <div class="date text-warning">@ms.Date</div>
                                                 </div>
                                             </li>
                                         }
@@ -138,7 +138,7 @@
 
                             <div class="row">
                                 <div class="col-7 mt-1">
-                                    Showing 1 - 20 of 289
+                                    Showing 1 - 20
                                 </div> <!-- end col-->
                                 <div class="col-5">
                                     <div class="btn-group float-right">

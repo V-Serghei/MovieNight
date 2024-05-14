@@ -5,6 +5,7 @@ namespace MovieNight.Web.Models.Review
 {
     public class ReviewModel
     {
+        public int Id { get; set; }
         public int? FilmId { get; set; }
         public string User { get; set; }
         public int? UserId { get; set; }

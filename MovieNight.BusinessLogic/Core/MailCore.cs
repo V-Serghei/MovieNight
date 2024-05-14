@@ -130,14 +130,13 @@ namespace MovieNight.BusinessLogic.Core
             {
                 try
                 {
-                    var existsInMailDb = db.MailE.Where(f => f.RecipientId == userId
-                                                             || f.SenderId == userId
+                    var existsInMailDb = db.MailE.Where(f =>f.RecipientId == userId
                                                              && f.IsStarred==true);
                     var listOfMessages = mapper.Map<List<InboxD>>(existsInMailDb);
                     foreach (var listOfMessage in listOfMessages)
                     {
-                        listOfMessage.RecipientName =
-                            db.UsersT.FirstOrDefault(g => g.Id == listOfMessage.RecipientId)?.UserName;
+                        listOfMessage.SenderName =
+                            db.UsersT.FirstOrDefault(g => g.Id == listOfMessage.SenderId)?.UserName;
                     }
                     return listOfMessages;
                 }

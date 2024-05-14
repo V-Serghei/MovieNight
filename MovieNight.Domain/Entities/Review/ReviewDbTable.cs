@@ -15,11 +15,9 @@ namespace MovieNight.Domain.Entities.Review
         public int Id { get; set; }
         [Required]
         public int FilmId { get; set; }
-        [Required]
         public MovieDbTable Film { get; set; }
         [Required]
         public int UserId { get; set; }
-        [Required]
         public UserDbTable User { get; set; }
         [Required]
         public string Text { get; set; }
