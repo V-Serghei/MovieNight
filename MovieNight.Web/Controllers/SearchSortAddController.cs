@@ -904,6 +904,99 @@ namespace MovieNight.Web.Controllers
     
     
     
+    public async Task<ActionResult> CurrentSortingAndFilteringActionBookmarkTomeOf(ViewListSort command)
+    {
+        
+                if (HttpContextInfrastructure.CurrentCommandStateComparison(command))
+                {
+                    if (command.DirectionStep == Direction.Right)
+                    {
+                        if ((System.Web.HttpContext.Current.GetCommandViewList().PageNumber == command.PageNumber))
+                            command.PageNumber += 1;
+
+                        if (System.Web.HttpContext.Current.GetCommandViewList().PageNumber > command.PageNumber)
+                            command.PageNumber = (System.Web.HttpContext.Current.GetCommandViewList().PageNumber);
+                        
+                        
+                        if (command.PageNumber <= 1) command.PageNumber = 1;
+                        else if (command.PageNumber >= (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+                            ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+                            : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1))
+                            command.PageNumber = (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+                                ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+                                : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1);
+                    }
+                    else if (command.DirectionStep == Direction.Left)
+                    {
+                        if ((System.Web.HttpContext.Current.GetCommandViewList().PageNumber == command.PageNumber))
+                            command.PageNumber -= 1;
+    
+                        if (System.Web.HttpContext.Current.GetCommandViewList().PageNumber < command.PageNumber)
+                            command.PageNumber = (System.Web.HttpContext.Current.GetCommandViewList().PageNumber);
+                        
+                        if (command.PageNumber <= 1) command.PageNumber = 1;
+                        else if (command.PageNumber >= (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+                            ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+                            : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1))
+                            command.PageNumber = (((System.Web.HttpContext.Current.GetListViewingHistoryS().Count % 10) == 0)
+                                ? (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10)
+                                : (System.Web.HttpContext.Current.GetListViewingHistoryS().Count / 10) + 1);
+                    }
+    
+                    var currStateListCache = System.Web.HttpContext.Current.GetListViewingHistoryS();
+                    var currList = currStateListCache.Skip((command.PageNumber - 1) * 10).Take(10).ToList();
+                    System.Web.HttpContext.Current.SetCommandViewList(command);
+                    ViewBag.CurrentPageNumber = command.PageNumber;
+    
+                    return Json(new { success = true, newListV = currList, pageNumber = command.PageNumber });
+                }
+                else
+                {
+                    command.PageNumber = 1;
+                    System.Web.HttpContext.Current.SetCommandViewList(command);
+                    var transCommand = _mapper.Map<ViewListSortCommandE>(command);
+                    var currStateList = await _movie.GetNewBookmarkTimeOfList(transCommand);
+                    var newListV = _mapper.Map<List<ViewingHistoryModel>>(currStateList);
+                    System.Web.HttpContext.Current.SetListViewingHistoryS(newListV);
+                    var currList = newListV.Take(10).ToList();
+                    ViewBag.CurrentPageNumber = command.PageNumber;
+                    return Json(new { success = true, newListV = currList, pageNumber = command.PageNumber });
+                }
+            
+        
+    }
+
+    
+    //НЕ ЗАКОНЧЕНО, НАДО 
+    public ActionResult BookmarkTimeOfPage()
+    {
+        System.Web.HttpContext.Current.GetCommandViewList().CurrentListViewing.Clear();
+        var bookmarkList = _movie.GetBookmarkList(System.Web.HttpContext.Current.GetMySessionObject().Id);
+        ViewBag.NumOfPage = 1;
+        var bookmarkModel = _mapper.Map<List<ViewingHistoryModel>>(bookmarkList);
+        System.Web.HttpContext.Current.SetCommandViewList(new ViewListSort
+        {
+            PageNumber = ViewBag.CurrentPageNumber = 1,
+            Field = SelectField.Non,
+            DirectionStep = Direction.Non,
+            SortingDirection = SortDirection.Non,
+            SearchParameter = "",
+            Category = FilmCategory.Non
+        });
+
+        var list = bookmarkModel.Take(10).ToList();
+        System.Web.HttpContext.Current.SetListViewingHistoryS(bookmarkModel);
+            
+        return View(list);
+    }
+
+    public ActionResult BookmarkPage()
+    {
+        var viewList = _movie.GetBookmarkList(System.Web.HttpContext.Current.GetMySessionObject().Id);
+        return View();
+    }
+    
+    
     
 
 

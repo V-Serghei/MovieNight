@@ -44,12 +44,13 @@
         <div class="dropdown-item noti-title">
             <h5 class="m-0">
                 <span class="float-right">
-                    <a href="" class="text-dark">
+                    <a href="#" class="text-dark" onclick="clearBookmarks()">
                         <small>Clear All</small>
                     </a>
                 </span>Notification
             </h5>
         </div>
+
 
         <div class="slimscroll noti-scroll">
 
@@ -156,15 +157,33 @@
         <!-- item-->
         <div class="dropdown-item noti-title">
             <h5 class="m-0">
-                <span class="float-right">
-                    <a href="" class="text-dark">
-                        <small>Clear All</small>
-                    </a>
-                </span>Bookmark exp
+        <span class="float-right">
+            @Ajax.ActionLink(
+            "Clear All", // т
+            "ClearBookmarks",
+            "InformationSynchronization",
+            null,
+            new AjaxOptions
+            {
+            HttpMethod = "POST",
+            OnSuccess = "clearBookmarksSuccess" 
+            },
+            new { @class = "text-dark" } 
+            )
+        </span>
+                Bookmark exp
             </h5>
         </div>
 
-               
+        <script>
+            
+            function clearBookmarksSuccess(response) {
+                location.reload();
+                console.log(response);
+            }
+        </script>
+
+
         @if(modelBookmark != null)
         {
             <!-- item-->
@@ -442,3 +461,18 @@ else
     </li>
 </ul>
 </div>
+<script>
+    function clearBookmarks() {
+        $.ajax({
+            url: '@Url.Action("ClearBookmarks", "InformationSynchronization")', 
+            type: 'POST',
+            success: function(response) {
+                location.reload();
+            },
+            error: function () {
+                alert('An error occurred while processing your request.');
+            }
+        });
+    }
+
+</script>

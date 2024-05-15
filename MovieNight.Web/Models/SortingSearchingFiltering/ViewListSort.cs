@@ -20,5 +20,11 @@ namespace MovieNight.Web.Models.SortingSearchingFiltering
         public List<ViewingHistoryModel> CurrentListViewing { get; set; }
         
         public string SearchParameter { get; set; }
+
+        public ViewListSort()
+        {
+            CurrentListViewing = new List<ViewingHistoryModel>();
+        }
+        
     }
 }

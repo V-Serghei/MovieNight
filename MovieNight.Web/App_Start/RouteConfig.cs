@@ -26,6 +26,13 @@ namespace MovieNight.Web
                 defaults: new { controller = "InformationSynchronization", action = "MovieTemplatePage", id = UrlParameter.Optional }
             );
             
+
+            routes.MapRoute(
+                name: "ClearBookmarks",
+                url: "InformationSynchronization/ClearBookmarks",
+                defaults: new { controller = "InformationSynchronization", action = "ClearBookmarks" }
+            );
+            
         }
     }
 }

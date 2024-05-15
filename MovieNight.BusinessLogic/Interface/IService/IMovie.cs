@@ -31,5 +31,9 @@ namespace MovieNight.BusinessLogic.Interface.IService
         StatisticE GetDataStatisticPage(int? userId);
         Task<GenresDataStatistic> GetInfOnFilmGenres(int? userId);
         Task<GenresDataStatistic> GetInfOnFilmCountry(int userId);
+        Task<RespAddViewListElDb> SetViewList((int? movieId, int? Id) valueTuple);
+        void ClearBookmarks();
+        List<ViewingHistoryM> GetBookmarkList(int? id);
+        Task<IEnumerable<ViewingHistoryM>> GetNewBookmarkTimeOfList(ViewListSortCommandE transCommand);
     }
 }

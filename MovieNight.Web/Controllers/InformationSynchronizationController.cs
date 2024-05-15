@@ -241,10 +241,12 @@ namespace MovieNight.Web.Controllers
         public ActionResult MovieTemplatePage(int? id)
         {
             int idU = 0;
+            
             if (id != null)
             {
                 idU = (int)id;
             }
+           
 
             try
             {
@@ -457,9 +459,26 @@ namespace MovieNight.Web.Controllers
 
         }
         
-        public async Task<JsonResult> AddToViewed(int movieid)
+        public async Task<ActionResult> AddToViewed(int? movieId)
         {
-            return Json(new { success = true, statusMsg = "StatusMsg", newButtonTitle = "Новое сообщение", newButtonColor = "red" }); 
+
+            if (movieId != null)
+            {
+                var respAddViewed = await 
+                    _movie.SetViewList((movieId, System.Web.HttpContext.Current.GetMySessionObject()?.Id));
+                if (respAddViewed.IsSuccese)
+                {
+                    return  RedirectToAction("MovieTemplatePage",new {id = movieId}); 
+                }
+                else
+                {
+                    return  RedirectToAction("MovieTemplatePage",new {id = movieId}); 
+                }
+            }
+            
+
+            return RedirectToAction("Error404Page", "Error");
+
         }
 
         public async Task<JsonResult> AddToGrade()
@@ -473,8 +492,6 @@ namespace MovieNight.Web.Controllers
 
             var resp =  await _movie.SetReteMovieAndView((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId,
                 rating));
-            
-            
             
             return (Json(new { star = rating }));
         }
@@ -523,7 +540,23 @@ namespace MovieNight.Web.Controllers
             }
 
         }
-            
+        [HttpPost]
+        public JsonResult ClearBookmarks()
+        {
+            try
+            {
+                _movie.ClearBookmarks();
+                System.Web.HttpContext.Current.GetBookmarkTimeOf().Bookmark.Clear();
+                System.Web.HttpContext.Current.GetBookmarkTimeOf().MovieInTimeOfBookmark.Clear();
+        
+                return Json(new { success = true, message = "Bookmarks cleared successfully" });
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = "An error occurred: " + e.Message });
+            }
+        }
+
         
 
         public ActionResult ReviewPage()

@@ -111,6 +111,26 @@ namespace MovieNight.BusinessLogic.Session.Service
         {
             return await GetInfOnFilmCountryDb(userId);
         }
+
+        public async Task<RespAddViewListElDb> SetViewList((int? movieId, int? Id) valueTuple)
+        {
+            return await SetViewListDb(valueTuple);
+        }
+
+        public void ClearBookmarks()
+        {
+            ClearBookmarksDb();
+        }
+
+        public List<ViewingHistoryM> GetBookmarkList(int? id)
+        {
+            return GetBookmarkTimeOfListDb(id);
+        }
+
+        public async Task<IEnumerable<ViewingHistoryM>> GetNewBookmarkTimeOfList(ViewListSortCommandE transCommand)
+        {
+            return await GetNewBookmarkTimeOfListDb(transCommand);
+        }
     }
 
     

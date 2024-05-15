@@ -55,11 +55,19 @@
                             
                         }
 
-                        <button type="button" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Will watch</button>
-                        <button type="button" class="btn btn-danger btn-xs waves-effect mb-2 waves-light">Looked</button><br>
-                        <a href="@Url.Action("MoviePlayer","InformationSynchronization", new { movieId = @Model.Id })"> <button type="button"  class="btn btn-primary btn-lg waves-effect mb-2 waves-light">Watch Now</button></a>
+                        @* <button type="button" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Will watch</button> *@
+                        @if (System.Web.HttpContext.Current.GetMySessionObject() != null)
+                        {
+                            <a href="@Url.Action("AddToViewed", "InformationSynchronization", new { movieId = @Model.Id })" > <button type="button" class="btn btn-rounded btn-bordered-pink btn-lg waves-effect mb-2 waves-light">Looked</button></a>
+                        }
+                        <a href="@Url.Action("MoviePlayer","InformationSynchronization", new { movieId = @Model.Id })"> <button type="button"  class="btn btn-rounded btn-purple btn-lg waves-effect mb-2 waves-light">Watch Now</button></a>
 
-                    @if(System.Web.HttpContext.Current.GetMySessionObject()!=null){<div id="bookmarkStatus">
+                        
+                        
+                        
+                        @if(System.Web.HttpContext.Current.GetMySessionObject()!=null)
+                        {
+                            <div id="bookmarkStatus">
                      @{
                          string buttonText = Model.Bookmark ? "Delete" : "Bookmark";
                          string buttonColor = Model.Bookmark ? "btn-danger" : "btn-primary";
@@ -153,7 +161,7 @@
                    <h1>The film's score</h1>
                        @if(HttpContext.Current.GetMySessionObject()!=null){ 
                             <div class="star-rating">
-                            @if (Model.UserRating != null)
+                            @if (Model.UserRating != null && Model.UserRating!= 0)
                             {
                                 for (int i = 1; i <= 10; i++)
                                 {
@@ -616,3 +624,8 @@ else
         </div> <!-- container -->
     </div> <!-- content -->
 }
+<script>
+    function restaartPage(){
+        location.reload();
+    }
+</script>

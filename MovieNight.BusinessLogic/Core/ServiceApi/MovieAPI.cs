@@ -14,6 +14,7 @@ using System.Web.Caching;
 using System.Web.UI;
 using AutoMapper;
 using MovieNight.BusinessLogic.DBModel;
+using MovieNight.BusinessLogic.Migrations.Session;
 using MovieNight.BusinessLogic.Migrations.User;
 using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.MovieM;
@@ -30,11 +31,11 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
     {
         //var op = ReadMoviesFromJson("D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
 
-        private IMapper MapperFilm{ get; set; }
-        private IMapper MapperFact{ get; set; }
-        private IMapper MapperCast{ get; set; }
-        private IMapper MapperCard{ get; set; }
-        
+        private IMapper MapperFilm { get; set; }
+        private IMapper MapperFact { get; set; }
+        private IMapper MapperCast { get; set; }
+        private IMapper MapperCard { get; set; }
+
         private IMapper MapperViewList { get; set; }
 
         private List<IMapper> LMapper => GetMappersSettings();
@@ -43,7 +44,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         //If you’re back to the meper again, remember,
         //check first if you called in your method where you want to use it,
         //the method itself with all the settings of the meper
-        private List<IMapper> GetMappersSettings()  
+        private List<IMapper> GetMappersSettings()
         {
             var conf = new MapperConfiguration(cfg =>
             {
@@ -84,7 +85,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         src.Ignore());
                 config.CreateMap<InterestingFactDbTable, InterestingFactE>();
             });
-            
+
             MapperFact = confInterFact.CreateMapper();
             var confCast = new MapperConfiguration(config =>
             {
@@ -115,7 +116,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     .ForPath(dist => dist.Movie.ProductionYear, opt =>
                         opt.MapFrom(src => src.YearOfRelease));
                 confV.CreateMap<ViewListDbTable, ViewingHistoryM>()
-                    .ForPath(dest => dest.MovieNightGrade, opt => 
+                    .ForPath(dest => dest.MovieNightGrade, opt =>
                         opt.MapFrom(src => src.Movie.MovieNightGrade))
                     .ForPath(dist => dist.YearOfRelease, opt =>
                         opt.MapFrom(src => src.Movie.ProductionYear));
@@ -125,7 +126,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             MapperViewList = configV.CreateMapper();
             return new List<IMapper>
             {
-                MapperCard,MapperFact,MapperCast,MapperFilm,MapperViewList
+                MapperCard, MapperFact, MapperCast, MapperFilm, MapperViewList
             };
         }
 
@@ -134,7 +135,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         {
             GetMappersSettings();
             var movieDb = new MovieTemplateInfE();
-            var op = ReadMoviesFromJson("D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
+            var op = ReadMoviesFromJson(
+                "D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
 
             PopulateDatabase(op);
             // conf.CreateMapper();
@@ -147,7 +149,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     if (movieS != null)
                     {
                         movieDb = MapperFilm.Map<MovieTemplateInfE>(movieS);
-                        var listOfCast = db.CastDbTables.Where(cast => cast.Movies.Any(movie => movie.Id == id)).ToList();
+                        var listOfCast = db.CastDbTables.Where(cast => cast.Movies.Any(movie => movie.Id == id))
+                            .ToList();
                         if (listOfCast != null)
                         {
                             movieDb.CastMembers = new List<CastMemberE>();
@@ -157,6 +160,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                                 movieDb.CastMembers.Add(onCast);
                             }
                         }
+
                         var listOfFacts = db.InterestingFact.Where(fact => fact.MovieId == id).ToList();
                         if (listOfFacts != null)
                         {
@@ -166,8 +170,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                                 var onFact = MapperFact.Map<InterestingFactE>(cast);
                                 movieDb.InterestingFacts.Add(onFact);
                             }
-                            
                         }
+
                         var listOfMovieCards = db.MovieCard.Where(card => card.MovieId == id).ToList();
                         if (listOfMovieCards != null)
                         {
@@ -180,9 +184,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         }
 
                         movieDb.Genre = new List<string>();
-                        
-                            movieDb.Genre = JsonConvert.DeserializeObject<List<string>>(movieS.Genres);
-                        
+
+                        movieDb.Genre = JsonConvert.DeserializeObject<List<string>>(movieS.Genres);
                     }
 
                     return movieDb;
@@ -193,21 +196,17 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     Console.WriteLine(@"StackTrace: " + ex.StackTrace);
                     return null;
                 }
-                
             }
-
         }
 
         private void PopulateDatabase(List<MovieTemplateInfE> movies)
         {
             using (var db = new MovieContext())
             {
-                
                 foreach (var movieTemplate in movies)
                 {
                     try
                     {
-                        
                         var movieDb = new MovieDbTable
                         {
                             Title = movieTemplate.Title,
@@ -217,10 +216,10 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             Description = movieTemplate.Description,
                             ProductionYear = movieTemplate.ProductionYear,
                             Country = movieTemplate.Country,
-                            Genres = JsonConvert.SerializeObject(movieTemplate.Genre), 
+                            Genres = JsonConvert.SerializeObject(movieTemplate.Genre),
                             Location = movieTemplate.Location,
                             Director = movieTemplate.Director,
-                            Duration = DateTime.Parse(movieTemplate.DurationJ), 
+                            Duration = DateTime.Parse(movieTemplate.DurationJ),
                             MovieNightGrade = movieTemplate.MovieNightGrade,
                             Certificate = movieTemplate.Certificate,
                             ProductionCompany = movieTemplate.ProductionCompany,
@@ -279,7 +278,6 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             movieDb.CastMembers.Add(castMemberDb);
                             db.CastDbTables.Add(castMemberDb);
                             // db.SaveChanges();
-
                         }
 
                         db.SaveChanges();
@@ -290,15 +288,15 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         {
                             foreach (var validationError in validationErrors.ValidationErrors)
                             {
-                                Console.WriteLine($@"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                                Console.WriteLine(
+                                    $@"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
                             }
                         }
                     }
                 }
-
             }
         }
-        
+
         private List<MovieTemplateInfE> ReadMoviesFromJson(string url)
         {
             try
@@ -314,7 +312,6 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 moviess = JsonConvert.DeserializeObject<List<MovieTemplateInfE>>(json);
 
                 return moviess;
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -322,23 +319,26 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     foreach (var validationError in validationErrors.ValidationErrors)
                     {
-                        Console.WriteLine($@"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                        Console.WriteLine(
+                            $@"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
                     }
                 }
+
                 return null;
             }
         }
 
-        protected async Task<BookmarkE> SetNewBookmarkDb((int user,int movie) idAdd)
+        protected async Task<BookmarkE> SetNewBookmarkDb((int user, int movie) idAdd)
         {
             var resp = new BookmarkE();
             try
             {
                 using (var db = new UserContext())
                 {
-                    var verify = await db.Bookmark.FirstOrDefaultAsync(b => b.UserId == idAdd.user && b.MovieId == idAdd.movie);
-            
-                    if (verify == null )
+                    var verify =
+                        await db.Bookmark.FirstOrDefaultAsync(b => b.UserId == idAdd.user && b.MovieId == idAdd.movie);
+
+                    if (verify == null)
                     {
                         var addBookmarkE = new BookmarkDbTable
                         {
@@ -367,9 +367,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             resp.Msg = "Have already been added!";
                             resp.Success = false;
                         }
-                
+
                         await db.SaveChangesAsync();
-                
+
                         return resp;
                     }
                 }
@@ -383,13 +383,14 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         }
 
 
-        protected async Task<bool> DeleteBookmarkDb((int user,int movie) idAdd)
+        protected async Task<bool> DeleteBookmarkDb((int user, int movie) idAdd)
         {
             try
             {
                 using (var db = new UserContext())
                 {
-                    var bookmarkToDelete = await db.Bookmark.FirstOrDefaultAsync(b => b.UserId == idAdd.user && b.MovieId == idAdd.movie);
+                    var bookmarkToDelete =
+                        await db.Bookmark.FirstOrDefaultAsync(b => b.UserId == idAdd.user && b.MovieId == idAdd.movie);
 
                     if (bookmarkToDelete != null)
                     {
@@ -399,6 +400,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             await db.SaveChangesAsync();
                             return true;
                         }
+
                         db.Bookmark.Remove(bookmarkToDelete);
 
                         await db.SaveChangesAsync();
@@ -407,24 +409,25 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     {
                         return false;
                     }
-                    
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine($@"Error deleting bookmark: {ex.Message}");
-                return  false;
+                return false;
             }
 
             return true;
         }
 
-        protected bool GetInfBookmarkDb((int? user,int movie) movieid)
+        protected bool GetInfBookmarkDb((int? user, int movie) movieid)
         {
             try
             {
                 using (var db = new UserContext())
                 {
-                    var verify =  db.Bookmark.FirstOrDefault(b => b.UserId == movieid.user && b.MovieId == movieid.movie);
+                    var verify =
+                        db.Bookmark.FirstOrDefault(b => b.UserId == movieid.user && b.MovieId == movieid.movie);
 
                     return verify != null && verify.BookMark;
                 }
@@ -432,16 +435,18 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             catch (Exception ex)
             {
                 Console.WriteLine($@"Error deleting bookmark: {ex.Message}");
-                return  false ;
+                return false;
             }
         }
-        protected bool GetInfBookmarkTimeOfDb((int user,int movie) movieid)
+
+        protected bool GetInfBookmarkTimeOfDb((int user, int movie) movieid)
         {
             try
             {
                 using (var db = new UserContext())
                 {
-                    var verify =  db.Bookmark.FirstOrDefault(b => b.UserId == movieid.user && b.MovieId == movieid.movie);
+                    var verify =
+                        db.Bookmark.FirstOrDefault(b => b.UserId == movieid.user && b.MovieId == movieid.movie);
 
                     return verify != null && verify.BookmarkTimeOf;
                 }
@@ -449,7 +454,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             catch (Exception ex)
             {
                 Console.WriteLine($@"Error deleting bookmark: {ex.Message}");
-                return  false ;
+                return false;
             }
         }
 
@@ -464,8 +469,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     var dbList = db.Bookmark
                         .Where(l => l.UserId == userId && !l.BookmarkTimeOf)
-                        .OrderByDescending(l => l.TimeAdd) 
-                        .Take(5) 
+                        .OrderByDescending(l => l.TimeAdd)
+                        .Take(5)
                         .ToList();
                     foreach (var bookmarkDbTable in dbList)
                     {
@@ -485,26 +490,20 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                                     Genre = JsonConvert.SerializeObject(movieS.Genres)
                                 });
                             }
-                            
-                           
                         }
-                       
                     }
 
                     return listBookmark;
-
                 }
             }
             catch (Exception ex)
             {
-                
                 return listBookmark;
             }
         }
 
         protected BookmarkTimeOfE GetListBookmarksTimeOfDb(int? userId)
         {
-
             var listBookmark = new BookmarkTimeOfE();
             GetMappersSettings();
             try
@@ -513,7 +512,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     var dbList = db.Bookmark
                         .Where(l => l.UserId == userId && l.BookmarkTimeOf)
-                        .OrderByDescending(l => l.TimeAdd) 
+                        .OrderByDescending(l => l.TimeAdd)
                         .ToList();
                     foreach (var bookmarkDbTable in dbList)
                     {
@@ -532,18 +531,14 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                                     TimeAdd = bookmarkDbTable.TimeAdd
                                 });
                             }
-                            
                         }
-                       
                     }
 
                     return listBookmark;
-
                 }
             }
             catch (Exception ex)
             {
-                
                 return listBookmark;
             }
         }
@@ -551,20 +546,19 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
         protected float GetUserRatingDb((int user, int movie) valueTuple)
         {
-            
             try
             {
                 using (var db = new UserContext())
                 {
-                    var verify =  db.ViewList?.FirstOrDefault(b => b.UserId == valueTuple.user && b.MovieId == valueTuple.movie);
+                    var verify = db.ViewList?.FirstOrDefault(b =>
+                        b.UserId == valueTuple.user && b.MovieId == valueTuple.movie);
 
                     if (verify != null) return verify.UserValues;
                 }
             }
             catch (Exception ex)
             {
-                
-                return 0 ;
+                return 0;
             }
 
             return 0;
@@ -578,34 +572,31 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             {
                 using (var db = new UserContext())
                 {
-                    var verify = await db.ViewList.FirstOrDefaultAsync(b => b.UserId == valueTuple.user && b.MovieId == valueTuple.movieId);
+                    var verify = await db.ViewList.FirstOrDefaultAsync(b =>
+                        b.UserId == valueTuple.user && b.MovieId == valueTuple.movieId);
 
                     var ms = new MasterContext();
 
                     var movieC = ms.Movies.FirstOrDefaultAsync(m => m.Id == valueTuple.movieId);
-                    
-                    if (verify == null && movieC.Result != null )
+
+                    if (verify == null && movieC.Result != null)
                     {
                         if (movieC.Result != null)
                         {
-                            
+                            var addBookmarkE = new ViewListDbTable()
+                            {
+                                UserId = valueTuple.user,
+                                MovieId = valueTuple.movieId,
+                                ReviewDate = DateTime.Now,
+                                TimeSpent = movieC.Result.Duration,
+                                UserValues = valueTuple.rating,
+                                UserViewCount = 1,
+                                Title = movieC.Result.Title,
+                                Category = movieC.Result.Category
+                            };
 
 
-                                var addBookmarkE = new ViewListDbTable()
-                                {
-                                    UserId = valueTuple.user,
-                                    MovieId = valueTuple.movieId,
-                                    ReviewDate = DateTime.Now,
-                                    TimeSpent = movieC.Result.Duration,
-                                    UserValues = valueTuple.rating,
-                                    UserViewCount = db.ViewList.Count(),
-                                    Title = movieC.Result.Title,
-                                    Category = movieC.Result.Category
-                                };
-
-
-                                db.ViewList.Add(addBookmarkE);
-                            
+                            db.ViewList.Add(addBookmarkE);
                         }
 
                         await db.SaveChangesAsync();
@@ -615,11 +606,11 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     {
                         if (movieC.Result != null)
                         {
-                             verify.UserValues = valueTuple.rating;
-                             db.Entry(verify).State = EntityState.Modified;
+                            verify.UserValues = valueTuple.rating;
+                            db.Entry(verify).State = EntityState.Modified;
                             await db.SaveChangesAsync();
-                            
                         }
+
                         return true;
                     }
                 }
@@ -628,8 +619,6 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             {
                 return false;
             }
-
-
         }
 
         #region ViewList
@@ -640,7 +629,6 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         /// 
         protected List<ViewingHistoryM> GetViewingListDb(int? userId)
         {
-            
             var viewingList = new List<ViewingHistoryM>();
 
             try
@@ -649,8 +637,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     var dbList = db.ViewList
                         .Where(l => l.UserId == userId)
-                        .OrderByDescending(l => l.Id) 
-                        .Take(5) 
+                        .OrderByDescending(l => l.Id)
+                        .Take(10)
                         .ToList();
 
                     foreach (var viewList in dbList)
@@ -674,13 +662,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                                     YearOfRelease = movieS.ProductionYear,
                                     MovieNightGrade = movieS.MovieNightGrade,
                                     Category = movieS.Category,
-                                    
                                 });
                             }
-                            
-                           
                         }
-                       
                     }
 
                     return viewingList;
@@ -688,8 +672,53 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             }
             catch (Exception ex)
             {
-                
                 return viewingList;
+            }
+        }
+        protected List<ViewingHistoryM> GetBookmarkTimeOfListDb(int? userId)
+        {
+            var getBookmarkListDb = new List<ViewingHistoryM>();
+
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var dbList = db.Bookmark
+                        .Where(l => l.UserId == userId && l.BookmarkTimeOf)
+                        .OrderByDescending(l => l.TimeAdd)
+                        .Take(10)
+                        .ToList();
+                    
+
+                    foreach (var bookmarkDbTable in dbList)
+                    {
+                        using (var movie = new MovieContext())
+                        {
+                            var movieS = movie.MovieDb.FirstOrDefault(m => m.Id == bookmarkDbTable.MovieId);
+                            if (movieS != null)
+                            {
+                                getBookmarkListDb.Add(new ViewingHistoryM
+                                {
+                                    Title = movieS.Title,
+                                    Description = movieS.Description,
+                                    Id = movieS.Id,
+                                    Poster = movieS.PosterImage,
+                                    ReviewDate = bookmarkDbTable.TimeAdd,
+                                    TimeSpent = movieS.Duration,
+                                    YearOfRelease = movieS.ProductionYear,
+                                    MovieNightGrade = movieS.MovieNightGrade,
+                                    Category = movieS.Category,
+                                });
+                            }
+                        }
+                    }
+
+                    return getBookmarkListDb;
+                }
+            }
+            catch (Exception ex)
+            {
+                return getBookmarkListDb;
             }
         }
 
@@ -698,11 +727,13 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         {
             List<ViewingHistoryM> currStateViewList;
             GetMappersSettings();
-            using (var db = new UserContext() )
+            using (var db = new UserContext())
             {
                 List<ViewListDbTable> preliminaryResult;
-                if(!string.IsNullOrEmpty(commandE.SearchParameter)){
-                    if(commandE.Category != FilmCategory.Non){
+                if (!string.IsNullOrEmpty(commandE.SearchParameter))
+                {
+                    if (commandE.Category != FilmCategory.Non)
+                    {
                         preliminaryResult = db.ViewList
                             .Where(l => l.Category == commandE.Category)
                             .Where(u => u.Title.StartsWith(commandE.SearchParameter))
@@ -713,10 +744,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     {
                         preliminaryResult = db.ViewList.Where(u => u.Title.StartsWith(commandE.SearchParameter))
                             .Include(viewListDbTable => viewListDbTable.Movie)
-                            .ToList();;
+                            .ToList();
+                        ;
                     }
-                    
-                     
                 }
                 else
                 {
@@ -728,10 +758,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     else
                     {
                         preliminaryResult = db.ViewList.Include(viewListDbTable => viewListDbTable.Movie).ToList();
-
                     }
                 }
-                
+
                 using (var movieD = new MovieContext())
                 {
                     if (commandE.SortingDirection != SortDirection.Non)
@@ -771,14 +800,14 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         }
                     }
                 }
+
                 currStateViewList = MapperViewList.Map<List<ViewingHistoryM>>(preliminaryResult);
             }
-            
-            
+
 
             return Task.FromResult<IEnumerable<ViewingHistoryM>>(currStateViewList);
         }
-        
+
         #endregion
 
 
@@ -815,7 +844,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                                 break;
                         }
                     }
-                    else if(movieSCommand.UserId != null)
+                    else if (movieSCommand.UserId != null)
                     {
                         using (var user = new UserContext())
                         {
@@ -847,55 +876,51 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
                             var similarMovies = dbMovie.MovieDb
                                 .AsEnumerable()
-                                .Where(m => {
+                                .Where(m =>
+                                {
                                     var movieGenres = JsonConvert.DeserializeObject<List<string>>(m.Genres);
                                     var commonGenresCount = movieGenres.Intersect(topGenres).Count();
-                                    return commonGenresCount >= 3; 
+                                    return commonGenresCount >= 3;
                                 })
-                                .Except(dbMovie.MovieDb.Where(m => bookmarkedMovieIds.Contains(m.Id) || m.ViewListEntries.Any(v => v.UserId == movieSCommand.UserId)))
+                                .Except(dbMovie.MovieDb.Where(m =>
+                                    bookmarkedMovieIds.Contains(m.Id) ||
+                                    m.ViewListEntries.Any(v => v.UserId == movieSCommand.UserId)))
                                 .ToList();
 
 
-
-                             
-                             
                             if (movieSCommand.UserId != null)
                             {
                                 var movieList1 = MapperFilm.Map<List<MovieTemplateInfE>>(similarMovies);
                                 foreach (var movie in movieList1)
                                 {
                                     var bookmarkDbTable = user.Bookmark
-                                        .FirstOrDefaultAsync(u => u.UserId == movieSCommand.UserId && u.MovieId == movie.Id)
+                                        .FirstOrDefaultAsync(u =>
+                                            u.UserId == movieSCommand.UserId && u.MovieId == movie.Id)
                                         .Result;
                                     if (bookmarkDbTable != null)
                                     {
                                         movie.BookmarkTomeOf = bookmarkDbTable.BookmarkTimeOf;
                                         movie.Bookmark = bookmarkDbTable.BookMark;
                                     }
-
                                 }
 
                                 return movieList1;
                             }
-                            
                         }
                     }
-                    
+
                     var movieDb = query.ToList();
                     if (movieSCommand.SortingDirection == SortDirection.Descending)
                     {
                         movieDb.Reverse();
                     }
-                    
-                    
-                    
-                   
+
+
                     var movieList = MapperFilm.Map<List<MovieTemplateInfE>>(movieDb);
-                    using (var  user = new UserContext())
+                    using (var user = new UserContext())
                     {
                         if (movieSCommand.UserId != null)
                         {
-
                             foreach (var movie in movieList)
                             {
                                 var bookmarkDbTable = user.Bookmark
@@ -906,10 +931,10 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                                     movie.BookmarkTomeOf = bookmarkDbTable.BookmarkTimeOf;
                                     movie.Bookmark = bookmarkDbTable.BookMark;
                                 }
-
                             }
                         }
                     }
+
                     return movieList;
                 }
             }
@@ -930,9 +955,10 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             {
                 using (var db = new UserContext())
                 {
-                    var verify = await db.Bookmark.FirstOrDefaultAsync(b => b.UserId == valueTuple.Id && b.MovieId == valueTuple.movieId);
-            
-                    if (verify == null )
+                    var verify = await db.Bookmark.FirstOrDefaultAsync(b =>
+                        b.UserId == valueTuple.Id && b.MovieId == valueTuple.movieId);
+
+                    if (verify == null)
                     {
                         var addBookmarkE = new BookmarkDbTable
                         {
@@ -944,11 +970,11 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         db.Bookmark.Add(addBookmarkE);
                         await db.SaveChangesAsync();
                         respAdd.RespMsg = resp.Msg = "Success";
-                        respAdd.IsSuccese =  resp.Success = true;
+                        respAdd.IsSuccese = resp.Success = true;
                         respAdd.Bookmark = resp;
                         respAdd.MovieInTimeOfBookmark = MapperFilm.Map<MovieTemplateInfE>(movie);
-                        
-                        
+
+
                         return respAdd;
                     }
                     else
@@ -960,7 +986,6 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             resp.IdUser = valueTuple.Id;
                             resp.IdMovie = valueTuple.movieId;
                             resp.BookMark = verify.BookMark;
-
                         }
                         else
                         {
@@ -970,12 +995,13 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             respAdd.MovieInTimeOfBookmark = MapperFilm.Map<MovieTemplateInfE>(movie);
                             return respAdd;
                         }
+
                         await db.SaveChangesAsync();
                         resp.Msg = "Have already been added!";
                         resp.Success = true;
                         respAdd.Bookmark = resp;
                         respAdd.MovieInTimeOfBookmark = MapperFilm.Map<MovieTemplateInfE>(movie);
-                        return  respAdd;
+                        return respAdd;
                     }
                 }
             }
@@ -984,17 +1010,18 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 respAdd.RespMsg = resp.Msg = "Error: " + ex.Message;
                 respAdd.IsSuccese = resp.Success = false;
                 respAdd.Bookmark = resp;
-                return  respAdd;
+                return respAdd;
             }
-
         }
-        protected async Task<bool> DeleteBookmarkTimeOfDb((int user,int movie) idAdd)
+
+        protected async Task<bool> DeleteBookmarkTimeOfDb((int user, int movie) idAdd)
         {
             try
             {
                 using (var db = new UserContext())
                 {
-                    var bookmarkToDelete = await db.Bookmark.FirstOrDefaultAsync(b => b.UserId == idAdd.user && b.MovieId == idAdd.movie);
+                    var bookmarkToDelete =
+                        await db.Bookmark.FirstOrDefaultAsync(b => b.UserId == idAdd.user && b.MovieId == idAdd.movie);
 
                     if (bookmarkToDelete != null)
                     {
@@ -1003,7 +1030,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             bookmarkToDelete.BookmarkTimeOf = false;
                             await db.SaveChangesAsync();
                             return true;
-                        }else if (bookmarkToDelete.BookmarkTimeOf)
+                        }
+                        else if (bookmarkToDelete.BookmarkTimeOf)
                         {
                             db.Bookmark.Remove(bookmarkToDelete);
                             await db.SaveChangesAsync();
@@ -1013,12 +1041,12 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     {
                         return false;
                     }
-                    
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine($@"Error deleting bookmark: {ex.Message}");
-                return  false;
+                return false;
             }
 
             return true;
@@ -1032,16 +1060,14 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     var currentTime = DateTime.Now;
                     var timeThreshold = currentTime.AddHours(-24);
-                    
+
                     var expiredBookmarks = db.Bookmark
                         .Where(b => b.BookmarkTimeOf && !b.BookMark && b.TimeAdd < timeThreshold)
                         .ToList();
-                    
+
                     db.Bookmark.RemoveRange(expiredBookmarks);
                     db.SaveChanges();
                 }
-                
-                
             }
             catch (Exception e)
             {
@@ -1049,6 +1075,32 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 throw;
             }
         }
+        
+        protected void ClearBookmarksDb()
+        {
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var bookmarksToUpdate = db.Bookmark.Where(b => b.BookmarkTimeOf && b.BookMark).ToList();
+                    foreach (var bookmark in bookmarksToUpdate)
+                    {
+                        bookmark.BookmarkTimeOf = false;
+                    }
+
+                    var bookmarksToDelete = db.Bookmark.Where(b => b.BookmarkTimeOf && !b.BookMark).ToList();
+                    db.Bookmark.RemoveRange(bookmarksToDelete);
+
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
 
         protected Task<MovieTemplateInfE> GetRandomFilmDb()
         {
@@ -1058,10 +1110,10 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 using (var movie = new MovieContext())
                 {
                     var totalMoviesCount = movie.MovieDb.Count();
-                
+
                     Random random = new Random();
                     int randomIndex = random.Next(0, totalMoviesCount);
-                
+
                     var randomMovie = movie.MovieDb.OrderBy(f => Guid.NewGuid()).Skip(randomIndex).FirstOrDefault();
 
                     var movieR = MapperFilm.Map<MovieTemplateInfE>(randomMovie);
@@ -1070,7 +1122,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     {
                         var userId = HttpContext.Current.Session["UserId"] as int?;
                         var bookmarkDbTable = user.Bookmark
-                            .FirstOrDefaultAsync(u => u.UserId == userId  && u.MovieId == movieR.Id)
+                            .FirstOrDefaultAsync(u => u.UserId == userId && u.MovieId == movieR.Id)
                             .Result;
                         if (bookmarkDbTable != null)
                         {
@@ -1078,8 +1130,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             movieR.Bookmark = bookmarkDbTable.BookMark;
                         }
                     }
-                    
-                    
+
+
                     return Task.FromResult(movieR);
                 }
             }
@@ -1087,12 +1139,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             {
                 Console.WriteLine(e);
                 return Task.FromResult(new MovieTemplateInfE());
-                
             }
-            
-            
-
-
         }
 
         protected async Task<InfMovieScoresE> GetInfOnFilmScoresDb(int? userId)
@@ -1106,7 +1153,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     {
                         var takeL = db.ViewList.Count();
                         if (takeL > 100) takeL = 100;
-                        var viewList = db.ViewList.OrderBy(u => u.ReviewDate).Where(u=>u.UserId == userId).Take(takeL).ToList();
+                        var viewList = db.ViewList.OrderBy(u => u.ReviewDate).Where(u => u.UserId == userId).Take(takeL)
+                            .ToList();
                         if (viewList != null)
                         {
                             foreach (var viewListDbTable in viewList)
@@ -1127,20 +1175,14 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         }
 
                         return null;
-
-
                     }
                 }
-                
-                
-                
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 return null;
             }
-            
         }
 
         protected StatisticE GetDataStatisticPageApi(int? userId)
@@ -1150,8 +1192,6 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 var statisticData = new StatisticE();
                 if (userId != null)
                 {
-    
-
                     using (var user = new UserContext())
                     {
                         using (var movie = new MovieContext())
@@ -1175,17 +1215,17 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             statisticData.AnimeTotal = movie.MovieDb.Count(c => c.Category == FilmCategory.Anime);
                             statisticData.CartonsCount = user.ViewList.Count(c =>
                                 c.Category == FilmCategory.Cartoon && c.UserId == userId);
-                            statisticData.CartonTotal =  movie.MovieDb.Count(c => c.Category == FilmCategory.Cartoon);
+                            statisticData.CartonTotal = movie.MovieDb.Count(c => c.Category == FilmCategory.Cartoon);
                             statisticData.FilmCount = user.ViewList.Count(c =>
                                 c.Category == FilmCategory.Film && c.UserId == userId);
-                            statisticData.FilTotal =  movie.MovieDb.Count(c => c.Category == FilmCategory.Film);
+                            statisticData.FilTotal = movie.MovieDb.Count(c => c.Category == FilmCategory.Film);
                             statisticData.SerialsCount = user.ViewList.Count(c =>
                                 c.Category == FilmCategory.Serial && c.UserId == userId);
-                            statisticData.SerialTotal =  movie.MovieDb.Count(c => c.Category == FilmCategory.Serial);
-                            
+                            statisticData.SerialTotal = movie.MovieDb.Count(c => c.Category == FilmCategory.Serial);
+
                             statisticData.ViewingCount = user.ViewList.Count(c => c.UserId == userId);
-                            statisticData.BookmarkCount =  user.Bookmark.Count(c => c.UserId == userId);
-                            
+                            statisticData.BookmarkCount = user.Bookmark.Count(c => c.UserId == userId);
+
                             var Genres = movie.MovieDb
                                 .Select(m => m.Genres)
                                 .ToList();
@@ -1207,8 +1247,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                                 .ToList()
                                 .Count();
                             statisticData.YourGenrePrefer = allGenres;
-                            
-                            
+
+
                             var viewedLocations = movie.MovieDb
                                 .Select(m => m.Location)
                                 .ToList();
@@ -1228,169 +1268,413 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
                             statisticData.YourGradeCount = user.ViewList.Count(c => c.UserId == userId);
                             var mostCommonRating = listView
-                                .Where(entry => entry.UserId == userId) 
-                                .GroupBy(entry => entry.UserValues) 
-                                .OrderByDescending(group => group.Count()) 
-                                .Select(group => group.Key) 
-                                .FirstOrDefault(); 
+                                .Where(entry => entry.UserId == userId)
+                                .GroupBy(entry => entry.UserValues)
+                                .OrderByDescending(group => group.Count())
+                                .Select(group => group.Key)
+                                .FirstOrDefault();
                             statisticData.YourMostGrade = mostCommonRating;
 
-                                
+
                             var averageRating = listView
-                                .Where(entry => entry.UserId == userId) 
-                                .Average(entry => entry.UserValues); 
+                                .Where(entry => entry.UserId == userId)
+                                .Average(entry => entry.UserValues);
                             statisticData.YourAverageRating = averageRating;
 
                             return statisticData;
-
-
-
                         }
-
                     }
                 }
 
                 return null;
-
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 return null;
-            } 
+            }
         }
 
         protected async Task<GenresDataStatistic> GetInfOnFilmGenresDb(int? userId)
         {
-               try
-               {
-                   var statisticData = new GenresDataStatistic();
-                   if (userId != null)
-                   {
-    
-
-                       using (var user = new UserContext())
-                       {
-                      
-                           var listView = user.ViewList.Where(u=>u.UserId == userId).ToList();
-                            
-                            
-                           var toListGenres = user.ViewList
-                               .Select(m => m.Movie.Genres)
-                               .ToList();
-
-                           var allGenres = toListGenres
-                               .SelectMany(genres => JsonConvert.DeserializeObject<List<string>>(genres))
-                               .ToList();
-                            
-                           var topGenres = allGenres.GroupBy(genre => genre)
-                               .Select(group => new { Genre = group.Key, Count = group.Count() })
-                               .OrderByDescending(x => x.Count)
-                               .ToList();
-                           if (topGenres.Count > 20)
-                           {
-                               var topNineteenGenres = topGenres.Take(19).ToList();
-    
-                               int otherCount = topGenres.Skip(19).Sum(x => x.Count);
-    
-                               topNineteenGenres.Add(new { Genre = "Other", Count = otherCount });
-    
-                               topGenres = topNineteenGenres;
-                           }
+            try
+            {
+                var statisticData = new GenresDataStatistic();
+                if (userId != null)
+                {
+                    using (var user = new UserContext())
+                    {
+                        var listView = user.ViewList.Where(u => u.UserId == userId).ToList();
 
 
-                           foreach (var genre in topGenres)
-                           {
-                               statisticData.GenresOrCountry.Add(genre.Genre);
-                               statisticData.CountGenreOrCountry.Add(genre.Count);
+                        var toListGenres = user.ViewList
+                            .Select(m => m.Movie.Genres)
+                            .ToList();
 
-                           }
-                                
-                           return  statisticData;
+                        var allGenres = toListGenres
+                            .SelectMany(genres => JsonConvert.DeserializeObject<List<string>>(genres))
+                            .ToList();
 
-                        
+                        var topGenres = allGenres.GroupBy(genre => genre)
+                            .Select(group => new { Genre = group.Key, Count = group.Count() })
+                            .OrderByDescending(x => x.Count)
+                            .ToList();
+                        if (topGenres.Count > 20)
+                        {
+                            var topNineteenGenres = topGenres.Take(19).ToList();
 
-                       }
-                   }
+                            int otherCount = topGenres.Skip(19).Sum(x => x.Count);
 
-                   return null;
-                
-                
-               }
-               catch (Exception e)
-               {
-                   Console.WriteLine(e);
-                   return null;
-               }
-            
-         
+                            topNineteenGenres.Add(new { Genre = "Other", Count = otherCount });
+
+                            topGenres = topNineteenGenres;
+                        }
+
+
+                        foreach (var genre in topGenres)
+                        {
+                            statisticData.GenresOrCountry.Add(genre.Genre);
+                            statisticData.CountGenreOrCountry.Add(genre.Count);
+                        }
+
+                        return statisticData;
+                    }
+                }
+
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
         }
 
         protected async Task<GenresDataStatistic> GetInfOnFilmCountryDb(int userId)
         {
-             try
-             {
-                
-                 var statisticData = new GenresDataStatistic();
-                 if (userId != null)
-                 {
-    
+            try
+            {
+                var statisticData = new GenresDataStatistic();
+                if (userId != null)
+                {
+                    using (var user = new UserContext())
+                    {
+                        var toListCountry = user.ViewList
+                            .Select(m => m.Movie.Location)
+                            .ToList();
 
-                     using (var user = new UserContext())
-                     {
-                      
-                            
-                         var toListCountry = user.ViewList
-                             .Select(m => m.Movie.Location)
-                             .ToList();
-                            
-                         var userUniqueLocations = string.Join(",", toListCountry).Split(',').ToList();
-
-                           
-                            
-                         var countryList = userUniqueLocations.GroupBy(genre => genre)
-                             .Select(group => new { Country = group.Key, Count = group.Count() })
-                             .OrderByDescending(x => x.Count)
-                             .ToList();
-                         if (countryList.Count > 20)
-                         {
-                             var topNineteenGenres = countryList.Take(19).ToList();
-    
-                             int otherCount = countryList.Skip(19).Sum(x => x.Count);
-    
-                             topNineteenGenres.Add(new { Country = "Other", Count = otherCount });
-    
-                             countryList = topNineteenGenres;
-                         }
+                        var userUniqueLocations = string.Join(",", toListCountry).Split(',').ToList();
 
 
-                         foreach (var country in countryList)
-                         {
-                             statisticData.GenresOrCountry.Add(country.Country);
-                             statisticData.CountGenreOrCountry.Add(country.Count);
+                        var countryList = userUniqueLocations.GroupBy(genre => genre)
+                            .Select(group => new { Country = group.Key, Count = group.Count() })
+                            .OrderByDescending(x => x.Count)
+                            .ToList();
+                        if (countryList.Count > 20)
+                        {
+                            var topNineteenGenres = countryList.Take(19).ToList();
 
-                         }
-                                
-                         return  statisticData;
+                            int otherCount = countryList.Skip(19).Sum(x => x.Count);
 
-                        
+                            topNineteenGenres.Add(new { Country = "Other", Count = otherCount });
 
-                     }
-                 }
+                            countryList = topNineteenGenres;
+                        }
 
-                 return null;
-                
-                
-             }
-             catch (Exception e)
-             {
-                 Console.WriteLine(e);
-                 return null;
-             }
+
+                        foreach (var country in countryList)
+                        {
+                            statisticData.GenresOrCountry.Add(country.Country);
+                            statisticData.CountGenreOrCountry.Add(country.Count);
+                        }
+
+                        return statisticData;
+                    }
+                }
+
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
         }
 
 
+        protected async Task<RespAddViewListElDb> SetViewListDb((int? movieId, int? Id) valueTuple)
+        {
+            try
+            {
+                if (valueTuple.movieId != null)
+                {
+                    if (valueTuple.Id != null)
+                    {
+                        using (var movieDb = new MovieContext())
+                        {
+                            using (var userDb = new UserContext())
+                            {
+                                var check = userDb.ViewList.Any(u =>
+                                    u.UserId == valueTuple.Id && u.MovieId == valueTuple.movieId);
+                                if (!check)
+                                {
+                                    var movieDbTable = movieDb.MovieDb
+                                        .FirstOrDefaultAsync(m => m.Id == valueTuple.movieId)
+                                        ?.Result;
+                                    if (movieDbTable != null)
+                                    {
+                                        var addDbViewEl = new ViewListDbTable
+                                        {
+                                            Title = movieDbTable?.Title,
+                                            ReviewDate = DateTime.Now,
+                                            Category = movieDbTable.Category,
+                                            MovieId = (int)valueTuple.movieId,
+                                            TimeSpent = movieDbTable.Duration,
+                                            UserId = (int)valueTuple.Id,
+                                            UserValues = 0,
+                                            UserViewCount = 1,
+                                            UserComment = ""
+                                        };
+                                        userDb.ViewList.Add(addDbViewEl);
+                                        await userDb.SaveChangesAsync();
+                                        return new RespAddViewListElDb
+                                        {
+                                            MsgResp = "Succese!",
+                                            IsSuccese = true
+                                        };
+                                    }
+                                    else
+                                    {
+                                        return new RespAddViewListElDb
+                                        {
+                                            MsgResp = "Error: Movie dont exist!",
+                                            IsSuccese = false
+                                        };
+                                    }
+                                }
+                                else
+                                {
+                                    var movieDbTable = movieDb.MovieDb
+                                        .FirstOrDefaultAsync(m => m.Id == valueTuple.movieId)
+                                        ?.Result;
+                                    var viewDb = userDb.ViewList.FirstOrDefault(u =>
+                                        u.UserId == valueTuple.Id && u.MovieId == valueTuple.movieId);
+                                    if (viewDb != null)
+                                    {
+                                        viewDb.UserViewCount++;
+                                        viewDb.TimeSpent = viewDb.TimeSpent + viewDb.TimeSpent.TimeOfDay;
+                                        await userDb.SaveChangesAsync();
 
-        
+                                        return new RespAddViewListElDb
+                                        {
+                                            MsgResp = "Succese!",
+                                            IsSuccese = true
+                                        };
+                                    }
+
+                                    return new RespAddViewListElDb
+                                    {
+                                        MsgResp = "Error:DB",
+                                        IsSuccese = false
+                                    };
+
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (HttpContext.Current.Session["UserId"] != null)
+                        {
+                            var userIdS = HttpContext.Current.Session["UserId"] as int?;
+                             using (var movieDb = new MovieContext())
+                             {
+                                 using (var userDb = new UserContext())
+                                 {
+                                     var check = userDb.ViewList.Any(u =>
+                                         u.UserId == userIdS && u.MovieId == valueTuple.movieId);
+                                     if (!check)
+                                     {
+                                         var movieDbTable = movieDb.MovieDb
+                                             .FirstOrDefaultAsync(m => m.Id == valueTuple.movieId)
+                                             ?.Result;
+                                         if (movieDbTable != null)
+                                         {
+                                             if (userIdS != null)
+                                             {
+                                                 var addDbViewEl = new ViewListDbTable
+                                                 {
+                                                     Title = movieDbTable?.Title,
+                                                     ReviewDate = DateTime.Now,
+                                                     Category = movieDbTable.Category,
+                                                     MovieId = (int)valueTuple.movieId,
+                                                     TimeSpent = movieDbTable.Duration,
+                                                     UserId = (int)userIdS,
+                                                     UserValues = 0,
+                                                     UserViewCount = 1,
+                                                     UserComment = ""
+                                                 };
+                                                 userDb.ViewList.Add(addDbViewEl);
+                                                 await userDb.SaveChangesAsync();
+                                             }
+
+                                             await movieDb.SaveChangesAsync();
+                                             return new RespAddViewListElDb
+                                             {
+                                                 MsgResp = "Succese!",
+                                                 IsSuccese = true
+                                             };
+                                         }
+                                         else
+                                         {
+                                             return new RespAddViewListElDb
+                                             {
+                                                 MsgResp = "Error: Movie dont exist!",
+                                                 IsSuccese = false
+                                             };
+                                         }
+                                     }
+                                     else
+                                     {
+                                         var viewDb = userDb.ViewList.FirstOrDefault(u =>
+                                             u.UserId == valueTuple.Id && u.MovieId == valueTuple.movieId);
+                                         if (viewDb != null)
+                                         {
+                                             viewDb.UserViewCount++;
+                                             viewDb.TimeSpent = viewDb.TimeSpent + viewDb.TimeSpent.TimeOfDay;
+                                             await userDb.SaveChangesAsync();
+
+                                         }
+                                         
+                                         return new RespAddViewListElDb
+                                         {
+                                             MsgResp = "Error:DB",
+                                             IsSuccese = false
+                                         };
+
+                                     }
+                                 }
+                             }
+                        }
+                        else
+                        {
+                            return new RespAddViewListElDb
+                            {
+                                MsgResp = "Error:Session does not exist",
+                                IsSuccese = false
+                            };
+                        }
+                    }
+                }
+
+                return new RespAddViewListElDb
+                {   
+                    MsgResp = "Error:Data error, movie does not exist",
+                    IsSuccese = false   
+
+                };
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new RespAddViewListElDb { MsgResp = "Error:" + e, IsSuccese = false };
+            }
+        }
+           protected Task<IEnumerable<ViewingHistoryM>> GetNewBookmarkTimeOfListDb(ViewListSortCommandE commandE)
+        {
+            List<ViewingHistoryM> currStateViewList;
+            GetMappersSettings();
+            using (var db = new UserContext())
+            {
+                List<BookmarkDbTable> preliminaryResult;
+                if (!string.IsNullOrEmpty(commandE.SearchParameter))
+                {
+                    if (commandE.Category != FilmCategory.Non)
+                    {
+                        preliminaryResult = db.Bookmark
+                            .Where(l => l.Movie.Category == commandE.Category)
+                            .Where(u => u.Movie.Title.StartsWith(commandE.SearchParameter))
+                            .Include(bookmarkDbTable => bookmarkDbTable.Movie)
+                            .ToList();
+                    }
+                    else
+                    {
+                        preliminaryResult = db.Bookmark.Where(u => u.Movie.Title.StartsWith(commandE.SearchParameter))
+                            .Include(viewListDbTable => viewListDbTable.Movie)
+                            .ToList();
+                        ;
+                    }
+                }
+                else
+                {
+                    if (commandE.Category != FilmCategory.Non)
+                    {
+                        preliminaryResult = db.Bookmark.Where(l => l.Movie.Category == commandE.Category)
+                            .Include(viewListDbTable => viewListDbTable.Movie).ToList();
+                    }
+                    else
+                    {
+                        preliminaryResult = db.Bookmark.Include(bookmarkDbTable => bookmarkDbTable.Movie).ToList();
+                    }
+                }
+
+                using (var movieD = new MovieContext())
+                {
+                    if (commandE.SortingDirection != SortDirection.Non)
+                    {
+                        switch (commandE.Field)
+                        {
+                            case SelectField.Title:
+                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
+                                    ? preliminaryResult.OrderBy(r => r.Movie.Title).ToList()
+                                    : preliminaryResult.OrderByDescending(r => r.Movie.Title).ToList();
+                                break;
+                            case SelectField.YearOfRelease:
+                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
+                                    ? preliminaryResult.OrderBy(r => r.Movie.ProductionYear).ToList()
+                                    : preliminaryResult.OrderByDescending(r => r.Movie.ProductionYear).ToList();
+                                break;
+                            case SelectField.ReviewDate:
+                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
+                                    ? preliminaryResult.OrderBy(r => r.TimeAdd).ToList()
+                                    : preliminaryResult.OrderByDescending(r => r.TimeAdd).ToList();
+                                break;
+                            case SelectField.MovieNight:
+                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
+                                    ? preliminaryResult.OrderBy(r => r.Movie.MovieNightGrade).ToList()
+                                    : preliminaryResult.OrderByDescending(r => r.Movie.MovieNightGrade).ToList();
+                                break;
+                            default:
+                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
+                                    ? preliminaryResult.OrderBy(r => r.Movie.Title).ToList()
+                                    : preliminaryResult.OrderByDescending(r => r.Movie.Title).ToList();
+                                break;
+                        }
+                    }
+                }
+                currStateViewList = new List<ViewingHistoryM>();
+
+                foreach (var bookmark in preliminaryResult)
+                {
+                    var viewingHistory = new ViewingHistoryM
+                    {
+                        Title = bookmark.Movie.Title,
+                        Description = bookmark.Movie.Description,
+                        Id = bookmark.Movie.Id,
+                        ReviewDate = bookmark.TimeAdd, 
+                        TimeSpent = bookmark.Movie.Duration, 
+                        YearOfRelease = bookmark.Movie.ProductionYear,
+                        MovieNightGrade = bookmark.Movie.MovieNightGrade,
+                        Category = bookmark.Movie.Category
+                    };
+
+                    currStateViewList.Add(viewingHistory);
+                }
+
+            }
+
+
+            return Task.FromResult<IEnumerable<ViewingHistoryM>>(currStateViewList);
+        }
     }
 }
