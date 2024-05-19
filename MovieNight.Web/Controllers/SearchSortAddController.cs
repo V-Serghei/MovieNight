@@ -272,7 +272,7 @@ namespace MovieNight.Web.Controllers
             return View(model);
         }
 
-        public async Task<ViewResult> RandomFilm()
+        public async Task<ActionResult> RandomFilm()
         {
             SessionStatus();
 
@@ -294,6 +294,7 @@ namespace MovieNight.Web.Controllers
             return Json(new
             {
                 success = true,
+                id = film.Id,
                 title = film.Title,
                 posterImage = Url.Content(film.PosterImage),
                 productionYear = film.ProductionYear.ToString("dd/MM/yyyy"),

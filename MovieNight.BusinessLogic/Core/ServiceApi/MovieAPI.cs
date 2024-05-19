@@ -1103,28 +1103,34 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         }
 
 
-        protected Task<MovieTemplateInfE> GetRandomFilmDb()
+        protected async Task<MovieTemplateInfE> GetRandomFilmDb()
         {
             try
             {
                 GetMappersSettings();
                 using (var movie = new MovieContext())
                 {
-                    var totalMoviesCount = movie.MovieDb.Count();
+                    movie.Database.CommandTimeout = 120; 
 
-                    Random random = new Random();
-                    int randomIndex = random.Next(0, totalMoviesCount);
+                    
+                    var randomMovies = await movie.MovieDb
+                        .OrderBy(f => Guid.NewGuid())
+                        .Take(1)
+                        .FirstOrDefaultAsync();
 
-                    var randomMovie = movie.MovieDb.OrderBy(f => Guid.NewGuid()).Skip(randomIndex).FirstOrDefault();
+                    if (randomMovies == null)
+                    {
+                        return null; 
+                    }
 
-                    var movieR = MapperFilm.Map<MovieTemplateInfE>(randomMovie);
+                    var movieR = MapperFilm.Map<MovieTemplateInfE>(randomMovies);
 
                     using (var user = new UserContext())
                     {
                         var userId = HttpContext.Current.Session["UserId"] as int?;
-                        var bookmarkDbTable = user.Bookmark
-                            .FirstOrDefaultAsync(u => u.UserId == userId && u.MovieId == movieR.Id)
-                            .Result;
+                        var bookmarkDbTable = await user.Bookmark
+                            .FirstOrDefaultAsync(u => u.UserId == userId && u.MovieId == movieR.Id);
+
                         if (bookmarkDbTable != null)
                         {
                             movieR.BookmarkTomeOf = bookmarkDbTable.BookmarkTimeOf;
@@ -1132,14 +1138,13 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         }
                     }
 
-
-                    return Task.FromResult(movieR);
+                    return movieR;
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return Task.FromResult(new MovieTemplateInfE());
+                return new MovieTemplateInfE();
             }
         }
 
@@ -1152,7 +1157,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     using (var movie = new MovieContext())
                     {
-                        var takeL = db.ViewList.Count();
+                        var takeL = await db.ViewList.CountAsync();
                         if (takeL > 100) takeL = 100;
                         var viewList = db.ViewList.OrderBy(u => u.ReviewDate).Where(u => u.UserId == userId).Take(takeL)
                             .ToList();
@@ -1161,8 +1166,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             foreach (var viewListDbTable in viewList)
                             {
                                 listStatisticInf.IdMovie.Add(viewListDbTable.Id);
-                                var movieDbTable = movie.MovieDb
-                                    .FirstOrDefaultAsync(m => m.Id == viewListDbTable.MovieId).Result;
+                                var movieDbTable = await movie.MovieDb
+                                    .FirstOrDefaultAsync(m => m.Id == viewListDbTable.MovieId);
                                 if (movieDbTable !=
                                     null)
                                     listStatisticInf.MovieNightGrade.Add(movieDbTable
