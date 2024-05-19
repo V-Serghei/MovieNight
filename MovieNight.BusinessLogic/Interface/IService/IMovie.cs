@@ -34,6 +34,7 @@ namespace MovieNight.BusinessLogic.Interface.IService
         Task<RespAddViewListElDb> SetViewList((int? movieId, int? Id) valueTuple);
         void ClearBookmarks();
         List<ViewingHistoryM> GetBookmarkList(int? id);
-        Task<IEnumerable<ViewingHistoryM>> GetNewBookmarkTimeOfList(ViewListSortCommandE transCommand);
+        Task<List<BookmarkInfoE>> GetNewBookmarkTimeOfList(ListSortCommandE transCommand);
+        List<BookmarkInfoE> GetListBookmarksTimeOfInfo(int? id);
     }
 }

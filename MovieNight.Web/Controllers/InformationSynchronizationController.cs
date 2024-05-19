@@ -240,6 +240,11 @@ namespace MovieNight.Web.Controllers
         [HttpGet]
         public ActionResult MovieTemplatePage(int? id)
         {
+            SessionStatus();
+            
+          
+            
+            
             int idU = 0;
             
             if (id != null)
@@ -555,12 +560,15 @@ namespace MovieNight.Web.Controllers
             {
                 return Json(new { success = false, message = "An error occurred: " + e.Message });
             }
+            
         }
 
         
 
         public ActionResult ReviewPage()
         {
+            
+            
             return View();
         }
 

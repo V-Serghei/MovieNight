@@ -935,10 +935,13 @@
     <Compile Include="Models\Movie\UploadMovieFileModel.cs" />
     <Compile Include="Models\Movie\ViewingHistoryModel.cs" />
     <Compile Include="Models\PersonalP\Bookmark\BookmarkModel.cs" />
+    <Compile Include="Models\PersonalP\Bookmark\BookmarkPageHModel.cs" />
     <Compile Include="Models\PersonalP\Bookmark\BookmarkTimeOf.cs" />
+    <Compile Include="Models\PersonalP\Bookmark\BookmarkPageInfoTableModel.cs" />
     <Compile Include="Models\PersonalP\PEditingM.cs" />
     <Compile Include="Models\PersonalP\PersonalProfilModel.cs" />
     <Compile Include="Models\RegistViewModel.cs" />
+    <Compile Include="Models\SortingSearchingFiltering\ListSortCommand.cs" />
     <Compile Include="Models\SortingSearchingFiltering\ViewListSort.cs" />
     <Compile Include="Models\StatisticModel.cs" />
     <Compile Include="Models\TimeModel.cs" />

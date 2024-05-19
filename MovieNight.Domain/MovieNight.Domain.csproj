@@ -77,6 +77,7 @@
     <Compile Include="Entities\MovieM\MovieTemplateInfE.cs" />
     <Compile Include="Entities\MovieM\Poster.cs" />
     <Compile Include="Entities\MovieM\RespAddViewListElDb.cs" />
+    <Compile Include="Entities\MovieM\SearchParam\ListSortCommandE.cs" />
     <Compile Include="Entities\MovieM\SearchParam\MovieCommandS.cs" />
     <Compile Include="Entities\MovieM\ViewingHistoryM.cs" />
     <Compile Include="Entities\MovieM\ViewListSortCommandE.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Entities\PersonalP\PersonalInfoDbTable.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkDbTable.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkE.cs" />
+    <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkInfoE.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkTimeOfE.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\RespToAddBookmarkTimeOf.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\ViewListDbTable.cs" />

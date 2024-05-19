@@ -675,6 +675,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 return viewingList;
             }
         }
+
         protected List<ViewingHistoryM> GetBookmarkTimeOfListDb(int? userId)
         {
             var getBookmarkListDb = new List<ViewingHistoryM>();
@@ -688,7 +689,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         .OrderByDescending(l => l.TimeAdd)
                         .Take(10)
                         .ToList();
-                    
+
 
                     foreach (var bookmarkDbTable in dbList)
                     {
@@ -1075,7 +1076,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 throw;
             }
         }
-        
+
         protected void ClearBookmarksDb()
         {
             try
@@ -1487,74 +1488,74 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         if (HttpContext.Current.Session["UserId"] != null)
                         {
                             var userIdS = HttpContext.Current.Session["UserId"] as int?;
-                             using (var movieDb = new MovieContext())
-                             {
-                                 using (var userDb = new UserContext())
-                                 {
-                                     var check = userDb.ViewList.Any(u =>
-                                         u.UserId == userIdS && u.MovieId == valueTuple.movieId);
-                                     if (!check)
-                                     {
-                                         var movieDbTable = movieDb.MovieDb
-                                             .FirstOrDefaultAsync(m => m.Id == valueTuple.movieId)
-                                             ?.Result;
-                                         if (movieDbTable != null)
-                                         {
-                                             if (userIdS != null)
-                                             {
-                                                 var addDbViewEl = new ViewListDbTable
-                                                 {
-                                                     Title = movieDbTable?.Title,
-                                                     ReviewDate = DateTime.Now,
-                                                     Category = movieDbTable.Category,
-                                                     MovieId = (int)valueTuple.movieId,
-                                                     TimeSpent = movieDbTable.Duration,
-                                                     UserId = (int)userIdS,
-                                                     UserValues = 0,
-                                                     UserViewCount = 1,
-                                                     UserComment = ""
-                                                 };
-                                                 userDb.ViewList.Add(addDbViewEl);
-                                                 await userDb.SaveChangesAsync();
-                                             }
+                            using (var movieDb = new MovieContext())
+                            {
+                                using (var userDb = new UserContext())
+                                {
+                                    var check = userDb.ViewList.Any(u =>
+                                        u.UserId == userIdS && u.MovieId == valueTuple.movieId);
+                                    if (!check)
+                                    {
+                                        var movieDbTable = movieDb.MovieDb
+                                            .FirstOrDefaultAsync(m => m.Id == valueTuple.movieId)
+                                            ?.Result;
+                                        if (movieDbTable != null)
+                                        {
+                                            if (userIdS != null)
+                                            {
+                                                var addDbViewEl = new ViewListDbTable
+                                                {
+                                                    Title = movieDbTable?.Title,
+                                                    ReviewDate = DateTime.Now,
+                                                    Category = movieDbTable.Category,
+                                                    MovieId = (int)valueTuple.movieId,
+                                                    TimeSpent = movieDbTable.Duration,
+                                                    UserId = (int)userIdS,
+                                                    UserValues = 0,
+                                                    UserViewCount = 1,
+                                                    UserComment = ""
+                                                };
+                                                userDb.ViewList.Add(addDbViewEl);
+                                                await userDb.SaveChangesAsync();
+                                            }
 
-                                             await movieDb.SaveChangesAsync();
-                                             return new RespAddViewListElDb
-                                             {
-                                                 MsgResp = "Succese!",
-                                                 IsSuccese = true
-                                             };
-                                         }
-                                         else
-                                         {
-                                             return new RespAddViewListElDb
-                                             {
-                                                 MsgResp = "Error: Movie dont exist!",
-                                                 IsSuccese = false
-                                             };
-                                         }
-                                     }
-                                     else
-                                     {
-                                         var viewDb = userDb.ViewList.FirstOrDefault(u =>
-                                             u.UserId == valueTuple.Id && u.MovieId == valueTuple.movieId);
-                                         if (viewDb != null)
-                                         {
-                                             viewDb.UserViewCount++;
-                                             viewDb.TimeSpent = viewDb.TimeSpent + viewDb.TimeSpent.TimeOfDay;
-                                             await userDb.SaveChangesAsync();
+                                            await movieDb.SaveChangesAsync();
+                                            return new RespAddViewListElDb
+                                            {
+                                                MsgResp = "Succese!",
+                                                IsSuccese = true
+                                            };
+                                        }
+                                        else
+                                        {
+                                            return new RespAddViewListElDb
+                                            {
+                                                MsgResp = "Error: Movie dont exist!",
+                                                IsSuccese = false
+                                            };
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var viewDb = userDb.ViewList.FirstOrDefault(u =>
+                                            u.UserId == valueTuple.Id && u.MovieId == valueTuple.movieId);
+                                        if (viewDb != null)
+                                        {
+                                            viewDb.UserViewCount++;
+                                            viewDb.TimeSpent = viewDb.TimeSpent + viewDb.TimeSpent.TimeOfDay;
+                                            await userDb.SaveChangesAsync();
 
-                                         }
-                                         
-                                         return new RespAddViewListElDb
-                                         {
-                                             MsgResp = "Error:DB",
-                                             IsSuccese = false
-                                         };
+                                        }
 
-                                     }
-                                 }
-                             }
+                                        return new RespAddViewListElDb
+                                        {
+                                            MsgResp = "Error:DB",
+                                            IsSuccese = false
+                                        };
+
+                                    }
+                                }
+                            }
                         }
                         else
                         {
@@ -1568,9 +1569,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 }
 
                 return new RespAddViewListElDb
-                {   
+                {
                     MsgResp = "Error:Data error, movie does not exist",
-                    IsSuccese = false   
+                    IsSuccese = false
 
                 };
             }
@@ -1580,101 +1581,120 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 return new RespAddViewListElDb { MsgResp = "Error:" + e, IsSuccese = false };
             }
         }
-           protected Task<IEnumerable<ViewingHistoryM>> GetNewBookmarkTimeOfListDb(ViewListSortCommandE commandE)
+
+        protected async Task<List<BookmarkInfoE>> GetNewBookmarkTimeOfListDb(ListSortCommandE commandE)
         {
-            List<ViewingHistoryM> currStateViewList;
+            List<BookmarkInfoE> currStateViewList;
             GetMappersSettings();
+
             using (var db = new UserContext())
             {
-                List<BookmarkDbTable> preliminaryResult;
+                IQueryable<BookmarkDbTable> query = db.Bookmark.Include(b => b.Movie);
+
+                if (commandE.UserId.HasValue)
+                {
+                    query = query.Where(b => b.UserId == commandE.UserId.Value);
+                }
+
                 if (!string.IsNullOrEmpty(commandE.SearchParameter))
                 {
-                    if (commandE.Category != FilmCategory.Non)
-                    {
-                        preliminaryResult = db.Bookmark
-                            .Where(l => l.Movie.Category == commandE.Category)
-                            .Where(u => u.Movie.Title.StartsWith(commandE.SearchParameter))
-                            .Include(bookmarkDbTable => bookmarkDbTable.Movie)
-                            .ToList();
-                    }
-                    else
-                    {
-                        preliminaryResult = db.Bookmark.Where(u => u.Movie.Title.StartsWith(commandE.SearchParameter))
-                            .Include(viewListDbTable => viewListDbTable.Movie)
-                            .ToList();
-                        ;
-                    }
+                    query = query.Where(u => u.Movie.Title.StartsWith(commandE.SearchParameter));
                 }
-                else
+
+                if (commandE.Category != FilmCategory.Non)
                 {
-                    if (commandE.Category != FilmCategory.Non)
-                    {
-                        preliminaryResult = db.Bookmark.Where(l => l.Movie.Category == commandE.Category)
-                            .Include(viewListDbTable => viewListDbTable.Movie).ToList();
-                    }
-                    else
-                    {
-                        preliminaryResult = db.Bookmark.Include(bookmarkDbTable => bookmarkDbTable.Movie).ToList();
-                    }
+                    query = query.Where(l => l.Movie.Category == commandE.Category);
                 }
 
-                using (var movieD = new MovieContext())
+                switch (commandE.Field)
                 {
-                    if (commandE.SortingDirection != SortDirection.Non)
-                    {
-                        switch (commandE.Field)
-                        {
-                            case SelectField.Title:
-                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
-                                    ? preliminaryResult.OrderBy(r => r.Movie.Title).ToList()
-                                    : preliminaryResult.OrderByDescending(r => r.Movie.Title).ToList();
-                                break;
-                            case SelectField.YearOfRelease:
-                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
-                                    ? preliminaryResult.OrderBy(r => r.Movie.ProductionYear).ToList()
-                                    : preliminaryResult.OrderByDescending(r => r.Movie.ProductionYear).ToList();
-                                break;
-                            case SelectField.ReviewDate:
-                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
-                                    ? preliminaryResult.OrderBy(r => r.TimeAdd).ToList()
-                                    : preliminaryResult.OrderByDescending(r => r.TimeAdd).ToList();
-                                break;
-                            case SelectField.MovieNight:
-                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
-                                    ? preliminaryResult.OrderBy(r => r.Movie.MovieNightGrade).ToList()
-                                    : preliminaryResult.OrderByDescending(r => r.Movie.MovieNightGrade).ToList();
-                                break;
-                            default:
-                                preliminaryResult = commandE.SortingDirection == SortDirection.Ascending
-                                    ? preliminaryResult.OrderBy(r => r.Movie.Title).ToList()
-                                    : preliminaryResult.OrderByDescending(r => r.Movie.Title).ToList();
-                                break;
-                        }
-                    }
+                    case SelectField.Title:
+                        query = commandE.SortingDirection == SortDirection.Ascending
+                            ? query.OrderBy(r => r.Movie.Title)
+                            : query.OrderByDescending(r => r.Movie.Title);
+                        break;
+                    case SelectField.YearOfRelease:
+                        query = commandE.SortingDirection == SortDirection.Ascending
+                            ? query.OrderBy(r => r.Movie.ProductionYear)
+                            : query.OrderByDescending(r => r.Movie.ProductionYear);
+                        break;
+                    case SelectField.BookmarkDate:
+                        query = commandE.SortingDirection == SortDirection.Ascending
+                            ? query.OrderBy(r => r.TimeAdd)
+                            : query.OrderByDescending(r => r.TimeAdd);
+                        break;
+                    case SelectField.OverallRating:
+                        query = commandE.SortingDirection == SortDirection.Ascending
+                            ? query.OrderBy(r => r.Movie.MovieNightGrade)
+                            : query.OrderByDescending(r => r.Movie.MovieNightGrade);
+                        break;
+                    default:
+                        query = commandE.SortingDirection == SortDirection.Ascending
+                            ? query.OrderBy(r => r.Movie.Title)
+                            : query.OrderByDescending(r => r.Movie.Title);
+                        break;
                 }
-                currStateViewList = new List<ViewingHistoryM>();
 
-                foreach (var bookmark in preliminaryResult)
+                var preliminaryResult = await query.ToListAsync();
+
+                currStateViewList = preliminaryResult.Select(bookmark => new BookmarkInfoE
                 {
-                    var viewingHistory = new ViewingHistoryM
-                    {
-                        Title = bookmark.Movie.Title,
-                        Description = bookmark.Movie.Description,
-                        Id = bookmark.Movie.Id,
-                        ReviewDate = bookmark.TimeAdd, 
-                        TimeSpent = bookmark.Movie.Duration, 
-                        YearOfRelease = bookmark.Movie.ProductionYear,
-                        MovieNightGrade = bookmark.Movie.MovieNightGrade,
-                        Category = bookmark.Movie.Category
-                    };
-
-                    currStateViewList.Add(viewingHistory);
-                }
-
+                    Title = bookmark.Movie.Title,
+                    MovieId = bookmark.Movie.Id,
+                    BookmarkDate = bookmark.TimeAdd,
+                    YearOfRelease = bookmark.Movie.ProductionYear,
+                    OverallRating = bookmark.Movie.MovieNightGrade,
+                    Category = bookmark.Movie.Category
+                }).ToList();
             }
 
-
-            return Task.FromResult<IEnumerable<ViewingHistoryM>>(currStateViewList);
+            return currStateViewList;
         }
-    }
+
+
+        protected  List<BookmarkInfoE> GetListBookmarksTimeOfInfoDb(int? id)
+        {
+            var listBookmark = new List<BookmarkInfoE>();
+            GetMappersSettings();
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var dbList = db.Bookmark
+                        .Where(l => l.UserId == id && l.BookmarkTimeOf)
+                        .OrderByDescending(l => l.TimeAdd)
+                        .ToList();
+                    foreach (var bookmarkDbTable in dbList)
+                    {
+                        using (var movie = new MovieContext())
+                        {
+                            var movieS = movie.MovieDb.FirstOrDefault(m => m.Id == bookmarkDbTable.MovieId);
+                            if (movieS != null)
+                            {
+                                listBookmark.Add(new BookmarkInfoE
+                                {
+                                    Title = movieS.Title,
+                                    MovieId = movieS.Id,
+                                    BookmarkDate = bookmarkDbTable.TimeAdd,
+                                    Category = movieS.Category,
+                                    OverallRating = movieS.MovieNightGrade,
+                                    YearOfRelease = movieS.ProductionYear
+                                });
+
+                            }
+                        }
+                    }
+
+                    return listBookmark;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            
+            
+            
+        }
+}
 }

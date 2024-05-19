@@ -45,6 +45,47 @@ namespace MovieNight.Web.Infrastructure
         /// by reducing the number of queries in the database
         /// </summary>
         
+        
+        #region Sorting And Filtering
+        
+        public static void SetListToSession<T>(this HttpContext context, List<T> list)
+        {
+            context.Session["__CurrentList"] = list;
+        }
+
+        public static List<T> GetListFromSession<T>(this HttpContext context)
+        {
+            return context.Session["__CurrentList"] as List<T> ?? new List<T>();
+        }
+        
+        
+        public static void SetCommandState(this HttpContext context, ListSortCommand command)
+        {
+            context.Session["__CurrentCommand"] = command;
+        }
+
+        public static ListSortCommand GetCommandState(this HttpContext context)
+        {
+            return context.Session["__CurrentCommand"] as ListSortCommand;
+        }
+        
+        
+        public static bool CurrentCommandStateComparison(ListSortCommand command)
+        {
+             if (HttpContext.Current.GetCommandState() != null)
+            {
+                var commandS = HttpContext.Current.GetCommandState();
+                if (command.Category == commandS.Category 
+                    && command.Field == commandS.Field
+                    && command.SearchParameter == commandS.SearchParameter
+                    && command.SortingDirection == commandS.SortingDirection)
+                    return true;
+            }
+
+            return false;
+        }
+        
+        #endregion
 
         #region ViewList
         //################################

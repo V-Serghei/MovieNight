@@ -1,8 +1,8 @@
-﻿@model System.Collections.Generic.List<MovieNight.Web.Models.Movie.ViewingHistoryModel>
+﻿@using MovieNight.Web.Models.PersonalP.Bookmark
+@model List<BookmarkPageInfoTableModel>
 
 @{
-ViewBag.Title = "Bookmark Time Of";
-
+ViewBag.Title = "BookmarkPage";
 }
 
 <div class="content">
@@ -15,107 +15,106 @@ ViewBag.Title = "Bookmark Time Of";
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Movie Night</a></li>
                             <li class="breadcrumb-item"><a href="javascript: void(0);">My Account</a></li>
-                            <li class="breadcrumb-item active">Bookmark Time Of</li>
+                            <li class="breadcrumb-item active">My bookmarks</li>
                         </ol>
                     </div>
-                    <h4 class="page-title">Bookmark Time Of</h4>
+                    <h4 class="page-title">My bookmarks</h4>
                 </div>
             </div>
         </div>
     </div>
-    @using (Ajax.BeginForm("CurrentSortingAndFilteringActionBookmarkTomeOf", "SearchSortAdd", new AjaxOptions
-            {
-                HttpMethod = "POST",
-                UpdateTargetId = "tableContainer", 
-                OnSuccess = "handleSuccess", 
-                OnFailure = "handleFailure" 
-            }))
+
+    @using (Ajax.BeginForm("BookmarkTimeOfSortingAndFilteringAction", "SearchSortAdd", new AjaxOptions
     {
+    HttpMethod = "POST",
+    UpdateTargetId = "tableContainer",
+    OnSuccess = "handleSuccess",
+    OnFailure = "handleFailure"
+    }))
+    {
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">List of bookmarks</h4>
 
-
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="header-title">List of what was reviewed</h4>
-
-                        <div class="row">
-                            <!-- Category Selector -->
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="categorySelector">Select Category:</label>
-                                    <select id="categorySelector" class="form-control" name="Category">
-                                        <option value="0">Non</option>
-                                        <option value="1">Film</option>
-                                        <option value="2">Serial</option>
-                                        <option value="3">Cartoon</option>
-                                        <option value="4">Anime</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <!-- Field Selector -->
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="fieldSelector">Select Field:</label>
-                                    <select id="fieldSelector" class="form-control" name="Field">
-                                        <option value="0">Non</option>
-                                        <option value="1">Title</option>
-                                        <option value="2">Year of release</option>
-                                        <option value="3">Review Date</option>
-                                        <option value="4"> Movie Night</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Sorting Direction Selector -->
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="sortDirectionSelector">Sort Direction:</label>
-                                    <select id="sortDirectionSelector" class="form-control" name="SortingDirection">
-                                        <option value="0">Non</option>
-                                        <option value="1">Ascending</option>
-                                        <option value="2">Descending</option>
-                                    </select>
-                                </div>
-                            </div>
-
-
-                            <!-- Search Field -->
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="searchField">Search:</label>
-                                    <input type="text" class="form-control" id="searchField" name="SearchParameter" placeholder="Enter search term">
-                                </div>
+                    <div class="row">
+                        <!-- Category Selector -->
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="categorySelector">Select Category:</label>
+                                <select id="categorySelector" class="form-control" name="Category">
+                                    <option value="Non">Non</option>
+                                    <option value="Film">Film</option>
+                                    <option value="Serial">Serial</option>
+                                    <option value="Cartoon">Cartoon</option>
+                                    <option value="Anime">Anime</option>
+                                </select>
                             </div>
                         </div>
 
+                        <!-- Field Selector -->
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="fieldSelector">Select Field:</label>
+                                <select id="fieldSelector" class="form-control" name="Field">
+                                    <option value="Non">Non</option>
+                                    <option value="Title">Title</option>
+                                    <option value="YearOfRelease">Year of release</option>
+                                    <option value="BookmarkDate">Bookmark Date</option>
+                                    <option value="OverallRating">Overall Rating</option>
+                                </select>
+                            </div>
+                        </div>
 
-                        <table id="alternative-page-datatable" class="table dt-responsive nowrap movie-table">
-                            <thead>
-                            <tr>
-                                <th>Title of the film</th>
-                                <th>Year of release</th>
-                                <th>Review date</th>
-                                <th>Movie Night</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach (var movie in Model)
-                            {
-                                <tr>
-                                    <td>@movie.Title</td>
-                                    <td>@movie.YearOfRelease</td>
-                                    <td>@movie.ReviewDate</td>
-                                    <td>@movie.MovieNightGrade</td>
-                                </tr>
-                            }
-                            </tbody>
-                        </table>
-                        <style>
-                        
+                        <!-- Sorting Direction Selector -->
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="sortDirectionSelector">Sort Direction:</label>
+                                <select id="sortDirectionSelector" class="form-control" name="SortingDirection">
+                                    <option value="Non">Non</option>
+                                    <option value="Ascending">Ascending</option>
+                                    <option value="Descending">Descending</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Search Field -->
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="searchField">Search:</label>
+                                <input type="text" class="form-control" id="searchField" name="SearchParameter" placeholder="Enter search term">
+                            </div>
+                        </div>
+                    </div>
+
+                    <table id="bookmark-table" class="table dt-responsive nowrap movie-table">
+                        <thead>
+                        <tr>
+                            <th>Title of the film</th>
+                            <th>Year of release</th>
+                            <th>Bookmark date</th>
+                            <th>Category</th>
+                            <th>Overall rating</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var movie in Model)
+                        {
+                        <tr>
+                            <td>@movie.Title</td>
+                            <td>@movie.YearOfRelease</td>
+                            <td>@movie.BookmarkDate</td>
+                            <td>@movie.Category</td>
+                            <td>@movie.OverallRating</td>
+                        </tr>
+                        }
+                        </tbody>
+                    </table>
+
+                    <style>
                         .page-link .icon {
-                            border-radius: 50%; 
+                            border-radius: 50%;
                             background-color: #2b387c;
                             color: white;
                             width: 30px;
@@ -126,82 +125,70 @@ ViewBag.Title = "Bookmark Time Of";
                             transition: transform 0.3s ease;
                             margin-right: 5px;
                             margin-left: 5px;
-                            border: none; 
-                            outline: none; 
+                            border: none;
+                            outline: none;
                         }
 
-                       
                         .page-link:hover .icon {
                             transform: scale(1.2);
                             background-color: #2b387c;
-                            border-radius: 50%; 
-                            outline: none; 
+                            border-radius: 50%;
+                            outline: none;
                         }
 
-                      
                         .page-number {
                             transition: background-color 0.3s ease;
-                            border: 1px solid #0a3622; 
+                            border: 1px solid #0a3622;
                             background-color: #2b387c;
                             color: white;
-                            border-radius: 20px; 
+                            border-radius: 20px;
                             padding: 5px 10px;
-                            margin-right: 5px; 
-                            
+                            margin-right: 5px;
                         }
 
-                        
                         .page-number:hover {
-                            background-color: #e46af9; 
+                            background-color: #e46af9;
                         }
-
                     </style>
-                        <!-- Pagination -->
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination justify-content-center">
-                                <button style="border: none; background: none" type="submit" name="DirectionStep" value="1" id="previousButton">
-                                    <div style="margin-right: 10px">
-                                        <a class="page-link page-number previous" href="#" aria-label="Previous">
-                                            <span class="icon" aria-hidden="true">&laquo;</span>
-                                            <span class="sr-only">Previous</span>
-                                        </a>
-                                    </div>
-                                </button>
-                                <li value="@ViewBag.CurrentPageNumber" name="PageNumber" class="page-item">
-                                    <input style="width: 30px" type="text" class="form-control page-link page-number"
-                                           id="pageNumber" name="PageNumber" value="@ViewBag.CurrentPageNumber"> 
-                                </li>
-                                <!-- Add more page numbers as needed -->
-                                <button style="border: none; background: none" type="submit" name="DirectionStep" value="2" id="nextButton">
-                                    <div style="margin-left: 10px">
-                                        <a class="page-link page-number next" href="#" aria-label="Next">
-                                            <span class="icon" aria-hidden="true">&raquo;</span>
-                                            <span class="sr-only">Next</span>
-                                        </a>
-                                    </div>
-                                </button>
 
-                            </ul>
-                        </nav>
-                       
-
-
-                    </div> <!-- end card body-->
-                </div> <!-- end card -->
-            </div><!-- end col-->
-        </div>
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <button style="border: none; background: none" type="submit" name="DirectionStep" value="1" id="previousButton">
+                                <div style="margin-right: 10px">
+                                    <a class="page-link page-number previous" href="#" aria-label="Previous">
+                                        <span class="icon" aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </div>
+                            </button>
+                            <li value="@ViewBag.CurrentPageNumber" name="PageNumber" class="page-item">
+                                <input style="width: 30px" type="text" class="form-control page-link page-number"
+                                       id="pageNumber" name="PageNumber" value="@ViewBag.CurrentPageNumber">
+                            </li>
+                            <button style="border: none; background: none" type="submit" name="DirectionStep" value="2" id="nextButton">
+                                <div style="margin-left: 10px">
+                                    <a class="page-link page-number next" href="#" aria-label="Next">
+                                        <span class="icon" aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+                            </button>
+                        </ul>
+                    </nav>
+                </div> <!-- end card body-->
+            </div> <!-- end card -->
+        </div><!-- end col-->
+    </div>
     }
 </div>
 
 <script>
-
     $(document).ready(function() {
-        $('form').submit(function(event) {
-            event.preventDefault(); // Prevent default form submission
-
-            var form = $(this);
-            var submitButton = $('button[type="submit"]'); // Get the submit button
-            submitButton.prop('disabled', true); // Disable submit button
+        function submitForm() {
+            var form = $('form');
+            var submitButton = $('button[type="submit"]');
+            submitButton.prop('disabled', true);
 
             $.ajax({
                 url: form.attr('action'),
@@ -209,38 +196,46 @@ ViewBag.Title = "Bookmark Time Of";
                 data: form.serialize(),
                 success: function(data) {
                     handleSuccess(data);
-                    submitButton.prop('disabled', false); // Enable submit button after success
+                    submitButton.prop('disabled', false);
                 },
                 error: function() {
                     handleFailure();
-                    submitButton.prop('disabled', false); // Enable submit button on error
+                    submitButton.prop('disabled', false);
                 }
             });
+        }
+
+        $('#categorySelector, #fieldSelector, #sortDirectionSelector').change(function() {
+            submitForm();
         });
 
-        // Button click handlers (prevent default submission)
+        $('#searchField').on('input', function() {
+            submitForm();
+        });
+
         $('#previousButton').click(function(event) {
             event.preventDefault();
             $('#DirectionStep').val(1);
-            $('form').submit();
+            submitForm();
         });
 
         $('#nextButton').click(function(event) {
             event.preventDefault();
             $('#DirectionStep').val(2);
-            $('form').submit();
+            submitForm();
         });
     });
+
     function handleSuccess(data) {
         if (data.success) {
             const newTableBody = data.newListV.map(item => (
                 `<tr>
-            <td>${item.Title}</td>
-            <td>${item.YearOfRelease}</td>
-            <td>${item.ReviewDate}</td>
-            <td>${item.MovieNightGrade}</td>
-            <td>${item.UserValues}</td>
-        </tr>`
+                    <td>${item.Title}</td>
+                    <td>${item.YearOfRelease}</td>
+                    <td>${item.BookmarkDate}</td>
+                    <td>${getCategoryName(item.Category)}</td>
+                    <td>${item.OverallRating}</td>
+                </tr>`
             )).join('');
             $('table.movie-table tbody').html(newTableBody);
 
@@ -250,7 +245,18 @@ ViewBag.Title = "Bookmark Time Of";
         }
     }
 
-    
+    function handleFailure() {
+        console.error('Error occurred during AJAX request');
+    }
 
-
+    function getCategoryName(category) {
+        const categories = {
+            0: 'Non',
+            1: 'Film',
+            2: 'Serial',
+            3: 'Cartoon',
+            4: 'Anime'
+        };
+        return categories[category] || 'Unknown';
+    }
 </script>

@@ -8,5 +8,12 @@
         ReviewDate,
         MovieNight,
         UserValues,
+        OverallRating,
+        Category,
+        Genre,
+        Director,
+        Writer,
+        Actors,
+        BookmarkDate,
     }
 }

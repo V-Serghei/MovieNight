@@ -11,6 +11,8 @@ namespace MovieNight.BusinessLogic.Session.Service
 {
     public class MovieService:MovieAPI,IMovie
     {
+        private IMovie _movieImplementation;
+
         public MovieTemplateInfE GetMovieInf(int? id)
         {
             return GetMovieFromDb( id);
@@ -127,9 +129,14 @@ namespace MovieNight.BusinessLogic.Session.Service
             return GetBookmarkTimeOfListDb(id);
         }
 
-        public async Task<IEnumerable<ViewingHistoryM>> GetNewBookmarkTimeOfList(ViewListSortCommandE transCommand)
+        public async Task<List<BookmarkInfoE>> GetNewBookmarkTimeOfList(ListSortCommandE transCommand)
         {
             return await GetNewBookmarkTimeOfListDb(transCommand);
+        }
+
+        public List<BookmarkInfoE> GetListBookmarksTimeOfInfo(int? id)
+        {
+            return GetListBookmarksTimeOfInfoDb(id);
         }
     }
 
