@@ -1026,7 +1026,22 @@ namespace MovieNight.Web.Controllers
     
     public ActionResult BookmarkPage()
     {
-        return View();
+        var bookmarkList = _movie.GetListBookmarksInfo(System.Web.HttpContext.Current.GetMySessionObject().Id);
+        var bookmarkModel = _mapper.Map<List<BookmarkPageInfoTableModel>>(bookmarkList);
+        System.Web.HttpContext.Current.SetListToSession(bookmarkModel);
+        ViewBag.CurrentPageNumber = 1;
+
+        var list = bookmarkModel.Take(10).ToList();
+        return View(list);
+    }
+    
+    public async Task<ActionResult> BookmarkSortingAndFilteringAction(ListSortCommand command)
+    {
+        command.UserId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+        return await SortingAndFilteringCommand(
+            command,
+            () => _movie.GetNewBookmarkList(_mapper.Map<ListSortCommandE>(command)),
+            entities => _mapper.Map<List<BookmarkPageInfoTableModel>>(entities));
     }
 
 

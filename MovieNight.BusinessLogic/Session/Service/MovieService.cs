@@ -138,6 +138,16 @@ namespace MovieNight.BusinessLogic.Session.Service
         {
             return GetListBookmarksTimeOfInfoDb(id);
         }
+
+        public Task<List<BookmarkInfoE>> GetNewBookmarkList(ListSortCommandE transCommand)
+        {
+            return GetNewBookmarkListDb(transCommand);
+        }
+
+        public List<BookmarkInfoE> GetListBookmarksInfo(int? id)
+        {
+            return GetListBookmarksInfoDb(id);
+        }
     }
 
     

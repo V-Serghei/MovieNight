@@ -341,7 +341,8 @@
 
                                                     </div>
                                                 </div>
-                                                <h5 class="mt-0 mb-1">@viewingHistory.Title</h5>
+                                                <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = viewingHistory.Id })">
+                                                <h5 class="mt-0 mb-1">@viewingHistory.Title</h5></a>
                                                 <div class="row">
                                                     <div class="col-md-10 col-xl-9">
                                                         <style>
@@ -407,7 +408,10 @@
 
                                         }
                                     </ul>
-                                    
+                                    <a href="@Url.Action("ViewedList","SearchSortAdd")" class="dropdown-item text-center text-primary notify-item notify-all">
+                                        View all viewings
+                                        <i class="fi-arrow-right"></i>
+                                    </a>
 
                                     <h5 class="mb-3 mt-4 text-uppercase">
                                         <i class="remixicon-send-plane-2-fill"></i>
@@ -416,118 +420,133 @@
                                     <div class="table-responsive">
                                         <table class="table table-borderless mb-0">
                                             <thead class="thead-light">
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Title of the film</th>
-                                                    <th>Release date</th>
-                                                    <th>Number of views</th>
-                                                    <th>Genre</th>
-                                                    <th style="width:200px">Grade </th>
-                                                </tr>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Title of the film</th>
+                                                <th>Release date</th>
+                                                <th>Number of views</th>
+                                                <th>Genre</th>
+                                                <th style="width:200px">Grade </th>
+                                            </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var modelListInThePlan in @Model.ListInThePlans)
-                                                {
-                                                    <tr>
-                                                        <td></td>
-                                                        <td>@modelListInThePlan.Name</td>
-                                                        <td>@modelListInThePlan.Date.ToString("dd/MM/yyyy")</td>
-                                                        <td>@modelListInThePlan.NumberOfViews</td>
-                                                        <td>
-                                                            @{
-                                                                var genresArray = modelListInThePlan.Genre
-                                                                    .Replace("\\\"", "") 
-                                                                    .Replace("]", "")    
-                                                                    .Replace("[", "")    
-                                                                    .Replace("\"", "")   
-                                                                    .Trim('[', ']')      
-                                                                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)  
-                                                                    .Select(genre => genre.Trim())  
-                                                                    .ToArray();
+                                            @foreach (var modelListInThePlan in @Model.ListInThePlans)
+                                            {
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = modelListInThePlan.MovieId })">
+                                                        @modelListInThePlan.Name
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = modelListInThePlan.MovieId })">
+                                                        @modelListInThePlan.Date.ToString("dd/MM/yyyy")
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = modelListInThePlan.MovieId })">
+                                                        @modelListInThePlan.NumberOfViews
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = modelListInThePlan.MovieId })">
+                                                        @{
+                                                        var genresArray = modelListInThePlan.Genre
+                                                        .Replace("\\\"", "")
+                                                        .Replace("]", "")
+                                                        .Replace("[", "")
+                                                        .Replace("\"", "")
+                                                        .Trim('[', ']')
+                                                        .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                                        .Select(genre => genre.Trim())
+                                                        .ToArray();
+                                                        }
 
-                                                            }
-                                                            
-                                                            @foreach (var genre in genresArray){
-                                                                <span class="badge badge-info">@genre</span>
-                                                                <br>
-                                                            }
-                                                            @if (modelListInThePlan.Tags == FilmCategory.Film)
-                                                            {
-                                                                <span class="badge badge-info">Film</span>
+                                                        @foreach (var genre in genresArray)
+                                                        {
+                                                        <span class="badge badge-info">@genre</span><br>
+                                                        }
 
-                                                            }
-                                                            else if (modelListInThePlan.Tags == FilmCategory.Anime)
-                                                            {
-                                                                <span class="badge badge-info">Anime</span>
-                                                            }
-                                                            else if (modelListInThePlan.Tags == FilmCategory.Serial)
-                                                            {
-                                                                <span class="badge badge-info">Serial</span>
-                                                            }
-                                                            else if (modelListInThePlan.Tags == FilmCategory.Cartoon)
-                                                            {
-                                                                <span class="badge badge-info">Cartoon</span>
-                                                            }
-                                                            
-                                                            
-                                                        </td>
-                                                        <td>
-                                                                <div class="col-md-10 col-xl-9">
-                                                                    <style>
-                                                                        .star-rating {
-                                                                            display: flex;
-                                                                            justify-content: center;
-                                                                            align-items: center;
-                                                                            width: 100%;
-                                                                        }
+                                                        @if (modelListInThePlan.Tags == FilmCategory.Film)
+                                                        {
+                                                        <span class="badge badge-info">Film</span>
+                                                        }
+                                                        else if (modelListInThePlan.Tags == FilmCategory.Anime)
+                                                        {
+                                                        <span class="badge badge-info">Anime</span>
+                                                        }
+                                                        else if (modelListInThePlan.Tags == FilmCategory.Serial)
+                                                        {
+                                                        <span class="badge badge-info">Serial</span>
+                                                        }
+                                                        else if (modelListInThePlan.Tags == FilmCategory.Cartoon)
+                                                        {
+                                                        <span class="badge badge-info">Cartoon</span>
+                                                        }
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = modelListInThePlan.MovieId })">
+                                                        <div class="col-md-10 col-xl-9">
+                                                            <style>
+                                                                .star-rating {
+                                                                    display: flex;
+                                                                    justify-content: center;
+                                                                    align-items: center;
+                                                                    width: 100%;
+                                                                }
 
-                                                                        .star-rating .star {
-                                                                            width: 20px;
-                                                                            height: 20px;
-                                                                            cursor: pointer;
-                                                                            font-size: 20px;
-                                                                        }
+                                                                .star-rating .star {
+                                                                    width: 20px;
+                                                                    height: 20px;
+                                                                    cursor: pointer;
+                                                                    font-size: 20px;
+                                                                }
 
-                                                                        .star-rating .star.active {
-                                                                            color: #f00;
-                                                                        }
-                                                                    </style>
-                                                                    <br>
-                                                                    <h1>The film's score</h1>
-                                                                    <div class="star-rating">
-                                                                        @if (modelListInThePlan.Star != 0)
-                                                                        {
-                                                                        for (int i = 1; i <= 10; i++)
-                                                                        {
-                                                                        if (i <= modelListInThePlan.Star)
-                                                                        {
-                                                                        <span class="star active" onclick="rate(@i,@modelListInThePlan.MovieId)"><i class="remixicon-star-s-fill"></i></span>
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                        <span class="star" onclick="rate(@i,@modelListInThePlan.MovieId)"><i class="remixicon-star-s-line"></i></span>
-                                                                        }
-                                                                        }
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                        for (int i = 1; i <= 10; i++)
-                                                                        {
-                                                                        <span class="star" onclick="rate(@i,@modelListInThePlan.MovieId)"><i class="remixicon-star-s-line"></i></span>
-                                                                        }
-                                                                        }
-                                                                    </div>
-
-                                                                    
+                                                                .star-rating .star.active {
+                                                                    color: #f00;
+                                                                }
+                                                            </style>
+                                                            <br>
+                                                            <h1>The film's score</h1>
+                                                            <div class="star-rating">
+                                                                @if (modelListInThePlan.Star != 0)
+                                                                {
+                                                                for (int i = 1; i <= 10; i++)
+                                                                {
+                                                                if (i <= modelListInThePlan.Star)
+                                                                {
+                                                                <span class="star active" onclick="rate(@i,@modelListInThePlan.MovieId)"><i class="remixicon-star-s-fill"></i></span>
+                                                                }
+                                                                else
+                                                                {
+                                                                <span class="star" onclick="rate(@i,@modelListInThePlan.MovieId)"><i class="remixicon-star-s-line"></i></span>
+                                                                }
+                                                                }
+                                                                }
+                                                                else
+                                                                {
+                                                                for (int i = 1; i <= 10; i++)
+                                                                {
+                                                                <span class="star" onclick="rate(@i,@modelListInThePlan.MovieId)"><i class="remixicon-star-s-line"></i></span>
+                                                                }
+                                                                }
                                                             </div>
-                                                        </td>
-                                                    </tr>
+                                                        </div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            }
 
-                                                }
 
                                             </tbody>
                                         </table>
                                     </div>
+                                    <a href="@Url.Action("BookmarkPage","SearchSortAdd")" class="dropdown-item text-center text-primary notify-item notify-all">
+                                        View all bookmarks
+                                        <i class="fi-arrow-right"></i>
+                                    </a>
 
                                 </div>
                                 <!-- end timeline content-->

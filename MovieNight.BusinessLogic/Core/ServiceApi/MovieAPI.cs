@@ -1593,7 +1593,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
                 if (commandE.UserId.HasValue)
                 {
-                    query = query.Where(b => b.UserId == commandE.UserId.Value);
+                    query = query.Where(b => b.UserId == commandE.UserId.Value && b.BookmarkTimeOf);
                 }
 
                 if (!string.IsNullOrEmpty(commandE.SearchParameter))
@@ -1662,6 +1662,122 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     var dbList = db.Bookmark
                         .Where(l => l.UserId == id && l.BookmarkTimeOf)
+                        .OrderByDescending(l => l.TimeAdd)
+                        .ToList();
+                    foreach (var bookmarkDbTable in dbList)
+                    {
+                        using (var movie = new MovieContext())
+                        {
+                            var movieS = movie.MovieDb.FirstOrDefault(m => m.Id == bookmarkDbTable.MovieId);
+                            if (movieS != null)
+                            {
+                                listBookmark.Add(new BookmarkInfoE
+                                {
+                                    Title = movieS.Title,
+                                    MovieId = movieS.Id,
+                                    BookmarkDate = bookmarkDbTable.TimeAdd,
+                                    Category = movieS.Category,
+                                    OverallRating = movieS.MovieNightGrade,
+                                    YearOfRelease = movieS.ProductionYear
+                                });
+
+                            }
+                        }
+                    }
+
+                    return listBookmark;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            
+            
+            
+        }
+        
+        
+          protected async Task<List<BookmarkInfoE>> GetNewBookmarkListDb(ListSortCommandE commandE)
+        {
+            List<BookmarkInfoE> currStateViewList;
+            GetMappersSettings();
+
+            using (var db = new UserContext())
+            {
+                IQueryable<BookmarkDbTable> query = db.Bookmark.Include(b => b.Movie);
+
+                if (commandE.UserId.HasValue)
+                {
+                    query = query.Where(b => b.UserId == commandE.UserId.Value && b.BookMark);
+                }
+
+                if (!string.IsNullOrEmpty(commandE.SearchParameter))
+                {
+                    query = query.Where(u => u.Movie.Title.StartsWith(commandE.SearchParameter));
+                }
+
+                if (commandE.Category != FilmCategory.Non)
+                {
+                    query = query.Where(l => l.Movie.Category == commandE.Category);
+                }
+
+                switch (commandE.Field)
+                {
+                    case SelectField.Title:
+                        query = commandE.SortingDirection == SortDirection.Ascending
+                            ? query.OrderBy(r => r.Movie.Title)
+                            : query.OrderByDescending(r => r.Movie.Title);
+                        break;
+                    case SelectField.YearOfRelease:
+                        query = commandE.SortingDirection == SortDirection.Ascending
+                            ? query.OrderBy(r => r.Movie.ProductionYear)
+                            : query.OrderByDescending(r => r.Movie.ProductionYear);
+                        break;
+                    case SelectField.BookmarkDate:
+                        query = commandE.SortingDirection == SortDirection.Ascending
+                            ? query.OrderBy(r => r.TimeAdd)
+                            : query.OrderByDescending(r => r.TimeAdd);
+                        break;
+                    case SelectField.OverallRating:
+                        query = commandE.SortingDirection == SortDirection.Ascending
+                            ? query.OrderBy(r => r.Movie.MovieNightGrade)
+                            : query.OrderByDescending(r => r.Movie.MovieNightGrade);
+                        break;
+                    default:
+                        query = commandE.SortingDirection == SortDirection.Ascending
+                            ? query.OrderBy(r => r.Movie.Title)
+                            : query.OrderByDescending(r => r.Movie.Title);
+                        break;
+                }
+
+                var preliminaryResult = await query.ToListAsync();
+
+                currStateViewList = preliminaryResult.Select(bookmark => new BookmarkInfoE
+                {
+                    Title = bookmark.Movie.Title,
+                    MovieId = bookmark.Movie.Id,
+                    BookmarkDate = bookmark.TimeAdd,
+                    YearOfRelease = bookmark.Movie.ProductionYear,
+                    OverallRating = bookmark.Movie.MovieNightGrade,
+                    Category = bookmark.Movie.Category
+                }).ToList();
+            }
+
+            return currStateViewList;
+        }
+
+
+        protected  List<BookmarkInfoE> GetListBookmarksInfoDb(int? id)
+        {
+            var listBookmark = new List<BookmarkInfoE>();
+            GetMappersSettings();
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var dbList = db.Bookmark
+                        .Where(l => l.UserId == id && l.BookMark)
                         .OrderByDescending(l => l.TimeAdd)
                         .ToList();
                     foreach (var bookmarkDbTable in dbList)

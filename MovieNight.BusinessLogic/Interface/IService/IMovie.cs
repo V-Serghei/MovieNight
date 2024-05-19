@@ -36,5 +36,8 @@ namespace MovieNight.BusinessLogic.Interface.IService
         List<ViewingHistoryM> GetBookmarkList(int? id);
         Task<List<BookmarkInfoE>> GetNewBookmarkTimeOfList(ListSortCommandE transCommand);
         List<BookmarkInfoE> GetListBookmarksTimeOfInfo(int? id);
+        Task<List<BookmarkInfoE>> GetNewBookmarkList(ListSortCommandE transCommand);
+        List<BookmarkInfoE> GetListBookmarksInfo(int? id);
+
     }
 }
