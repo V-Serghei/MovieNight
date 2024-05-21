@@ -372,23 +372,27 @@ namespace MovieNight.Web.Controllers
         [HttpGet]
         public ActionResult ViewedList()
         {
-            var viewList = _movie.GetViewingList(System.Web.HttpContext.Current.GetMySessionObject().Id);
-            ViewBag.NumOfPage = 1;
-            var viewingModel = _mapper.Map<List<ViewingHistoryModel>>(viewList);
-            System.Web.HttpContext.Current.SetCommandViewList(new ViewListSort
+            if(System.Web.HttpContext.Current.GetMySessionObject()!=null)
             {
-                PageNumber = ViewBag.CurrentPageNumber = 1,
-                Field = SelectField.Non,
-                DirectionStep = Direction.Non,
-                SortingDirection = SortDirection.Non,
-                SearchParameter = "",
-                Category = FilmCategory.Non
-            });
+                var viewList = _movie.GetViewingList(System.Web.HttpContext.Current.GetMySessionObject().Id);
+                ViewBag.NumOfPage = 1;
+                var viewingModel = _mapper.Map<List<ViewingHistoryModel>>(viewList);
+                System.Web.HttpContext.Current.SetCommandViewList(new ViewListSort
+                {
+                    PageNumber = ViewBag.CurrentPageNumber = 1,
+                    Field = SelectField.Non,
+                    DirectionStep = Direction.Non,
+                    SortingDirection = SortDirection.Non,
+                    SearchParameter = "",
+                    Category = FilmCategory.Non
+                });
 
-            var list = viewingModel.Take(10).ToList();
-            System.Web.HttpContext.Current.SetListViewingHistoryS(viewingModel);
-            
-            return View(list);
+                var list = viewingModel.Take(10).ToList();
+                System.Web.HttpContext.Current.SetListViewingHistoryS(viewingModel);
+
+                return View(list);
+            }
+            return View(new List<ViewingHistoryModel>());
         }
 
         #endregion

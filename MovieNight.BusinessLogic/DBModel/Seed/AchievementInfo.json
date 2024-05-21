@@ -7,6 +7,7 @@
     "Condition": "Become a registered user!",
     "AdditionalRecords": "Do good, and enjoy the movie!",
     "SuccessСount": 0,
+    "ProgressСount": 1,
     "Unlocked": false
   },
   {
@@ -17,6 +18,7 @@
     "Condition": "Add all data so users can see you as a friend",
     "AdditionalRecords": "Add all data so users can see you as a friend",
     "SuccessСount": 0,
+    "ProgressСount": 10,
     "Unlocked": false
   }
 ]

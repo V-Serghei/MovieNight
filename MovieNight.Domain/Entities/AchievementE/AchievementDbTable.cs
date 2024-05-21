@@ -17,6 +17,8 @@ namespace MovieNight.Domain.Entities.AchievementE
         public string Condition { get; set; }
         public string AdditionalRecords { get; set; }
         public int SuccessСount { get; set; }
+        public int ProgressСount { get; set; }
+
         public bool Unlocked { get; set; }
     }
     

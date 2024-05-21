@@ -8,6 +8,7 @@ namespace MovieNight.BusinessLogic.DBModel
     {
         public MovieContext() : base("name=MovieNight")
         {
+            this.Database.CommandTimeout = 180;
         }
 
         public DbSet<MovieDbTable> MovieDb { get; set; }

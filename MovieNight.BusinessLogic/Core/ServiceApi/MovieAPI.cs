@@ -6,6 +6,7 @@ using System.Data.Entity.Validation;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading.Tasks;
@@ -135,8 +136,13 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         {
             GetMappersSettings();
             var movieDb = new MovieTemplateInfE();
-            var op = ReadMoviesFromJson(
-                "D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
+         string jsonPath = Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.FullName ?? string.Empty, @"MovieNight.BusinessLogic\DBModel\Seed\SeedData.json");
+            var basePath = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty)?
+                .Parent?.Parent?.FullName; 
+            
+            // var op = ReadMoviesFromJson(
+            //     "D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
+            var op = ReadMoviesFromJson(jsonPath);
 
             PopulateDatabase(op);
             // conf.CreateMapper();

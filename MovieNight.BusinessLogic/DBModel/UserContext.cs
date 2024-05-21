@@ -20,7 +20,7 @@ namespace MovieNight.BusinessLogic.DBModel
     {
         public UserContext() : base("name=MovieNight")
         {
-
+            this.Database.CommandTimeout = 180;
         }
 
         public DbSet<UserDbTable> UsersT { get; set; }

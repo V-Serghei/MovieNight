@@ -7,14 +7,16 @@ using System.Web.Mvc;
 using AutoMapper;
 using MovieNight.BusinessLogic.Interface;
 using MovieNight.BusinessLogic.Interface.IService;
+using MovieNight.Domain.enams;
+using MovieNight.Domain.Entities.AchievementE;
 using MovieNight.Domain.Entities.Friends;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Models;
+using MovieNight.Web.Models.Achievement;
 using MovieNight.Web.Models.Friends;
-using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Web.Models.Movie;
 using MovieNight.Web.Models.PersonalP;
 using MovieNight.Web.Models.PersonalP.Bookmark;
@@ -25,11 +27,13 @@ namespace MovieNight.Web.Controllers
     {
         private readonly ISession _sessionUser;
 
-        private IMovie _movie;
+        private readonly IMovie _movie;
             
         private readonly IMapper _mapper;
         
         private readonly IFriendsService _serviceFriend;
+        
+        private readonly IAchievements _achievements;
         public InformationSynchronizationController()
         {
             var sesControlBl = new BusinessLogic.BusinessLogic();
@@ -40,6 +44,9 @@ namespace MovieNight.Web.Controllers
 
             var serviceFriend = new BusinessLogic.BusinessLogic();
             _serviceFriend = serviceFriend.GetFriendsService();
+            
+            var serviceAchievements = new BusinessLogic.BusinessLogic();
+            _achievements = serviceAchievements.GetAchievementsService();
             
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<PEditingM, ProfEditingE>();
@@ -64,6 +71,8 @@ namespace MovieNight.Web.Controllers
                 cfg.CreateMap<ListOfFilmsModel, ListOfFilmsE>();
                 cfg.CreateMap<ViewingHistoryM,ViewingHistoryModel>();
                 cfg.CreateMap<ViewingHistoryModel,ViewingHistoryM>();
+                cfg.CreateMap<AchievementModel, AchievementE>();
+                cfg.CreateMap<AchievementE, AchievementModel>();
 
 
                 cfg.CreateMap<FriendsPageD, FriendPageModel>()
@@ -75,7 +84,7 @@ namespace MovieNight.Web.Controllers
 
         }
 
-        // GET: InformationSynchronization
+       
         [HttpGet]
         [UserMod]
         public ActionResult PersonalProfile()
@@ -113,7 +122,28 @@ namespace MovieNight.Web.Controllers
                                 Username = userHttp.Username,
                                 Email = userHttp.Email
                             };
-                             return View(userM);
+                            var statistic = _movie.GetDataStatisticPage(userId);
+                            if (statistic != null)
+                            {
+                                userM.AnimeCount = statistic.AnimeCount;
+                                userM.AnimeTotal = statistic.AnimeTotal;
+                                userM.CartonsCount = statistic.CartonsCount;
+                                userM.CartonTotal = statistic.CartonTotal;
+                                userM.FilmCount = statistic.FilmCount;
+                                userM.FilTotal = statistic.FilTotal;
+                                userM.SerialsCount = statistic.SerialsCount;
+                                userM.SerialTotal = statistic.SerialTotal;
+                            }
+                            var achievements = _achievements.GetAchievements(userId);
+                            if (achievements != null)
+                            {
+                                var achiev = _mapper.Map<List<AchievementModel>>(achievements);
+                                if (achiev != null)
+                                {
+                                    userM.Achievements = achiev;
+                                }
+                            }
+                            return View(userM);
                         }
                         
                     }
@@ -326,7 +356,7 @@ namespace MovieNight.Web.Controllers
 
         [HttpPost]
         [UserMod]
-        public ActionResult ProfileEdit(PEditingM profEd)
+        public async Task< ActionResult> ProfileEdit(PEditingM profEd)
         {
             SessionStatus();
             if (profEd.AvatarFile != null)
@@ -344,6 +374,12 @@ namespace MovieNight.Web.Controllers
             var success = _sessionUser.EdProfInfo(profEdBl);
             if (success.Successes)
             {
+                var achievement = await _achievements.AchievementСheck((userCurr.Id, AchievementType.CompleteProfile));
+                if (achievement != null && achievement.Unlocked)
+                {
+                    var achiev = _mapper.Map<AchievementModel>(achievement);
+                    System.Web.HttpContext.Current.SetListAchievement(achiev);
+                }
                 return RedirectToAction("PersonalProfile", "InformationSynchronization");
             }
 
