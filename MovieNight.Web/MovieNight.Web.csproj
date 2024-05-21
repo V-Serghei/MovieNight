@@ -486,8 +486,13 @@
     <Content Include="fonts\themify.svg" />
     <Content Include="fonts\weathericons-regular-webfont.svg" />
     <Content Include="Global.asax" />
-    <Content Include="images\Achievement\rec.png" />
+    <Content Include="images\Achievement\first_friend.png" />
+    <Content Include="images\Achievement\first_movie.png" />
+    <Content Include="images\Achievement\Full_profile.png" />
+    <Content Include="images\Achievement\horror_enthusiast.png" />
+    <Content Include="images\Achievement\movie_buff.png" />
     <Content Include="images\Achievement\reg.png" />
+    <Content Include="images\Achievement\social_butterfly.png" />
     <Content Include="images\animat-diamond-color.gif" />
     <Content Include="images\animat-rocket-color.gif" />
     <Content Include="images\attached-files\img-1.jpg" />

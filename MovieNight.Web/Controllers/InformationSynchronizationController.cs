@@ -509,6 +509,12 @@ namespace MovieNight.Web.Controllers
                     _movie.SetViewList((movieId, System.Web.HttpContext.Current.GetMySessionObject()?.Id));
                 if (respAddViewed.IsSuccese)
                 {
+                    var achievement = await _achievements.AchievementСheck((System.Web.HttpContext.Current.GetMySessionObject()?.Id, AchievementType.FirstMovie));
+                    if (achievement != null && achievement.Unlocked)
+                    {
+                        var achiev = _mapper.Map<AchievementModel>(achievement);
+                        System.Web.HttpContext.Current.SetListAchievement(achiev);
+                    }
                     return  RedirectToAction("MovieTemplatePage",new {id = movieId}); 
                 }
                 else
@@ -522,10 +528,10 @@ namespace MovieNight.Web.Controllers
 
         }
 
-        public async Task<JsonResult> AddToGrade()
-        {
-            return Json(new { success = true, statusMsg = "StatusMsg", newButtonTitle = "Новое сообщение", newButtonColor = "red" }); 
-        }
+        // public async Task<JsonResult> AddToGrade()
+        // {
+        //     return Json(new { success = true, statusMsg = "StatusMsg", newButtonTitle = "Новое сообщение", newButtonColor = "red" }); 
+        // }
 
         [HttpPost]
         public async Task<JsonResult> RateMovie(int rating, int movieId)
@@ -533,6 +539,16 @@ namespace MovieNight.Web.Controllers
 
             var resp =  await _movie.SetReteMovieAndView((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId,
                 rating));
+
+            if (resp)
+            {
+                var achievement = await _achievements.AchievementСheck((System.Web.HttpContext.Current.GetMySessionObject()?.Id, AchievementType.FirstMovie));
+                if (achievement != null && achievement.Unlocked)
+                {
+                    var achiev = _mapper.Map<AchievementModel>(achievement);
+                    System.Web.HttpContext.Current.SetListAchievement(achiev);
+                } 
+            }
             
             return (Json(new { star = rating }));
         }

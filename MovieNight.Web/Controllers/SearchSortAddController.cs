@@ -637,6 +637,7 @@ namespace MovieNight.Web.Controllers
                 else
                 {
                     command.PageNumber = 1;
+                    command.userId = System.Web.HttpContext.Current.GetMySessionObject()?.Id;
                     System.Web.HttpContext.Current.SetCommandViewList(command);
                     var transCommand = _mapper.Map<ViewListSortCommandE>(command);
                     var currStateList = await _movie.GetNewViewList(transCommand);

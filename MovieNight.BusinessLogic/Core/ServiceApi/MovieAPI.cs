@@ -742,14 +742,14 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     if (commandE.Category != FilmCategory.Non)
                     {
                         preliminaryResult = db.ViewList
-                            .Where(l => l.Category == commandE.Category)
+                            .Where(l => l.Category == commandE.Category  && l.UserId == commandE.userId )
                             .Where(u => u.Title.StartsWith(commandE.SearchParameter))
                             .Include(viewListDbTable => viewListDbTable.Movie)
                             .ToList();
                     }
                     else
                     {
-                        preliminaryResult = db.ViewList.Where(u => u.Title.StartsWith(commandE.SearchParameter))
+                        preliminaryResult = db.ViewList.Where(u => u.Title.StartsWith(commandE.SearchParameter) && u.UserId == commandE.userId)
                             .Include(viewListDbTable => viewListDbTable.Movie)
                             .ToList();
                         ;
@@ -759,12 +759,12 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     if (commandE.Category != FilmCategory.Non)
                     {
-                        preliminaryResult = db.ViewList.Where(l => l.Category == commandE.Category)
+                        preliminaryResult = db.ViewList.Where(l => l.Category == commandE.Category && l.UserId == commandE.userId)
                             .Include(viewListDbTable => viewListDbTable.Movie).ToList();
                     }
                     else
                     {
-                        preliminaryResult = db.ViewList.Include(viewListDbTable => viewListDbTable.Movie).ToList();
+                        preliminaryResult = db.ViewList.Where( l => l.UserId == commandE.userId).Include(viewListDbTable => viewListDbTable.Movie).ToList();
                     }
                 }
 
@@ -1208,7 +1208,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     {
                         using (var movie = new MovieContext())
                         {
-                            var listView = user.ViewList.OrderByDescending(v => v.ReviewDate)
+                            var listView = user.ViewList.Where(us=> us.UserId == userId)
+                                .OrderByDescending(v => v.ReviewDate)
                                 .Include(viewListDbTable => viewListDbTable.Movie).ToList();
                             foreach (var listDbTable in listView)
                             {
@@ -1319,7 +1320,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         var listView = user.ViewList.Where(u => u.UserId == userId).ToList();
 
 
-                        var toListGenres = user.ViewList
+                        var toListGenres = user.ViewList.Where(us => us.UserId == userId)
                             .Select(m => m.Movie.Genres)
                             .ToList();
 
@@ -1371,7 +1372,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     using (var user = new UserContext())
                     {
-                        var toListCountry = user.ViewList
+                        var toListCountry = user.ViewList.Where(us => us.UserId == userId)
                             .Select(m => m.Movie.Location)
                             .ToList();
 

@@ -192,7 +192,50 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             return null;
         }
 
-      
+        private async Task<AchievementE> FirstMovieAnalisAchDb(int? userId)
+        {
+            using (var user = new UserContext())
+            {
+                var exist = user.UsersT.Any(u => u.Id == userId);
+
+                if (exist)
+                {
+                   
+                    var hasWatchedMovie = user.ViewList.Any(v => v.UserId == userId);
+
+                    if (hasWatchedMovie)
+                    {
+                        var achievementData = AchievementsData.FirstOrDefault(a => a.AchievementType == AchievementType.FirstMovie);
+
+                        if (achievementData != null)
+                        {
+                            achievementData.Unlocked = true;
+                            achievementData.SuccessСount++;
+                            user.AchievementDb.Add(achievementData);
+                            await user.SaveChangesAsync();
+
+                            if (userId != null)
+                            {
+                                var userAchievement = new UserAchievementDbTable
+                                {
+                                    UserId = userId.Value,
+                                    AchievementId = achievementData.Id
+                                };
+
+                                user.UserAchievementDb.Add(userAchievement);
+                                await user.SaveChangesAsync();
+                                return _mapper.Map<AchievementE>(achievementData);
+                            }
+                        }
+
+                        return null;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         
 
         
@@ -230,7 +273,8 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         }
 
                         break;
-                    }case AchievementType.CompleteProfile:{
+                    }
+                    case AchievementType.CompleteProfile:{
 
                         using (var userA = new UserContext())
                         {
@@ -250,6 +294,47 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             }
                         }
                     
+                        break;
+                    }
+                    case AchievementType.FirstMovie:
+                    {
+                        using (var userA = new UserContext())
+                        {
+                            var verif = userA.UserAchievementDb.Include(ua => ua.Achievement)
+                                .FirstOrDefault(u => u.Id == valueTuple.userId  && u.Achievement.AchievementType == AchievementType.FirstMovie)?.Achievement;
+                            if (verif != null)
+                            {
+                                if (!verif.Unlocked)
+                                {
+                                    return await FirstMovieAnalisAchDb(valueTuple.userId);
+                                }
+                            }
+                            else
+                            {
+                                return await FirstMovieAnalisAchDb(valueTuple.userId);
+                            }
+                        }
+                    
+                        break;
+                    }
+                    case AchievementType.FirstFriend:
+                    {
+                        
+                        break;
+                    }
+                    case AchievementType.SocialButterfly:
+                    {
+                        
+                        break;
+                    }
+                    case AchievementType.HorrorEnthusiast:
+                    {
+                        
+                        break;
+                    }
+                    case AchievementType.MovieBuff:
+                    {
+                        
                         break;
                     }
                 

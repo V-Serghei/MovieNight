@@ -7,6 +7,7 @@ namespace MovieNight.Web.Models.SortingSearchingFiltering
 {
     public class ViewListSort
     {
+        public int? userId { get; set; }
         public FilmCategory Category { get; set; }
         
         public SelectField Field { get; set; }

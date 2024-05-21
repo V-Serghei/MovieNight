@@ -4,6 +4,7 @@ namespace MovieNight.Domain.Entities.MovieM.SearchParam
 {
     public class MovieCommandS
     {
+        public int? userId { get; set; }
         public FilmCategory Category { get; set; }
         public SortingOption SortPar { get; set; }
         public int PageNom { get; set; }
