@@ -895,6 +895,7 @@
     <Content Include="Views\SearchSortAdd\Novelty.cshtml" />
     <Content Include="Views\SearchSortAdd\_LoadingIndicator.cshtml" />
     <Content Include="Views\Shared\_AchievementL.cshtml" />
+    <Content Include="Views\Shared\_SearchResultsPartial.cshtml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

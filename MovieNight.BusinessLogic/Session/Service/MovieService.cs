@@ -148,6 +148,11 @@ namespace MovieNight.BusinessLogic.Session.Service
         {
             return GetListBookmarksInfoDb(id);
         }
+
+        public Task<List<MovieTemplateInfE>> GetMovies(string searchTerm)
+        {
+            return GetMoviesDb(searchTerm);
+        }
     }
 
     

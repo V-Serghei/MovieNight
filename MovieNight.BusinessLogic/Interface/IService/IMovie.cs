@@ -39,5 +39,6 @@ namespace MovieNight.BusinessLogic.Interface.IService
         Task<List<BookmarkInfoE>> GetNewBookmarkList(ListSortCommandE transCommand);
         List<BookmarkInfoE> GetListBookmarksInfo(int? id);
 
+        Task<List<MovieTemplateInfE>> GetMovies(string searchTerm);
     }
 }

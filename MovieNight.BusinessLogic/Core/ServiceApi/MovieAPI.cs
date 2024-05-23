@@ -1824,5 +1824,33 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             
             
         }
-}
+
+        protected async Task<List<MovieTemplateInfE>> GetMoviesDb(string searchTerm)
+        {
+            try
+            {
+                GetMappersSettings();
+                using (var movie = new MovieContext())
+                {
+                    var movieS = await movie.MovieDb
+                        .Where(m => m.Title.Contains(searchTerm)).Include(l=>l.ViewListEntries)
+                        .OrderByDescending(m => m.ViewListEntries.Count) 
+                        .ThenByDescending(m => m.MovieNightGrade) 
+                        .Take(20) 
+                        .ToListAsync();
+
+                    var listMovie = MapperFilm.Map<List<MovieTemplateInfE>>(movieS);
+                    
+                    return listMovie;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+
+            }
+
+        }
+    }
 }

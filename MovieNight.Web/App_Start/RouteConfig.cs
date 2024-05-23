@@ -33,6 +33,14 @@ namespace MovieNight.Web
                 defaults: new { controller = "InformationSynchronization", action = "ClearBookmarks" }
             );
             
+            routes.MapRoute(
+                name: "SearchMovies",
+                url: "{controller}/{action}/{searchTerm}",
+                defaults: new { controller = "SearchSortAdd", action = "SearchMovies", searchTerm = UrlParameter.Optional }
+            );
+
+
+            
         }
     }
 }

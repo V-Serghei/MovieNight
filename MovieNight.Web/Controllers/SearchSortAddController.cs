@@ -1052,8 +1052,40 @@ namespace MovieNight.Web.Controllers
 
 
     #endregion
+
+    #region Global Search
     
     
+    
+    
+    [HttpPost]
+    public async Task<ActionResult> _SearchResultsPartial(string searchTerm)
+    {
+        var movieModel = new List<MovieTemplateInfModel>();
+        
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            var movies = await _movie.GetMovies(searchTerm);
+            movieModel = _mapper.Map<List<MovieTemplateInfModel>>(movies);
+        }
+
+        movieModel.ToList().ForEach(movie =>
+        {
+            movie.ProductionYearS = movie.ProductionYear.ToString("MM/dd/yyyy");
+            if (!string.IsNullOrEmpty(movie.PosterImage) && movie.PosterImage.StartsWith("~"))
+            {
+                movie.PosterImage = movie.PosterImage.Substring(1); 
+            }
+        });
+        
+        
+        ViewBag.SearchResults = movieModel;
+        ViewBag.SearchTerm = searchTerm;
+
+        return Json(new { success = true, newListV = movieModel });
+    }
+
+    #endregion
     
    
     

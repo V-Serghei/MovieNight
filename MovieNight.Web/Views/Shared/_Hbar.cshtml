@@ -1,38 +1,104 @@
 ﻿@using MovieNight.Domain.enams
 @using MovieNight.Web.Infrastructure
 @using MovieNight.Web.Models
+@using MovieNight.Web.Models.Movie
 @using MovieNight.Web.Models.PersonalP.Bookmark
 @model dynamic
 
 @{
     var userModel = HttpContext.Current.GetMySessionObject();
     var modelBookmark = HttpContext.Current.GetBookmarkTimeOf() as BookmarkTimeOf;
-
 }
 
 @{
     ViewBag.Title = "_Hbar";
 }
+<style>
+    .notify-icon img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+    }
+
+    .notify-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #searchResults {
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+        position: absolute;
+        width: 300px;
+        max-height: 400px;
+        overflow-y: scroll;
+        position: relative; 
+    }
+    .notify-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+    }
+    .notify-icon {
+        margin-right: 10px;
+    }
+    .close-btn {
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+</style>
+
 <div>
 <ul class="list-unstyled topnav-menu float-right mb-0">
-
-<li class="d-none d-sm-block">
-    <form class="app-search">
-        <div class="app-search-box">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Movie search... ">
-                <div class="input-group-append">
-                    <button class="btn" type="submit">
-                        <i class="fe-search"></i>
-                    </button>
+<li id=" buttonCloss">
+    <div class="contButtonClos">
+    <button class="close-btn btn badge-danger" id="buttonCloss" style="margin-top: 10px; display: none; background-color: darkred" onclick="closeSearchResults()">&times;</button>
+</div>
+</li>
+    <li class="d-none d-sm-block">
+        @using (Ajax.BeginForm("_SearchResultsPartial", "SearchSortAdd", new AjaxOptions
+        {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "searchResults",
+        OnSuccess = "handleSuccess",
+        OnFailure = "handleFailure"
+        }))
+        {
+        <form class="app-search" style="display: flex; align-items: center; ">
+            <div class="app-search-box" style="background-color: #5A2D82; border-radius: 25px;margin-top: 10px; padding: 5px 10px;">
+                <div class="input-group" style="display: flex; align-items: center;">
+                    <input type="text" class="form-control" id="movieSearchInput" name="searchTerm" placeholder="Movie search..."
+                           style="border: none; background: transparent; color: white; width: 200px; margin-right: 10px;">
+                    <div class="input-group-append" style="display: flex; align-items: center;">
+                        <button class="btn" type="submit" style="background: none; border: none; color: white;">
+                            <i class="fe-search"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
-</li>
+        </form>
+        }
+
+        <div id="searchResults" class="scrollspy-example badge-primary" style="display: none"></div>
+    </li>
 
 
-    
+
+
+
+
 <li class="dropdown notification-list">
     <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
         <i class="fe-bell noti-icon"></i>
@@ -68,7 +134,7 @@
             <!-- item-->
             <a href="javascript:void(0);" class="dropdown-item notify-item">
                 <div class="notify-icon">
-                    <img src="/images/users/avatar-2.jpg" class="img-fluid rounded-circle" alt="" />
+                    <img src="/images/users/avatar-2.jpg" class="img-fluid rounded-circle" alt=""/>
                 </div>
                 <p class="notify-details">Mario Drummond</p>
                 <p class="text-muted mb-0 user-msg">
@@ -79,7 +145,7 @@
             <!-- item-->
             <a href="javascript:void(0);" class="dropdown-item notify-item">
                 <div class="notify-icon">
-                    <img src="/images/users/avatar-4.jpg" class="img-fluid rounded-circle" alt="" />
+                    <img src="/images/users/avatar-4.jpg" class="img-fluid rounded-circle" alt=""/>
                 </div>
                 <p class="notify-details">Karen Robinson</p>
                 <p class="text-muted mb-0 user-msg">
@@ -130,11 +196,13 @@
 
     </div>
 </li>
-@if(userModel!=null){if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+@if (userModel != null)
+{
+    if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
     {
         <li class="dropdown notification-list">
-            <a class="nav-link dropdown-toggle" href="@Url.Action("MovieTemplateEditing","InformationSynchronization")" role="button" >
-                <i class=" remixicon-quill-pen-line" ></i>
+            <a class="nav-link dropdown-toggle" href="@Url.Action("MovieTemplateEditing", "InformationSynchronization")" role="button">
+                <i class=" remixicon-quill-pen-line"></i>
             </a>
         </li>
     }
@@ -142,35 +210,39 @@
     if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
     {
         <li class="dropdown notification-list">
-            <a class="nav-link dropdown-toggle  " href="@Url.Action("Index","Admin")">
-                <i class=" remixicon-file-add-fill" ></i>
+            <a class="nav-link dropdown-toggle  " href="@Url.Action("Index", "Admin")">
+                <i class=" remixicon-file-add-fill"></i>
             </a>
         </li>
-    }}
-<li class="dropdown notification-list">
+    }
+}
+<li class="dropdown notification-list ">
     <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
         <i class=" remixicon-bookmark-3-line"></i>
-        @if(modelBookmark!=null){<span class="badge badge-danger rounded-bottom-pill noti-icon-badge">@modelBookmark.Bookmark.Count</span>}
+        @if (modelBookmark != null)
+        {
+            <span class="badge badge-danger rounded-bottom-pill noti-icon-badge">@modelBookmark.Bookmark.Count</span>
+        }
     </a>
     <div class="dropdown-menu dropdown-menu-right dropdown-lg">
 
         <!-- item-->
-        <div class="dropdown-item noti-title">
+        <div class="dropdown-item noti-title ">
             <h5 class="m-0">
-        <span class="float-right">
-            @Ajax.ActionLink(
-            "Clear All", // т
-            "ClearBookmarks",
-            "InformationSynchronization",
-            null,
-            new AjaxOptions
-            {
-            HttpMethod = "POST",
-            OnSuccess = "clearBookmarksSuccess" 
-            },
-            new { @class = "text-dark" } 
-            )
-        </span>
+                <span class="float-right">
+                    @Ajax.ActionLink(
+                        "Clear All", // т
+                        "ClearBookmarks",
+                        "InformationSynchronization",
+                        null,
+                        new AjaxOptions
+                        {
+                            HttpMethod = "POST",
+                            OnSuccess = "clearBookmarksSuccess"
+                        },
+                        new { @class = "text-dark" }
+                    )
+                </span>
                 Bookmark exp
             </h5>
         </div>
@@ -184,20 +256,26 @@
         </script>
 
 
-        @if(modelBookmark != null)
+        @if (modelBookmark != null)
         {
             <!-- item-->
             <div class="slimscroll noti-scroll">
 
                 @for (int i = 0; i < modelBookmark.Bookmark.Count && i < modelBookmark.MovieInTimeOfBookmark.Count; i++)
-                {   
+                {
                     modelBookmark.SortByTimeAdd();
                     var bookmark = modelBookmark.Bookmark.ElementAt(i);
                     var movie = modelBookmark.MovieInTimeOfBookmark.ElementAt(i);
-                    <a href="@Url.Action("MovieTemplatePage","InformationSynchronization", new{id = movie.Id})" class="dropdown-item notify-item">
+                    <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = movie.Id })" class="dropdown-item notify-item">
                         <div class="notify-icon bg-soft-primary text-primary">
-                            @if(movie.PosterImage!=null){<img src="@Url.Content(movie.PosterImage)" class="img-fluid rounded-circle" alt="" />}
-                            else{<img src="~/images/Movie/no_image.jpg" class="img-fluid rounded-circle" alt="" />}
+                            @if (movie.PosterImage != null)
+                            {
+                                <img src="@Url.Content(movie.PosterImage)" class="img-fluid rounded-circle" alt=""/>
+                            }
+                            else
+                            {
+                                <img src="~/images/Movie/no_image.jpg" class="img-fluid rounded-circle" alt=""/>
+                            }
                         </div>
                         <p class="notify-details">
                             @movie.Title
@@ -223,11 +301,11 @@
                         </p>
                     </a>
                 }
-                    
-                    
-                
+
+
+
             </div>
-                    
+
         }
         @*     <a href="javascript:void(0);" class="dropdown-item notify-item active"> *@
         @*         <div class="notify-icon bg-soft-primary text-primary"> *@
@@ -251,14 +329,13 @@
         @*     </a> *@
         @* *@
         <!-- All-->
-        <a href="@Url.Action("BookmarkTimeOfPage","SearchSortAdd")" class="dropdown-item text-center text-primary notify-item notify-all">
+        <a href="@Url.Action("BookmarkTimeOfPage", "SearchSortAdd")" class="dropdown-item text-center text-primary notify-item notify-all">
             View all bookmarks
             <i class="fi-arrow-right"></i>
         </a>
 
     </div>
 </li>
-
 @if (userModel != null)
 {
 
@@ -266,7 +343,7 @@
 
     <li class="dropdown notification-list">
         <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-            @if (userModel.Avatar==null)
+            @if (userModel.Avatar == null)
             {
                 <img src="/images/users/default_avatar.png" alt="user-image" class="rounded-circle">
             }
@@ -284,29 +361,29 @@
                 <h6 class="text-overflow m-0">Welcome !</h6>
             </div>
 
-            <a href=@Url.Action("PersonalProfile","InformationSynchronization") class="dropdown-item notify-item">
+            <a href=@Url.Action("PersonalProfile", "InformationSynchronization") class="dropdown-item notify-item">
                 <i class="mdi mdi-account-circle"></i>
                 <span>My Account</span>
             </a>
 
-            <a href=@Url.Action("ProfileEditing","InformationSynchronization") class="dropdown-item notify-item">
+            <a href=@Url.Action("ProfileEditing", "InformationSynchronization") class="dropdown-item notify-item">
                 <i class="mdi mdi-settings"></i>
                 <span>Settings</span>
             </a>
 
-            <a href=@Url.Action("ViewedList","SearchSortAdd") class="dropdown-item notify-item">
+            <a href=@Url.Action("ViewedList", "SearchSortAdd") class="dropdown-item notify-item">
                 <i class="remixicon-movie-2-line"></i>
                 <span>My viewed list </span>
             </a>
 
-            <a href=@Url.Action("PersonalPromotionStatistics","Statistic") class="dropdown-item notify-item">
+            <a href=@Url.Action("PersonalPromotionStatistics", "Statistic") class="dropdown-item notify-item">
                 <i class="remixicon-focus-2-fill"></i>
                 <span> MY Statistic</span>
             </a>
 
             <div class="dropdown-divider"></div>
 
-            <a href=@Url.Action("Logout","Identification") class="dropdown-item notify-item">
+            <a href=@Url.Action("Logout", "Identification") class="dropdown-item notify-item">
                 <i class="mdi mdi-logout"></i>
                 <span>Logout</span>
             </a>
@@ -317,14 +394,14 @@
 else
 {
     <li class="dropdown notification-list">
-        <a class="nav-link dropdown-toggle waves-effect waves-light"  role="button" href=@Url.Action("Login","Identification") class="dropdown-item notify-item">
+        <a class="nav-link dropdown-toggle waves-effect waves-light" role="button" href=@Url.Action("Login", "Identification") class="dropdown-item notify-item">
             <i class="mdi mdi-login"></i>
             <span>Login</span>
         </a>
     </li>
 }
 
-       
+
 
 <li class="dropdown notification-list">
     <a href="javascript:void(0);" class="nav-link right-bar-toggle waves-effect waves-light">
@@ -461,6 +538,7 @@ else
     </li>
 </ul>
 </div>
+
 <script>
     function clearBookmarks() {
         $.ajax({
@@ -474,5 +552,57 @@ else
             }
         });
     }
+    function triggerSearch() {
+        clearTimeout(window.searchTimer);
+        window.searchTimer = setTimeout(() => {
+            document.getElementById('searchForm').submit();
+        }, 300); 
+    }
+
+
+    function closeSearchResults() {
+        document.getElementById("searchResults").style.display = "none";
+        document.getElementById("buttonCloss").style.display = "none";
+        document.getElementById("contButtonClos").style.display = "none";
+    }
+
+    var baseUrl = '@Url.Content("~")';
+    // URL к изображению, если нет другого изображения
+    var noImageUrl = '@Url.Content("~/images/Movie/no_image.jpg")';
+    function handleSuccess(data) {
+        if (data.success) {
+            const newTableBody =` <button class="close-btn" onclick="closeSearchResults()">&times;</button>
+        <div>Результаты поиска</div>`+ data.newListV.map(item => {
+                let posterImageUrl = item.PosterImage ? `${item.PosterImage}` : noImageUrl; 
+                let detailsUrl = `/InformationSynchronization/MovieTemplatePage/${item.Id}`; 
+
+                
+                return `<a href="${detailsUrl}" class='dropdown-item notify-item'>
+                <div class='notify-icon bg-soft-primary text-primary'>
+                    <img src="${item.PosterImage}" class='img-fluid rounded-circle' alt='${item.Title}'>
+                </div>
+                <p class='notify-details'>${item.Title} <small class='text-muted'>${item.ProductionYearS}</small></p>
+            </a>`;
+            }).join('');
+            $('#searchResults').html(newTableBody);
+            document.getElementById("searchResults").style.display = "block";
+            document.getElementById("buttonCloss").style.display = "block";
+            
+            
+        } else {
+            console.error('Operation failed');
+        }
+    }
+    function closeB() {
+        document.getElementById("searchResults").style.display = "none";
+        document.getElementById("buttonCloss").style.display = "none";
+        document.getElementById("contButtonClos").style.display = "none";
+        
+        
+}
+
+    document.getElementById('movieSearchInput').addEventListener('keyup', triggerSearch);
+   
+
 
 </script>
