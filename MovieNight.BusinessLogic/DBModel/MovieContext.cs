@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
+using MovieNight.Domain.Entities.Review;
 
 namespace MovieNight.BusinessLogic.DBModel
 {
@@ -18,6 +19,8 @@ namespace MovieNight.BusinessLogic.DBModel
         public DbSet<CastMemDbTable> CastDbTables { get; set; }
         
         public DbSet<InterestingFactDbTable> InterestingFact { get; set; }
+        
+        public DbSet<ReviewDbTable> Review { get; set; }
  
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -31,7 +34,17 @@ namespace MovieNight.BusinessLogic.DBModel
                     mc.MapLeftKey("MovieId");
                     mc.MapRightKey("CastMemberId");
                 });
-           
+            modelBuilder.Entity<ReviewDbTable>()
+                .HasRequired(f => f.Film)
+                .WithMany()
+                .HasForeignKey(f => f.FilmId)
+                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<ReviewDbTable>()
+                .HasRequired(f => f.User)
+                .WithMany()
+                .HasForeignKey(f => f.UserId)
+                .WillCascadeOnDelete(false);
+
         }
     }
 }

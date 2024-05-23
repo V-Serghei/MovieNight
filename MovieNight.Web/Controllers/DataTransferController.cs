@@ -10,22 +10,27 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
+using Microsoft.AspNet.Http.Features;
 using MovieNight.Web.Infrastructure;
+using ISession = MovieNight.BusinessLogic.Interface.ISession;
 
 namespace MovieNight.Web.Controllers
 {
     public class DataTransferController : MasterController
     {
         internal IInbox сompleteInbox;
+        internal ISession _session;
         public DataTransferController()
         {
-            var MailBL = new BusinessLogic.BusinessLogic();
-            сompleteInbox = MailBL.GetInbox();
+            var BL = new BusinessLogic.BusinessLogic();
+            сompleteInbox = BL.GetInbox();
+            _session = BL.Session();
         }
         // GET: DataTransfer
         [HttpGet]
-        public ActionResult Inbox(int? userId)
+        public ActionResult Inbox()
         {
+            var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<InboxD, InboxModel>();
@@ -35,19 +40,29 @@ namespace MovieNight.Web.Controllers
             var message = mapper.Map<List<InboxModel>>(messageD);
             return View(message);
         }
-        public ActionResult Read()
+        public ActionResult Read(int? mailId)
         {
-            return View();
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<InboxD, InboxModel>();
+            });
+            var mapper = config.CreateMapper();
+            var messageD = сompleteInbox.InboxRead(mailId);
+            var message = mapper.Map<InboxModel>(messageD);
+            return View(message);
         }
-        public ActionResult Compose()
+        public ActionResult Compose(int? id)
         {
-            return View();
+            var model = new InboxModel
+            {
+                RecipientName = _session.GetUserData(id).Username
+            };
+            return View(model);
         }
 
         [HttpPost]
         public ActionResult ComposeAdd(InboxModel model)
         {
-            var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             var messageDb = new InboxD
             {
                 Theme = model.Theme,
@@ -63,10 +78,7 @@ namespace MovieNight.Web.Controllers
         }
         public ActionResult Starred()
         {
-            return View();
-        }
-        public ActionResult StarredList(int? userId)
-        {
+            var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<InboxD, InboxModel>();
@@ -76,12 +88,20 @@ namespace MovieNight.Web.Controllers
             var message = mapper.Map<List<InboxModel>>(messageD);
             return View(message);
         }
+
+        public ActionResult AddStarMail(int? mailId)
+        {
+            var sendMail = сompleteInbox.SetMailStar(mailId);
+            return RedirectToAction("Starred");
+        }
+        public ActionResult DeleteStarMail(int? mailId)
+        {
+            var sendMail = сompleteInbox.DeleteMailStar(mailId);
+            return RedirectToAction("Starred");
+        }
         public ActionResult SentMail()
         {
-            return View();
-        }
-        public ActionResult SentMailList(int? userId)
-        {
+            var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<InboxD, InboxModel>();
@@ -91,9 +111,10 @@ namespace MovieNight.Web.Controllers
             var message = mapper.Map<List<InboxModel>>(messageD);
             return View(message);
         }
-        public ActionResult Trash()
+        public ActionResult Trash(int? mailId)
         {
-            return View();
+            var sendMail = сompleteInbox.DeleteMail(mailId);
+            return RedirectToAction("Inbox");
         }
        
     }

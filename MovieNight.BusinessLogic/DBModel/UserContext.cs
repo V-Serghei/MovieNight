@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.ModelBinding;
+using MovieNight.Domain.Entities.MovieM.EfDbEntities;
 using MovieNight.Domain.Entities.AchievementE;
 using MovieNight.Domain.Entities.Friends;
 using MovieNight.Domain.Entities.MailE;
@@ -35,8 +36,11 @@ namespace MovieNight.BusinessLogic.DBModel
         public DbSet<BookmarkDbTable> Bookmark { get; set; }
         
         public DbSet<AchievementDbTable> AchievementDb { get; set; }
+
+        public DbSet<FriendsDbTable> Friends { get; set; }
         
         public DbSet<UserAchievementDbTable> UserAchievementDb { get; set; }
+        public DbSet<MailDbTable> MailE { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

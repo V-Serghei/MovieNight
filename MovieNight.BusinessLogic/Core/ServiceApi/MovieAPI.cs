@@ -22,6 +22,7 @@ using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
+using MovieNight.Domain.Entities.Review;
 using MovieNight.Domain.Entities.Statistics;
 using Newtonsoft.Json;
 using EntityState = System.Data.Entity.EntityState;
@@ -1851,6 +1852,94 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
             }
 
+        }
+        
+
+        public List<ReviewE> getListOfReviewsDb(int? filmId)
+        {
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<ReviewDbTable, ReviewE>()
+                    .ForMember(g=>g.Film, 
+                        d => d.Ignore())
+                    .ForMember(a=>a.User, 
+                        b => b.Ignore());
+            });
+            
+            var mapper = config.CreateMapper();
+            using (var db = new MovieContext())
+            {
+                try
+                {
+                    var existsInDb = db.Review.Where(m => m.FilmId == filmId).ToList();
+                    var reviewList = mapper.Map<List<ReviewE>>(existsInDb);
+                    using(var dbU = new UserContext())
+                    {
+                        foreach (var review in reviewList)
+                        {
+                            review.Film = db.MovieDb.FirstOrDefault(v => v.Id == review.FilmId)?.Title;
+                            review.User = dbU.UsersT.FirstOrDefault(n => n.Id == review.UserId)?.UserName;
+                        }
+                        return reviewList;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    return null;
+                }
+            }
+        }
+
+        public bool SetReviewDb(ReviewE reviewE)
+        {
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<ReviewE , ReviewDbTable>()
+                    .ForMember(g=>g.Film, 
+                        d => d.Ignore())
+                    .ForMember(a=>a.User, 
+                        b => b.Ignore());
+            });
+            
+            var mapper = config.CreateMapper();
+            using (var db = new MovieContext())
+            {
+                try
+                {
+                    var reviewTable = mapper.Map<ReviewDbTable>(reviewE);
+                    db.Review.Add(reviewTable);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception exception)
+                {
+                    return false;
+                }
+            }
+        }
+        
+        public int? DeleteReviewDb(int? reviewE)
+        {
+            using (var db = new MovieContext())
+            {
+                try
+                {
+                    var reviewTable = db.Review.FirstOrDefault(l=>l.Id==reviewE);
+                    if (reviewTable != null)
+                    {
+                        var idFilm = reviewTable.FilmId;
+                        db.Review.Remove(reviewTable);
+                        db.SaveChanges();
+                        return idFilm;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    return null;
+                }
+
+                return null;
+            }
         }
     }
 }

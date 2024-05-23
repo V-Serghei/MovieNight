@@ -11,6 +11,7 @@ using MovieNight.Domain.Entities.Friends;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP;
+using MovieNight.Web.Infrastructure;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Attributes;
@@ -97,7 +98,7 @@ namespace MovieNight.Web.Controllers
         }
         // GET: SearchSortAdd
         [UserMod]
-        public ActionResult FriendsPage(int _skipParametr)
+        public ActionResult FriendsPage(int _skipParametr = 0)
         {
             var listU = _serviceFriend.getListOfFriends(_skipParametr);
             if (listU == null)
@@ -310,8 +311,14 @@ namespace MovieNight.Web.Controllers
         
         [UserMod]
         [HttpGet]
-        public ActionResult FindFriends(int _skipParametr)
+        public ActionResult FindFriends(int _skipParametr = 0)
         {
+            // if(TempData["_skipParametr"]==null)
+            // {
+            //     TempData["_skipParametr"] = _skipParametr;
+            // }
+            // else if(TempData["_skipParametr"])
+            //
             var listU = _serviceFriend.getListOfUsers(_skipParametr);
             FriendListModel friendListModel = new FriendListModel();
             if (listU == null)
@@ -332,33 +339,6 @@ namespace MovieNight.Web.Controllers
             }
 
             return View(friendListModel);
-        }
-        
-        public ActionResult SetNewFriendPage(int? _friendId)
-        {
-            var _userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
-            var _userVsFriend = _serviceFriend.setAddFriend((_userId, _friendId));
-            if (_userVsFriend == true)
-            {
-                return RedirectToAction("FindFriends");
-            }
-            else
-            {
-                return RedirectToAction("Error404Page", "Error");
-            }
-        }
-        public ActionResult SetDeleteFriendPage(int? _friendId)
-        {
-            var _userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
-            var _userVsFriend = _serviceFriend.setDeleteFriend((_userId, _friendId));
-            if (_userVsFriend == true)
-            {
-                return RedirectToAction("FriendsPage");
-            }
-            else
-            {
-                return RedirectToAction("Error404Page", "Error");
-            }
         }
 
 
@@ -1094,5 +1074,33 @@ namespace MovieNight.Web.Controllers
 
 
         
+    }
+    public ActionResult SetNewFriendPage(int? _friendId)
+    {
+        var _userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+        var _userVsFriend = _serviceFriend.setAddFriend((_userId, _friendId));
+        if (_userVsFriend)
+        {
+            
+            return RedirectToAction("FindFriends");
+        }
+        else
+        {
+            return RedirectToAction("Error404Page", "Error");
+        }
+    }
+    public ActionResult SetDeleteFriendPage(int? _friendId)
+    {
+        var _userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+        var _userVsFriend = _serviceFriend.setDeleteFriend((_userId, _friendId));
+        if (_userVsFriend == true)
+        {
+            return RedirectToAction("FriendsPage");
+        }
+        else
+        {
+            return RedirectToAction("Error404Page", "Error");
+        }
+    }
     }
 }

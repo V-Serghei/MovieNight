@@ -1,11 +1,11 @@
 ﻿@using System.Web.Optimization
-@model dynamic
 @using MovieNight.Domain.enams
 @using MovieNight.Web.Infrastructure
 
 @{
 var userModel = HttpContext.Current.GetMySessionObject();
 }
+@model MovieNight.Web.Models.Review.ReviewPageModel
 
 <div>
 <div class="content">
@@ -21,155 +21,205 @@ var userModel = HttpContext.Current.GetMySessionObject();
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Movie Night</a></li>
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Cinema</a></li>
+                        <li class="breadcrumb-item active">@Model.FilmTitle</li>
                         <li class="breadcrumb-item active">Review</li>
                     </ol>
                 </div>
+                <h4 class="page-title text-warning font-weight-bold">@Model.FilmTitle</h4>
             </div>
         </div>
     </div>
     <!-- end page title -->
 
 
-<div class="row">
-<div class="col-lg-4">
-    <div class="card-box">
-        @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
-        {
-            <a class href="" role="button" >
-                <i class="remixicon-delete-bin-3-line" ></i>
-            </a>
-        }
-        <h4 class="header-title">
-            That's great!
-        </h4>
-        <p class="sub-header">
-            Write your positive feedback here.
-        </p>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card-box">
+                <h4 class="header-title">
+                    That's great!
+                </h4>
+                <p class="sub-header">
+                    Write your positive feedback here.
+                </p>
 
-        <ul class="sortable-list tasklist list-unstyled" id="upcoming">
-            <li id="task1" class="task-medium">
-                @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
-                {
-                <div class="checkbox checkbox-blue mb-2 checkbox-single float-right">
-                    <input type="checkbox">
-                    <label></label>
-                </div>
-                }
+                <ul class="sortable-list tasklist list-unstyled" id="upcoming">
+                    <li id="task1" class="task-medium">
 
-                <h5 class="mt-0"><a href="javascript: void(0);" class="text-dark">Flopa</a></h5>
-
-                <p>Oh yeah, what a movie!</p>
-                <div class="clearfix"></div>
-                <div class="row">
-                    <div class="col-auto">
-                        <a href="javascript: void(0);" class="text-muted">
-                            <img src="~/images/Nelea/Pooh.jpg" alt="task-user" class="avatar-sm img-thumbnail rounded-circle">
-                        </a>
-                    </div>
-                    <div class="col">
-                        <div class="text-right">
-                            <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i> 16.04.2024 </p>
+                        @foreach (var review in Model.RGreat)
+                        {
+                            if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+                            {
+                                <a href="@Url.Action("DeleteReviewData", "InformationSynchronization", new { movieId = review.Id })" class="subject">
+                                    <span class=" remixicon-delete-bin-3-line text-primary"></span>
+                                </a>
+                            }
+                                <h5 class="mt-0"><a href="@Url.Action("UserTemplatePage", "InformationSynchronization", new { id = review.UserId })" class="text-dark">@review.User</a></h5>
+                                <p>@review.Text</p>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <a href="javascript: void(0);" class="text-muted">
+                                            @if(userModel.Avatar!=null)
+                                            {
+                                                <img src=@Url.Content(userModel.Avatar) class="rounded-circle img-thumbnail avatar-sm" alt="profile-image">
+                                            }
+                                            else
+                                            {
+                                                <img src="~/images/users/default_avatar.png" class="rounded-circle img-thumbnail avatar-sm" alt="profile-image">
+                                            }
+                                        </a>
+                                        <hr style="border:none; height: 2px; background-color: #d4a310">
+                                    </div>
+                                    <div class="col">
+                                        <div class="text-right">
+                                            <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i>@review.Date.ToString("d")</p>
+                                        </div>
+                                    </div>
+                                </div>
+                        }
+                    </li>
+                </ul>
+                <a class="btn btn-primary btn-block mt-3 waves-effect waves-light text-white" onclick="showReviewForm(1)"><i class="remixicon-quill-pen-line"></i> Add New </a>
+                <div id="addReview-1" style="display:none">
+                    @using (Html.BeginForm("ReviewPageWrite", "InformationSynchronization", FormMethod.Post))
+                    {
+                        <div class="form-group">
+                            <label for="Text">Write something</label>
+                            <textarea class="form-control" id="Text" rows="4"  placeholder="Write something..." name="Text" value="@Model"></textarea>
                         </div>
-                    </div>
+                        <input type="hidden" name="FilmId" value="@Model.FilmId"/>
+                        <input type="hidden" name="ReviewType" value="@TypeOfReview.Great"/>
+                        <button type="submit" name="submit" class="btn btn-primary waves-effect waves-light">
+                            <span>Send</span> <i class="mdi mdi-send ml-2"></i>
+                        </button>
+                    }
                 </div>
-            </li>
+                </div>
+        </div> <!-- end col -->
 
-        </ul>
-        <a href="javascript: void(0);" class="btn btn-primary btn-block mt-3 waves-effect waves-light"><i class="remixicon-quill-pen-line"></i> Add New </a>
+        <div class="col-lg-4">
+            <div class="card-box">
+                <h4 class="header-title">
+                    It's fine.
+                </h4>
+                <ul class="sortable-list tasklist list-unstyled" id="inprogress">
+                    <li id="task6" class="task-low">
+
+                        @foreach (var review in Model.RFine)
+                        {
+                            if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+                            {
+                                <a href="@Url.Action("DeleteReviewData", "InformationSynchronization", new { movieId = review.Id })" class="subject">
+                                    <span class=" remixicon-delete-bin-3-line text-primary"></span>
+                                </a>
+                            }
+                            <h5 class="mt-0"><a href="@Url.Action("UserTemplatePage", "InformationSynchronization", new { id = review.UserId })" class="text-dark">@review.User</a></h5>
+                            <p>@review.Text</p>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <a href="javascript: void(0);" class="text-muted">
+                                        @if(userModel.Avatar!=null)
+                                        {
+                                            <img src=@Url.Content(userModel.Avatar) class="rounded-circle img-thumbnail avatar-sm" alt="profile-image">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/users/default_avatar.png" class="rounded-circle img-thumbnail avatar-sm" alt="profile-image">
+                                        }
+                                    </a>
+                                    <hr style="border:none; height: 2px; background-color: #d4a310">
+                                </div>
+                                <div class="col">
+                                    <div class="text-right">
+                                        <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i>@review.Date.ToString("d")</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </li>
+
+                </ul>
+                <a class="btn btn-primary btn-block mt-3 waves-effect waves-light text-white" onclick="showReviewForm(2)"><i class="remixicon-quill-pen-line"></i> Add New </a>
+                <div id="addReview-2" style="display:none">
+                    @using (Html.BeginForm("ReviewPageWrite", "InformationSynchronization", FormMethod.Post))
+                    {
+                    <div class="form-group">
+                        <label for="Text">Write something</label>
+                        <textarea class="form-control" id="Text" rows="4"  placeholder="Write something..." name="Text" value="@Model"></textarea>
+                    </div>
+                    <input type="hidden" name="FilmId" value="@Model.FilmId"/>
+                    <input type="hidden" name="ReviewType" value="@TypeOfReview.Fine"/>
+                    <button type="submit" name="submit" class="btn btn-primary waves-effect waves-light">
+                        <span>Send</span> <i class="mdi mdi-send ml-2"></i>
+                    </button>
+                    }
+                </div>
+                 </div> <!-- end card-box -->
+        </div> <!-- end col -->
+
+        <div class="col-lg-4">
+            <div class="card-box">
+                <h4 class="header-title">
+                    Waste of time!
+                </h4>
+                <p class="sub-header">
+                    Write your negative reviews here (only decently please).
+                </p>
+
+                <ul class="sortable-list tasklist list-unstyled" id="completed">
+                    <li id="task10" class="task-low">
+                        
+                        @foreach (var review in Model.RWaste)
+                        {
+                            if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+                            {
+                                <a href="@Url.Action("DeleteReviewData", "InformationSynchronization", new { movieId = review.Id })" class="subject">
+                                    <span class=" remixicon-delete-bin-3-line text-primary"></span>
+                                </a>
+                            }
+                            <h5 class="mt-0"><a href="@Url.Action("UserTemplatePage", "InformationSynchronization", new { id = review.UserId })" class="text-dark">@review.User</a></h5>
+                            <p>@review.Text</p>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <a href="javascript: void(0);" class="text-muted">
+                                        @if(userModel.Avatar!=null)
+                                        {
+                                            <img src=@Url.Content(userModel.Avatar) class="rounded-circle img-thumbnail avatar-sm" alt="profile-image">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/users/default_avatar.png" class="rounded-circle img-thumbnail avatar-sm" alt="profile-image">
+                                        }
+                                    </a>
+                                    <hr style="border:none; height: 2px; background-color: #d4a310">
+                                </div>
+                                <div class="col">
+                                    <div class="text-right">
+                                        <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i>@review.Date.ToString("d")</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </li>
+                </ul>
+                <a class="btn btn-primary btn-block mt-3 waves-effect waves-light text-white" onclick="showReviewForm(3)"><i class="remixicon-quill-pen-line"></i> Add New </a>
+                <div id="addReview-3" style="display:none">
+                    @using (Html.BeginForm("ReviewPageWrite", "InformationSynchronization", FormMethod.Post))
+                    {
+                    <div class="form-group">
+                        <label for="Text">Write something</label>
+                        <textarea class="form-control" id="Text" rows="4"  placeholder="Write something..." name="Text" value="@Model"></textarea>
+                    </div>
+                    <input type="hidden" name="FilmId" value="@Model.FilmId"/>
+                    <input type="hidden" name="ReviewType" value="@TypeOfReview.Waste"/>
+                    <button type="submit" name="submit" class="btn btn-primary waves-effect waves-light">
+                        <span>Send</span> <i class="mdi mdi-send ml-2"></i>
+                    </button>
+                    }
+                </div>
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+
     </div>
-</div> <!-- end col -->
-
-<div class="col-lg-4">
-    <div class="card-box">
-        @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
-        {
-        <a class href="" role="button" >
-            <i class="remixicon-delete-bin-3-line" ></i>
-        </a>
-        }
-        <h4 class="header-title">
-             It's fine.
-        </h4>
-        <ul class="sortable-list tasklist list-unstyled" id="inprogress">
-            <li id="task6" class="task-low">
-                @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
-                {
-                <div class="checkbox checkbox-blue mb-2 checkbox-single float-right">
-                    <input type="checkbox">
-                    <label></label>
-                </div>
-                }
-
-                <h5 class="mt-0"><a href="javascript: void(0);" class="text-dark">Plovdiva</a></h5>
-
-                <p>Uh, I don't know.</p>
-                <div class="clearfix"></div>
-                <div class="row">
-                    <div class="col-auto">
-                        <a href="javascript: void(0);" class="text-muted">
-                            <img src="~/images/Nelea/Nelea.png" alt="task-user" class="avatar-sm img-thumbnail rounded-circle">
-                        </a>
-                    </div>
-                    <div class="col">
-                        <div class="text-right">
-                            <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i>16.04.2024</p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-
-        </ul>
-        <a href="javascript: void(0);" class="btn btn-primary btn-block mt-3 waves-effect waves-light"><i class="remixicon-quill-pen-line"></i> Add New </a>
-    </div> <!-- end card-box -->
-</div> <!-- end col -->
-
-<div class="col-lg-4">
-    <div class="card-box">
-        @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
-        {
-        <a class href="" role="button" >
-            <i class="remixicon-delete-bin-3-line" ></i>
-        </a>
-        }
-        <h4 class="header-title">
-             Waste of time!
-        </h4>
-        <p class="sub-header">
-            Write your negative reviews here (only decently please).
-        </p>
-
-        <ul class="sortable-list tasklist list-unstyled" id="completed">
-            <li id="task10" class="task-low">
-
-                @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
-                {
-                    <div class="checkbox checkbox-blue mb-2 checkbox-single float-right">
-                        <input type="checkbox">
-                        <label></label>
-                    </div>
-                }
-                <h5 class="mt-0"><a href="javascript: void(0);" class="text-dark">Anastasiea</a></h5>
-                <p>How do I erase it from my memory?</p>
-                <div class="clearfix"></div>
-                <div class="row">
-                    <div class="col-auto">
-                        <a href="javascript: void(0);" class="text-muted">
-                            <img src="~/images/Nelea/Richi.jpg" alt="task-user" class="avatar-sm img-thumbnail rounded-circle">
-                        </a>
-                    </div>
-                    <div class="col">
-                        <div class="text-right">
-                            <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i>16.04.2024</p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-        <a href="javascript: void(0);" class="btn btn-primary btn-block mt-3 waves-effect waves-light"><i class="remixicon-quill-pen-line"></i> Add New</a>
-    </div> <!-- end card-box -->
-</div> <!-- end col -->
-
-</div>
 <!-- end row -->
                         
 </div> <!-- container -->
@@ -177,3 +227,20 @@ var userModel = HttpContext.Current.GetMySessionObject();
 </div> <!-- content -->
 </div>
 @Scripts.Render("~/bundles/kanban/js")
+<script>
+    function showReviewForm(data) {
+        if (data === 1)
+        {
+            document.getElementById("addReview-1").style.display = "block";
+        }
+        else if (data === 2)
+        {
+            document.getElementById("addReview-2").style.display = "block";
+        }
+        else if (data === 3)
+        {
+            document.getElementById("addReview-3").style.display = "block";
+        }
+        }
+
+</script>

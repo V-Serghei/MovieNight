@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
+using MovieNight.Domain.Entities.Review;
 using MovieNight.Domain.Entities.Statistics;
 
 namespace MovieNight.BusinessLogic.Interface.IService
@@ -40,5 +41,8 @@ namespace MovieNight.BusinessLogic.Interface.IService
         List<BookmarkInfoE> GetListBookmarksInfo(int? id);
 
         Task<List<MovieTemplateInfE>> GetMovies(string searchTerm);
+        List<ReviewE> getListOfReviews(int? filmId);
+        bool setNewReview(ReviewE reviewE);
+        int? DeleteReview(int? reviewE);
     }
 }

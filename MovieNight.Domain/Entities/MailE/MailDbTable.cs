@@ -10,6 +10,8 @@ namespace MovieNight.Domain.Entities.MailE
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public bool IsChecked { get; set; }
+        
         [Required]
         public int? SenderId { get; set; }
         [Required]
@@ -24,5 +26,6 @@ namespace MovieNight.Domain.Entities.MailE
         [Required]
         public DateTime Date { get; set; }
         public bool IsStarred { get; set; }
+        
     }
 }

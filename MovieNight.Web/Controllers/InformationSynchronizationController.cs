@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
@@ -20,6 +21,10 @@ using MovieNight.Web.Models.Friends;
 using MovieNight.Web.Models.Movie;
 using MovieNight.Web.Models.PersonalP;
 using MovieNight.Web.Models.PersonalP.Bookmark;
+using MovieNight.BusinessLogic.Interface.IService;
+using MovieNight.Domain.enams;
+using MovieNight.Domain.Entities.Review;
+using MovieNight.Web.Models.Review;
 
 namespace MovieNight.Web.Controllers
 {
@@ -248,9 +253,8 @@ namespace MovieNight.Web.Controllers
 
         [HttpGet]
         [UserMod]
-        public ActionResult UserTemplatePage()
+        public ActionResult UserTemplatePage(int? id)
         {
-            int? id = 1;
             var friendsDate = _serviceFriend.getFriendDate(id);
             var friendmodel = _mapper.Map<FriendPageModel>(friendsDate);
             if (friendmodel != null)
@@ -612,16 +616,63 @@ namespace MovieNight.Web.Controllers
             {
                 return Json(new { success = false, message = "An error occurred: " + e.Message });
             }
-            
         }
 
         
-
-        public ActionResult ReviewPage()
+        [HttpGet]
+       
+        public ActionResult ReviewPage(int? filmId)
         {
-            
-            
-            return View();
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<ReviewE, ReviewModel>();
+            });
+            var mapper = config.CreateMapper();
+            List<ReviewE> reviews = _movie.getListOfReviews(filmId);
+            var review = mapper.Map<List<ReviewModel>>(reviews);
+            var model = new ReviewPageModel()
+            {
+                FilmId = filmId,
+                RGreat = review.Where(g=>g.ReviewType == TypeOfReview.Great).ToList(),
+                RFine = review.Where(g=>g.ReviewType == TypeOfReview.Fine).ToList(),
+                RWaste = review.Where(g=>g.ReviewType == TypeOfReview.Waste).ToList(),
+                FilmTitle = _movie.GetMovieInf(filmId).Title
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult ReviewPageWrite(ReviewModel movieReview)
+        {
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<ReviewModel, ReviewE>();
+            });
+            var mapper = config.CreateMapper();
+            var review = mapper.Map<ReviewE>(movieReview);
+            review.Date = DateTime.Now;
+            review.UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id;
+            review.User = System.Web.HttpContext.Current.GetMySessionObject()?.Username;
+            bool addReview = _movie.setNewReview(review);
+            if (addReview)
+            {
+                return RedirectToAction("ReviewPage", new{filmId = review.FilmId});
+            }
+            return RedirectToAction("Error404Page","Error");
+        }
+        [ModeratorMod]
+        public ActionResult DeleteReviewData(int? movieId)
+        {
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<ReviewModel, ReviewE>();
+            });
+            var mapper = config.CreateMapper();
+            int? deleteReview = _movie.DeleteReview(movieId);
+            if (deleteReview!=null)
+            {
+                return RedirectToAction("ReviewPage", new{filmId = deleteReview});
+            }
+            return RedirectToAction("Error404Page","Error");
         }
 
         [ModeratorMod]

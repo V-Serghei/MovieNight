@@ -5,6 +5,7 @@ using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
+using MovieNight.Domain.Entities.Review;
 using MovieNight.Domain.Entities.Statistics;
 
 namespace MovieNight.BusinessLogic.Session.Service
@@ -152,6 +153,21 @@ namespace MovieNight.BusinessLogic.Session.Service
         public Task<List<MovieTemplateInfE>> GetMovies(string searchTerm)
         {
             return GetMoviesDb(searchTerm);
+        }
+
+        public List<ReviewE> getListOfReviews(int? filmId)
+        {
+            return getListOfReviewsDb(filmId);
+        }
+
+        public bool setNewReview(ReviewE reviewE)
+        {
+            return SetReviewDb(reviewE);
+        }
+        
+        public int? DeleteReview(int? reviewE)
+        {
+            return DeleteReviewDb(reviewE);
         }
     }
 

@@ -7,11 +7,7 @@ namespace MovieNight.Web.Models.Mail
 {
     public class InboxModel
     {
-        public string SenderName { get; set; }
-        public string Theme { get; set; }
-
-        public string Message { get; set; }
-
+        public int Id { get; set; }
         public bool IsChecked { get; set; }
         
         public string RecipientName { get; set; }

@@ -59,6 +59,7 @@
     <Compile Include="Entities\AchievementE\AchievementDbTable.cs" />
     <Compile Include="Entities\AchievementE\AchievementE.cs" />
     <Compile Include="Entities\AchievementE\UserAchievementDbTable.cs" />
+    <Compile Include="enams\TypeOfReview.cs" />
     <Compile Include="Entities\DifferentE\PhoneNumE.cs" />
     <Compile Include="Entities\DifferentE\Tag.cs" />
     <Compile Include="Entities\Friends\FriendsDbTable.cs" />
@@ -93,6 +94,8 @@
     <Compile Include="Entities\Notification\EventE.cs" />
     <Compile Include="Entities\PersonalP\PersonalProfileM.cs" />
     <Compile Include="Entities\PersonalP\ProfEditingE.cs" />
+    <Compile Include="Entities\Review\ReviewDbTable.cs" />
+    <Compile Include="Entities\Review\ReviewE.cs" />
     <Compile Include="Entities\Statistics\GenresDataStatistic.cs" />
     <Compile Include="Entities\Statistics\InfMovieScoresE.cs" />
     <Compile Include="Entities\Statistics\StatisticE.cs" />

@@ -80,7 +80,7 @@
                                 <div class="pt-2 pb-2">
                                     @if(person.BUserE.Avatar!=null)
                                     {
-                                        <img src=@person.BUserE.Avatar class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                                        <img src=@Url.Content(person.BUserE.Avatar) class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
                                     }
                                     else
                                     {
@@ -96,17 +96,17 @@
                                         </p>
                                     }
 
-                                    <a href=@Url.Action("Compose", "DataTransfer")>
-                                        <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                    <form action=@Url.Action("Compose", "DataTransfer") method="get">
+                                        <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light" name="id" value="@person.BUserE.Id">
                                             <i class="mdi mdi-email mr-1"></i> Message
                                         </button>
-                                    </a>
+                                    </form>
                                     <form action=@Url.Action("SetDeleteFriendPage", "SearchSortAdd") method="get">
                                         <button type="submit" class="btn btn-outline-warning btn-sm waves-effect" name="_friendId" value="@person.BUserE.Id">
                                             <i class="fe-x-circle"></i> Unfriend
                                         </button>
                                     </form>
-                                    <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", person.BUserE.Id)>
+                                    <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", new{id=person.BUserE.Id})>
                                         <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
                                             <i class="remixicon-account-pin-box-fill"></i> Go to profile
                                         </button>
@@ -126,7 +126,7 @@
                                 <div class="pt-2 pb-2">
                                     @if(nextPerson.BUserE.Avatar != null)
                                     {
-                                        <img src=@nextPerson.BUserE.Avatar class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                                        <img src=@Url.Content(nextPerson.BUserE.Avatar) class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
                                     }
                                     else
                                     {
@@ -141,18 +141,18 @@
                                             @nextPerson.Quote
                                         </p>
                                     }
-
-                                    <a href=@Url.Action("Compose", "DataTransfer")>
-                                        <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                    
+                                    <form action=@Url.Action("Compose", "DataTransfer") method="get">
+                                        <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light" name="id" value="@nextPerson.BUserE.Id">
                                             <i class="mdi mdi-email mr-1"></i> Message
                                         </button>
-                                    </a>
+                                    </form>
                                     <form action=@Url.Action("SetDeleteFriendPage", "SearchSortAdd") method="get">
                                         <button type="submit" class="btn btn-outline-warning btn-sm waves-effect" name="_friendId" value="@nextPerson.BUserE.Id">
                                             <i class="fe-x-circle"></i> Unfriend
                                         </button>
                                     </form>
-                                    <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", nextPerson.BUserE.Id)>
+                                    <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", new{id=nextPerson.BUserE.Id})>
                                         <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
                                             <i class="remixicon-account-pin-box-fill"></i> Go to profile
                                         </button>
@@ -173,7 +173,7 @@
                                 <div class="pt-2 pb-2">
                                     @if(nextnextPerson.BUserE.Avatar!=null)
                                     {
-                                    <img src=@nextnextPerson.BUserE.Avatar class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                                    <img src=@Url.Content(nextnextPerson.BUserE.Avatar) class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
                                     }
                                     else
                                     {
@@ -187,17 +187,18 @@
                                             @nextnextPerson.Quote
                                             </p>
                                     }
-                                    <a href=@Url.Action("Compose", "DataTransfer")>
-                                        <button type="button" class="btn btn-primary btn-sm waves-effect waves-light">
+                                    
+                                    <form action=@Url.Action("Compose", "DataTransfer") method="get">
+                                        <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light" name="id" value="@nextnextPerson.BUserE.Id">
                                             <i class="mdi mdi-email mr-1"></i> Message
                                         </button>
-                                    </a>
+                                    </form>
                                     <form action=@Url.Action("SetDeleteFriendPage", "SearchSortAdd") method="get">
                                         <button type="submit" class="btn btn-outline-warning btn-sm waves-effect" name="_friendId" value="@nextnextPerson.BUserE.Id">
                                             <i class="fe-x-circle"></i> Unfriend
                                         </button>
                                     </form>
-                                    <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", nextnextPerson.BUserE.Id)>
+                                    <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", new{id=nextnextPerson.BUserE.Id})>
                                         <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
                                             <i class="remixicon-account-pin-box-fill"></i> Go to profile
                                         </button>

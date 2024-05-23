@@ -75,12 +75,13 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             {
                 try
                 {
-                    var list9Users = db.UsersT.OrderBy(u => u.Id).Skip(_skipParameter*9).Take(9).ToList();
+                    var userId = HttpContext.Current.Session["UserId"] as int?;
+                    var list9Users = db.UsersT.Where(u =>u.Id != (int)userId).ToList();
                     foreach (var list9 in list9Users)
                     {
                         var userd = db.PEdBdTables.FirstOrDefault(p => p.UserDbTableId == list9.Id);
-                        bool existsInFriendsDb = db.Friends.Any(f => f.IdFriend != list9.Id);
-                        if (userd != null && existsInFriendsDb)
+                        var existsInFriendsDb = db.Friends.FirstOrDefault(f => f.IdFriend == list9.Id && f.IdUser == userId);
+                        if (userd != null && existsInFriendsDb == null)
                         {
                             var oneOfList = mapper.Map<FriendsPageD>(userd);
                             oneOfList.BUserE = new UserE
@@ -91,7 +92,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             };
                             friendsListD.ListOfFriends.Add(oneOfList);
                         }
-                        else if(existsInFriendsDb)
+                        else if(existsInFriendsDb == null)
                         {
                             var oneOfList = new FriendsPageD
                             {
@@ -111,9 +112,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     return null;
                 }
             }
+            friendsListD.ListOfFriends = friendsListD.ListOfFriends.Skip(_skipParameter*9).Take(9).ToList();
             return friendsListD;
         }
-        
         public FriendsListD getListOfFriendsD(int _skipParameter)
         {
             var config = new MapperConfiguration(c =>
