@@ -97,10 +97,6 @@
     <Compile Include="Session\SessionBL.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MovieNight.Domain\MovieNight.Domain.csproj">
-      <Project>{98ab5b36-e39d-469b-bc7e-cc2f4af52c70}</Project>
-      <Name>MovieNight.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MovieNight.Helpers\MovieNight.Helpers.csproj">
       <Project>{e906a821-4a0a-41e8-9104-3a77fe388ee2}</Project>
       <Name>MovieNight.Helpers</Name>
