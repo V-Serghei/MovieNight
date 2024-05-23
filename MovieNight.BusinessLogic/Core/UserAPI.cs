@@ -420,7 +420,10 @@ namespace MovieNight.BusinessLogic.Core
                 {
                     var existingUser = db.UsersT.FirstOrDefault(u => u.Id == currentUser.Id);
                     var existingProfile = db.PEdBdTables.FirstOrDefault(u => u.UserDbTableId == existingUser.Id);
-
+                    if (editing.DataBirth == default(DateTime))
+                    {
+                        editing.DataBirth = new DateTime(1753, 1, 1);
+                    }
                     if (existingProfile != null)
                     {
                         mapper.Map(editing, existingProfile);

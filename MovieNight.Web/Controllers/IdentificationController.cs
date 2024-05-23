@@ -72,13 +72,16 @@ namespace MovieNight.Web.Controllers
         [HttpPost]
         public async Task<JsonResult> RegistPost(RegistViewModel rModel)
         {
-            
+            if (rModel.Checkbox != "on")
+            {
+                return Json(new { success = false, statusMsg = "To register, you must agree to the license agreement!" });
+            }
             var regD = new RegData
             {
                 UserName = rModel.UserName,
                 Password = rModel.Password,
                 Email = rModel.Email,
-                Checkbox = rModel.Checkbox,
+                Checkbox = rModel.Checkbox=="on",
                 RegDateTime = DateTime.Now,
                 Ip = Request.UserHostAddress
 

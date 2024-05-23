@@ -156,6 +156,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                                 userAchievement.Achievement.Unlocked = true;
                             }
                             await user.SaveChangesAsync();
+                            return _mapper.Map<AchievementE>(userAchievement);
                         }
                         else
                         {
@@ -256,7 +257,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         using (var userA = new UserContext())
                         {
                             var verif = userA.UserAchievementDb.Include(ua => ua.Achievement)
-                                .FirstOrDefault(u => u.Id == valueTuple.userId  && u.Achievement.AchievementType == AchievementType.Registration)
+                                .FirstOrDefault(u => u.UserId == valueTuple.userId  && u.Achievement.AchievementType == AchievementType.Registration)
                                 ?.Achievement;
                             if (verif != null)
                             {
@@ -279,7 +280,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         using (var userA = new UserContext())
                         {
                             var verif = userA.UserAchievementDb.Include(ua => ua.Achievement)
-                                .FirstOrDefault(u => u.Id == valueTuple.userId  && u.Achievement.AchievementType == AchievementType.CompleteProfile)
+                                .FirstOrDefault(u => u.UserId == valueTuple.userId  && u.Achievement.AchievementType == AchievementType.CompleteProfile)
                                 ?.Achievement;
                             if (verif != null)
                             {
@@ -301,7 +302,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                         using (var userA = new UserContext())
                         {
                             var verif = userA.UserAchievementDb.Include(ua => ua.Achievement)
-                                .FirstOrDefault(u => u.Id == valueTuple.userId  && u.Achievement.AchievementType == AchievementType.FirstMovie)?.Achievement;
+                                .FirstOrDefault(u => u.UserId == valueTuple.userId  && u.Achievement.AchievementType == AchievementType.FirstMovie)?.Achievement;
                             if (verif != null)
                             {
                                 if (!verif.Unlocked)
