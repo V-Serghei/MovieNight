@@ -74,19 +74,11 @@
     <Compile Include="Interface\IService\IFriendsService.cs" />
     <Compile Include="Interface\IService\IMovie.cs" />
     <Compile Include="Interface\ISession.cs" />
-    <Compile Include="Migrations\Movie\202405141429495_Movie.cs" />
-    <Compile Include="Migrations\Movie\202405141429495_Movie.Designer.cs">
-      <DependentUpon>202405141429495_Movie.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Movie\Configuration.cs" />
-    <Compile Include="Migrations\Session\202405100959037_movie.cs" />
-    <Compile Include="Migrations\Session\202405100959037_movie.Designer.cs">
-      <DependentUpon>202405100959037_movie.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Session\Configuration.cs" />
-    <Compile Include="Migrations\User\202405111107452_user.cs" />
-    <Compile Include="Migrations\User\202405111107452_user.Designer.cs">
-      <DependentUpon>202405111107452_user.cs</DependentUpon>
+    <Compile Include="Migrations\User\202405232114011_YourMigrationName.cs" />
+    <Compile Include="Migrations\User\202405232114011_YourMigrationName.Designer.cs">
+      <DependentUpon>202405232114011_YourMigrationName.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\User\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -97,6 +89,10 @@
     <Compile Include="Session\SessionBL.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MovieNight.Domain\MovieNight.Domain.csproj">
+      <Project>{98ab5b36-e39d-469b-bc7e-cc2f4af52c70}</Project>
+      <Name>MovieNight.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MovieNight.Helpers\MovieNight.Helpers.csproj">
       <Project>{e906a821-4a0a-41e8-9104-3a77fe388ee2}</Project>
       <Name>MovieNight.Helpers</Name>
@@ -114,14 +110,8 @@
     <Content Include="DBModel\Seed\SeedData.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\Movie\202405141429495_Movie.resx">
-      <DependentUpon>202405141429495_Movie.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Session\202405100959037_movie.resx">
-      <DependentUpon>202405100959037_movie.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\User\202405111107452_user.resx">
-      <DependentUpon>202405111107452_user.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\User\202405232114011_YourMigrationName.resx">
+      <DependentUpon>202405232114011_YourMigrationName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

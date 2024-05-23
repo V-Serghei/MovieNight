@@ -1074,7 +1074,7 @@ namespace MovieNight.Web.Controllers
 
 
         
-    }
+    
     public ActionResult SetNewFriendPage(int? _friendId)
     {
         var _userId = System.Web.HttpContext.Current.GetMySessionObject().Id;

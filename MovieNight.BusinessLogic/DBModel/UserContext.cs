@@ -28,9 +28,6 @@ namespace MovieNight.BusinessLogic.DBModel
         public DbSet<PEdBdTable> PEdBdTables { get; set; }
         
         public DbSet<ViewListDbTable> ViewList { get; set; }
-        public DbSet<FriendsDbTable> Friends { get; set; }
-        
-        public DbSet<MailDbTable> MailE { get; set; }
 
         
         public DbSet<BookmarkDbTable> Bookmark { get; set; }
