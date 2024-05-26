@@ -18,5 +18,5 @@ D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\bin\Debug\Newtonsoft.Js
 D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNig.E67086DB.Up2Date
 D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.dll
 D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.pdb
-D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.Migrations.User.YourMigrationName.resources
+D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.Migrations.Movie.Movie.resources
 D:\web project\Movie\MovieNight\MovieNight.BusinessLogic\obj\Debug\MovieNight.BusinessLogic.csproj.GenerateResource.cache
