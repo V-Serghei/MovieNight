@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MovieNight.BusinessLogic.Core.ServiceApi;
 using MovieNight.BusinessLogic.Interface.IService;
+using MovieNight.Domain.Entities.DifferentE;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
@@ -168,6 +169,11 @@ namespace MovieNight.BusinessLogic.Session.Service
         public int? DeleteReview(int? reviewE)
         {
             return DeleteReviewDb(reviewE);
+        }
+
+        public List<AreWatchingE> GetMoviesAreWatching(int? userId)
+        {
+            return GetMoviesAreWatchingDb(userId);
         }
     }
 

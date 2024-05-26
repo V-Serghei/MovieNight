@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MovieNight.Domain.Entities.DifferentE;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
@@ -44,5 +45,6 @@ namespace MovieNight.BusinessLogic.Interface.IService
         List<ReviewE> getListOfReviews(int? filmId);
         bool setNewReview(ReviewE reviewE);
         int? DeleteReview(int? reviewE);
+        List<AreWatchingE> GetMoviesAreWatching(int? userId);
     }
 }

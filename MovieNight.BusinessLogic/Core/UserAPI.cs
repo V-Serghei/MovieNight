@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -184,11 +185,6 @@ namespace MovieNight.BusinessLogic.Core
         
         protected static bool UserAdding(RegData rData)
         {
-            //add user to database
-
-          
-            
-
             var user = new UserDbTable()
             {
                 UserName = rData.UserName,
@@ -214,8 +210,18 @@ namespace MovieNight.BusinessLogic.Core
                     HttpContext.Current.Session["UserName"] = user.UserName;
                     return true;
                 }
-                catch (Exception ex)
+                catch (DbEntityValidationException  ex)
                 {
+                    foreach (var validationErrors in ex.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            Console.WriteLine("Сущность: {0}, Свойство: {1}, Ошибка: {2}",
+                                validationErrors.Entry.Entity.GetType().Name,
+                                validationError.PropertyName,
+                                validationError.ErrorMessage);
+                        }
+                    }
                     return false;
                 }
             }

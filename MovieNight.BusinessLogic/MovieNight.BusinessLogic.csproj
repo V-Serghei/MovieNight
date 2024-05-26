@@ -74,12 +74,12 @@
     <Compile Include="Interface\IService\IFriendsService.cs" />
     <Compile Include="Interface\IService\IMovie.cs" />
     <Compile Include="Interface\ISession.cs" />
+    <Compile Include="Migrations\Movie\202405260936104_Movie.cs" />
+    <Compile Include="Migrations\Movie\202405260936104_Movie.Designer.cs">
+      <DependentUpon>202405260936104_Movie.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Movie\Configuration.cs" />
     <Compile Include="Migrations\Session\Configuration.cs" />
-    <Compile Include="Migrations\User\202405232114011_YourMigrationName.cs" />
-    <Compile Include="Migrations\User\202405232114011_YourMigrationName.Designer.cs">
-      <DependentUpon>202405232114011_YourMigrationName.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\User\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session\MailS\InboxS.cs" />
@@ -110,8 +110,8 @@
     <Content Include="DBModel\Seed\SeedData.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\User\202405232114011_YourMigrationName.resx">
-      <DependentUpon>202405232114011_YourMigrationName.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\Movie\202405260936104_Movie.resx">
+      <DependentUpon>202405260936104_Movie.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -60,6 +60,7 @@
     <Compile Include="Entities\AchievementE\AchievementE.cs" />
     <Compile Include="Entities\AchievementE\UserAchievementDbTable.cs" />
     <Compile Include="enams\TypeOfReview.cs" />
+    <Compile Include="Entities\DifferentE\AreWatchingE.cs" />
     <Compile Include="Entities\DifferentE\PhoneNumE.cs" />
     <Compile Include="Entities\DifferentE\Tag.cs" />
     <Compile Include="Entities\Friends\FriendsDbTable.cs" />

@@ -18,6 +18,7 @@ using MovieNight.BusinessLogic.DBModel;
 using MovieNight.BusinessLogic.Migrations.Session;
 using MovieNight.BusinessLogic.Migrations.User;
 using MovieNight.Domain.enams;
+using MovieNight.Domain.Entities.DifferentE;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
@@ -1941,5 +1942,66 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 return null;
             }
         }
+
+        protected List<AreWatchingE> GetMoviesAreWatchingDb(int? userId)
+        {
+            try
+            {
+                using (var mDb = new MovieContext())
+                using (var uDb = new UserContext())
+                {
+                    var lastMonth = DateTime.Now.AddMonths(-1);
+
+                    var viewListEntries = uDb.ViewList
+                        .Where(v => v.ReviewDate >= lastMonth)
+                        .ToList();
+
+                    var movieCounts = viewListEntries
+                        .GroupBy(v => v.MovieId)
+                        .Select(g => new
+                        {
+                            MovieId = g.Key,
+                            Count = g.Count()
+                        })
+                        .OrderByDescending(mc => mc.Count)
+                        .ToList();
+
+                    var movieIds = movieCounts.Select(mc => mc.MovieId).ToList();
+                    var movies = mDb.MovieDb
+                        .Where(m => movieIds.Contains(m.Id))
+                        .ToList();
+
+                    var bookmarks = userId.HasValue
+                        ? uDb.Bookmark
+                            .Where(b => b.UserId == userId && movieIds.Contains(b.MovieId))
+                            .ToList()
+                        : null;
+
+                    var result = movieCounts.Select(mc => new AreWatchingE
+                    {
+                        Id = mc.MovieId,
+                        Title = movies.First(m => m.Id == mc.MovieId).Title,
+                        PosterImage = movies.First(m => m.Id == mc.MovieId).PosterImage,
+                        ProductionYear = movies.First(m => m.Id == mc.MovieId).ProductionYear,
+                        Rating = movies.First(m => m.Id == mc.MovieId).MovieNightGrade,
+                        Genre = JsonConvert.DeserializeObject<List<string>>(
+                            movies.First(m => m.Id == mc.MovieId).Genres),
+                        CountWatching = mc.Count,
+                        Bookmark = bookmarks != null && userId.HasValue && bookmarks.Any(b => b.MovieId == mc.MovieId && b.BookMark),
+                        BookmarkTomeOf = bookmarks != null &&
+                                         userId.HasValue &&
+                                         bookmarks.Any(b => b.MovieId == mc.MovieId && b.BookmarkTimeOf)
+                    }).Take(30).ToList();
+
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
     }
 }
