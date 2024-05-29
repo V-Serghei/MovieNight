@@ -442,96 +442,119 @@ else
         </a>
         <div class="dropdown-menu dropdown-megamenu">
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-12">
 
                     <div class="row">
-                        <div class="col-md-4">
-                            <h5 class="text-dark mt-0">UI Components</h5>
+                        <div class="col-md-3">
+                            <h5 class="text-dark mt-0"> <i class="fe-film" style="margin-right: 10px"></i>Movie </h5>
                             <ul class="list-unstyled megamenu-list">
                                 <li>
-                                    <a href="javascript:void(0);">Widgets</a>
+                                    <a href="@Url.Action("MovieSearch","SearchSortAdd")">Film page</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">Nestable List</a>
+                                    <a href="@Url.Action("CartoonsSearch","SearchSortAdd")">Cartoons page</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">Range Sliders</a>
+                                    <a href="@Url.Action("AnimeSearch","SearchSortAdd")">Anime page</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">Masonry Items</a>
+                                    <a href="@Url.Action("SerialsSearch","SearchSortAdd")">Serial page</a>
+                                </li>
+                                <h5 class="text-dark mt-0"> <i class="fe-tag" style="margin-right: 10px"></i>Different </h5>
+                                <li>
+                                    <a href="@Url.Action("RandomFilm","SearchSortAdd")">Random movie</a>
+                                </li>
+                                @if(System.Web.HttpContext.Current.GetMySessionObject()!=null){<li>
+                                    <a href="@Url.Action("ForYou","SearchSortAdd")">Movie For You</a>
+                                </li>}
+                                <li>
+                                    <a href="@Url.Action("Novelty","SearchSortAdd")">Novelty</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">Sweet Alerts</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">Treeview Page</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">Tour Page</a>
+                                    <a href="@Url.Action("AreWatching","MainPage")">Novelty</a>
                                 </li>
                             </ul>
                         </div>
 
-                        <div class="col-md-4">
-                            <h5 class="text-dark mt-0">Applications</h5>
+                        <div class="col-md-3">
+                            <h5 class="text-dark mt-0"> <i class="fe-anchor" style="margin-right: 10px"></i>Information </h5>
+
                             <ul class="list-unstyled megamenu-list">
                                 <li>
-                                    <a href="javascript:void(0);">eCommerce Pages</a>
+                                    <a href="@Url.Action("Index","MainPage")">About us Pages</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">CRM Pages</a>
+                                    <a href="@Url.Action("Primary","MainPage")">Primary</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">Email</a>
+                                    <a href="@Url.Action("News","MainPage")">News</a>
+                                </li>
+                                
+                                <li>
+                                    <a href="@Url.Action("Top","MainPage")">Top</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">Calendar</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">Team Contacts</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">Task Board</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">Email Templates</a>
+                                    <a href="@Url.Action("Calendar","Notification")">Calendar</a>
                                 </li>
                             </ul>
                         </div>
 
-                        <div class="col-md-4">
-                            <h5 class="text-dark mt-0">Extra Pages</h5>
+                        @if(System.Web.HttpContext.Current.GetMySessionObject()!=null){
+                            <div class="col-md-3">
+                            <h5 class="text-dark mt-0"> <i class="fe-user" style="margin-right: 10px"></i> User panel </h5>
+
                             <ul class="list-unstyled megamenu-list">
                                 <li>
-                                    <a href="javascript:void(0);">Left Sidebar with User</a>
+                                    <a href="@Url.Action("BookmarkPage","SearchSortAdd")">Bookmark Page</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">Menu Collapsed</a>
+                                    <a href="@Url.Action("BookmarkTimeOfPage","SearchSortAdd")">Temporal bookmarks </a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">Small Left Sidebar</a>
+                                    <a href="@Url.Action("ViewedList","SearchSortAdd")">Viewed List </a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">New Header Style</a>
+                                    <a href="@Url.Action("PersonalPromotionStatistics","Statistic")">Personal Statistics </a>
+
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">Search Result</a>
+                                    <a href="@Url.Action("FriendsPage","SearchSortAdd")">Friends Page </a>
+
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">Gallery Pages</a>
+                                    <a href="@Url.Action("FindFriends","SearchSortAdd")">Find Friends </a>
+
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">Maintenance & Coming Soon</a>
+                                    <a href="@Url.Action("Inbox","DataTransfer")">Inbox page </a>
+
                                 </li>
                             </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="text-center mt-3">
-                        <h3 class="text-dark">Special Discount Sale!</h3>
-                        <h4>Save up to 70% off.</h4>
-                        <button class="btn btn-primary mt-3">Download Now <i class="ml-1 mdi mdi-arrow-right"></i></button>
+                        </div>}
+                       @if(System.Web.HttpContext.Current.GetMySessionObject()!=null &&
+                           (HttpContext.Current.GetMySessionObject().Role == LevelOfAccess.Moderator
+                            || HttpContext.Current.GetMySessionObject().Role == LevelOfAccess.Admin)){ 
+                           <div class="col-md-3">
+                            <h5 class="text-dark mt-0"> <i class="fe-server" style="margin-right: 10px"></i>Admin mod </h5>
+                            <ul class="list-unstyled megamenu-list">
+                                <li>
+                                    <a href="@Url.Action("Index","Admin")">Add file</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("MovieTemplateEditing","InformationSynchronization")">Movie add</a>
+                                </li>
+                                <li>
+                                    <a href="">Distribution of roles </a>
+                                </li>
+                                <li>
+                                    <a href="">Review complaints</a>
+                                </li>
+                                <li>
+                                    <a href="">Adding events</a>
+                                </li>
+                                
+                            </ul>
+                        </div>}
                     </div>
                 </div>
             </div>

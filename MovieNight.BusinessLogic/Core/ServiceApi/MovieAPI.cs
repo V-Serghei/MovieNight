@@ -15,12 +15,14 @@ using System.Web.Caching;
 using System.Web.UI;
 using AutoMapper;
 using MovieNight.BusinessLogic.DBModel;
+using MovieNight.BusinessLogic.Migrations.Movie;
 using MovieNight.BusinessLogic.Migrations.Session;
 using MovieNight.BusinessLogic.Migrations.User;
 using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.DifferentE;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
+using MovieNight.Domain.Entities.MovieM.ResultsOfTheOperation;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 using MovieNight.Domain.Entities.Review;
@@ -202,6 +204,78 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     }
 
                     return movieDb;
+                }
+                catch (NullReferenceException ex)
+                {
+                    Console.WriteLine(@"Ошибка: " + ex.Message);
+                    Console.WriteLine(@"StackTrace: " + ex.StackTrace);
+                    return null;
+                }
+            }
+        }
+        protected int? GetMovieFromDb(MovieTemplateInfE movieE)
+        {
+            GetMappersSettings();
+            var movieDb = new MovieTemplateInfE();
+        
+            
+            // var op = ReadMoviesFromJson(
+            //     "D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
+            //var op = ReadMoviesFromJson(_jsonPath);
+
+            //PopulateDatabase(op);
+            // conf.CreateMapper();
+            // var maper = conf.CreateMapper();
+            using (var db = new MovieContext())
+            {
+                try
+                {
+                    var movieS = db.MovieDb.FirstOrDefault(m => m.Title == movieE.Title &&
+                                                                m.ProductionYear == movieE.ProductionYear && 
+                                                                m.Director == movieE.Director);
+                    if (movieS != null)
+                    {
+                        movieDb = MapperFilm.Map<MovieTemplateInfE>(movieS);
+                        var listOfCast = db.CastDbTables.Where(cast => cast.Movies.Any(movie => movie.Id == movieS.Id))
+                            .ToList();
+                        if (listOfCast != null)
+                        {
+                            movieDb.CastMembers = new List<CastMemberE>();
+                            foreach (var cast in listOfCast)
+                            {
+                                var onCast = MapperCast.Map<CastMemberE>(cast);
+                                movieDb.CastMembers.Add(onCast);
+                            }
+                        }
+
+                        var listOfFacts = db.InterestingFact.Where(fact => fact.MovieId == movieS.Id).ToList();
+                        if (listOfFacts != null)
+                        {
+                            movieDb.InterestingFacts = new List<InterestingFactE>();
+                            foreach (var cast in listOfFacts)
+                            {
+                                var onFact = MapperFact.Map<InterestingFactE>(cast);
+                                movieDb.InterestingFacts.Add(onFact);
+                            }
+                        }
+
+                        var listOfMovieCards = db.MovieCard.Where(card => card.MovieId == movieS.Id).ToList();
+                        if (listOfMovieCards != null)
+                        {
+                            movieDb.MovieCards = new List<MovieCardE>();
+                            foreach (var card in listOfMovieCards)
+                            {
+                                var onCard = MapperCard.Map<MovieCardE>(card);
+                                movieDb.MovieCards.Add(onCard);
+                            }
+                        }
+
+                        movieDb.Genre = new List<string>();
+
+                        movieDb.Genre = JsonConvert.DeserializeObject<List<string>>(movieS.Genres);
+                    }
+
+                    return movieDb.Id;
                 }
                 catch (NullReferenceException ex)
                 {
@@ -2023,6 +2097,109 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 return null;
             }
         }
+
+        protected MovieAddResult AddMovieTemplateDb(MovieTemplateInfE movieTemplateInfE)
+        {
+            var result = new MovieAddResult();
+            using (var db = new MovieContext())
+            {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        
+                        if (string.IsNullOrWhiteSpace(movieTemplateInfE.Title) ||
+                            string.IsNullOrWhiteSpace(movieTemplateInfE.Description) ||
+                            movieTemplateInfE.ProductionYear == default(DateTime))
+                        {
+                            result.Result = false;
+                            result.Message = "Required fields are not filled in.";
+                            return result;
+                        }
+                        
+                        var movieDb = new MovieDbTable
+                        {
+                            Title = movieTemplateInfE.Title,
+                            Category = movieTemplateInfE.Category,
+                            PosterImage = movieTemplateInfE.PosterImage,
+                            Quote = movieTemplateInfE.Quote,
+                            Description = movieTemplateInfE.Description,
+                            ProductionYear = movieTemplateInfE.ProductionYear,
+                            Country = movieTemplateInfE.Country,
+                            Genres = JsonConvert.SerializeObject(movieTemplateInfE.Genre),
+                            Location = movieTemplateInfE.Location,
+                            Director = movieTemplateInfE.Director,
+                            Duration = movieTemplateInfE.Duration,
+                            MovieNightGrade = movieTemplateInfE.MovieNightGrade,
+                            Certificate = movieTemplateInfE.Certificate,
+                            ProductionCompany = movieTemplateInfE.ProductionCompany,
+                            Budget = movieTemplateInfE.Budget,
+                            GrossWorldwide = movieTemplateInfE.GrossWorldwide,
+                            Language = movieTemplateInfE.Language
+                        };
+
+                        db.MovieDb.Add(movieDb);
+                        db.SaveChanges();
+                        movieDb.CastMembers = new List<CastMemDbTable>();
+
+                        foreach (var member in movieTemplateInfE.CastMembers)
+                        {
+                            var castMemberDb = new CastMemDbTable
+                            {
+                                Name = member.Name,
+                                ImageUrl = member.ImageUrl,
+                                Role = member.Role,
+                                
+                            };
+                            movieDb.CastMembers.Add(castMemberDb);
+                            db.CastDbTables.Add(castMemberDb);
+                        }
+                        movieDb.MovieCards = new List<MovieCardDbTable>();
+
+                        foreach (var card in movieTemplateInfE.MovieCards)
+                        {
+                            var movieCardDb = new MovieCardDbTable
+                            {
+                                Title = card.Title,
+                                ImageUrl = card.ImageUrl,
+                                Description = card.Description
+                            };
+                            movieDb.MovieCards.Add(movieCardDb);
+                            db.MovieCard.Add(movieCardDb);
+                        }
+                        movieDb.InterestingFacts = new List<InterestingFactDbTable>();
+
+                        foreach (var fact in movieTemplateInfE.InterestingFacts)
+                        {
+                            var interestingFactDb = new InterestingFactDbTable
+                            {
+                                FactName = fact.FactName,
+                                FactText = fact.FactText
+                            };
+                            movieDb.InterestingFacts.Add(interestingFactDb);
+                            db.InterestingFact.Add(interestingFactDb);
+                        }
+
+                        db.SaveChanges();
+                        transaction.Commit();
+
+                        result.Result = true;
+                        result.Movie = new MovieTemplateInfE();
+                        result.Movie.Title = movieDb.Title;
+                        result.Message = "Film successfully added.";
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        result.Result = false;
+                        result.Message = "Error adding film: " + ex.Message;
+                    }
+                }
+            }
+
+            return result;
+        }
+
 
     }
 }

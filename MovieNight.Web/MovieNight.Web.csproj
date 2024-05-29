@@ -603,47 +603,22 @@
     <Content Include="scripts\jquery-ui-1.13.2.js" />
     <Content Include="scripts\jquery-ui-1.13.2.min.js" />
     <Content Include="scripts\pages\apexcharts.init.js" />
-    <Content Include="scripts\pages\c3.init.js" />
     <Content Include="scripts\pages\calendar.init.js" />
     <Content Include="scripts\pages\chartist.init.js" />
     <Content Include="scripts\pages\chartjs.init.js" />
     <Content Include="scripts\pages\coming-soon.init.js" />
-    <Content Include="scripts\pages\companies.js" />
-    <Content Include="scripts\pages\dashboard-1.init.js" />
     <Content Include="scripts\pages\dashboard-2.init.js" />
     <Content Include="scripts\pages\datatables.init.js" />
-    <Content Include="scripts\pages\flot.init.js" />
-    <Content Include="scripts\pages\foo-tables.init.js" />
     <Content Include="scripts\pages\form-advanced.init.js" />
     <Content Include="scripts\pages\form-fileuploads.init.js" />
     <Content Include="scripts\pages\form-pickers.init.js" />
-    <Content Include="scripts\pages\form-quilljs.init.js" />
-    <Content Include="scripts\pages\form-summernote.init.js" />
     <Content Include="scripts\pages\form-validation.init.js" />
-    <Content Include="scripts\pages\form-wizard.init.js" />
-    <Content Include="scripts\pages\form-xeditable.init.js" />
-    <Content Include="scripts\pages\gallery.init.js" />
-    <Content Include="scripts\pages\google-maps.init.js" />
     <Content Include="scripts\pages\inbox.js" />
     <Content Include="scripts\pages\jquery.chat.js" />
     <Content Include="scripts\pages\jquery.todo.js" />
     <Content Include="scripts\pages\kanban.init.js" />
-    <Content Include="scripts\pages\mapeal-maps.init.js" />
-    <Content Include="scripts\pages\morris.init.js" />
-    <Content Include="scripts\pages\nestable.init.js" />
-    <Content Include="scripts\pages\peity.init.js" />
-    <Content Include="scripts\pages\range-sliders.init.js" />
-    <Content Include="scripts\pages\responsive-table.init.js" />
-    <Content Include="scripts\pages\sparkline.init.js" />
-    <Content Include="scripts\pages\sweet-alerts.init.js" />
     <Content Include="scripts\pages\tabledit.init.js" />
     <Content Include="scripts\pages\tablesaw.init.js" />
-    <Content Include="scripts\pages\tickets.js" />
-    <Content Include="scripts\pages\toastr.init.js" />
-    <Content Include="scripts\pages\tour.init.js" />
-    <Content Include="scripts\pages\treeview.init.js" />
-    <Content Include="scripts\pages\vector-maps.init.js" />
-    <Content Include="scripts\pages\widgets.init.js" />
     <Content Include="scripts\vendor.js" />
     <Content Include="scripts\vendor.min.js" />
     <Content Include="vendor\AdditionalScripts.js" />
@@ -885,6 +860,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="images\Cards\" />
+    <Folder Include="images\Cast\" />
     <Folder Include="uploads\" />
   </ItemGroup>
   <ItemGroup>
