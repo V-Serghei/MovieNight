@@ -193,7 +193,7 @@
 }
 
 .enlarged .left-side-menu {
-    position: absolute;
+    position: fixed;
     padding-top: 0;
     width: 70px !important;
     z-index: 5
@@ -818,13 +818,7 @@ body.enlarged {
             margin-left: 0
         }
 
-.footer-alt {
-    left: 0 !important;
-    text-align: center;
-    background-color: transparent;
-    -webkit-box-shadow: none;
-    box-shadow: none
-}
+
 
 @media (max-width:767.98px) {
     .footer {
