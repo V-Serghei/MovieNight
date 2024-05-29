@@ -393,6 +393,11 @@
     <Content Include="images\cadr\cadr7.jpg" />
     <Content Include="images\cadr\card4.jpg" />
     <Content Include="images\cadr\card5.jpg" />
+    <Content Include="images\Cards\34sxEPWSTYg.jpg" />
+    <Content Include="images\Cards\8nSt3H_Pwhk.jpg" />
+    <Content Include="images\Cast\1612201928_37-p-fioletovii-fon-kiberpank-73.jpg" />
+    <Content Include="images\Cast\19487dece3b094050f8b030a993bdd76.jpg" />
+    <Content Include="images\Cast\X2E6xUUVVBA.jpg" />
     <Content Include="images\companies\airbnb.png" />
     <Content Include="images\companies\amazon.png" />
     <Content Include="images\companies\apple.png" />
@@ -467,6 +472,8 @@
     <Content Include="images\mainPage5.jpg" />
     <Content Include="images\mainPage6.jpg" />
     <Content Include="images\megamenu-bg.png" />
+    <Content Include="images\Movie\3c3827674f89c45c6b4c881eabbf164e.jpg" />
+    <Content Include="images\Movie\77rtqYvMtjw.jpg" />
     <Content Include="images\Movie\acountaant.jpg" />
     <Content Include="images\Movie\alberto_interstellar.jpg" />
     <Content Include="images\Movie\AnnewithanE.jpg" />
@@ -491,6 +498,7 @@
     <Content Include="images\Movie\HotelTransylvania.jpg" />
     <Content Include="images\Movie\Howls.jpg" />
     <Content Include="images\Movie\HunterxHunter.jpg" />
+    <Content Include="images\Movie\image.jpg" />
     <Content Include="images\Movie\IvanTsarevichandtheGreyWolf.jpg" />
     <Content Include="images\Movie\JeepersCreepers.jpg" />
     <Content Include="images\Movie\kararekid.jpg" />
@@ -860,8 +868,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="images\Cards\" />
-    <Folder Include="images\Cast\" />
     <Folder Include="uploads\" />
   </ItemGroup>
   <ItemGroup>
