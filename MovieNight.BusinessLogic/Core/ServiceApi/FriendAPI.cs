@@ -292,6 +292,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 return query.Count() - countFriend;
             }
         }
+
+       
+
     }
     
 }

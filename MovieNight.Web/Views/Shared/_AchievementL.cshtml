@@ -1,0 +1,47 @@
+﻿@using MovieNight.Web.Infrastructure
+@using MovieNight.Web.Models.Achievement
+@model dynamic
+
+@{
+    ViewBag.Title = "_AchievementL";
+    var achievement = new AchievementModel();
+    if(HttpContext.Current.GetListAchievement()!=null  && HttpContext.Current.GetListAchievement().Count > 0 ){
+        achievement = HttpContext.Current.GetListAchievement()[0];
+        HttpContext.Current.RemoveAchievementFirst();
+    }
+ 
+}
+
+
+
+@if(achievement.ImgA!=null && achievement.Description!=null && achievement.Name!=null){
+    <div id="achievementWindow" style="display: none; width: 300px; background-color: #fff; border: 1px solid #ccc; padding: 10px; position: fixed; bottom: 10px; left: 10px; z-index: 999999;">
+    <button type="button" class="close" style="position: absolute; top: 5px; right: 5px;" onclick="closeAchievement()">&times;</button>
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="text-center">
+                <img src="@Url.Content(achievement.ImgA)" alt="@achievement.Name" class="img-fluid" style="max-width: 100px; max-height: 100px;">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h3 class="text-center">@achievement.Name</h3>
+            <p class="text-center">@achievement.Description</p>
+        </div>
+    </div>
+</div>}
+
+
+<script>
+    var achievementList = @Html.Raw(Json.Encode(achievement));
+    if (achievementList!= null) {
+        document.getElementById("achievementWindow").style.display = "block";
+
+        setTimeout(function() {
+            document.getElementById("achievementWindow").style.display = "none";
+        }, 10000); 
+    }
+    function closeAchievement() {
+        var achievementWindow = document.getElementById("achievementWindow");
+        achievementWindow.style.display = "none";
+    }
+</script>

@@ -1,23 +1,95 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
 using MovieNight.BusinessLogic.Interface;
-using MovieNight.Domain.Entities.UserId;
+using MovieNight.BusinessLogic.Interface.IService;
+using MovieNight.Domain.Entities.DifferentE;
+using MovieNight.Domain.Entities.Friends;
+using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities.MovieM.SearchParam;
+using MovieNight.Domain.Entities.PersonalP;
+using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 using MovieNight.Web.Infrastructure;
+using MovieNight.Web.Models.DifModel;
+using MovieNight.Web.Models.Friends;
+using MovieNight.Web.Models.Movie;
+using MovieNight.Web.Models.PersonalP;
+using MovieNight.Web.Models.PersonalP.Bookmark;
+using MovieNight.Web.Models.SortingSearchingFiltering;
 
 namespace MovieNight.Web.Controllers
 {
     public class MainPageController : MasterController
     {
-        internal ISession SessionUser;
-
+        private readonly ISession _sessionUser;
+        private readonly IMapper _mapper;
+        private readonly IMovie _movie;
+        
 
         public MainPageController()
         {
             var sesControlBl = new BusinessLogic.BusinessLogic();
-            SessionUser = sesControlBl.Session();
+            _sessionUser = sesControlBl.Session();
+            _movie = sesControlBl.GetMovieService();
+
+              var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<FriendsPageD , FriendPageModel>()
+                    .ForMember(dest=>dest.BUserE, 
+                        opt=>opt.Ignore())
+                    .ForMember(dest=>dest.ViewingHistory, 
+                        opt=>opt.Ignore())
+                    .ForMember(dest=>dest.ListInThePlans, 
+                        opt=>opt.Ignore());
+                cfg.CreateMap<PEditingM, ProfEditingE>();
+                cfg.CreateMap<PEditingM, PersonalProfileModel>();
+                cfg.CreateMap<PersonalProfileM, PersonalProfileModel>()
+                    .ForMember(dist => dist.BUserE,
+                        src => src.Ignore());
+                cfg.CreateMap<MovieTemplateInfE, MovieTemplateInfModel>()
+                    .ForMember(cnf => cnf.CastMembers,
+                        src => src.Ignore())
+                    .ForMember(cnf => cnf.InterestingFacts,
+                        src => src.Ignore())
+                    .ForMember(cnf => cnf.MovieCards,
+                        src => src.Ignore());
+                cfg.CreateMap<InterestingFact, InterestingFactE>();
+                cfg.CreateMap<InterestingFactE, InterestingFact>();
+                cfg.CreateMap<MovieCardE, MovieCard>();
+                cfg.CreateMap<MovieCard, MovieCardE>();
+                cfg.CreateMap<CastMemberE, CastMember>();
+                cfg.CreateMap<CastMember, CastMemberE>();
+                cfg.CreateMap<ListOfFilmsE, ListOfFilmsModel>();
+                cfg.CreateMap<ListOfFilmsModel, ListOfFilmsE>();
+                cfg.CreateMap<ViewingHistoryM, ViewingHistoryModel>()
+                    .ForPath(dest => dest.YearOfRelease, opt =>
+                        opt.MapFrom(src => src.YearOfRelease.ToString("yyyy-MM-dd")))
+                    .ForPath(dest => dest.ReviewDate, opt =>
+                        opt.MapFrom(src => src.ReviewDate.ToString("yyyy-MM-dd")));
+                cfg.CreateMap<ViewingHistoryModel,ViewingHistoryM>();
+                cfg.CreateMap<ViewListSort, ViewListSortCommandE>();
+                cfg.CreateMap<ViewListSortCommandE,ViewListSort>();
+                cfg.CreateMap<FilmCommandSort, MovieCommandS>();
+                cfg.CreateMap<MovieCommandS, FilmCommandSort>();
+                cfg.CreateMap<ListSortCommandE, ListSortCommand>();
+                cfg.CreateMap<ListSortCommand, ListSortCommandE>();
+                cfg.CreateMap<BookmarkPageInfoTableModel, BookmarkInfoE>()
+                    .ForMember(dest => dest.YearOfRelease, opt => opt.MapFrom(src => DateTime.Parse(src.YearOfRelease)))
+                    .ForMember(dest => dest.BookmarkDate, opt => opt.MapFrom(src => DateTime.Parse(src.BookmarkDate)));
+
+                cfg.CreateMap<BookmarkInfoE, BookmarkPageInfoTableModel>()
+                    .ForMember(dest => dest.YearOfRelease, opt => opt.MapFrom(src => src.YearOfRelease.ToString("yyyy-MM-dd")))
+                    .ForMember(dest => dest.BookmarkDate, opt => opt.MapFrom(src => src.BookmarkDate.ToString("g")));
+                cfg.CreateMap<AreWatchingModel, AreWatchingE>();
+                cfg.CreateMap<AreWatchingE, AreWatchingModel>();
+
+                cfg.CreateMap<AreWatchingModel, MovieTemplateInfE>();
+                cfg.CreateMap<MovieTemplateInfE, AreWatchingModel>();
+
+              });
+
+            _mapper = config.CreateMapper();
+            
         }
         // GET: MainPage
         public ActionResult Index()
@@ -33,11 +105,11 @@ namespace MovieNight.Web.Controllers
             }
             var user = System.Web.HttpContext.Current.GetMySessionObject();
             if(user==null){
-                HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(null));
+                HttpContextInfrastructure.SerGlobalParam(_sessionUser.GetIdCurrUser(null));
             }
             else
             {
-                HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(user.Username));
+                HttpContextInfrastructure.SerGlobalParam(_sessionUser.GetIdCurrUser(user.Username));
             }
             return View();
         }
@@ -55,11 +127,11 @@ namespace MovieNight.Web.Controllers
                 return RedirectToAction("Login", "Identification");
             }
             var user = System.Web.HttpContext.Current.GetMySessionObject();
-            if(user==null){HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(null));
+            if(user==null){HttpContextInfrastructure.SerGlobalParam(_sessionUser.GetIdCurrUser(null));
             }
             else
             {
-                HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(user.Username));
+                HttpContextInfrastructure.SerGlobalParam(_sessionUser.GetIdCurrUser(user.Username));
             }
             
             return View();
@@ -96,14 +168,20 @@ namespace MovieNight.Web.Controllers
             SessionStatus();
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
             {
-                return View();
+               var listMovie = _movie.GetMoviesAreWatching(null);
+               var listModel = _mapper.Map<List<AreWatchingModel>>(listMovie);
+               return View(listModel);
             }
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
                 return RedirectToAction("Login", "Identification");
             }
             var user = System.Web.HttpContext.Current.GetMySessionObject();
-            return View();
+            var listMovieExUser = _movie.GetMoviesAreWatching(user.Id);
+            var listModelExUser = _mapper.Map<List<AreWatchingModel>>(listMovieExUser);
+            
+            return View(listModelExUser);
+            
         }
     }
 }

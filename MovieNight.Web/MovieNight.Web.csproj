@@ -197,10 +197,12 @@
     <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.6.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
     </Reference>
@@ -484,6 +486,13 @@
     <Content Include="fonts\themify.svg" />
     <Content Include="fonts\weathericons-regular-webfont.svg" />
     <Content Include="Global.asax" />
+    <Content Include="images\Achievement\first_friend.png" />
+    <Content Include="images\Achievement\first_movie.png" />
+    <Content Include="images\Achievement\Full_profile.png" />
+    <Content Include="images\Achievement\horror_enthusiast.png" />
+    <Content Include="images\Achievement\movie_buff.png" />
+    <Content Include="images\Achievement\reg.png" />
+    <Content Include="images\Achievement\social_butterfly.png" />
     <Content Include="images\animat-diamond-color.gif" />
     <Content Include="images\animat-rocket-color.gif" />
     <Content Include="images\attached-files\img-1.jpg" />
@@ -626,6 +635,7 @@
     <Content Include="images\Movie\TheMiracleWorkers.jpg" />
     <Content Include="images\Movie\TheMysteryoftheThirdPlanet.jpeg" />
     <Content Include="images\Movie\TheSecretWorldofArrietty.jpg" />
+    <Content Include="images\Movie\ThreeHeroesandtheSeaKing.jpg" />
     <Content Include="images\Movie\TomandJerry.jpg" />
     <Content Include="images\Movie\Venom.jpg" />
     <Content Include="images\Movie\Venom2.jpg" />
@@ -647,6 +657,7 @@
     <Content Include="images\plugins\jstree.png" />
     <Content Include="images\plugins\loading.gif" />
     <Content Include="images\plugins\multiple-arrow.png" />
+    <Content Include="images\plugins\pngegg.png" />
     <Content Include="images\small\img-1.jpg" />
     <Content Include="images\small\img-2.jpg" />
     <Content Include="images\small\img-3.jpg" />
@@ -876,13 +887,22 @@
     <Content Include="Views\InformationSynchronization\MoviePlayer.cshtml" />
     <Content Include="Views\InformationSynchronization\MovieTemplateEditing.cshtml" />
     <Content Include="Views\InformationSynchronization\ReviewPage.cshtml" />
+    <Content Include="Views\InformationSynchronization\MoviePlayer.cshtml" />
+    <Content Include="Views\SearchSortAdd\BookmarkPage.cshtml" />
+    <Content Include="Views\SearchSortAdd\BookmarkTimeOfPage.cshtml" />
     <Content Include="Views\SearchSortAdd\FindFriends.cshtml" />
+    <Content Include="Views\SearchSortAdd\ForYou.cshtml" />
     <Content Include="Views\SearchSortAdd\MovieSearch.cshtml" />
     <Content Include="Views\Shared\_Pagination.cshtml" />
+    <Content Include="Views\SearchSortAdd\Novelty.cshtml" />
+    <Content Include="Views\SearchSortAdd\_LoadingIndicator.cshtml" />
+    <Content Include="Views\Shared\_AchievementL.cshtml" />
+    <Content Include="Views\Shared\_SearchResultsPartial.cshtml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Attributes\AdminModAttribute.cs" />
     <Compile Include="Attributes\GuestModAttribute.cs" />
@@ -899,16 +919,20 @@
     <Compile Include="Controllers\SearchSortAddController.cs" />
     <Compile Include="Controllers\SettingController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
+    <Compile Include="Filter\ClearSessionFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\CacheI\ViewListCacheKey.cs" />
     <Compile Include="Infrastructure\Different\ValidationStr.cs" />
     <Compile Include="Infrastructure\HttpContextInfrastructure.cs" />
-    <Compile Include="Models\Achievement\Achievement.cs" />
+    <Compile Include="Infrastructure\SessionExchanges.cs" />
+    <Compile Include="Models\Achievement\AchievementModel.cs" />
+    <Compile Include="Models\Calendar\CalendarEvent.cs" />
     <Compile Include="Models\Calendar\EventDataModel.cs" />
     <Compile Include="Models\Different\PhoneNumModel.cs" />
     <Compile Include="Models\Different\TagModel.cs" />
+    <Compile Include="Models\DifModel\AreWatchingModel.cs" />
     <Compile Include="Models\Friends\FriendListModel.cs" />
     <Compile Include="Models\Friends\FriendPageModel.cs" />
     <Compile Include="Models\Friends\PaginationModel.cs" />
@@ -925,12 +949,17 @@
     <Compile Include="Models\Movie\UploadMovieFileModel.cs" />
     <Compile Include="Models\Movie\ViewingHistoryModel.cs" />
     <Compile Include="Models\PersonalP\Bookmark\BookmarkModel.cs" />
+    <Compile Include="Models\PersonalP\Bookmark\BookmarkPageHModel.cs" />
+    <Compile Include="Models\PersonalP\Bookmark\BookmarkTimeOf.cs" />
+    <Compile Include="Models\PersonalP\Bookmark\BookmarkPageInfoTableModel.cs" />
     <Compile Include="Models\PersonalP\PEditingM.cs" />
     <Compile Include="Models\PersonalP\PersonalProfilModel.cs" />
     <Compile Include="Models\RegistViewModel.cs" />
     <Compile Include="Models\Review\ReviewPageModel.cs" />
+    <Compile Include="Models\SortingSearchingFiltering\ListSortCommand.cs" />
     <Compile Include="Models\SortingSearchingFiltering\ViewListSort.cs" />
     <Compile Include="Models\Review\ReviewModel.cs" />
+    <Compile Include="Models\StatisticModel.cs" />
     <Compile Include="Models\TimeModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1050,6 +1079,9 @@
       <Project>{e906a821-4a0a-41e8-9104-3a77fe388ee2}</Project>
       <Name>MovieNight.Helpers</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

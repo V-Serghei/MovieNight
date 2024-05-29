@@ -1,4 +1,6 @@
 ﻿
+
+
 @{
     ViewBag.Title = "Compose";
 }
@@ -59,7 +61,6 @@
                                         @Html.TextBoxFor(m => m.Theme, new { @class = "form-control", placeholder = "Enter Title" })
                                         @Html.ValidationMessageFor(m => m.Theme)
                                     </div>
-
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.Message)
                                         @Html.TextAreaFor(m => m.Message, new { @class = "form-control", rows = "4", placeholder = "Write something..." })

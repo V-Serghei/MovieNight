@@ -11,27 +11,36 @@ using MovieNight.Domain.Entities.UserId;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
+using MovieNight.BusinessLogic.Interface.IService;
+using MovieNight.Domain.enams;
+using MovieNight.Domain.Entities.AchievementE;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Infrastructure.Different;
+using MovieNight.Web.Models.Achievement;
 
 namespace MovieNight.Web.Controllers
 {
-    public class IdentificationController : Controller
+    public class IdentificationController : MasterController
     {
         private readonly ISession _sessionUser;
         private readonly IMapper _mapper;
+        private readonly IAchievements _achievements;
          
         public IdentificationController()
         {
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<LogInData,UserModel >();
+                cfg.CreateMap<AchievementE, AchievementModel>();
+                cfg.CreateMap<AchievementModel, AchievementE>();
+
 
             });
                 _mapper = config.CreateMapper();
 
             var sesControlBl = new BusinessLogic.BusinessLogic();
             _sessionUser = sesControlBl.Session();
+            _achievements = sesControlBl.GetAchievementsService();
         }
 
         [HttpPost]
@@ -63,12 +72,16 @@ namespace MovieNight.Web.Controllers
         [HttpPost]
         public async Task<JsonResult> RegistPost(RegistViewModel rModel)
         {
+            if (rModel.Checkbox != "on")
+            {
+                return Json(new { success = false, statusMsg = "To register, you must agree to the license agreement!" });
+            }
             var regD = new RegData
             {
                 UserName = rModel.UserName,
                 Password = rModel.Password,
                 Email = rModel.Email,
-                Checkbox = rModel.Checkbox,
+                Checkbox = rModel.Checkbox=="on",
                 RegDateTime = DateTime.Now,
                 Ip = Request.UserHostAddress
 
@@ -86,7 +99,14 @@ namespace MovieNight.Web.Controllers
                     var cookie = _sessionUser.GenCookie(rUserVerification.CurUser);
                     ControllerContext.HttpContext.Response.Cookies.Add(cookie);
                     var us = _mapper.Map<UserModel>(rUserVerification.CurUser);
+                    if (_sessionUser != null) us.Id = (int)_sessionUser.GetIdCurrUser(us.Username);
                     System.Web.HttpContext.Current.SetMySessionObject(us);
+                    var achievement = await _achievements.AchievementСheck((us.Id, AchievementType.Registration));
+                    if (achievement != null)
+                    {
+                        var achiev = _mapper.Map<AchievementModel>(achievement);
+                        System.Web.HttpContext.Current.SetListAchievement(achiev);
+                    }
                     return Json(new { redirect = Url.Action("PersonalProfile", "InformationSynchronization") });
                 }
                 else

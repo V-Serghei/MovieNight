@@ -11,7 +11,7 @@ namespace MovieNight.Web.Models.Movie
         public Direction Direction { get; set; }
         public int MaxPage { get; set; }
         
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         
     }

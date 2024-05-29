@@ -5,7 +5,106 @@
 
     @{
         ViewBag.Title = "Personal Profile";
+        var percentageA = (float)((Model.AnimeCount * 100) / (float) Model.AnimeTotal); 
+        var percentageC = (float)((Model.CartonsCount * 100) / (float) Model.CartonTotal); 
+        var percentageS = (float)((Model.SerialsCount * 100) / (float) Model.SerialTotal); 
+        var percentageF = (float)((Model.FilmCount * 100) / (float) Model.FilTotal); 
     }
+    <style>
+        .poster-image {
+            width: 100%;
+            height: 0;
+            padding-top: 100%; 
+            background-size: cover;
+            background-position: center;
+        }
+
+    </style>
+    <style>
+        .achievement-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+        .achievement-img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .achievement-content {
+            padding: 15px;
+        }
+
+        .achievement-content h5 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .achievement-content p {
+            margin: 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .achievement-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .achievement-status {
+            font-size: 18px;
+        }
+
+        .achievement-status .unlocked {
+            color: green;
+        }
+
+        .achievement-status .locked {
+            color: red;
+        }
+
+        .achievement-progress {
+            font-size: 14px;
+            color: #777;
+        }
+        .achievement-card {
+            transition: all 0.3s ease;
+        }
+
+        .achievement-card.locked {
+            filter: grayscale(100%);
+            opacity: 0.6;
+        }
+
+        .achievement-card.locked .achievement-img,
+        .achievement-card.locked h5,
+        .achievement-card.locked p {
+            color: grey;
+        }
+
+        .achievement-card.locked:hover .achievement-img,
+        .achievement-card.locked:hover h5,
+        .achievement-card.locked:hover p {
+            color: grey;
+        }
+
+        .achievement-status i {
+            cursor: pointer;
+        }
+    </style>
+
     <div>
         <div class="content">
 
@@ -126,7 +225,7 @@
                                                               </span>
                                                           </p>
                                                         }
-                                                        @if (Model.DataBirth != default(DateTime)) { <p class="text-muted mb-2 font-13">
+                                                        @if (Model.DataBirth != default(DateTime) && Model.DataBirth != new DateTime(1753, 1, 1)) { <p class="text-muted mb-2 font-13">
                                                             @{ CultureInfo culture = new CultureInfo("en-US"); }
                                                             @{ Thread.CurrentThread.CurrentCulture = culture; }
                                                             <strong>DataBirth :</strong>
@@ -181,56 +280,105 @@
 
                         </div> <!-- end card-box -->
 
-                        <div class="card-box">
+                     @if(percentageS!=null && percentageA != null && percentageF != null && percentageC != null){   <div class="card-box">
                             <h4 class="header-title">Viewing percentage</h4>
                             <p class="mb-3">How many have you looked from the entire world base, so you can call yourself a fan of this genre</p>
 
-                            <div class="pt-1">
-                                <h6 class="text-uppercase mt-0">Anime <span class="float-right">99%</span></h6>
+                            @if(Model.AnimeCount!=null){
+                                <div class="pt-1">
+                                <h6 class="text-uppercase mt-0">Anime <span class="float-right">@percentageA %</span></h6>
                                 <div class="progress progress-sm m-0">
-                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" style="width: 99%">
-                                        <span class="sr-only">99% Complete</span>
+                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="@percentageA" aria-valuemin="0" aria-valuemax="100" style="width: @percentageA%">
+                                        <span class="sr-only">@percentageA % Complete</span>
                                     </div>
                                 </div>
                             </div>
+                                
+                            }
+                            else
+                            {
+                                <div class="pt-1">
+                                    <h6 class="text-uppercase mt-0">Anime <span class="float-right">0 %</span></h6>
+                                    <div class="progress progress-sm m-0">
+                                        <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                            <span class="sr-only">0 % Complete</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            @if(Model.CartonsCount!=null){<div class="mt-2 pt-1">
+                                <h6 class="text-uppercase">Cartons<span class="float-right">@percentageC %</span></h6>
+                                <div class="progress progress-sm m-0">
+                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="@percentageC" aria-valuemin="0" aria-valuemax="100" style="width: @percentageC%">
+                                        <span class="sr-only">@percentageC % Complete</span>
+                                    </div>
+                                </div>
+                            </div>}
+                            else
+                            {
+                                <div class="mt-2 pt-1">
+                                    <h6 class="text-uppercase">Cartons<span class="float-right">0 %</span></h6>
+                                    <div class="progress progress-sm m-0">
+                                        <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                            <span class="sr-only">0 % Complete</span>
+                                        </div>
+                                    </div>
+                                </div> 
+                            }
+
+                            @if(Model.FilmCount!=null){<div class="mt-2 pt-1">
+                                <h6 class="text-uppercase">Films <span class="float-right">@percentageF %</span></h6>
+                                <div class="progress progress-sm m-0">
+                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="@percentageF" aria-valuemin="0" aria-valuemax="100" style="width: @percentageF%">
+                                        <span class="sr-only">@percentageF % Complete</span>
+                                    </div>
+                                </div>
+                            </div>}
+                            else
+                            {
+                                <div class="mt-2 pt-1">
+                                    <h6 class="text-uppercase">Films <span class="float-right">0 %</span></h6>
+                                    <div class="progress progress-sm m-0">
+                                        <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                            <span class="sr-only">0 % Complete</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            }
+
+                           @if(Model.SerialsCount!=null){ <div class="mt-2 pt-1">
+                                <h6 class="text-uppercase">Serials <span class="float-right">@percentageS %</span></h6>
+                                <div class="progress progress-sm m-0">
+                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="@percentageS" aria-valuemin="0" aria-valuemax="100" style="width: @percentageS%">
+                                        <span class="sr-only">@percentageS % Complete</span>
+                                    </div>
+                                </div>
+                            </div>}
+                           else
+                           {
+                               <div class="mt-2 pt-1">
+                                   <h6 class="text-uppercase">Serials <span class="float-right">0 %</span></h6>
+                                   <div class="progress progress-sm m-0">
+                                       <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                           <span class="sr-only">0 % Complete</span>
+                                       </div>
+                                   </div>
+                               </div>
+                           }
+                            @{var total = percentageA + percentageC + percentageF + percentageS; }
 
                             <div class="mt-2 pt-1">
-                                <h6 class="text-uppercase">Horrors<span class="float-right">20%</span></h6>
+                                <h6 class="text-uppercase">Total <span class="float-right">@total %</span></h6>
                                 <div class="progress progress-sm m-0">
-                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                        <span class="sr-only">20% Complete</span>
+                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="@total" aria-valuemin="0" aria-valuemax="100" style="width: @total%">
+                                        <span class="sr-only">@total % Complete</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="mt-2 pt-1">
-                                <h6 class="text-uppercase">Fantasy <span class="float-right">15%</span></h6>
-                                <div class="progress progress-sm m-0">
-                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width: 15%">
-                                        <span class="sr-only">15% Complete</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-2 pt-1">
-                                <h6 class="text-uppercase">Detective <span class="float-right">5%</span></h6>
-                                <div class="progress progress-sm m-0">
-                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100" style="width: 5%">
-                                        <span class="sr-only">5% Complete</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-2 pt-1">
-                                <h6 class="text-uppercase">Cartoons <span class="float-right">1%</span></h6>
-                                <div class="progress progress-sm m-0">
-                                    <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" style="width: 1%">
-                                        <span class="sr-only">1% Complete</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div> <!-- end card-box-->
+                        </div> <!-- end card-box-->}
 
                     </div> <!-- end col-->
 
@@ -243,7 +391,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#settings" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                    <a href="#achievements" data-toggle="tab" aria-expanded="false" class="nav-link">
                                         <i class="remixicon-award-line"></i>Achievements
                                     </a>
                                 </li>
@@ -331,7 +479,8 @@
 
                                                     </div>
                                                 </div>
-                                                <h5 class="mt-0 mb-1">@viewingHistory.Title</h5>
+                                                <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = viewingHistory.Id })">
+                                                <h5 class="mt-0 mb-1">@viewingHistory.Title</h5></a>
                                                 <div class="row">
                                                     <div class="col-md-10 col-xl-9">
                                                         <style>
@@ -386,9 +535,9 @@
 
                                                     </div>
 
+                                                    
                                                     <div class="col-md-6 col-xl-3">
-                                                        <img src="@Url.Content(@viewingHistory.Poster)" class="rounded-circle avatar-xl img-thumbnail"
-                                                             alt="profile-image">
+                                                        <div class="rounded-circle avatar-xl img-thumbnail poster-image" style="background-image: url('@Url.Content(@viewingHistory.Poster)')"></div>
                                                     </div>
 
                                                 </div>
@@ -397,7 +546,10 @@
 
                                         }
                                     </ul>
-                                    
+                                    <a href="@Url.Action("ViewedList","SearchSortAdd")" class="dropdown-item text-center text-primary notify-item notify-all">
+                                        View all viewings
+                                        <i class="fi-arrow-right"></i>
+                                    </a>
 
                                     <h5 class="mb-3 mt-4 text-uppercase">
                                         <i class="remixicon-send-plane-2-fill"></i>
@@ -406,126 +558,165 @@
                                     <div class="table-responsive">
                                         <table class="table table-borderless mb-0">
                                             <thead class="thead-light">
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Title of the film</th>
-                                                    <th>Release date</th>
-                                                    <th>Number of views</th>
-                                                    <th>Genre</th>
-                                                    <th style="width:200px">Grade </th>
-                                                </tr>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Title of the film</th>
+                                                <th>Release date</th>
+                                                <th>Number of views</th>
+                                                <th>Genre</th>
+                                                <th style="width:200px">Grade </th>
+                                            </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var modelListInThePlan in @Model.ListInThePlans)
-                                                {
-                                                    <tr>
-                                                        <td></td>
-                                                        <td>@modelListInThePlan.Name</td>
-                                                        <td>@modelListInThePlan.Date.ToString("dd/MM/yyyy")</td>
-                                                        <td>@modelListInThePlan.NumberOfViews</td>
-                                                        <td>
-                                                            @{
-                                                                var genresArray = modelListInThePlan.Genre
-                                                                    .Replace("\\\"", "") 
-                                                                    .Replace("]", "")    
-                                                                    .Replace("[", "")    
-                                                                    .Replace("\"", "")   
-                                                                    .Trim('[', ']')      
-                                                                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)  
-                                                                    .Select(genre => genre.Trim())  
-                                                                    .ToArray();
+                                            @foreach (var modelListInThePlan in @Model.ListInThePlans)
+                                            {
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = modelListInThePlan.MovieId })">
+                                                        @modelListInThePlan.Name
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = modelListInThePlan.MovieId })">
+                                                        @modelListInThePlan.Date.ToString("dd/MM/yyyy")
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = modelListInThePlan.MovieId })">
+                                                        @modelListInThePlan.NumberOfViews
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = modelListInThePlan.MovieId })">
+                                                        @{
+                                                        var genresArray = modelListInThePlan.Genre
+                                                        .Replace("\\\"", "")
+                                                        .Replace("]", "")
+                                                        .Replace("[", "")
+                                                        .Replace("\"", "")
+                                                        .Trim('[', ']')
+                                                        .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                                        .Select(genre => genre.Trim())
+                                                        .ToArray();
+                                                        }
 
-                                                            }
-                                                            
-                                                            @foreach (var genre in genresArray){
-                                                                <span class="badge badge-info">@genre</span>
-                                                                <br>
-                                                            }
-                                                            @if (modelListInThePlan.Tags == FilmCategory.Film)
-                                                            {
-                                                                <span class="badge badge-info">Film</span>
+                                                        @foreach (var genre in genresArray)
+                                                        {
+                                                        <span class="badge badge-info">@genre</span><br>
+                                                        }
 
-                                                            }
-                                                            else if (modelListInThePlan.Tags == FilmCategory.Anime)
-                                                            {
-                                                                <span class="badge badge-info">Anime</span>
-                                                            }
-                                                            else if (modelListInThePlan.Tags == FilmCategory.Serial)
-                                                            {
-                                                                <span class="badge badge-info">Serial</span>
-                                                            }
-                                                            else if (modelListInThePlan.Tags == FilmCategory.Cartoon)
-                                                            {
-                                                                <span class="badge badge-info">Cartoon</span>
-                                                            }
-                                                            
-                                                            
-                                                        </td>
-                                                        <td>
-                                                                <div class="col-md-10 col-xl-9">
-                                                                    <style>
-                                                                        .star-rating {
-                                                                            display: flex;
-                                                                            justify-content: center;
-                                                                            align-items: center;
-                                                                            width: 100%;
-                                                                        }
+                                                        @if (modelListInThePlan.Tags == FilmCategory.Film)
+                                                        {
+                                                        <span class="badge badge-info">Film</span>
+                                                        }
+                                                        else if (modelListInThePlan.Tags == FilmCategory.Anime)
+                                                        {
+                                                        <span class="badge badge-info">Anime</span>
+                                                        }
+                                                        else if (modelListInThePlan.Tags == FilmCategory.Serial)
+                                                        {
+                                                        <span class="badge badge-info">Serial</span>
+                                                        }
+                                                        else if (modelListInThePlan.Tags == FilmCategory.Cartoon)
+                                                        {
+                                                        <span class="badge badge-info">Cartoon</span>
+                                                        }
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = modelListInThePlan.MovieId })">
+                                                        <div class="col-md-10 col-xl-9">
+                                                            <style>
+                                                                .star-rating {
+                                                                    display: flex;
+                                                                    justify-content: center;
+                                                                    align-items: center;
+                                                                    width: 100%;
+                                                                }
 
-                                                                        .star-rating .star {
-                                                                            width: 20px;
-                                                                            height: 20px;
-                                                                            cursor: pointer;
-                                                                            font-size: 20px;
-                                                                        }
+                                                                .star-rating .star {
+                                                                    width: 20px;
+                                                                    height: 20px;
+                                                                    cursor: pointer;
+                                                                    font-size: 20px;
+                                                                }
 
-                                                                        .star-rating .star.active {
-                                                                            color: #f00;
-                                                                        }
-                                                                    </style>
-                                                                    <br>
-                                                                    <h1>The film's score</h1>
-                                                                    <div class="star-rating">
-                                                                        @if (modelListInThePlan.Star != 0)
-                                                                        {
-                                                                        for (int i = 1; i <= 10; i++)
-                                                                        {
-                                                                        if (i <= modelListInThePlan.Star)
-                                                                        {
-                                                                        <span class="star active" onclick="rate(@i,@modelListInThePlan.MovieId)"><i class="remixicon-star-s-fill"></i></span>
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                        <span class="star" onclick="rate(@i,@modelListInThePlan.MovieId)"><i class="remixicon-star-s-line"></i></span>
-                                                                        }
-                                                                        }
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                        for (int i = 1; i <= 10; i++)
-                                                                        {
-                                                                        <span class="star" onclick="rate(@i,@modelListInThePlan.MovieId)"><i class="remixicon-star-s-line"></i></span>
-                                                                        }
-                                                                        }
-                                                                    </div>
-
-                                                                    
+                                                                .star-rating .star.active {
+                                                                    color: #f00;
+                                                                }
+                                                            </style>
+                                                            <br>
+                                                            <h1>The film's score</h1>
+                                                            <div class="star-rating">
+                                                                @if (modelListInThePlan.Star != 0)
+                                                                {
+                                                                for (int i = 1; i <= 10; i++)
+                                                                {
+                                                                if (i <= modelListInThePlan.Star)
+                                                                {
+                                                                <span class="star active" onclick="rate(@i,@modelListInThePlan.MovieId)"><i class="remixicon-star-s-fill"></i></span>
+                                                                }
+                                                                else
+                                                                {
+                                                                <span class="star" onclick="rate(@i,@modelListInThePlan.MovieId)"><i class="remixicon-star-s-line"></i></span>
+                                                                }
+                                                                }
+                                                                }
+                                                                else
+                                                                {
+                                                                for (int i = 1; i <= 10; i++)
+                                                                {
+                                                                <span class="star" onclick="rate(@i,@modelListInThePlan.MovieId)"><i class="remixicon-star-s-line"></i></span>
+                                                                }
+                                                                }
                                                             </div>
-                                                        </td>
-                                                    </tr>
+                                                        </div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            }
 
-                                                }
 
                                             </tbody>
                                         </table>
                                     </div>
+                                    <a href="@Url.Action("BookmarkPage","SearchSortAdd")" class="dropdown-item text-center text-primary notify-item notify-all">
+                                        View all bookmarks
+                                        <i class="fi-arrow-right"></i>
+                                    </a>
 
                                 </div>
                                 <!-- end timeline content-->
 
-                                <div class="tab-pane" id="settings">
-                                    <form>
-                                        
-                                    </form>
+                                <div class="tab-pane" id="achievements">
+                                    <div class="row">
+                                        @foreach (var achievement in Model.Achievements)
+                                        {
+                                        var cardClass = achievement.Unlocked ? "achievement-card unlocked" : "achievement-card locked";
+                                        var lockIcon = achievement.Unlocked ? "remixicon-lock-unlock-fill unlocked" : "remixicon-lock-fill locked";
+                                        var lockTitle = achievement.Condition; // Условие, которое вы хотите показать при наведении
+
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="@cardClass">
+                                                <img src="@Url.Content(@achievement.ImgA)" alt="@achievement.Name" class="achievement-img">
+                                                <div class="achievement-content">
+                                                    <h5>@achievement.Name</h5>
+                                                    <p>@achievement.Description</p>
+                                                    <div class="achievement-footer">
+                    <span class="achievement-status">
+                        <i class="@lockIcon" title="@lockTitle"></i>
+                    </span>
+                                                        <span class="achievement-progress">
+                        @achievement.SuccessСount / @achievement.ProgressСount
+                    </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        }
+
+                                    </div>
                                 </div>
                                 <!-- end settings content-->
                             </div>
@@ -581,17 +772,19 @@
                     if (!response.ok) {
                         throw new Error('Error sending evaluation to server');
                     }
+                    location.reload();
                     return response.json();
                 })
                 .then(data => {
                     console.log('Evaluation successfully saved:', data);
 
-
+                    location.reload();
                     if (data.userRating) {
                         updateStarDisplay(data.userRating);
                     }
                 })
                 .catch(error => {
+                    location.reload();
                     console.error('There was an error:', error);
                 });
         }

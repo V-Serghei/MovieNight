@@ -16,7 +16,7 @@ using ISession = MovieNight.BusinessLogic.Interface.ISession;
 
 namespace MovieNight.Web.Controllers
 {
-    public class DataTransferController : Controller
+    public class DataTransferController : MasterController
     {
         internal IInbox сompleteInbox;
         internal ISession _session;
@@ -59,7 +59,7 @@ namespace MovieNight.Web.Controllers
             };
             return View(model);
         }
-        
+
         [HttpPost]
         public ActionResult ComposeAdd(InboxModel model)
         {

@@ -40,5 +40,7 @@ namespace MovieNight.Web.Models.Friends
         public int SerialsCount { get; set; }
         public int SerialTotal { get; set; }
         public string MsgResp { get; set; }
-        }
+        
+        public List<AchievementModel> Achievements { get; set; } = new List<AchievementModel>();
+    }
 }

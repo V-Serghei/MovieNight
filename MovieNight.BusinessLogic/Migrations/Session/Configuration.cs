@@ -11,6 +11,7 @@
         {
             AutomaticMigrationsEnabled = true;
             MigrationsDirectory = @"Migrations\Session";
+           
         }
 
         protected override void Seed(MovieNight.BusinessLogic.DBModel.SessionContext context)

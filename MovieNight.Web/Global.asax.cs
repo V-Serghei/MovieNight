@@ -7,6 +7,8 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
+using MovieNight.BusinessLogic.Core.ServiceApi;
+using MovieNight.Web.Controllers;
 
 namespace MovieNight.Web
 {
@@ -17,8 +19,10 @@ namespace MovieNight.Web
             // Code that runs on application startup
            AreaRegistration.RegisterAllAreas();
            RouteConfig.RegisterRoutes(RouteTable.Routes);
-
            BundleConfig.RegisterBundles(BundleTable.Bundles);
+           FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+           MovieAPI.Initialize();
+           
         }
     }
 }

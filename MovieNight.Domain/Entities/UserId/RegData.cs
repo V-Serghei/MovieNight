@@ -14,7 +14,7 @@ namespace MovieNight.Domain.Entities.UserId
         public string Email { get; set; }
         public DateTime RegDateTime { get; set; }
         public string Ip { get; set; }
-        public bool Checkbox { get; set; } = false;
+        public bool Checkbox { get; set; }
         
         public LevelOfAccess Role { get; set; }
         

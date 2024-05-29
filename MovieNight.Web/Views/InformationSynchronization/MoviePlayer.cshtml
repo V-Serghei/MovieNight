@@ -3,15 +3,11 @@
 @{
 ViewBag.Title = @Model.Title;
 }
+<link href="https://vjs.zencdn.net/7.18.1/video-js.css" rel="stylesheet" />
 
 <div>
     <div class="content">
-
-        <!-- Start Content-->
-
         <div class="container-fluid">
-
-            <!-- start page title -->
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box">
@@ -19,211 +15,182 @@ ViewBag.Title = @Model.Title;
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">MovieNight</a></li>
                                 <li class="breadcrumb-item" name="Category" value="1"><a href="javascript: void(0);">@Model.Title</a></li>
-                                <input type="hidden" name="Category" value="1"/>
+                                <input type="hidden" name="Category" value="1" />
                             </ol>
                         </div>
                         <h4 class="page-title">@Model.Title</h4>
                     </div>
                 </div>
             </div>
-            <!-- end page title -->
-            <style>
 
-                video {
+            <style>
+                .video-wrapper {
                     width: 100%;
                     max-width: 100%;
-                    height: auto;
                     background-color: #000;
                     border-radius: 10px;
-                    border-color: #2b387c;
-
                     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-                }
-
-                /* Стили для кнопок управления */
-                .video-controls {
+                    overflow: hidden;
                     position: relative;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    margin-top: -50px;
                 }
 
-
-
-                .play-pause-btn, .volume-btn, .more-btn {
-                    background-color: rgba(255, 255, 255, 0.8);
-                    color: #333;
-                    border: none;
-                    border-radius: 50%;
-                    width: 40px;
-                    height: 40px;
-                    font-size: 20px;
-                    margin: 0 10px;
-                    cursor: pointer;
-                }
-
-                .play-pause-btn:hover, .volume-btn:hover {
-                    background-color: rgba(255, 255, 255, 1);
-                }
-
-                .video-title {
-                    text-align: center;
-                    font-size: 18px;
-                    color: #fff;
-                    margin-top: 10px;
-                }
-                .playback-rate-btn,
-                .pip-btn,
-                .fullscreen-btn,
-                .download-btn {
-                    background-color: #007bff;
-                    color: #fff;
-                    border: none;
-                    border-radius: 5px;
-                    padding: 8px 16px;
+                .video-js .vjs-control-bar {
                     font-size: 16px;
-                    margin: 0 10px;
-                    cursor: pointer;
-                    transition: background-color 0.3s ease;
                 }
 
-                .playback-rate-btn:hover,
-                .pip-btn:hover,
-                .fullscreen-btn:hover,
-                .download-btn:hover {
-                    background-color: #0056b3;
+                .video-js .vjs-play-control,
+                .video-js .vjs-volume-panel,
+                .video-js .vjs-mute-control,
+                .video-js .vjs-fullscreen-control {
+                    font-size: 20px;
                 }
 
-                .playback-rate-btn:focus,
-                .pip-btn:focus,
-                .fullscreen-btn:focus,
-                .download-btn:focus {
-                    outline: none;
+                .video-js .vjs-control {
+                    color: #fff;
                 }
 
-                .download-btn {
-                    background-color: #28a745;
+                .video-js .vjs-menu-button-popup .vjs-menu {
+                    background-color: rgba(0, 0, 0, 0.8);
                 }
 
-                .download-btn:hover {
-                    background-color: #218838;
-                }
-                .additional-controls {
-                    display: none;
+                .video-js .vjs-menu-item:hover,
+                .video-js .vjs-menu-item:focus {
+                    background-color: rgba(255, 255, 255, 0.1);
                 }
 
-                .additional-controls.show {
-                    display: flex;
+                .vjs-icon-download:before {
+                    content: "\f019";
+                    font-family: 'FontAwesome';
                 }
-                .dropdown-menu {
-                    background-color: #fff;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
-                    padding: 5px;
-                    display: none;
-                    position: absolute;
-                    top: calc(50% + 20px);
+
+                .vjs-icon-cog:before {
+                    content: "\f013";
+                    font-family: 'FontAwesome';
+                }
+
+                .vjs-icon-more-options:before {
+                    content: "\f141";
+                    font-family: 'FontAwesome';
+                }
+
+                .vjs-icon-download,
+                .vjs-icon-cog,
+                .vjs-icon-more-options {
+                    color: #fff;
+                    font-size: 20px;
+                }
+
+                .vjs-icon-download:hover,
+                .vjs-icon-cog:hover,
+                .vjs-icon-more-options:hover {
+                    color: #ddd;
+                }
+
+                .vjs-big-play-centered .vjs-big-play-button {
+                    top: 50%;
                     left: 50%;
-                    transform: translate(-50%, -50%);
+                    margin-top: -1.5em;
+                    margin-left: -1.5em;
+                    position: absolute;
+                    font-size: 3em;
+                }
+
+                .vjs-options-menu {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    border-radius: 5px;
+                    padding: 10px;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+                    display: none;
                     z-index: 1000;
                 }
 
-
-                .dropdown-menu.show {
+                .vjs-options-menu button,
+                .vjs-options-menu a {
                     display: block;
-                }            </style>
+                    width: 100%;
+                    background: none;
+                    border: none;
+                    color: #fff;
+                    font-size: 16px;
+                    padding: 10px;
+                    text-align: left;
+                    cursor: pointer;
+                    text-decoration: none;
+                }
 
-            <!-- Inserting the player iframe -->
+                .vjs-options-menu button:hover,
+                .vjs-options-menu a:hover {
+                    background-color: rgba(255, 255, 255, 0.1);
+                }
+            </style>
+
             <div class="row">
                 <div class="col-12">
                     <div class="video-wrapper">
-                        <video id="videoPlayer" width="100%"  poster="@Url.Content(Model.PosterImage)">
+                        <video
+                            id="videoPlayer"
+                            class="video-js vjs-default-skin vjs-big-play-centered"
+                            controls
+                            preload="auto"
+                            width="100%"
+                            height="auto"
+                            poster="@Url.Content(Model.PosterImage)"
+                            data-setup='{"fluid": true}'
+                        >
                             <source src="~/Video/viedeo_Test.mp4" type="video/mp4">
-                            <!--<source src="your-video.webm" type="video/webm">-->
-                            <!--<source src="your-video.ogv" type="video/ogg">-->
                             Your browser does not support the video tag.
                         </video>
-                        <div class="video-controls">
-                            <button id="playPauseBtn" class="play-pause-btn"><i class="fas fa-play"></i></button>
-                            <button id="volumeBtn" class="volume-btn"><i class="fas fa-volume-up"></i></button>
-                            <button id="moreBtn" class="more-btn"><i class="fas fa-ellipsis-v"></i></button>
-                        </div>
-                        <div class="additional-controls">
-                            <div id="dropdownMenu" class="dropdown-menu">
-                                <button onclick="changePlaybackRate(0.5)" class="playback-rate-btn">0.5x</button>
-                                <button onclick="changePlaybackRate(1)" class="playback-rate-btn">1x</button>
-                                <button onclick="changePlaybackRate(1.5)" class="playback-rate-btn">1.5x</button>
-                                <button onclick="togglePiP()" class="pip-btn">PiP</button>
-                                <button onclick="toggleFullScreen()" class="fullscreen-btn">Fullscreen</button>
-                                <a href="~/Video/viedeo_Test.mp4" download class="download-btn">Download</a>
-                            </div>
+                        <div class="vjs-options-menu" id="optionsMenu">
+                            <button onclick="changePlaybackRate(0.5)">Speed: 0.5x</button>
+                            <button onclick="changePlaybackRate(1)">Speed: 1x</button>
+                            <button onclick="changePlaybackRate(1.5)">Speed: 1.5x</button>
+                            <button onclick="togglePiP()">Picture in Picture</button>
+                            <a href="~/Video/viedeo_Test.mp4" download>Download</a>
                         </div>
                         <div class="video-title">@Model.Title</div>
                     </div>
                 </div>
             </div>
-            <!-- End player iframe -->
-
         </div>
-        <!-- container -->
-
-    </div> <!-- content -->
+    </div>
 </div>
 
-<!-- Font Awesome -->
-<script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
+<script src="https://vjs.zencdn.net/7.18.1/video.min.js"></script>
 <script>
-    var moreBtn = document.getElementById("moreBtn");
-    var dropdownMenu = document.getElementById("dropdownMenu");
+    var player = videojs('videoPlayer');
 
-    moreBtn.addEventListener("click", function() {
-        if (dropdownMenu.classList.contains("show")) {
-            dropdownMenu.classList.remove("show");
-        } else {
-            dropdownMenu.classList.add("show");
-        }
-    });
-    var video = document.getElementById("videoPlayer");
-    var playPauseBtn = document.getElementById("playPauseBtn");
-    var volumeBtn = document.getElementById("volumeBtn");
-    var additionalControls = document.getElementsByClassName("additional-controls")[0];
-    var videoControls = document.querySelector(".video-controls");
+    player.ready(function() {
+        var Button = videojs.getComponent('Button');
 
-    playPauseBtn.addEventListener("click", function() {
-        if (video.paused || video.ended) {
-            video.play();
-            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        } else {
-            video.pause();
-            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-        }
-    });
+        var MoreOptionsButton = videojs.extend(Button, {
+            constructor: function() {
+                Button.apply(this, arguments);
+                this.controlText("More Options");
+                this.addClass("vjs-icon-more-options");
+            },
+            handleClick: function() {
+                var optionsMenu = document.getElementById('optionsMenu');
+                if (optionsMenu.style.display === 'block') {
+                    optionsMenu.style.display = 'none';
+                } else {
+                    optionsMenu.style.display = 'block';
+                }
+            }
+        });
 
-    volumeBtn.addEventListener("click", function() {
-        if (video.muted) {
-            video.muted = false;
-            volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-        } else {
-            video.muted = true;
-            volumeBtn.innerHTML = '<i class="fas fa-volume-off"></i>';
-        }
-    });
-
-    moreBtn.addEventListener("click", function() {
-        if (additionalControls.classList.contains("show")) {
-            additionalControls.classList.remove("show");
-        } else {
-            additionalControls.classList.add("show");
-        }
+        player.getChild('controlBar').addChild(new MoreOptionsButton(), {}, 10);
     });
 
     function changePlaybackRate(rate) {
+        var video = document.getElementById('videoPlayer_html5_api');
         video.playbackRate = rate;
     }
 
     function togglePiP() {
+        var video = document.getElementById('videoPlayer_html5_api');
         if (document.pictureInPictureElement) {
             document.exitPictureInPicture();
         } else {
@@ -231,38 +198,12 @@ ViewBag.Title = @Model.Title;
         }
     }
 
-    function toggleFullScreen() {
-        if (!document.fullscreenElement) {
-            video.requestFullscreen();
-        } else {
-            document.exitFullscreen();
+    document.addEventListener('click', function(event) {
+        var optionsMenu = document.getElementById('optionsMenu');
+        var moreOptionsButton = document.querySelector('.vjs-icon-more-options');
+
+        if (!optionsMenu.contains(event.target) && !moreOptionsButton.contains(event.target)) {
+            optionsMenu.style.display = 'none';
         }
-    }
-
-    var controlsTimeout;
-    var controls = document.querySelector('.video-controls');
-
-    function hideControls() {
-        controls.style.opacity = 0;
-        controls.style.transition = "opacity 0.5s";
-    }
-
-    function showControls() {
-        controls.style.opacity = 1;
-    }
-
-    function resetControlsTimeout() {
-        clearTimeout(controlsTimeout);
-        hideControls();
-        controlsTimeout = setTimeout(hideControls, 5000);
-    }
-
-    videoControls.addEventListener("mouseenter", showControls);
-    videoControls.addEventListener("mouseleave", resetControlsTimeout);
-    additionalControls.addEventListener("mouseenter", showControls);
-    additionalControls.addEventListener("mouseleave", resetControlsTimeout);
-
-    showControls();
-
-
+    });
 </script>

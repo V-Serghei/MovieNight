@@ -11,6 +11,7 @@ namespace MovieNight.Web.Models.Movie
         public string Quote { get; set; }
         public string Description { get; set; }
         public DateTime ProductionYear { get; set; }
+        public string ProductionYearS { get; set; }
         public string Country { get; set; }
         public List<string> Genre { get; set; }
         public string Location { get; set; }
@@ -27,6 +28,8 @@ namespace MovieNight.Web.Models.Movie
         public List<InterestingFact> InterestingFacts { get; set; }
         
         public bool Bookmark { get; set; }
+        
+        public bool BookmarkTomeOf { get; set; }
         
         public float UserRating { get; set; }
         

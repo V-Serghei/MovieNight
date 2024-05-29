@@ -8,8 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.ModelBinding;
 using MovieNight.Domain.Entities.MovieM.EfDbEntities;
+using MovieNight.Domain.Entities.AchievementE;
 using MovieNight.Domain.Entities.Friends;
 using MovieNight.Domain.Entities.MailE;
+using MovieNight.Domain.Entities.MovieM.EfDbEntities;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 
 
@@ -19,18 +21,22 @@ namespace MovieNight.BusinessLogic.DBModel
     {
         public UserContext() : base("name=MovieNight")
         {
-
+            this.Database.CommandTimeout = 180;
         }
 
         public DbSet<UserDbTable> UsersT { get; set; }
         public DbSet<PEdBdTable> PEdBdTables { get; set; }
         
         public DbSet<ViewListDbTable> ViewList { get; set; }
+
         
         public DbSet<BookmarkDbTable> Bookmark { get; set; }
+        
+        public DbSet<AchievementDbTable> AchievementDb { get; set; }
 
         public DbSet<FriendsDbTable> Friends { get; set; }
         
+        public DbSet<UserAchievementDbTable> UserAchievementDb { get; set; }
         public DbSet<MailDbTable> MailE { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -65,7 +71,7 @@ namespace MovieNight.BusinessLogic.DBModel
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<FriendsDbTable>()
                 .HasRequired(f => f.Friend)
-                .WithMany() // Нет навигационного свойства, так как Friend используется только в контексте Friendship
+                .WithMany() 
                 .HasForeignKey(f => f.IdFriend)
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<MailDbTable>()
@@ -79,26 +85,20 @@ namespace MovieNight.BusinessLogic.DBModel
                 .HasForeignKey(f => f.RecipientId)
                 .WillCascadeOnDelete(false);
 
-            // modelBuilder.Entity<ViewListDbTable>()
-            //     .HasOptional(v => v.User)
-            //     .WithMany(u => u.ViewListEntries)
-            //     .HasForeignKey(v => v.UserId);
-            //
-            // modelBuilder.Entity<ViewListDbTable>()
-            //     .HasOptional(v => v.Movie)
-            //     .WithMany(m => m.ViewListEntries)
-            //     .HasForeignKey(v => v.MovieId);
+            
+            modelBuilder.Entity<UserAchievementDbTable>()
+                .HasRequired(ua => ua.Achievement)  
+                .WithMany()                          
+                .HasForeignKey(ua => ua.AchievementId); 
 
+           
+            modelBuilder.Entity<UserAchievementDbTable>()
+                .HasRequired(ua => ua.User)        
+                .WithMany()                        
+                .HasForeignKey(ua => ua.UserId);  
 
-            // modelBuilder.Entity<MovieDbTable>()
-            //     .HasMany(m => m.CastMembers)
-            //     .WithMany(c => c.Movies)
-            //     .Map(mc =>
-            //     {
-            //         mc.ToTable("MovieCastMembers");
-            //         mc.MapLeftKey("MovieId");
-            //         mc.MapRightKey("CastMemberId");
-            //     });
+            base.OnModelCreating(modelBuilder);
+            
         }
     }
 }

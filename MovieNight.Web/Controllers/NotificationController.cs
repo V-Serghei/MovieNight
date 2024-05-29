@@ -6,12 +6,14 @@ using MovieNight.Web.Models.Calendar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
+using System.Web.Http.Results;
 using System.Web.Mvc;
 
 namespace MovieNight.Web.Controllers
 {
-    public class NotificationController : Controller
+    public class NotificationController : MasterController
     {
         // GET: Notification
         private readonly ISession _eventSession;
@@ -21,17 +23,19 @@ namespace MovieNight.Web.Controllers
             var bl = new BusinessLogic.BusinessLogic();
             _eventSession = bl.Session();
         }
+        
         [HttpPost]
-        [Route("Notification/EventSave")]
-        public ActionResult EventSave(EventDataModel eventDataModel)
+        public JsonResult EventSave(CalendarEvent model)
         {
-            EventE eventE = new EventE()
-            {
-                EventTitle = eventDataModel.EventTitle,
-                EventDay = DateTime.Now
-            };
             
-            return RedirectToAction("Calendar");
+            if (model == null || string.IsNullOrEmpty(model.Title) || string.IsNullOrEmpty(model.Category))
+            {
+                return Json(new { success = false, message = "Title and Category are required." });
+            }
+
+            
+
+            return Json(new { success = true, message = "Event saved successfully!" });
         }
         public ActionResult Calendar()
         {

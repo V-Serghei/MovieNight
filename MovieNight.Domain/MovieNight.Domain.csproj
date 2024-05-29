@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="enams\AchievementType.cs" />
     <Compile Include="enams\Direction.cs" />
     <Compile Include="enams\EventColor.cs" />
     <Compile Include="enams\FilmCategory.cs" />
@@ -55,7 +56,11 @@
     <Compile Include="enams\SelectField.cs" />
     <Compile Include="enams\SortDirection.cs" />
     <Compile Include="enams\SortingOption.cs" />
+    <Compile Include="Entities\AchievementE\AchievementDbTable.cs" />
+    <Compile Include="Entities\AchievementE\AchievementE.cs" />
+    <Compile Include="Entities\AchievementE\UserAchievementDbTable.cs" />
     <Compile Include="enams\TypeOfReview.cs" />
+    <Compile Include="Entities\DifferentE\AreWatchingE.cs" />
     <Compile Include="Entities\DifferentE\PhoneNumE.cs" />
     <Compile Include="Entities\DifferentE\Tag.cs" />
     <Compile Include="Entities\Friends\FriendsDbTable.cs" />
@@ -73,6 +78,8 @@
     <Compile Include="Entities\MovieM\MovieCardE.cs" />
     <Compile Include="Entities\MovieM\MovieTemplateInfE.cs" />
     <Compile Include="Entities\MovieM\Poster.cs" />
+    <Compile Include="Entities\MovieM\RespAddViewListElDb.cs" />
+    <Compile Include="Entities\MovieM\SearchParam\ListSortCommandE.cs" />
     <Compile Include="Entities\MovieM\SearchParam\MovieCommandS.cs" />
     <Compile Include="Entities\MovieM\ViewingHistoryM.cs" />
     <Compile Include="Entities\MovieM\ViewListSortCommandE.cs" />
@@ -80,6 +87,9 @@
     <Compile Include="Entities\PersonalP\PersonalInfoDbTable.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkDbTable.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkE.cs" />
+    <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkInfoE.cs" />
+    <Compile Include="Entities\PersonalP\PersonalPDb\BookmarkTimeOfE.cs" />
+    <Compile Include="Entities\PersonalP\PersonalPDb\RespToAddBookmarkTimeOf.cs" />
     <Compile Include="Entities\PersonalP\PersonalPDb\ViewListDbTable.cs" />
     <Compile Include="Entities\Notification\EventDbTable.cs" />
     <Compile Include="Entities\Notification\EventE.cs" />
@@ -87,6 +97,9 @@
     <Compile Include="Entities\PersonalP\ProfEditingE.cs" />
     <Compile Include="Entities\Review\ReviewDbTable.cs" />
     <Compile Include="Entities\Review\ReviewE.cs" />
+    <Compile Include="Entities\Statistics\GenresDataStatistic.cs" />
+    <Compile Include="Entities\Statistics\InfMovieScoresE.cs" />
+    <Compile Include="Entities\Statistics\StatisticE.cs" />
     <Compile Include="Entities\TimeD.cs" />
     <Compile Include="Entities\UserE.cs" />
     <Compile Include="Entities\UserId\LogInData.cs" />

@@ -25,6 +25,22 @@ namespace MovieNight.Web
                 url: "InformationSynchronization/MovieTemplatePage/{id}",
                 defaults: new { controller = "InformationSynchronization", action = "MovieTemplatePage", id = UrlParameter.Optional }
             );
+            
+
+            routes.MapRoute(
+                name: "ClearBookmarks",
+                url: "InformationSynchronization/ClearBookmarks",
+                defaults: new { controller = "InformationSynchronization", action = "ClearBookmarks" }
+            );
+            
+            routes.MapRoute(
+                name: "SearchMovies",
+                url: "{controller}/{action}/{searchTerm}",
+                defaults: new { controller = "SearchSortAdd", action = "SearchMovies", searchTerm = UrlParameter.Optional }
+            );
+
+
+            
         }
     }
 }

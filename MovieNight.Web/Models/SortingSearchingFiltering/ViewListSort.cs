@@ -7,6 +7,7 @@ namespace MovieNight.Web.Models.SortingSearchingFiltering
 {
     public class ViewListSort
     {
+        public int? userId { get; set; }
         public FilmCategory Category { get; set; }
         
         public SelectField Field { get; set; }
@@ -20,5 +21,11 @@ namespace MovieNight.Web.Models.SortingSearchingFiltering
         public List<ViewingHistoryModel> CurrentListViewing { get; set; }
         
         public string SearchParameter { get; set; }
+
+        public ViewListSort()
+        {
+            CurrentListViewing = new List<ViewingHistoryModel>();
+        }
+        
     }
 }
