@@ -16,13 +16,13 @@ namespace MovieNight.BusinessLogic.Session.Service
             return getFriendDateDB(id);
         }
 
-        public FriendsListD getListOfUsers( int _skipParameter)
+        public FriendsListD getListOfUsers( int _skipParameter, string _searchParameter)
         {
-            return getListOfUsersD(_skipParameter);
+            return getListOfUsersD(_skipParameter, _searchParameter);
         }
-        public FriendsListD getListOfFriends(int _skipParameter)
+        public FriendsListD getListOfFriends(int _skipParameter, string _searchParameter)
         {
-            return getListOfFriendsD(_skipParameter);
+            return getListOfFriendsD(_skipParameter, _searchParameter);
         }
 
         public bool setAddFriend((int _userId, int? _friendId) valueTuple)
@@ -34,7 +34,13 @@ namespace MovieNight.BusinessLogic.Session.Service
         {
             return setDeleteFriendD(valueTuple);
         }
-
-        
+        public int GetTotalUserCount(string _searchParameter)
+        {
+            return GetTotalUserCountD(_searchParameter);
+        }
+        public int GetTotalFriendsCount(string _searchParameter)
+        {
+            return GetTotalFriendsCountD(_searchParameter);
+        }
     }
 }

@@ -893,6 +893,7 @@
     <Content Include="Views\SearchSortAdd\FindFriends.cshtml" />
     <Content Include="Views\SearchSortAdd\ForYou.cshtml" />
     <Content Include="Views\SearchSortAdd\MovieSearch.cshtml" />
+    <Content Include="Views\Shared\_Pagination.cshtml" />
     <Content Include="Views\SearchSortAdd\Novelty.cshtml" />
     <Content Include="Views\SearchSortAdd\_LoadingIndicator.cshtml" />
     <Content Include="Views\Shared\_AchievementL.cshtml" />
@@ -934,6 +935,7 @@
     <Compile Include="Models\DifModel\AreWatchingModel.cs" />
     <Compile Include="Models\Friends\FriendListModel.cs" />
     <Compile Include="Models\Friends\FriendPageModel.cs" />
+    <Compile Include="Models\Friends\PaginationModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\Mail\InboxModel.cs" />
     <Compile Include="Models\Movie\CastMember.cs" />

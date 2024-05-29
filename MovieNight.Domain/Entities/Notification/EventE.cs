@@ -12,9 +12,6 @@ namespace MovieNight.Domain.Entities.Notification
     {
         public int Id { get; set; }
         public string EventTitle { get; set; }
-        public EventColor Category { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public string Description { get; set; }
+        public DateTime EventDay { get; set; }
     }
 }

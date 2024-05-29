@@ -1,11 +1,9 @@
-﻿@using System.Activities.Expressions
-@using MovieNight.Web.Models.Friends
+﻿@using MovieNight.Web.Models.Friends
 @model MovieNight.Web.Models.Friends.FriendListModel
 
 @{
 ViewBag.Title = "FriendsPage";
 }
-
 
 <div>
     <div class="content">
@@ -34,25 +32,14 @@ ViewBag.Title = "FriendsPage";
                     <div class="card-box">
                         <div class="row">
                             <div class="col-lg-8">
-                                <form class="form-inline">
+                                <form class="form-inline" method="get" action="@Url.Action("FriendsPage", "SearchSortAdd")">
                                     <div class="form-group">
                                         <label for="searchInput" class="sr-only">Search</label>
-                                        <input type="search" class="form-control" id="searchInput" placeholder="Search..." oninput="filterFriends()">
+                                        <input type="search" class="form-control" id="searchInput" name="searchTerm" placeholder="Search..." value="@Model.SearchTerm">
                                     </div>
-                                    <div class="form-group mx-sm-3">
-                                    </div>
+                                    <button type="submit" class="btn btn-primary ml-2">Search</button>
                                 </form>
                             </div>
-                            @* <div class="col-lg-8"> *@
-                            @*     <form class="form-inline"> *@
-                            @*         <div class="form-group"> *@
-                            @*             <label for="inputPassword2" class="sr-only">Search</label> *@
-                            @*             <input type="search" class="form-control" id="inputPassword2" placeholder="Search..."> *@
-                            @*         </div> *@
-                            @*         <div class="form-group mx-sm-3"> *@
-                            @*         </div> *@
-                            @*     </form> *@
-                            @* </div> *@
                             <div class="col-lg-4">
                                 <div class="text-lg-right mt-3 mt-lg-0">
                                     <a href="@Url.Action("FindFriends", "SearchSortAdd", new { _skipParametr = 0 })">
@@ -69,209 +56,83 @@ ViewBag.Title = "FriendsPage";
             </div>
             <!-- end row -->
 
-            @{
-            for (int i = 0; i < Model.ListOfFriends.Count; i++)
+            @for (int i = 0; i < Model.ListOfFriends.Count; i += 3)
             {
-            var person = Model.ListOfFriends[i];
             <div class="row">
+                @for (int j = 0; j < 3; j++)
+                {
+                if (i + j < Model.ListOfFriends.Count)
+                {
+                var person = Model.ListOfFriends[i + j];
                 <div class="col-lg-4">
                     <div class="text-center card-box ribbon-box">
                         <div class="clearfix"></div>
                         <div class="pt-2 pb-2">
-                            @if(person.BUserE.Avatar!=null)
-                            {
-                            <img src=@Url.Content(person.BUserE.Avatar) class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
-                            }
-                            else
-                            {
-                            <img src="~/images/users/default_avatar.png" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
-                            }
+                            <img src="@Url.Content(person.BUserE.Avatar ?? "~/images/users/default_avatar.png")" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
                             <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">@person.BUserE.Username</a></h4>
-                            <p> <span> <a href="#" class="text-pink">@person.BUserE.Email</a> </span></p>
-
+                            <p><a href="#" class="text-pink">@person.BUserE.Email</a></p>
                             @if (person.Quote != null)
                             {
-                            <p class="text-muted font-13 mb-3">
-                                @person.Quote
-                            </p>
+                            <p class="text-muted font-13 mb-3">@person.Quote</p>
                             }
-
-                            <form action=@Url.Action("Compose", "DataTransfer") method="get">
+                            <form action="@Url.Action("Compose", "DataTransfer")" method="get">
                                 <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light" name="id" value="@person.BUserE.Id">
                                     <i class="mdi mdi-email mr-1"></i> Message
                                 </button>
                             </form>
-                            <form action=@Url.Action("SetDeleteFriendPage", "SearchSortAdd") method="get">
+                            <form action="@Url.Action("SetDeleteFriendPage", "SearchSortAdd")" method="get">
                                 <button type="submit" class="btn btn-outline-warning btn-sm waves-effect" name="_friendId" value="@person.BUserE.Id">
                                     <i class="fe-x-circle"></i> Unfriend
                                 </button>
                             </form>
-                            <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", new{id=person.BUserE.Id})>
+                            <a href="@Url.Action("UserTemplatePage", "InformationSynchronization", new { id = person.BUserE.Id })">
                                 <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
                                     <i class="remixicon-account-pin-box-fill"></i> Go to profile
                                 </button>
                             </a>
-
-                        </div> <!-- end .padding -->
-                    </div> <!-- end card-box-->
-                </div> <!-- end col -->
-
-                @if (i + 1 < Model.ListOfFriends.Count)
-                {
-                var nextPerson = Model.ListOfFriends[i + 1];
-                i++;
-                <div class="col-lg-4">
-                    <div class="text-center card-box ribbon-box">
-                        <div class="clearfix"></div>
-                        <div class="pt-2 pb-2">
-                            @if(nextPerson.BUserE.Avatar != null)
-                            {
-                            <img src=@Url.Content(nextPerson.BUserE.Avatar) class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
-                            }
-                            else
-                            {
-                            <img src="~/images/users/default_avatar.png" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
-                            }
-                            <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">@nextPerson.BUserE.Username</a></h4>
-                            <p> <span> <a href="#" class="text-pink">@nextPerson.BUserE.Email</a> </span></p>
-
-                            @if (nextPerson.Quote != null)
-                            {
-                            <p class="text-muted font-13 mb-3">
-                                @nextPerson.Quote
-                            </p>
-                            }
-
-                            <form action=@Url.Action("Compose", "DataTransfer") method="get">
-                                <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light" name="id" value="@nextPerson.BUserE.Id">
-                                    <i class="mdi mdi-email mr-1"></i> Message
-                                </button>
-                            </form>
-                            <form action=@Url.Action("SetDeleteFriendPage", "SearchSortAdd") method="get">
-                                <button type="submit" class="btn btn-outline-warning btn-sm waves-effect" name="_friendId" value="@nextPerson.BUserE.Id">
-                                    <i class="fe-x-circle"></i> Unfriend
-                                </button>
-                            </form>
-                            <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", new{id=nextPerson.BUserE.Id})>
-                                <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
-                                    <i class="remixicon-account-pin-box-fill"></i> Go to profile
-                                </button>
-                            </a>
-
-                        </div> <!-- end .padding -->
-                    </div> <!-- end card-box-->
-                </div> <!-- end col -->
+                        </div>
+                    </div>
+                </div>
                 }
-
-                @if (i + 1 < Model.ListOfFriends.Count)
-                {
-                var nextnextPerson = Model.ListOfFriends[i + 1];
-                i++;
-                <div class="col-lg-4">
-                    <div class="text-center card-box ribbon-box">
-                        <div class="clearfix"></div>
-                        <div class="pt-2 pb-2">
-                            @if(nextnextPerson.BUserE.Avatar!=null)
-                            {
-                            <img src=@Url.Content(nextnextPerson.BUserE.Avatar) class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
-                            }
-                            else
-                            {
-                            <img src="~/images/users/default_avatar.png" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
-                            }
-                            <h4 class="mt-3 font-17"><a href="extras-profile.html" class="text-dark">@nextnextPerson.BUserE.Username</a></h4>
-                            <p> <span> <a href="#" class="text-pink">@nextnextPerson.BUserE.Email</a> </span></p>
-
-                            @if(nextnextPerson.Quote !=null)
-                            {<p class ="text-muted font-13 mb-3" >
-                                @nextnextPerson.Quote
-                            </p>
-                            }
-
-                            <form action=@Url.Action("Compose", "DataTransfer") method="get">
-                                <button type="submit" class="btn btn-primary btn-sm waves-effect waves-light" name="id" value="@nextnextPerson.BUserE.Id">
-                                    <i class="mdi mdi-email mr-1"></i> Message
-                                </button>
-                            </form>
-                            <form action=@Url.Action("SetDeleteFriendPage", "SearchSortAdd") method="get">
-                                <button type="submit" class="btn btn-outline-warning btn-sm waves-effect" name="_friendId" value="@nextnextPerson.BUserE.Id">
-                                    <i class="fe-x-circle"></i> Unfriend
-                                </button>
-                            </form>
-                            <a href=@Url.Action("UserTemplatePage", "InformationSynchronization", new{id=nextnextPerson.BUserE.Id})>
-                                <button type="button" class="btn btn-outline-warning btn-sm waves-effect">
-                                    <i class="remixicon-account-pin-box-fill"></i> Go to profile
-                                </button>
-                            </a>
-
-                        </div> <!-- end .padding -->
-                    </div> <!-- end card-box-->
-                </div> <!-- end col -->
                 }
-
             </div>
-            <!-- end row -->
             }
-            }
-
 
             <div class="row">
                 <div class="col-12">
                     <div class="text-right">
-                        <ul class="pagination pagination-rounded justify-content-end" id="paginationList">
-                            <!-- Здесь будет генерироваться список пагинации -->
+                        <ul class="pagination pagination-rounded justify-content-end">
+                            @if (Model.Pagination.CurrentPage > 1)
+                            {
+                            <li class="page-item">
+                                <a class="page-link" href="javascript:void(0);" onclick="loadPage(@((Model.Pagination.CurrentPage - 2) * Model.Pagination.ItemsPerPage))">&laquo;</a>
+                            </li>
+                            }
+                            @for (int i = 1; i <= Model.Pagination.TotalPages; i++)
+                            {
+                            <li class="page-item @(Model.Pagination.CurrentPage == i ? "active" : "")">
+                                <a class="page-link" href="javascript:void(0);" onclick="loadPage(@((i - 1) * Model.Pagination.ItemsPerPage))">@i</a>
+                            </li>
+                            }
+                            @if (Model.Pagination.CurrentPage < Model.Pagination.TotalPages)
+                            {
+                            <li class="page-item">
+                                <a class="page-link" href="javascript:void(0);" onclick="loadPage(@((Model.Pagination.CurrentPage) * Model.Pagination.ItemsPerPage))">&raquo;</a>
+                            </li>
+                            }
                         </ul>
                     </div>
                 </div>
             </div>
-
-            <script>
-                // Функция для загрузки страницы с указанным _skipParametr
-                function loadPage(skipParam) {
-                    var url = '@Url.Action("FriendsPage", "SearchSortAdd")';
-                    url += '?_skipParametr=' + skipParam;
-                    window.location.href = url;
-                }
-
-                // Генерация списка пагинации
-                function generatePagination(totalPages, currentPage, itemsPerPage) {
-                    var paginationList = $('#paginationList');
-                    paginationList.empty();
-
-                    // Добавление кнопок для каждой страницы
-                    for (var i = 1; i <= totalPages; i++) {
-                        var liClass = (i === currentPage) ? 'page-item active' : 'page-item';
-                        var pageLink = $('<a>', {
-                            class: 'page-link',
-                            href: 'javascript:void(0);',
-                            text: i,
-                            click: function () {
-                                var skipParam = (i - 1) * itemsPerPage;
-                                loadPage(skipParam);
-                            }
-                        });
-                        var listItem = $('<li>', { class: liClass }).append(pageLink);
-                        paginationList.append(listItem);
-                    }
-                }
-
-                // Вызов функции генерации пагинации при загрузке страницы
-                $(document).ready(function () {
-                    // Здесь установите значения totalPages, currentPage и itemsPerPage из вашей модели или контроллера
-                    var totalPages = 5; // Общее количество страниц
-                    var currentPage = 1; // Текущая страница
-                    var itemsPerPage = 10; // Количество элементов на странице
-
-                    generatePagination(totalPages, currentPage, itemsPerPage);
-                });
-            </script>
-            <!-- end row -->
-
-
         </div> <!-- container -->
-
     </div> <!-- content -->
-
-
 </div>
 
+<script>
+    function loadPage(skipParam) {
+        var searchTerm = document.getElementById("searchInput").value;
+        var url = '@Url.Action("FriendsPage", "SearchSortAdd")';
+        url += '?_skipParametr=' + skipParam + '&searchTerm=' + encodeURIComponent(searchTerm);
+        window.location.href = url;
+    }
+</script>

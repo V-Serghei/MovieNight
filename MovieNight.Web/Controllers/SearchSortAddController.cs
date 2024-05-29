@@ -98,16 +98,30 @@ namespace MovieNight.Web.Controllers
             _mapper = config.CreateMapper();
 
         }
-       
+        // GET: SearchSortAdd
+        #region Friends
         [UserMod]
-        public ActionResult FriendsPage(int _skipParametr = 0)
+        public ActionResult FriendsPage(int _skipParametr = 0, string searchTerm = "")
         {
-            var listU = _serviceFriend.getListOfFriends(_skipParametr);
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+            {
+                return RedirectToAction("Error404Page", "Error");
+            }
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Login", "Identification");
+            }
+    
+            int itemsPerPage = 9;
+
+            var listU = _serviceFriend.getListOfFriends(_skipParametr, searchTerm);
+            FriendListModel friendListModel = new FriendListModel();
             if (listU == null)
             {
                 return View();
             }
-            FriendListModel friendListModel = new FriendListModel();
+
             foreach (var t in listU.ListOfFriends)
             {
                 FriendsPageD tmp = t; 
@@ -120,8 +134,51 @@ namespace MovieNight.Web.Controllers
                 };
                 friendListModel.ListOfFriends.Add(listOfFriends);
             }
+
+            int totalItems = _serviceFriend.GetTotalFriendsCount(searchTerm);
+            friendListModel.Pagination = new PaginationModel
+            {
+                TotalItems = totalItems,
+                ItemsPerPage = itemsPerPage,
+                CurrentPage = _skipParametr / itemsPerPage + 1
+            };
+
+            friendListModel.SearchTerm = searchTerm; // Добавляем параметр поиска в модель
+
             return View(friendListModel);
         }
+        
+        [UserMod]
+        [HttpGet]
+        public ActionResult FindFriends(int _skipParametr = 0, string searchTerm = "")
+        { 
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+            {
+                return RedirectToAction("Error404Page", "Error");
+            }
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Login", "Identification");
+            }
+            var listU = _serviceFriend.getListOfUsers(_skipParametr, searchTerm);
+            FriendListModel friendListModel = new FriendListModel();
+            if (listU == null)
+            {
+                return View();
+            }
+            foreach (var t in listU.ListOfFriends)
+            {
+                FriendsPageD tmp = t; 
+                var listOfUsers = _mapper.Map<FriendPageModel>(tmp);
+                listOfUsers.BUserE = new UserModel
+                {
+                    Id = tmp.BUserE.Id,
+                    Username = tmp.BUserE.Username,
+                    Email = tmp.BUserE.Email
+                };
+                friendListModel.ListOfFriends.Add(listOfUsers);
+            }
 
        
         #region [Action: Action for sorting films by category]
@@ -1166,6 +1223,12 @@ namespace MovieNight.Web.Controllers
             return RedirectToAction("FriendsPage");
         }
         else
+        {
+            return RedirectToAction("Error404Page", "Error");
+        }
+        {
+            return RedirectToAction("Error404Page", "Error");
+        }
         {
             return RedirectToAction("Error404Page", "Error");
         }

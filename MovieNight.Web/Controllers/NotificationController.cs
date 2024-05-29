@@ -16,12 +16,12 @@ namespace MovieNight.Web.Controllers
     public class NotificationController : MasterController
     {
         // GET: Notification
-        private readonly ISession EventSession;
+        private readonly ISession _eventSession;
 
         public NotificationController()
         {
             var bl = new BusinessLogic.BusinessLogic();
-            EventSession = bl.Session();
+            _eventSession = bl.Session();
         }
         
         [HttpPost]

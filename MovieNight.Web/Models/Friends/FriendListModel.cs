@@ -12,6 +12,7 @@ namespace MovieNight.Web.Models.Friends
             ListOfFriends = new List<FriendPageModel>();
         }
         public List<FriendPageModel> ListOfFriends { get; set; }
-        
+        public PaginationModel Pagination { get; set; }
+        public string SearchTerm { get; set; }
     }
 }
