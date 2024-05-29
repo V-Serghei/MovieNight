@@ -1,24 +1,46 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "_Content";
+ViewBag.Title = "_Content";
+var data = DateTime.Now.Year;
 }
 
-<footer id="footer">
+<footer id="footer" class="footer bg-dark text-white py-4">
     <div class="container-fluid">
+        
         <div class="row">
-            <div class="col-md-6">
-                MovieNight 2024 - the best team in the world
+            <div class="col-md-4 mb-3 mb-md-0">
+                <h5 class="text-info">MovieNight @data</h5>
+                <p>The best team in the world</p>
             </div>
-            <div class="col-md-6">
-                <div class="text-md-right footer-links d-none d-sm-block">
-                    <a href="javascript:void(0);">About Us</a>
-                    <a href="javascript:void(0);">Help</a>
-                    <a href="javascript:void(0);">Contact Us</a>
-                </div>
+            <div class="col-md-4 mb-3 mb-md-0 text-md-center">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="javascript:void(0);" class="text-white">About Us</a></li>
+                    <li><a href="javascript:void(0);" class="text-white">Help</a></li>
+                    <li><a href="javascript:void(0);" class="text-white">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 text-md-right">
+                <h5>Follow Us</h5>
+                <a href="javascript:void(0);" class="btn btn-outline-light btn-sm rounded-circle mr-2">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="javascript:void(0);" class="btn btn-outline-light btn-sm rounded-circle mr-2">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="javascript:void(0);" class="btn btn-outline-light btn-sm rounded-circle mr-2">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="javascript:void(0);" class="btn btn-outline-light btn-sm rounded-circle">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 text-center">
+                <p class="mb-0">&copy; @data MovieNight. All Rights Reserved.</p>
             </div>
         </div>
     </div>
 </footer>
-<!-- end Footer -->
-

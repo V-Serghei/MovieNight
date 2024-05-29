@@ -262,7 +262,6 @@ namespace MovieNight.Web.Controllers
             [GuestMod]
             public ActionResult SerialsSearch()
             {
-                SessionStatus();
                 int numP = 1;
                 SessionStatus();
                 if (System.Web.HttpContext.Current.GetListFilmS() != null)

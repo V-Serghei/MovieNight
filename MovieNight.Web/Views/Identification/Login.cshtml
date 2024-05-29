@@ -42,6 +42,7 @@
                             </div>
                             @using (Ajax.BeginForm("LoginPost", "Identification", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "result", OnSuccess = "onSuccess", OnFailure = "onFailure" }, new { id = "loginForm", autocomplete = "off" }))
                             {
+                                @Html.AntiForgeryToken()
                                 <div class="alert alert-danger" style="display:none;"></div>
 
                                 @* <form action="@Url.Action("Login", "Identification")" method="post"> *@

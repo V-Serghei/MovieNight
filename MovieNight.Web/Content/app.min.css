@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700);
+﻿@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700);
 
 
 
@@ -787,14 +787,14 @@ body.enlarged {
 .footer {
     bottom: 0;
     padding: 19px 15px 20px;
-    position: fixed;
+    position: relative;
     right: 0;
     color: #98a6ad;
     left: 240px;
     background-color: #fff;
     -webkit-box-shadow: 0 0 1px rgba(50,58,70,.1);
     box-shadow: 0 0 1px rgba(50,58,70,.1);
-    display: none
+    display: block;
 }
     
 
