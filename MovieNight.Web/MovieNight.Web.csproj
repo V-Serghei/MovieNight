@@ -878,6 +878,7 @@
     <Content Include="Views\InformationSynchronization\ReviewPage.cshtml" />
     <Content Include="Views\SearchSortAdd\FindFriends.cshtml" />
     <Content Include="Views\SearchSortAdd\MovieSearch.cshtml" />
+    <Content Include="Views\Shared\_Pagination.cshtml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -910,6 +911,7 @@
     <Compile Include="Models\Different\TagModel.cs" />
     <Compile Include="Models\Friends\FriendListModel.cs" />
     <Compile Include="Models\Friends\FriendPageModel.cs" />
+    <Compile Include="Models\Friends\PaginationModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\Mail\InboxModel.cs" />
     <Compile Include="Models\Movie\CastMember.cs" />

@@ -459,9 +459,9 @@ namespace MovieNight.Web.Controllers
             }
         }
 
-        
+        #region Review
+
         [HttpGet]
-       
         public ActionResult ReviewPage(int? filmId)
         {
             var config = new MapperConfiguration(c =>
@@ -515,6 +515,8 @@ namespace MovieNight.Web.Controllers
             }
             return RedirectToAction("Error404Page","Error");
         }
+
+        #endregion
 
         [ModeratorMod]
         public ActionResult MovieTemplateEditing()

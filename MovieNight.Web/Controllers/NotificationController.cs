@@ -14,12 +14,12 @@ namespace MovieNight.Web.Controllers
     public class NotificationController : Controller
     {
         // GET: Notification
-        private readonly ISession EventSession;
+        private readonly ISession _eventSession;
 
         public NotificationController()
         {
             var bl = new BusinessLogic.BusinessLogic();
-            EventSession = bl.Session();
+            _eventSession = bl.Session();
         }
         [HttpPost]
         [Route("Notification/EventSave")]
@@ -27,12 +27,11 @@ namespace MovieNight.Web.Controllers
         {
             EventE eventE = new EventE()
             {
-                EventTitle = eventDataModel.title,
-                Category = Domain.enams.EventColor.Blue,
-                //StartTime = eventDataModel.beginning,
-                //EndTime = eventDataModel.ending
+                EventTitle = eventDataModel.EventTitle,
+                EventDay = DateTime.Now
             };
-            return RedirectToAction("Index","MainPage");
+            
+            return RedirectToAction("Calendar");
         }
         public ActionResult Calendar()
         {

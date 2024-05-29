@@ -2,6 +2,7 @@
 using MovieNight.Domain.Entities.Friends;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,28 +60,37 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             return friendsPageD;
         }
         
-        public FriendsListD getListOfUsersD(int _skipParameter)
+        public FriendsListD getListOfUsersD(int _skipParameter, string searchTerm)
         {
             var config = new MapperConfiguration(c =>
             {
-                c.CreateMap<PEdBdTable,FriendsPageD>()
-                    .ForMember(dest => dest.BUserE, 
+                c.CreateMap<PEdBdTable, FriendsPageD>()
+                    .ForMember(dest => dest.BUserE,
                         opt => opt.Ignore());
             });
-            
+
             var mapper = config.CreateMapper();
-            
+
             FriendsListD friendsListD = new FriendsListD();
             using (var db = new UserContext())
             {
                 try
                 {
                     var userId = HttpContext.Current.Session["UserId"] as int?;
-                    var list9Users = db.UsersT.Where(u =>u.Id != (int)userId).ToList();
+                    var query = db.UsersT.Where(u => u.Id != userId);
+
+                    if (!string.IsNullOrEmpty(searchTerm))
+                    {
+                        query = query.Where(u => u.UserName.Contains(searchTerm));
+                    }
+
+                    var list9Users = query.ToList();
+
                     foreach (var list9 in list9Users)
                     {
                         var userd = db.PEdBdTables.FirstOrDefault(p => p.UserDbTableId == list9.Id);
-                        var existsInFriendsDb = db.Friends.FirstOrDefault(f => f.IdFriend == list9.Id && f.IdUser == userId);
+                        var existsInFriendsDb =
+                            db.Friends.FirstOrDefault(f => f.IdFriend == list9.Id && f.IdUser == userId);
                         if (userd != null && existsInFriendsDb == null)
                         {
                             var oneOfList = mapper.Map<FriendsPageD>(userd);
@@ -92,7 +102,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             };
                             friendsListD.ListOfFriends.Add(oneOfList);
                         }
-                        else if(existsInFriendsDb == null)
+                        else if (existsInFriendsDb == null)
                         {
                             var oneOfList = new FriendsPageD
                             {
@@ -105,17 +115,18 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             };
                             friendsListD.ListOfFriends.Add(oneOfList);
                         }
-                    } 
+                    }
                 }
                 catch (Exception exception)
                 {
                     return null;
                 }
             }
-            friendsListD.ListOfFriends = friendsListD.ListOfFriends.Skip(_skipParameter*9).Take(9).ToList();
+
+            friendsListD.ListOfFriends = friendsListD.ListOfFriends.Skip(_skipParameter).Take(9).ToList();
             return friendsListD;
         }
-        public FriendsListD getListOfFriendsD(int _skipParameter)
+        public FriendsListD getListOfFriendsD(int _skipParameter, string searchTerm)
         {
             var config = new MapperConfiguration(c =>
             {
@@ -134,7 +145,11 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             {
                 try
                 {
-                    var list9Users = db.UsersT.OrderBy(u => u.Id).Skip(_skipParameter*9).Take(9).ToList();
+                    var list9Users = db.UsersT.OrderBy(u => u.Id).ToList();
+                    if (!string.IsNullOrEmpty(searchTerm))
+                    {
+                        list9Users = list9Users.Where(u => u.UserName.Contains(searchTerm)).ToList();
+                    }
                     foreach (var list9 in list9Users)
                     {
                         var userId = (int)HttpContext.Current.Session["UserId"];
@@ -172,6 +187,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     return null;
                 }
             }
+            friendsListD.ListOfFriends =  friendsListD.ListOfFriends.Skip(_skipParameter).Take(9).ToList();
             return friendsListD;
         }
 
@@ -233,6 +249,47 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     return false;
                 }
+            }
+        }
+        
+        protected int GetTotalFriendsCountD(string searchTerm)
+        {
+            try
+            {
+                using (var db = new UserContext())
+                {
+                    var userId = (int)HttpContext.Current.Session["UserId"];
+                    var query = db.Friends.Where(u => u.IdUser == userId).Include(u=>u.User);
+
+                    if (!string.IsNullOrEmpty(searchTerm))
+                    {
+                        query = query.Where(u => u.User.UserName.Contains(searchTerm));
+                    }
+
+                    return query.Count();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return 0;
+            }
+        }
+
+        protected int GetTotalUserCountD(string searchTerm)
+        {
+            using (var db = new UserContext())
+            {
+                var userId = HttpContext.Current.Session["UserId"] as int?;
+                var query = db.UsersT.Where(u => u.Id != userId);
+
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    query = query.Where(u => u.UserName.Contains(searchTerm));
+                }
+                var countFriend = db.Friends.Count(u => u.IdUser == userId);
+
+                return query.Count() - countFriend;
             }
         }
     }

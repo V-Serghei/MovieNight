@@ -23,7 +23,7 @@ using MovieNight.Web.Models.SortingSearchingFiltering;
 
 namespace MovieNight.Web.Controllers
 {
-    public class SearchSortAddController : Controller
+    public class SearchSortAddController : MasterController
     {
         
         private readonly IFriendsService _serviceFriend;
@@ -86,15 +86,29 @@ namespace MovieNight.Web.Controllers
 
         }
         // GET: SearchSortAdd
+        #region Friends
         [UserMod]
-        public ActionResult FriendsPage(int _skipParametr = 0)
+        public ActionResult FriendsPage(int _skipParametr = 0, string searchTerm = "")
         {
-            var listU = _serviceFriend.getListOfFriends(_skipParametr);
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+            {
+                return RedirectToAction("Error404Page", "Error");
+            }
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Login", "Identification");
+            }
+    
+            int itemsPerPage = 9;
+
+            var listU = _serviceFriend.getListOfFriends(_skipParametr, searchTerm);
+            FriendListModel friendListModel = new FriendListModel();
             if (listU == null)
             {
                 return View();
             }
-            FriendListModel friendListModel = new FriendListModel();
+
             foreach (var t in listU.ListOfFriends)
             {
                 FriendsPageD tmp = t; 
@@ -107,13 +121,95 @@ namespace MovieNight.Web.Controllers
                 };
                 friendListModel.ListOfFriends.Add(listOfFriends);
             }
+
+            int totalItems = _serviceFriend.GetTotalFriendsCount(searchTerm);
+            friendListModel.Pagination = new PaginationModel
+            {
+                TotalItems = totalItems,
+                ItemsPerPage = itemsPerPage,
+                CurrentPage = _skipParametr / itemsPerPage + 1
+            };
+
+            friendListModel.SearchTerm = searchTerm; // Добавляем параметр поиска в модель
+
+            return View(friendListModel);
+        }
+        
+        [UserMod]
+        [HttpGet]
+        public ActionResult FindFriends(int _skipParametr = 0, string searchTerm = "")
+        { 
+            SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+            {
+                return RedirectToAction("Error404Page", "Error");
+            }
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
+            {
+                return RedirectToAction("Login", "Identification");
+            }
+            var listU = _serviceFriend.getListOfUsers(_skipParametr, searchTerm);
+            FriendListModel friendListModel = new FriendListModel();
+            if (listU == null)
+            {
+                return View();
+            }
+            foreach (var t in listU.ListOfFriends)
+            {
+                FriendsPageD tmp = t; 
+                var listOfUsers = _mapper.Map<FriendPageModel>(tmp);
+                listOfUsers.BUserE = new UserModel
+                {
+                    Id = tmp.BUserE.Id,
+                    Username = tmp.BUserE.Username,
+                    Email = tmp.BUserE.Email
+                };
+                friendListModel.ListOfFriends.Add(listOfUsers);
+            }
+
+            int totalItems = _serviceFriend.GetTotalUserCount(searchTerm); 
+            int itemsPerPage = 9; 
+            friendListModel.Pagination = new PaginationModel
+            {
+                TotalItems = totalItems,
+                ItemsPerPage = itemsPerPage,
+                CurrentPage = _skipParametr / itemsPerPage + 1
+            };
+
+            friendListModel.SearchTerm = searchTerm; 
+                
             return View(friendListModel);
         }
 
-       
-
+        public ActionResult SetNewFriendPage(int? _friendId)
+        {
+            var _userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+            var _userVsFriend = _serviceFriend.setAddFriend((_userId, _friendId));
+            if (_userVsFriend)
+            {
+            
+                return RedirectToAction("FindFriends");
+            }
+            else
+            {
+                return RedirectToAction("Error404Page", "Error");
+            }
+        }
+        public ActionResult SetDeleteFriendPage(int? _friendId)
+        {
+            var _userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+            var _userVsFriend = _serviceFriend.setDeleteFriend((_userId, _friendId));
+            if (_userVsFriend == true)
+            {
+                return RedirectToAction("FriendsPage");
+            }
+            else
+            {
+                return RedirectToAction("Error404Page", "Error");
+            }
+        }
         
-
+        #endregion
         public ActionResult SerialsSearch()
         {
             if(TempData["MovieListModel"] == null){
@@ -214,38 +310,6 @@ namespace MovieNight.Web.Controllers
         {
             return View();
         }
-        [UserMod]
-        [HttpGet]
-        public ActionResult FindFriends(int _skipParametr = 0)
-        {
-            // if(TempData["_skipParametr"]==null)
-            // {
-            //     TempData["_skipParametr"] = _skipParametr;
-            // }
-            // else if(TempData["_skipParametr"])
-            //
-            var listU = _serviceFriend.getListOfUsers(_skipParametr);
-            FriendListModel friendListModel = new FriendListModel();
-            if (listU == null)
-            {
-                return View();
-            }
-            foreach (var t in listU.ListOfFriends)
-            {
-                FriendsPageD tmp = t; 
-                var listOfUsers = _mapper.Map<FriendPageModel>(tmp);
-                listOfUsers.BUserE = new UserModel
-                {
-                    Id = tmp.BUserE.Id,
-                    Username = tmp.BUserE.Username,
-                    Email = tmp.BUserE.Email
-                };
-                friendListModel.ListOfFriends.Add(listOfUsers);
-            }
-
-            return View(friendListModel);
-        }
-
 
         #region ViewedList
 
@@ -674,33 +738,6 @@ namespace MovieNight.Web.Controllers
         //return RedirectToAction("MovieSearch","SearchSortAdd");
         return Json(listModel);
 
-    }
-    public ActionResult SetNewFriendPage(int? _friendId)
-    {
-        var _userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
-        var _userVsFriend = _serviceFriend.setAddFriend((_userId, _friendId));
-        if (_userVsFriend)
-        {
-            
-            return RedirectToAction("FindFriends");
-        }
-        else
-        {
-            return RedirectToAction("Error404Page", "Error");
-        }
-    }
-    public ActionResult SetDeleteFriendPage(int? _friendId)
-    {
-        var _userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
-        var _userVsFriend = _serviceFriend.setDeleteFriend((_userId, _friendId));
-        if (_userVsFriend == true)
-        {
-            return RedirectToAction("FriendsPage");
-        }
-        else
-        {
-            return RedirectToAction("Error404Page", "Error");
-        }
     }
     }
 }

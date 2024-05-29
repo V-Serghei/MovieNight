@@ -172,7 +172,7 @@ namespace MovieNight.BusinessLogic.Core
                 Username = rData.UserName,
                 Email = rData.Email,
                 Password = rData.Password,
-                Role = LevelOfAccess.Admin
+                Role = LevelOfAccess.User
             };
             
             
@@ -195,7 +195,7 @@ namespace MovieNight.BusinessLogic.Core
                 Email = rData.Email,
                 LastLoginDate = rData.RegDateTime,
                 LastIp = rData.Ip,
-                Role = LevelOfAccess.Admin,
+                Role = LevelOfAccess.User,
                 Checkbox = rData.Checkbox,
                 Salt = Salt.GetRandSalt()
                 
