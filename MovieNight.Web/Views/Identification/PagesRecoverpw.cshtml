@@ -70,8 +70,11 @@
     </div>
     <!-- end page -->
 
-    <footer class="footer footer-alt">
-        2024  &copy; Movie Night <a href="" class="text-muted"> </a>
+    <footer id="footer" style="margin-right: 0!important; margin-left: 0!important;" class=" bg-dark text-white py-4">
+        <div style="margin-left: 240px">
+
+        @Html.Partial("_Footer")
+        </div>
     </footer>
 
     @Scripts.Render("~/bundles/vendor/js")

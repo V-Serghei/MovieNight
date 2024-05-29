@@ -13,8 +13,7 @@
 
     <!-- App css -->
 
-
-
+   
     @Styles.Render("~/bundles/bootstrap/css")
     @Styles.Render("~/bundles/icons/css")
     @Styles.Render("~/bundles/app/css")
@@ -50,10 +49,7 @@
     @* email *@
     @Styles.Render("~/bundles/summernote_bs4/css")
     @Styles.Render("~/bundles/dropzone/css")
-  
-  
-
-
+    
 
 
     @if (IsSectionDefined("Styles"))
@@ -82,10 +78,11 @@
         </div>
         <div class="content-page">
             @RenderBody()
-            <footer class="footer">
-                @Html.Partial("_Footer")
-            </footer>
+            
         </div>
+        <footer id="footer" class="footer bg-dark text-white py-4">
+            @Html.Partial("_Footer")
+        </footer>
 
         <div class="right-bar">
             @Html.Partial("_Rbar")

@@ -22,6 +22,7 @@ namespace MovieNight.Web.Controllers
         internal ISession _session;
         public DataTransferController()
         {
+            
             var BL = new BusinessLogic.BusinessLogic();
             сompleteInbox = BL.GetInbox();
             _session = BL.Session();
@@ -30,6 +31,9 @@ namespace MovieNight.Web.Controllers
         [HttpGet]
         public ActionResult Inbox()
         {
+            SessionStatus();
+            
+            
             var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             var config = new MapperConfiguration(c =>
             {

@@ -14,6 +14,7 @@ using AutoMapper;
 using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.AchievementE;
+using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Infrastructure.Different;
 using MovieNight.Web.Models.Achievement;
@@ -22,6 +23,12 @@ namespace MovieNight.Web.Controllers
 {
     public class IdentificationController : MasterController
     {
+
+        #region Basic Settings
+
+        /// <summary>
+        /// Basic settings for the controller
+        /// </summary>
         private readonly ISession _sessionUser;
         private readonly IMapper _mapper;
         private readonly IAchievements _achievements;
@@ -36,14 +43,19 @@ namespace MovieNight.Web.Controllers
 
 
             });
-                _mapper = config.CreateMapper();
+            _mapper = config.CreateMapper();
 
             var sesControlBl = new BusinessLogic.BusinessLogic();
             _sessionUser = sesControlBl.Session();
             _achievements = sesControlBl.GetAchievementsService();
         }
+        
+        #endregion
+        
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [GuestMod]
         public async Task<JsonResult> LoginPost(LoginViewModel model)
         {
             var logD = new LogInData
@@ -70,6 +82,8 @@ namespace MovieNight.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [GuestMod]
         public async Task<JsonResult> RegistPost(RegistViewModel rModel)
         {
             if (rModel.Checkbox != "on")
@@ -123,22 +137,27 @@ namespace MovieNight.Web.Controllers
 
         // GET: Identification
         [HttpGet]
+        [GuestMod]
         public ActionResult Login()
         {
             
             return View();
         }
         [HttpGet]
+        [GuestMod]
         public ActionResult Register()
         {
             return View();
         }
         [HttpGet]
+        [GuestMod]
         public ActionResult PagesRecoverpw()
         {
             return View();
         }
 
+        [HttpGet]
+        [GuestMod]
         public ActionResult Logout()
         {
 
