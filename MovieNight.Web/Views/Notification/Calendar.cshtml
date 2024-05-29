@@ -1,129 +1,126 @@
 ﻿@using System.Web.Optimization
 
 @{
-    ViewBag.Title = "Calendar";
+ViewBag.Title = "Calendar";
 }
 
-<div>
-    <!-- Start Content-->
-        <div class="container-fluid">
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Minton</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
+                            <li class="breadcrumb-item active">Calendar</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Calendar</h4>
+                </div>
+            </div>
+        </div>
 
-            <!-- start page title -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box">
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Movie Night</a></li>
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Calendar</a></li>
-                            </ol>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <a href="#" data-toggle="modal" data-target="#add-category" class="btn btn-lg font-16 btn-primary btn-block">
+                                    <i class="mdi mdi-plus-circle-outline"></i> Create New Event
+                                </a>
+                                <div id="external-events" class="m-t-20">
+                                    <br>
+                                    <p class="text-muted">Drag and drop your event or click in the calendar</p>
+                                    <div class="external-event bg-success" data-class="bg-success">
+                                        <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>New Theme Release
+                                    </div>
+                                    <div class="external-event bg-info" data-class="bg-info">
+                                        <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>My Event
+                                    </div>
+                                    <div class="external-event bg-warning" data-class="bg-warning">
+                                        <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>Meet manager
+                                    </div>
+                                    <div class="external-event bg-danger" data-class="bg-danger">
+                                        <i class="mdi mdi-checkbox-blank-circle mr-2 vertical-middle"></i>Create New theme
+                                    </div>
+                                </div>
+                                <div class="custom-control custom-checkbox mt-3">
+                                    <input type="checkbox" class="custom-control-input" id="drop-remove">
+                                    <label class="custom-control-label" for="drop-remove">Remove after drop</label>
+                                </div>
+                                <div class="mt-5 d-none d-xl-block">
+                                    <h5 class="text-center">How It Works ?</h5>
+                                    <ul class="pl-3">
+                                        <li class="text-muted mb-3">
+                                            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                                        </li>
+                                        <li class="text-muted mb-3">
+                                            Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage.
+                                        </li>
+                                        <li class="text-muted mb-3">
+                                            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div id="calendar"></div>
+                            </div>
                         </div>
-                        <h4 class="page-title text-warning font-weight-bold">Calendar</h4>
+                    </div>
+                </div>
+                <div class="modal fade" id="event-modal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Add New Event</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body p-3"></div>
+                            <div class="text-right p-3">
+                                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-success save-event">Create event</button>
+                                <button type="button" class="btn btn-danger delete-event" data-dismiss="modal">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="add-category" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Add a category</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body p-3">
+                                <form>
+                                    <div class="form-group">
+                                        <label class="control-label">Category Name</label>
+                                        <input class="form-control form-white" placeholder="Enter name" type="text" name="category-name"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Choose Category Color</label>
+                                        <select class="form-control form-white" data-placeholder="Choose a color..." name="category-color">
+                                            <option value="primary">Primary</option>
+                                            <option value="success">Success</option>
+                                            <option value="danger">Danger</option>
+                                            <option value="info">Info</option>
+                                            <option value="warning">Warning</option>
+                                            <option value="dark">Dark</option>
+                                        </select>
+                                    </div>
+                                </form>
+                                <div class="text-right pt-2">
+                                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary ml-1 save-category" data-dismiss="modal">Save</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- end page title -->
-
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="card-box">
-                        <style>
-                            /* Увеличение размеров календаря и его содержимого */
-                            .datepicker {
-                                width: 500px; 
-                                height: 600px; 
-                                font-size: 35px; 
-                            }
-
-                            /* Увеличение размеров заголовков и текста внутри календаря */
-                            .datepicker th,
-                            .datepicker td {
-                                font-size: 35px; 
-                            }
-                            /* Увеличение расстояния между числами и названиями дней недели */
-                            .datepicker th,
-                            .datepicker td {
-                                padding: 10px;
-                            }
-                            /* Увеличение размера текста только для класса larger-text */
-                            .larger-text {
-                                font-size: 20px; 
-                            }
-                        </style>
-                        <div class="row">
-
-                            <div class="col-lg-6">
-                                <div class="p-2">
-                                    <label class="larger-text text-purple">New movie releases on our website</label>
-                                    <div class="input-group">
-                                        <div data-provide="datepicker-inline"></div>
-                                    </div><!-- input-group -->
-                                </div>
-                            </div>
-                            
-                            <div class="col-lg-6">
-                                <div class="p-2 text-center mt-5">
-                                    <form action="#" class="form-horizontal">
-                                        @* <div class="form-group row mb-3"> *@
-                                        @*     <label class="larger-text text-purple col-sm-4">Default Functionality</label> *@
-                                        @*     <div> *@
-                                        @*         <div class="input-group larger-text"> *@
-                                        @*             <input type="text" class="form-control" data-provide="datepicker"> *@
-                                        @*             <div class="input-group-append"> *@
-                                        @*                 <span class="input-group-text"><i class="ti-calendar"></i></span> *@
-                                        @*             </div> *@
-                                        @*         </div> *@
-                                        @*         <!-- input-group --> *@
-                                        @*     </div> *@
-                                        @* </div> *@
-
-                                        <div class="form-group row mb-3">
-                                            <label class="larger-text text-purple col-sm-4">Choose a date</label>
-                                            <div>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control larger-text text-purple" data-provide="datepicker" data-date-autoclose="true">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text"><i class="ti-calendar"></i></span>
-                                                    </div>
-                                                </div><!-- input-group -->
-                                            </div>
-                                        </div>
-                                        <div class="form-group row mb-3">
-                                            <label class="larger-text text-purple col-sm-4">Month View</label>
-                                            <div>
-                                                <div class="input-group larger-text">
-                                                    <input type="text" class="form-control larger-text text-purple" data-provide="datepicker" data-date-format="MM yyyy" data-date-min-view-mode="1">
-                                                </div><!-- input-group -->
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="form-group row mb-0">
-                                            <label class="larger-text text-purple col-sm-4">Year View</label>
-                                            <div>
-                                                <div class="input-group larger-text">
-                                                    <input type="text" class="form-control larger-text text-purple" data-provide="datepicker" data-date-min-view-mode="2">
-                                                </div><!-- input-group -->
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-8 mt-5">
-                                                <div class="form-group larger-text">
-                                                    <label class="larger-text text-purple col-sm-4" for="event">Event name</label>
-                                                    <input type="text" class="form-control" id="event" placeholder="Enter the name of the event" name="event" value="">
-                                                </div>
-                                            </div>
-                                        </div> <!-- end row -->
-                                    </form>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div> <!-- end card-box -->
-                </div> <!-- end col -->
-            </div>
         </div>
+    </div>
 </div>
-
-
-
-

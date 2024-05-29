@@ -259,14 +259,43 @@ namespace MovieNight.Web.Controllers
             var friendmodel = _mapper.Map<FriendPageModel>(friendsDate);
             if (friendmodel != null)
             {
-                friendmodel.BUserE = new UserModel
                 {
-                    Username = friendsDate.BUserE.Username,
-                    Email = friendsDate.BUserE.Email
-                };
-                return View(friendmodel);
+                    var listInPl = _movie.GetListPlain(id);
+                    friendmodel.ListInThePlans = _mapper.Map<List<ListOfFilmsModel>>(listInPl);
+                    var lisrViewing = _movie.GetViewingList(id);
+                    friendmodel.ViewingHistory = _mapper.Map<List<ViewingHistoryModel>>(lisrViewing);
+                    var defInf = _sessionUser.GetUserData(id);
+                    friendmodel.BUserE = new UserModel
+                    {
+                        Username = defInf.Username,
+                        Email = defInf.Email
+                    };
+                    var statistic = _movie.GetDataStatisticPage(id);
+                    if (statistic != null)
+                    {
+                        friendmodel.AnimeCount = statistic.AnimeCount;
+                        friendmodel.AnimeTotal = statistic.AnimeTotal;
+                        friendmodel.CartonsCount = statistic.CartonsCount;
+                        friendmodel.CartonTotal = statistic.CartonTotal;
+                        friendmodel.FilmCount = statistic.FilmCount;
+                        friendmodel.FilTotal = statistic.FilTotal;
+                        friendmodel.SerialsCount = statistic.SerialsCount;
+                        friendmodel.SerialTotal = statistic.SerialTotal;
+                    }
+
+                    var achievements = _achievements.GetAchievements(id);
+                    if (achievements != null)
+                    {
+                        var achiev = _mapper.Map<List<AchievementModel>>(achievements);
+                        if (achiev != null)
+                        {
+                            friendmodel.Achievements = achiev;
+                        }
+                    }
+                }
             }
-            return View();
+
+            return View(friendmodel);
         }
 
         

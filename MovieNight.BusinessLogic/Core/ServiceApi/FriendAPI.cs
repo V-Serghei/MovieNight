@@ -2,6 +2,7 @@
 using MovieNight.Domain.Entities.Friends;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,7 +59,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             }
             return friendsPageD;
         }
-        
+
         public FriendsListD getListOfUsersD(int _skipParameter)
         {
             var config = new MapperConfiguration(c =>
@@ -115,6 +116,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             friendsListD.ListOfFriends = friendsListD.ListOfFriends.Skip(_skipParameter*9).Take(9).ToList();
             return friendsListD;
         }
+
         public FriendsListD getListOfFriendsD(int _skipParameter)
         {
             var config = new MapperConfiguration(c =>
@@ -235,6 +237,9 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 }
             }
         }
+
+       
+
     }
     
 }

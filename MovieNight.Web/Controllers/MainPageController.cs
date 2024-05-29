@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using MovieNight.BusinessLogic.Interface;
 using MovieNight.BusinessLogic.Interface.IService;
-using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.DifferentE;
 using MovieNight.Domain.Entities.Friends;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
-using MovieNight.Domain.Entities.UserId;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Models.DifModel;
 using MovieNight.Web.Models.Friends;
 using MovieNight.Web.Models.Movie;
-using MovieNight.Web.Models.Movie.SearchPages;
 using MovieNight.Web.Models.PersonalP;
 using MovieNight.Web.Models.PersonalP.Bookmark;
 using MovieNight.Web.Models.SortingSearchingFiltering;
@@ -27,7 +22,7 @@ namespace MovieNight.Web.Controllers
 {
     public class MainPageController : MasterController
     {
-        internal ISession SessionUser;
+        private readonly ISession _sessionUser;
         private readonly IMapper _mapper;
         private readonly IMovie _movie;
         
@@ -35,7 +30,7 @@ namespace MovieNight.Web.Controllers
         public MainPageController()
         {
             var sesControlBl = new BusinessLogic.BusinessLogic();
-            SessionUser = sesControlBl.Session();
+            _sessionUser = sesControlBl.Session();
             _movie = sesControlBl.GetMovieService();
 
               var config = new MapperConfiguration(cfg => {
@@ -110,11 +105,11 @@ namespace MovieNight.Web.Controllers
             }
             var user = System.Web.HttpContext.Current.GetMySessionObject();
             if(user==null){
-                HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(null));
+                HttpContextInfrastructure.SerGlobalParam(_sessionUser.GetIdCurrUser(null));
             }
             else
             {
-                HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(user.Username));
+                HttpContextInfrastructure.SerGlobalParam(_sessionUser.GetIdCurrUser(user.Username));
             }
             return View();
         }
@@ -132,11 +127,11 @@ namespace MovieNight.Web.Controllers
                 return RedirectToAction("Login", "Identification");
             }
             var user = System.Web.HttpContext.Current.GetMySessionObject();
-            if(user==null){HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(null));
+            if(user==null){HttpContextInfrastructure.SerGlobalParam(_sessionUser.GetIdCurrUser(null));
             }
             else
             {
-                HttpContextInfrastructure.SerGlobalParam(SessionUser.GetIdCurrUser(user.Username));
+                HttpContextInfrastructure.SerGlobalParam(_sessionUser.GetIdCurrUser(user.Username));
             }
             
             return View();

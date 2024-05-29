@@ -34,5 +34,7 @@ namespace MovieNight.BusinessLogic.Session.Service
         {
             return setDeleteFriendD(valueTuple);
         }
+
+        
     }
 }

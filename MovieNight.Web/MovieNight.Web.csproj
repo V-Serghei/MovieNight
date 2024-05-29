@@ -901,6 +901,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Attributes\AdminModAttribute.cs" />
     <Compile Include="Attributes\GuestModAttribute.cs" />
@@ -917,6 +918,7 @@
     <Compile Include="Controllers\SearchSortAddController.cs" />
     <Compile Include="Controllers\SettingController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
+    <Compile Include="Filter\ClearSessionFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -925,6 +927,7 @@
     <Compile Include="Infrastructure\HttpContextInfrastructure.cs" />
     <Compile Include="Infrastructure\SessionExchanges.cs" />
     <Compile Include="Models\Achievement\AchievementModel.cs" />
+    <Compile Include="Models\Calendar\CalendarEvent.cs" />
     <Compile Include="Models\Calendar\EventDataModel.cs" />
     <Compile Include="Models\Different\PhoneNumModel.cs" />
     <Compile Include="Models\Different\TagModel.cs" />

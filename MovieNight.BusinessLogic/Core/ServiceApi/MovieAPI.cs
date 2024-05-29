@@ -33,17 +33,19 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
     public class MovieAPI
     {
         //var op = ReadMoviesFromJson("D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
-
+        readonly string _jsonPath = Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.FullName ?? string.Empty, @"MovieNight.BusinessLogic\DBModel\Seed\SeedData.json");
+        string _basePath = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty)?
+            .Parent?.Parent?.FullName; 
         private IMapper MapperFilm { get; set; }
         private IMapper MapperFact { get; set; }
         private IMapper MapperCast { get; set; }
         private IMapper MapperCard { get; set; }
 
         private IMapper MapperViewList { get; set; }
-
+        
         private List<IMapper> LMapper => GetMappersSettings();
-
-
+        
+        
         //If you’re back to the meper again, remember,
         //check first if you called in your method where you want to use it,
         //the method itself with all the settings of the meper
@@ -132,21 +134,24 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 MapperCard, MapperFact, MapperCast, MapperFilm, MapperViewList
             };
         }
-
+        public static void Initialize()
+        {
+            var api = new MovieAPI();
+            var movies = api.ReadMoviesFromJson(api._jsonPath);
+            api.PopulateDatabase(movies);
+        }
 
         protected MovieTemplateInfE GetMovieFromDb(int? id)
         {
             GetMappersSettings();
             var movieDb = new MovieTemplateInfE();
-         string jsonPath = Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.FullName ?? string.Empty, @"MovieNight.BusinessLogic\DBModel\Seed\SeedData.json");
-            var basePath = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty)?
-                .Parent?.Parent?.FullName; 
+        
             
             // var op = ReadMoviesFromJson(
             //     "D:\\web project\\Movie\\MovieNight\\MovieNight.BusinessLogic\\DBModel\\Seed\\SeedData.json");
-            var op = ReadMoviesFromJson(jsonPath);
+            //var op = ReadMoviesFromJson(_jsonPath);
 
-            PopulateDatabase(op);
+            //PopulateDatabase(op);
             // conf.CreateMapper();
             // var maper = conf.CreateMapper();
             using (var db = new MovieContext())
@@ -215,6 +220,18 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 {
                     try
                     {
+                        
+                        var existingMovie = db.MovieDb.FirstOrDefault(m =>
+                            m.Title == movieTemplate.Title &&
+                            m.ProductionYear == movieTemplate.ProductionYear &&
+                            m.Director == movieTemplate.Director);
+
+                        if (existingMovie != null)
+                        {
+                            
+                            continue;
+                        }
+
                         var movieDb = new MovieDbTable
                         {
                             Title = movieTemplate.Title,
@@ -239,7 +256,6 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             MovieCards = new List<MovieCardDbTable>()
                         };
                         db.MovieDb.Add(movieDb);
-                        //db.SaveChanges();
 
                         foreach (var factE in movieTemplate.InterestingFacts)
                         {
@@ -251,12 +267,11 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
                             movieDb.InterestingFacts.Add(fact);
                             db.InterestingFact.Add(fact);
-                            //db.SaveChanges();
                         }
 
                         foreach (var cardE in movieTemplate.MovieCards)
                         {
-                            var card = new MovieCardDbTable()
+                            var card = new MovieCardDbTable
                             {
                                 ImageUrl = cardE.ImageUrl,
                                 Description = cardE.Description,
@@ -265,18 +280,10 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
 
                             movieDb.MovieCards.Add(card);
                             db.MovieCard.Add(card);
-                            //db.SaveChanges();
                         }
 
                         foreach (var member in movieTemplate.CastMembers)
                         {
-                            // movieDb.CastMembers.Add(new CastMemDbTable
-                            // {
-                            //     Name = member.Name,
-                            //     ImageUrl = member.ImageUrl,
-                            //     Role = member.Role
-                            // });
-
                             var castMemberDb = new CastMemDbTable
                             {
                                 Name = member.Name,
@@ -285,7 +292,6 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                             };
                             movieDb.CastMembers.Add(castMemberDb);
                             db.CastDbTables.Add(castMemberDb);
-                            // db.SaveChanges();
                         }
 
                         db.SaveChanges();
@@ -305,6 +311,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             }
         }
 
+
         private List<MovieTemplateInfE> ReadMoviesFromJson(string url)
         {
             try
@@ -315,7 +322,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 List<MovieTemplateInfE> moviess;
 
                 string json = File.ReadAllText(jsonFilePath);
-                Console.WriteLine(json);
+                
 
                 moviess = JsonConvert.DeserializeObject<List<MovieTemplateInfE>>(json);
 
@@ -1073,8 +1080,14 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     var expiredBookmarks = db.Bookmark
                         .Where(b => b.BookmarkTimeOf && !b.BookMark && b.TimeAdd < timeThreshold)
                         .ToList();
-
+                    
                     db.Bookmark.RemoveRange(expiredBookmarks);
+                    var expiredBookmarksAndInBookmark = db.Bookmark
+                        .Where(b => b.BookmarkTimeOf && b.BookMark && b.TimeAdd < timeThreshold);
+                    foreach (var bookmark in expiredBookmarksAndInBookmark)
+                    {
+                        bookmark.BookmarkTimeOf = false;
+                    }
                     db.SaveChanges();
                 }
             }

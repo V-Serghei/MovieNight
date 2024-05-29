@@ -1,4 +1,5 @@
-﻿@model MovieNight.Web.Models.StatisticModel
+﻿@using System.Web.Optimization
+@model MovieNight.Web.Models.StatisticModel
 
 @{
     ViewBag.Title = "Personal Promotion Statistics";
@@ -9,7 +10,7 @@
 
     
 }
-
+@Styles.Render("~/bundles/jquery_jvectormap_1_2_2/css")
 
 <style>
     #apex-pie-2 {
