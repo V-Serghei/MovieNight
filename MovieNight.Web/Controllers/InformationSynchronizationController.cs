@@ -4,6 +4,7 @@ using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using MovieNight.BusinessLogic.Interface;
@@ -66,6 +67,7 @@ namespace MovieNight.Web.Controllers
                         src => src.Ignore())
                     .ForMember(cnf => cnf.MovieCards,
                         src => src.Ignore());
+                cfg.CreateMap<MovieTemplateInfModel, MovieTemplateInfE>();
                 cfg.CreateMap<InterestingFact, InterestingFactE>();
                 cfg.CreateMap<InterestingFactE, InterestingFact>();
                 cfg.CreateMap<MovieCardE, MovieCard>();
@@ -711,5 +713,59 @@ namespace MovieNight.Web.Controllers
         {
             return View();
         }
+
+        [ModeratorMod]
+        [HttpPost]
+        public ActionResult MovieTemplateAdding(MovieTemplateInfModel model, HttpPostedFileBase AvatarFile, IEnumerable<HttpPostedFileBase> CastImages, IEnumerable<HttpPostedFileBase> CardImages)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Error404Page","Error");
+            }
+
+            if (AvatarFile != null && AvatarFile.ContentLength > 0)
+            {
+                string posterPath = Path.Combine(Server.MapPath("~/images/Movie"), Path.GetFileName(AvatarFile.FileName));
+                AvatarFile.SaveAs(posterPath);
+                model.PosterImage = "/images/Movie/" + Path.GetFileName(AvatarFile.FileName);
+            }
+
+            int castIndex = 0;
+            foreach (var file in CastImages)
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    string castImagePath = Path.Combine(Server.MapPath("~/images/Cast"), Path.GetFileName(file.FileName));
+                    file.SaveAs(castImagePath);
+                    model.CastMembers[castIndex].ImageUrl = "/images/Cast/" + Path.GetFileName(file.FileName);
+                }
+                castIndex++;
+            }
+
+            int cardIndex = 0;
+            foreach (var file in CardImages)
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    string cardImagePath = Path.Combine(Server.MapPath("~/images/Cards"), Path.GetFileName(file.FileName));
+                    file.SaveAs(cardImagePath);
+                    model.MovieCards[cardIndex].ImageUrl = "/images/Cards/" + Path.GetFileName(file.FileName);
+                }
+                cardIndex++;
+            }
+            var movieData = _mapper.Map<MovieTemplateInfE>(model);
+            var result = _movie.AddMovieTemplate(movieData);
+            if (result.Result)
+            {
+                var idM =  _movie.GetMovieId(movieData);
+                return RedirectToAction("MovieTemplatePage", new { id = idM });
+
+            }
+            else
+            {
+                return RedirectToAction("Error404Page","Error");
+            }
+        }
+
     }
 }

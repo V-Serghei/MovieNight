@@ -79,6 +79,7 @@
     <Compile Include="Entities\MovieM\MovieTemplateInfE.cs" />
     <Compile Include="Entities\MovieM\Poster.cs" />
     <Compile Include="Entities\MovieM\RespAddViewListElDb.cs" />
+    <Compile Include="Entities\MovieM\ResultsOfTheOperation\MovieAddResult.cs" />
     <Compile Include="Entities\MovieM\SearchParam\ListSortCommandE.cs" />
     <Compile Include="Entities\MovieM\SearchParam\MovieCommandS.cs" />
     <Compile Include="Entities\MovieM\ViewingHistoryM.cs" />

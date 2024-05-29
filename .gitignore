@@ -18,3 +18,6 @@
 *.cache
 /MovieNight.Web/bin/MovieNight.Web.dll
 /MovieNight.Web/bin/MovieNight.Web.pdb
+/bin
+bin/
+obj/

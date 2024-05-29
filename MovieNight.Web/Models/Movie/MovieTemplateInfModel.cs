@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using MovieNight.Domain.enams;
 
 namespace MovieNight.Web.Models.Movie
 {
     public class MovieTemplateInfModel
     {
         public int Id { get; set; }
+        public FilmCategory Category { get; set; }
         public string Title { get; set; }
         public string PosterImage { get; set; }
         public string Quote { get; set; }
