@@ -10,6 +10,6 @@ namespace MovieNight.Web.Models
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public bool Checkbox { get; set; }
+        public string Checkbox { get; set; }
     }
 }

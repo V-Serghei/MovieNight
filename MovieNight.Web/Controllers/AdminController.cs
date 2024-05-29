@@ -9,7 +9,7 @@ using MovieNight.Web.Attributes;
 namespace MovieNight.Web.Controllers
 {
     //[Authorize(Roles = "Admin")]
-    public class AdminController : Controller
+    public class AdminController : MasterController
     {
         // GET: Admin
 

@@ -1,0 +1,25 @@
+﻿@model MovieNight.Web.Models.Friends.PaginationModel
+
+<ul class="pagination pagination-rounded justify-content-end">
+    <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+        <a class="page-link" href="javascript:void(0);" onclick="loadPage(@(Model.CurrentPage - 1))">&laquo;</a>
+    </li>
+    @for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+            <a class="page-link" href="javascript:void(0);" onclick="loadPage(@i)">@i</a>
+        </li>
+    }
+    <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+        <a class="page-link" href="javascript:void(0);" onclick="loadPage(@(Model.CurrentPage + 1))">&raquo;</a>
+    </li>
+</ul>
+
+<script>
+    function loadPage(pageNumber) {
+        var skipParam = (pageNumber - 1) * @Model.ItemsPerPage;
+        var url = '@Url.Action(ViewContext.RouteData.Values["action"].ToString(), ViewContext.RouteData.Values["controller"].ToString())';
+        url += '?_skipParametr=' + skipParam;
+        window.location.href = url;
+    }
+</script>

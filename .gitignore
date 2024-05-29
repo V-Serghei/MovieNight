@@ -16,3 +16,5 @@
 /MovieNight.Web/obj/Debug/MovieNight.Web.pdb
 /MovieNight/MovieNight.Web/obj/
 *.cache
+/MovieNight.Web/bin/MovieNight.Web.dll
+/MovieNight.Web/bin/MovieNight.Web.pdb

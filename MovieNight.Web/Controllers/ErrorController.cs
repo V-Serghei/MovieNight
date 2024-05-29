@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace MovieNight.Web.Controllers
 {
-    public class ErrorController : Controller
+    public class ErrorController : MasterController
     {
         public ActionResult Error404Page()
         {

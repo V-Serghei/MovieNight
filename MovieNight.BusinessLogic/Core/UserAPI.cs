@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -172,7 +173,7 @@ namespace MovieNight.BusinessLogic.Core
                 Username = rData.UserName,
                 Email = rData.Email,
                 Password = rData.Password,
-                Role = LevelOfAccess.Admin
+                Role = LevelOfAccess.User
             };
             
             
@@ -184,18 +185,13 @@ namespace MovieNight.BusinessLogic.Core
         
         protected static bool UserAdding(RegData rData)
         {
-            //add user to database
-
-          
-            
-
             var user = new UserDbTable()
             {
                 UserName = rData.UserName,
                 Email = rData.Email,
                 LastLoginDate = rData.RegDateTime,
                 LastIp = rData.Ip,
-                Role = LevelOfAccess.Admin,
+                Role = LevelOfAccess.User,
                 Checkbox = rData.Checkbox,
                 Salt = Salt.GetRandSalt()
                 
@@ -214,8 +210,18 @@ namespace MovieNight.BusinessLogic.Core
                     HttpContext.Current.Session["UserName"] = user.UserName;
                     return true;
                 }
-                catch (Exception ex)
+                catch (DbEntityValidationException  ex)
                 {
+                    foreach (var validationErrors in ex.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            Console.WriteLine("Сущность: {0}, Свойство: {1}, Ошибка: {2}",
+                                validationErrors.Entry.Entity.GetType().Name,
+                                validationError.PropertyName,
+                                validationError.ErrorMessage);
+                        }
+                    }
                     return false;
                 }
             }
@@ -420,7 +426,10 @@ namespace MovieNight.BusinessLogic.Core
                 {
                     var existingUser = db.UsersT.FirstOrDefault(u => u.Id == currentUser.Id);
                     var existingProfile = db.PEdBdTables.FirstOrDefault(u => u.UserDbTableId == existingUser.Id);
-
+                    if (editing.DataBirth == default(DateTime))
+                    {
+                        editing.DataBirth = new DateTime(1753, 1, 1);
+                    }
                     if (existingProfile != null)
                     {
                         mapper.Map(editing, existingProfile);
@@ -449,6 +458,7 @@ namespace MovieNight.BusinessLogic.Core
                     {
                         var newProfile = new PEdBdTable { User = existingUser };
                         mapper.Map(editing, newProfile);
+                        newProfile.Avatar = editing.Avatar;
                         db.PEdBdTables.Add(newProfile);
                     }
 

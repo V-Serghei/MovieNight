@@ -81,6 +81,7 @@
                                             <label class="custom-control-label" for="checkbox-signup">I accept <a href="javascript: void(0);" class="text-dark">Terms and Conditions</a></label>
                                         </div>
                                     </div>
+
                                     <div class="form-group mb-0 text-center">
                                         <button class="btn btn-primary btn-block" type="submit"> Sign Up </button>
                                     </div>
@@ -140,18 +141,16 @@
             $(document).ready(function() {
                 $('#registrationForm').submit(function(e) {
                     e.preventDefault();
-                    var formData = $(this).serialize(); 
-        
+                    var formData = $(this).serialize();
+
                     $.ajax({
                         type: 'POST',
-                        url: '@Url.Action("RegistPost", "Identification")', 
+                        url: '@Url.Action("RegistPost", "Identification")',
                         data: formData,
                         success: function(response) {
                             if (response.redirect) {
-                               
                                 window.location.href = response.redirect;
                             } else if (!response.success) {
-                             
                                 $('.alert-danger').html(response.statusMsg).show();
                             }
                         },
@@ -161,6 +160,7 @@
                     });
                 });
             });
+
         </script>
 
     </body>

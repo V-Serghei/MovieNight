@@ -1,1 +1,259 @@
-function generateDayWiseTimeSeries(e,a,t){for(var n=0,i=[];n<a;){var o=e,r=Math.floor(Math.random()*(t.max-t.min+1))+t.min;i.push([o,r]),e+=864e5,n++}return i}var options={chart:{height:320,type:"area",stacked:!0,toolbar:{show:!1},events:{selection:function(e,a){console.log(new Date(a.xaxis.min))}}},colors:["#3f51b5","#CED4DC"],dataLabels:{enabled:!1},stroke:{width:[2],curve:"smooth"},series:[{name:"Direct",data:generateDayWiseTimeSeries(new Date("11 Feb 2017 GMT").getTime(),20,{min:100,max:1500})},{name:"Affilliate",data:generateDayWiseTimeSeries(new Date("11 Feb 2017 GMT").getTime(),20,{min:100,max:1e3})}],fill:{type:"gradient",gradient:{opacityFrom:.3,opacityTo:.9}},legend:{position:"top",horizontalAlign:"center"},xaxis:{type:"datetime"},yaxis:{title:{text:"Recent Signups",offsetX:-20,style:{color:void 0,fontSize:"13px",cssClass:"apexcharts-yaxis-title"}}}};(chart=new ApexCharts(document.querySelector("#apex-area"),options)).render();var chart;options={chart:{height:320,type:"donut"},series:[44,55,41,15],legend:{show:!0,position:"bottom",horizontalAlign:"center",verticalAlign:"middle",floating:!1,fontSize:"14px",offsetX:0,offsetY:-10},labels:["Series 1","Series 2","Series 3","Series 4"],colors:["#3f51b5","#009688","#00bcd4","#d1dee4"],responsive:[{breakpoint:600,options:{chart:{height:210},legend:{show:!1}}}]};(chart=new ApexCharts(document.querySelector("#apex-pie-2"),options)).render(),$("#world-map-markers").vectorMap({map:"world_mill_en",normalizeFunction:"polynomial",hoverOpacity:.7,hoverColor:!1,regionStyle:{initial:{fill:"#d4dadd"}},markerStyle:{initial:{r:9,fill:"#1abc9c","fill-opacity":.9,stroke:"#fff","stroke-width":7,"stroke-opacity":.4},hover:{stroke:"#fff","fill-opacity":1,"stroke-width":1.5}},backgroundColor:"transparent",markers:[{latLng:[41.9,12.45],name:"Vatican City"},{latLng:[43.73,7.41],name:"Monaco"},{latLng:[-.52,166.93],name:"Nauru"},{latLng:[-8.51,179.21],name:"Tuvalu"},{latLng:[43.93,12.46],name:"San Marino"},{latLng:[47.14,9.52],name:"Liechtenstein"},{latLng:[7.11,171.06],name:"Marshall Islands"},{latLng:[17.3,-62.73],name:"Saint Kitts and Nevis"},{latLng:[3.2,73.22],name:"Maldives"},{latLng:[35.88,14.5],name:"Malta"},{latLng:[12.05,-61.75],name:"Grenada"},{latLng:[13.16,-61.23],name:"Saint Vincent and the Grenadines"},{latLng:[13.16,-59.55],name:"Barbados"},{latLng:[17.11,-61.85],name:"Antigua and Barbuda"},{latLng:[-4.61,55.45],name:"Seychelles"},{latLng:[7.35,134.46],name:"Palau"},{latLng:[42.5,1.51],name:"Andorra"},{latLng:[14.01,-60.98],name:"Saint Lucia"},{latLng:[6.91,158.18],name:"Federated States of Micronesia"},{latLng:[1.3,103.8],name:"Singapore"},{latLng:[.33,6.73],name:"SÃ£o TomÃ© and PrÃ­ncipe"}]});
+function generateTimeSeriesWithEqualInterval(ratings, titles, timeAdd) {
+    var seriesData = [];
+    for (var i = 0; i < ratings.length; i++) {
+        seriesData.push({
+            x: i,
+            y: ratings[i],
+            title: titles[i], 
+            time: timeAdd[i] 
+        });
+    }
+    return seriesData;
+}
+
+var optionsAreaChart = {
+    chart: {
+        height: 320,
+        type: "area",
+        stacked: true,
+        toolbar: { show: false },
+        events: {
+            selection: function (e, a) {
+                console.log(new Date(a.xaxis.min));
+                
+            },
+            click: function(event, chartContext, config) {
+                var dataPoint = chartContext.w.config.series[config.seriesIndex].data[config.dataPointIndex];
+                console.log("Clicked on point:", dataPoint);
+                var title = dataPoint.title; 
+                var url = '/MainPage/Index?title=' + encodeURIComponent(title);
+                window.location.href = url;
+            }
+        },
+    },
+    colors: ["#3f51b5", "#CED4DC"],
+    stroke: { width: [2], curve: "smooth" },
+    fill: { type: "gradient", gradient: { opacityFrom: 0.3, opacityTo: 0.9 } },
+    legend: { position: "top", horizontalAlign: "center" },
+    xaxis: {
+        type: "numeric",
+    },
+    yaxis: {
+        title: {
+            text: "grades",
+            offsetX: -20,
+            style: {
+                color: undefined,
+                fontSize: "13px",
+                cssClass: "apexcharts-yaxis-title",
+            },
+        },
+    },
+    tooltip: {
+        enabled: true,
+        custom: function({ series, seriesIndex, dataPointIndex, w }) {
+            var dataPoint = w.config.series[seriesIndex].data[dataPointIndex];
+            return '<input value="" class="apexcharts-tooltip" style="display: block; background: #0a3622; position:relative; width: 100px; min-width: 200px; height: 10px; min-height: 10px; padding: 10px; border-radius: 5px;">' +
+                '<div style="color: maroon; margin-bottom: 5px;">Title: <strong style="color: blueviolet;">' + dataPoint.title + '</strong></div>' +
+                '<div>Date: <strong>' + dataPoint.time + '</strong></div>'+
+                '<div>Grade: <strong>' + dataPoint.y + '</strong></div>' +
+                '</input>';
+        }
+    },
+
+
+
+};
+$.ajax({
+    url: '/Statistic/GetChartDataRating',
+    type: 'GET',
+    success: function (data1) {
+        if (data1) {
+            var newData = {
+                myRating: generateTimeSeriesWithEqualInterval(data1.mygrade, data1.title,data1.timeAdd),
+                overallRating: generateTimeSeriesWithEqualInterval(data1.movieNightGrade, data1.title,data1.timeAdd)
+            };
+
+            optionsAreaChart.series = [
+                { name: "my rating", data: newData.myRating },
+                { name: "overall rating", data: newData.overallRating }
+            ];
+
+            var chartArea = new ApexCharts(document.querySelector("#apex-area"), optionsAreaChart);
+            chartArea.render(); 
+
+        }
+    },
+    error: function () {
+        
+    }
+});
+
+var options = {
+    chart: {
+        height: 320,
+        type: "area",
+        stacked: true,
+        toolbar: { show: false },
+        events: {
+            selection: function (e, a) {
+                console.log(new Date(a.xaxis.min));
+            },
+        },
+    },
+    colors: ["#3f51b5", "#CED4DC"],
+    dataLabels: { enabled: false },
+    stroke: { width: [2], curve: "smooth" },
+    fill: { type: "gradient", gradient: { opacityFrom: 0.3, opacityTo: 0.9 } },
+    legend: { position: "top", horizontalAlign: "center" },
+    xaxis: { type: "datetime" },
+    yaxis: {
+        title: {
+            text: "Recent Signups",
+            offsetX: -20,
+            style: {
+                color: undefined,
+                fontSize: "13px",
+                cssClass: "apexcharts-yaxis-title",
+            },
+        },
+    },
+};
+
+
+
+var chart;
+var colorStack = [
+    '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107',
+    '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#ffeb3b',
+    '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#ffeb3b', '#ffc107',
+    '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#ffeb3b',
+    '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336', '#e91e63', '#9c27b0', '#673ab7',
+    '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336', '#e91e63', '#9c27b0',
+    '#673ab7', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336', '#e91e63',
+    '#9c27b0', '#673ab7', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b', '#f44336',
+    '#e91e63', '#9c27b0', '#673ab7', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e', '#607d8b',
+    '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#9e9e9e'
+];
+
+function generateColors(count) {
+    var colors = [];
+    for (var i = 0; i < count; i++) {
+        var color = colorStack.shift(); 
+        if (!color) {
+           
+            colorStack = colorStack.concat(colorStack.slice());
+            color = colorStack.shift(); 
+        }
+        colors.push(color);
+    }
+    return colors;
+}
+
+
+var optionsGenres = {
+    chart: { height: 500, type: "donut" },
+    legend: {
+        show: !0,
+        position: "bottom",
+        horizontalAlign: "center",
+        verticalAlign: "middle",
+        floating: !1,
+        fontSize: "14px",
+        offsetX: 0,
+        offsetY: -10,
+    },
+    responsive: [
+        {
+            breakpoint: 600,
+            options: { chart: { height: 210 }, legend: { show: !1 } },
+        },
+    ],
+};
+$.ajax({
+    url: '/Statistic/GetChartDataGenre',
+    type: 'GET',
+    success: function (data1) {
+        if (data1) {
+            var countData = data1.countG;
+            var genresData = data1.genres;
+            var colorsData = generateColors(data1.countG.length);
+
+            optionsGenres.series = countData;
+            optionsGenres.labels = genresData;
+            optionsGenres.colors = colorsData;
+
+            var chartAreaGenres = new ApexCharts(document.querySelector("#apex-pie-2"), optionsGenres);
+            chartAreaGenres.render();
+        }
+    },
+    error: function () {
+    }
+});
+
+
+function generateColorsC(count) {
+    var colors = [];
+    for (var i = 20; i < count+20; i++) {
+        var color = colorStack.shift();
+        if (!color) {
+
+            colorStack = colorStack.concat(colorStack.slice());
+            color = colorStack.shift();
+        }
+        colors.push(color);
+    }
+    return colors;
+}
+
+
+
+
+var optionsCountry = {
+    chart: { height: 500, type: "donut" },
+    legend: {
+        show: !0,
+        position: "bottom",
+        horizontalAlign: "center",
+        verticalAlign: "middle",
+        floating: !1,
+        fontSize: "14px",
+        offsetX: 0,
+        offsetY: -10,
+    },
+    responsive: [
+        {
+            breakpoint: 600,
+            options: { chart: { height: 210 }, legend: { show: !1 } },
+        },
+    ],
+};
+
+
+
+
+$.ajax({
+    url: '/Statistic/GetChartDataCountry',
+    type: 'GET',
+    success: function (data1) {
+        if (data1) {
+            var countData = data1.countC;
+            var genresData = data1.country;
+            var colorsData = generateColorsC(data1.countC.length);
+
+            optionsCountry.series = countData;
+            optionsCountry.labels = genresData;
+            optionsCountry.colors = colorsData;
+
+            var chartAreaCountry = new ApexCharts(document.querySelector("#apex-pie-4"), optionsCountry);
+            chartAreaCountry.render();
+        }
+    },
+    error: function () {
+    }
+});
+
+
+
+
+

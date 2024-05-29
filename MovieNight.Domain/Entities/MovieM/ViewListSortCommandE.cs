@@ -5,6 +5,7 @@ namespace MovieNight.Domain.Entities.MovieM
 {
     public class ViewListSortCommandE
     {
+        public int? userId { get; set; }
         public FilmCategory Category { get; set; }
         
         public SelectField Field { get; set; }

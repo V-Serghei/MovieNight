@@ -1,0 +1,21 @@
+﻿@model IEnumerable<MovieNight.Web.Models.Movie.MovieTemplateInfModel>
+
+@if (Model != null && Model.Any())
+{
+    <div class="search-results" style="width: 200px; height: 200px; ">
+        @foreach (var movie in Model)
+        {
+            <div class="result-item " style="width: 100px;height: 100px"  onclick="location.href='@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = movie.Id })'">
+                <img src="@movie.PosterImage" alt="@movie.Title">
+                <div class="details">
+                    <span class="title">@movie.Title</span>
+                    <span class="year">@movie.ProductionYear</span>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="no-results">No results found.</div>
+}

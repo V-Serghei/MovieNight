@@ -1,4 +1,5 @@
 ﻿@using MovieNight.Domain.enams
+@using MovieNight.Web.Infrastructure
 @using SortDirection = MovieNight.Domain.enams.SortDirection
 @model MovieNight.Web.Models.Movie.SearchPages.MovieListModel
 
@@ -23,8 +24,8 @@ ViewBag.Title = "Cartoons";
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">MovieNight</a></li>
-                                <li class="breadcrumb-item" name="Category" value="1"><a href="javascript: void(0);">Cartoons</a></li>
-                                <input type="hidden" name="Category" value="4"/>
+                                <li class="breadcrumb-item" name="Category" value="3"><a href="javascript: void(0);">Cartoons</a></li>
+                                <input type="hidden" name="Category" value="3"/>
                             </ol>
                         </div>
                         <h4 class="page-title">Cartoons</h4>
@@ -96,7 +97,7 @@ ViewBag.Title = "Cartoons";
                                 }
                             <br>
 
-                            @if (!Model.ListFilm[index + currIndex].Bookmark)
+                            @if(System.Web.HttpContext.Current.GetBookmarkTimeOf()!=null){ if (!Model.ListFilm[index + currIndex].Bookmark)
                             {
                             <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="toggleBookmark('@Model.ListFilm[index + currIndex].Id', true)">
                                 <i class="mdi mdi-bookmark-plus mr-1"></i> Bookmark
@@ -108,7 +109,19 @@ ViewBag.Title = "Cartoons";
                                 <i class="mdi mdi-bookmark-plus mr-1"></i> Delete Bookmark
                             </button>
                             }
-                            <a href="@Url.Action("MoviePlayer","InformationSynchronization", new { movie = Model.ListFilm[index+currIndex] })" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-movie-open mr-1"></i> Watch</a>
+                            if (!Model.ListFilm[currIndex+index].BookmarkTomeOf)
+                            {
+                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="toggleBookmarkTimeOf('@Model.ListFilm[index + currIndex].Id', true)">
+                                <i class="mdi mdi-bookmark-plus mr-1"></i> Maybe I’ll watch!
+                            </button>
+                            }
+                            else
+                            {
+                            <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" onclick="toggleBookmarkTimeOf('@Model.ListFilm[index + currIndex].Id', false)">
+                                <i class=" remixicon-bookmark-3-line"></i> Cancel
+                            </button>
+                            }}
+                            <a href="@Url.Action("MoviePlayer","InformationSynchronization", new { movieId = Model.ListFilm[index+currIndex].Id })" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-movie mr-1"></i> Watch</a>
                         </div> <!-- end .padding -->
                     </div> <!-- end card-box-->
 
@@ -301,6 +314,26 @@ ViewBag.Title = "Cartoons";
             .then(response => response.json())
             .then(data => {
                 
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+    function toggleBookmarkTimeOf(movieId, isAddBookmark) {
+        var url = isAddBookmark ? '/InformationSynchronization/AddToBookmarkTimeOf' : '/InformationSynchronization/DeleteBookmarkTimeOf';
+        var button = event.target;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ movieId: movieId }),
+        })
+            .then(response => response.json())
+            .then(data => {
+
                 location.reload();
             })
             .catch(error => {

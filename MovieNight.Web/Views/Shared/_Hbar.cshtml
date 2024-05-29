@@ -1,400 +1,610 @@
 ﻿@using MovieNight.Domain.enams
 @using MovieNight.Web.Infrastructure
 @using MovieNight.Web.Models
+@using MovieNight.Web.Models.Movie
+@using MovieNight.Web.Models.PersonalP.Bookmark
 @model dynamic
 
 @{
     var userModel = HttpContext.Current.GetMySessionObject();
+    var modelBookmark = HttpContext.Current.GetBookmarkTimeOf() as BookmarkTimeOf;
 }
 
 @{
     ViewBag.Title = "_Hbar";
 }
-<div>
-    <ul class="list-unstyled topnav-menu float-right mb-0">
+<style>
+    .notify-icon img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+    }
 
-        <li class="d-none d-sm-block">
-            <form class="app-search">
-                <div class="app-search-box">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Movie search... ">
-                        <div class="input-group-append">
-                            <button class="btn" type="submit">
-                                <i class="fe-search"></i>
-                            </button>
-                        </div>
+    .notify-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #searchResults {
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+        position: absolute;
+        width: 300px;
+        max-height: 400px;
+        overflow-y: scroll;
+        position: relative; 
+    }
+    .notify-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+    }
+    .notify-icon {
+        margin-right: 10px;
+    }
+    .close-btn {
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+</style>
+
+<div>
+<ul class="list-unstyled topnav-menu float-right mb-0">
+<li id=" buttonCloss">
+    <div class="contButtonClos">
+    <button class="close-btn btn badge-danger" id="buttonCloss" style="margin-top: 10px; display: none; background-color: darkred" onclick="closeSearchResults()">&times;</button>
+</div>
+</li>
+    <li class="d-none d-sm-block">
+        @using (Ajax.BeginForm("_SearchResultsPartial", "SearchSortAdd", new AjaxOptions
+        {
+        HttpMethod = "POST",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "searchResults",
+        OnSuccess = "handleSuccess",
+        OnFailure = "handleFailure"
+        }))
+        {
+        <form class="app-search" style="display: flex; align-items: center; ">
+            <div class="app-search-box" style="background-color: #5A2D82; border-radius: 25px;margin-top: 10px; padding: 5px 10px;">
+                <div class="input-group" style="display: flex; align-items: center;">
+                    <input type="text" class="form-control" id="movieSearchInput" name="searchTerm" placeholder="Movie search..."
+                           style="border: none; background: transparent; color: white; width: 200px; margin-right: 10px;">
+                    <div class="input-group-append" style="display: flex; align-items: center;">
+                        <button class="btn" type="submit" style="background: none; border: none; color: white;">
+                            <i class="fe-search"></i>
+                        </button>
                     </div>
                 </div>
-            </form>
-        </li>
+            </div>
+        </form>
+        }
+
+        <div id="searchResults" class="scrollspy-example badge-primary" style="display: none">
+            
+        </div>
+    </li>
 
 
-    
-    <li class="dropdown notification-list">
-        <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-            <i class="fe-bell noti-icon"></i>
-            <span class="badge badge-danger rounded-circle noti-icon-badge">3</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right dropdown-lg">
+
+
+
+
+<li class="dropdown notification-list">
+    <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+        <i class="fe-bell noti-icon"></i>
+        <span class="badge badge-danger rounded-circle noti-icon-badge">3</span>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right dropdown-lg">
+
+        <!-- item-->
+        <div class="dropdown-item noti-title">
+            <h5 class="m-0">
+                <span class="float-right">
+                    <a href="#" class="text-dark" onclick="clearBookmarks()">
+                        <small>Clear All</small>
+                    </a>
+                </span>Notification
+            </h5>
+        </div>
+
+
+        <div class="slimscroll noti-scroll">
 
             <!-- item-->
-            <div class="dropdown-item noti-title">
-                <h5 class="m-0">
-                    <span class="float-right">
-                        <a href="" class="text-dark">
-                            <small>Clear All</small>
-                        </a>
-                    </span>Notification
-                </h5>
-            </div>
+            <a href="javascript:void(0);" class="dropdown-item notify-item active">
+                <div class="notify-icon bg-soft-primary text-primary">
+                    <i class="mdi mdi-comment-account-outline"></i>
+                </div>
+                <p class="notify-details">
+                    Doug Dukes commented on Admin Dashboard
+                    <small class="text-muted">1 min ago</small>
+                </p>
+            </a>
 
+            <!-- item-->
+            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                <div class="notify-icon">
+                    <img src="/images/users/avatar-2.jpg" class="img-fluid rounded-circle" alt=""/>
+                </div>
+                <p class="notify-details">Mario Drummond</p>
+                <p class="text-muted mb-0 user-msg">
+                    <small>Hi, How are you? What about our next meeting</small>
+                </p>
+            </a>
+
+            <!-- item-->
+            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                <div class="notify-icon">
+                    <img src="/images/users/avatar-4.jpg" class="img-fluid rounded-circle" alt=""/>
+                </div>
+                <p class="notify-details">Karen Robinson</p>
+                <p class="text-muted mb-0 user-msg">
+                    <small>Wow ! this admin looks good and awesome design</small>
+                </p>
+            </a>
+
+            <!-- item-->
+            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                <div class="notify-icon bg-soft-warning text-warning">
+                    <i class="mdi mdi-account-plus"></i>
+                </div>
+                <p class="notify-details">
+                    New user registered.
+                    <small class="text-muted">5 hours ago</small>
+                </p>
+            </a>
+
+            <!-- item-->
+            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                <div class="notify-icon bg-info">
+                    <i class="mdi mdi-comment-account-outline"></i>
+                </div>
+                <p class="notify-details">
+                    Caleb Flakelar commented on Admin
+                    <small class="text-muted">4 days ago</small>
+                </p>
+            </a>
+
+            <!-- item-->
+            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                <div class="notify-icon bg-secondary">
+                    <i class="mdi mdi-heart"></i>
+                </div>
+                <p class="notify-details">
+                    Carlos Crouch liked
+                    <b>Admin</b>
+                    <small class="text-muted">13 days ago</small>
+                </p>
+            </a>
+        </div>
+
+        <!-- All-->
+        <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item notify-all">
+            View all
+            <i class="fi-arrow-right"></i>
+        </a>
+
+    </div>
+</li>
+@if (userModel != null)
+{
+    if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+    {
+        <li class="dropdown notification-list">
+            <a class="nav-link dropdown-toggle" href="@Url.Action("MovieTemplateEditing", "InformationSynchronization")" role="button">
+                <i class=" remixicon-quill-pen-line"></i>
+            </a>
+        </li>
+    }
+
+    if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+    {
+        <li class="dropdown notification-list">
+            <a class="nav-link dropdown-toggle  " href="@Url.Action("Index", "Admin")">
+                <i class=" remixicon-file-add-fill"></i>
+            </a>
+        </li>
+    }
+}
+<li class="dropdown notification-list ">
+    <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+        <i class=" remixicon-bookmark-3-line"></i>
+        @if (modelBookmark != null)
+        {
+            <span class="badge badge-danger rounded-bottom-pill noti-icon-badge">@modelBookmark.Bookmark.Count</span>
+        }
+    </a>
+    <div class="dropdown-menu dropdown-menu-right dropdown-lg">
+
+        <!-- item-->
+        <div class="dropdown-item noti-title ">
+            <h5 class="m-0">
+                <span class="float-right">
+                    @Ajax.ActionLink(
+                        "Clear All", // т
+                        "ClearBookmarks",
+                        "InformationSynchronization",
+                        null,
+                        new AjaxOptions
+                        {
+                            HttpMethod = "POST",
+                            OnSuccess = "clearBookmarksSuccess"
+                        },
+                        new { @class = "text-dark" }
+                    )
+                </span>
+                Bookmark exp
+            </h5>
+        </div>
+
+        <script>
+            
+            function clearBookmarksSuccess(response) {
+                location.reload();
+                console.log(response);
+            }
+        </script>
+
+
+        @if (modelBookmark != null)
+        {
+            <!-- item-->
             <div class="slimscroll noti-scroll">
 
-                <!-- item-->
-                <a href="javascript:void(0);" class="dropdown-item notify-item active">
-                    <div class="notify-icon bg-soft-primary text-primary">
-                        <i class="mdi mdi-comment-account-outline"></i>
-                    </div>
-                    <p class="notify-details">
-                        Doug Dukes commented on Admin Dashboard
-                        <small class="text-muted">1 min ago</small>
-                    </p>
-                </a>
+                @for (int i = 0; i < modelBookmark.Bookmark.Count && i < modelBookmark.MovieInTimeOfBookmark.Count; i++)
+                {
+                    modelBookmark.SortByTimeAdd();
+                    var bookmark = modelBookmark.Bookmark.ElementAt(i);
+                    var movie = modelBookmark.MovieInTimeOfBookmark.ElementAt(i);
+                    <a href="@Url.Action("MovieTemplatePage", "InformationSynchronization", new { id = movie.Id })" class="dropdown-item notify-item">
+                        <div class="notify-icon bg-soft-primary text-primary">
+                            @if (movie.PosterImage != null)
+                            {
+                                <img src="@Url.Content(movie.PosterImage)" class="img-fluid rounded-circle" alt=""/>
+                            }
+                            else
+                            {
+                                <img src="~/images/Movie/no_image.jpg" class="img-fluid rounded-circle" alt=""/>
+                            }
+                        </div>
+                        <p class="notify-details">
+                            @movie.Title
 
-                <!-- item-->
-                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                    <div class="notify-icon">
-                        <img src="/images/users/avatar-2.jpg" class="img-fluid rounded-circle" alt="" />
-                    </div>
-                    <p class="notify-details">Mario Drummond</p>
-                    <p class="text-muted mb-0 user-msg">
-                        <small>Hi, How are you? What about our next meeting</small>
-                    </p>
-                </a>
+                            @{
+                                var timeDifference = DateTime.Now - bookmark.TimeAdd;
+                                if (timeDifference.TotalMinutes < 1)
+                                {
+                                    <small class="text-muted">less than a minute ago</small>
+                                }
+                                else if (timeDifference.TotalHours < 1)
+                                {
+                                    var minutesAgo = (int)timeDifference.TotalMinutes;
+                                    <small class="text-muted">@minutesAgo min ago</small>
+                                }
+                                else
+                                {
+                                    var hoursAgo = (int)timeDifference.TotalHours;
+                                    <small class="text-muted">@hoursAgo hour ago</small>
+                                }
 
-                <!-- item-->
-                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                    <div class="notify-icon">
-                        <img src="/images/users/avatar-4.jpg" class="img-fluid rounded-circle" alt="" />
-                    </div>
-                    <p class="notify-details">Karen Robinson</p>
-                    <p class="text-muted mb-0 user-msg">
-                        <small>Wow ! this admin looks good and awesome design</small>
-                    </p>
-                </a>
+                            }
+                        </p>
+                    </a>
+                }
 
-                <!-- item-->
-                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                    <div class="notify-icon bg-soft-warning text-warning">
-                        <i class="mdi mdi-account-plus"></i>
-                    </div>
-                    <p class="notify-details">
-                        New user registered.
-                        <small class="text-muted">5 hours ago</small>
-                    </p>
-                </a>
 
-                <!-- item-->
-                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                    <div class="notify-icon bg-info">
-                        <i class="mdi mdi-comment-account-outline"></i>
-                    </div>
-                    <p class="notify-details">
-                        Caleb Flakelar commented on Admin
-                        <small class="text-muted">4 days ago</small>
-                    </p>
-                </a>
 
-                <!-- item-->
-                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                    <div class="notify-icon bg-secondary">
-                        <i class="mdi mdi-heart"></i>
-                    </div>
-                    <p class="notify-details">
-                        Carlos Crouch liked
-                        <b>Admin</b>
-                        <small class="text-muted">13 days ago</small>
-                    </p>
-                </a>
             </div>
 
-            <!-- All-->
-            <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item notify-all">
-                View all
-                <i class="fi-arrow-right"></i>
+        }
+        @*     <a href="javascript:void(0);" class="dropdown-item notify-item active"> *@
+        @*         <div class="notify-icon bg-soft-primary text-primary"> *@
+        @*             <img src="/images/Movie/Guillermo_del_Toros_Cabinet_of_Curiosities.jpg" class="img-fluid rounded-circle" alt="" /> *@
+        @*         </div> *@
+        @*         <p class="notify-details"> *@
+        @*             Guillermo del Toros Cabinet of Curiosities *@
+        @*             <small class="text-muted">1 min ago</small> *@
+        @*         </p> *@
+        @*     </a> *@
+        @* *@
+        @*     <!-- item--> *@
+        @*     <a href="javascript:void(0);" class="dropdown-item notify-item"> *@
+        @*         <div class="notify-icon"> *@
+        @*             <img src="/images/Movie/silent_hill.png" class="img-fluid rounded-circle" alt="" /> *@
+        @*         </div> *@
+        @*         <p class="notify-details">Silent Hill</p> *@
+        @*         <p class="text-muted mb-0 user-msg"> *@
+        @*             <small class="text-muted">1 min ago</small> *@
+        @*         </p> *@
+        @*     </a> *@
+        @* *@
+        <!-- All-->
+        <a href="@Url.Action("BookmarkTimeOfPage", "SearchSortAdd")" class="dropdown-item text-center text-primary notify-item notify-all">
+            View all bookmarks
+            <i class="fi-arrow-right"></i>
+        </a>
+
+    </div>
+</li>
+@if (userModel != null)
+{
+
+
+
+    <li class="dropdown notification-list">
+        <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+            @if (userModel.Avatar == null)
+            {
+                <img src="/images/users/default_avatar.png" alt="user-image" class="rounded-circle">
+            }
+            else
+            {
+                <img src="@Url.Content(userModel.Avatar)" alt="user-image" class="rounded-circle">
+            }
+
+            <span class="pro-user-name ml-1">
+                @userModel.Username <i class="mdi mdi-chevron-down"></i>
+            </span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+            <div class="dropdown-header noti-title">
+                <h6 class="text-overflow m-0">Welcome !</h6>
+            </div>
+
+            <a href=@Url.Action("PersonalProfile", "InformationSynchronization") class="dropdown-item notify-item">
+                <i class="mdi mdi-account-circle"></i>
+                <span>My Account</span>
+            </a>
+
+            <a href=@Url.Action("ProfileEditing", "InformationSynchronization") class="dropdown-item notify-item">
+                <i class="mdi mdi-settings"></i>
+                <span>Settings</span>
+            </a>
+
+            <a href=@Url.Action("ViewedList", "SearchSortAdd") class="dropdown-item notify-item">
+                <i class="remixicon-movie-2-line"></i>
+                <span>My viewed list </span>
+            </a>
+
+            <a href=@Url.Action("PersonalPromotionStatistics", "Statistic") class="dropdown-item notify-item">
+                <i class="remixicon-focus-2-fill"></i>
+                <span> MY Statistic</span>
+            </a>
+
+            <div class="dropdown-divider"></div>
+
+            <a href=@Url.Action("Logout", "Identification") class="dropdown-item notify-item">
+                <i class="mdi mdi-logout"></i>
+                <span>Logout</span>
             </a>
 
         </div>
     </li>
-@if(userModel!=null){if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+}
+else
 {
     <li class="dropdown notification-list">
-        <a class="nav-link dropdown-toggle" href="@Url.Action("MovieTemplateEditing","InformationSynchronization")" role="button" >
-           <i class=" remixicon-quill-pen-line" ></i>
+        <a class="nav-link dropdown-toggle waves-effect waves-light" role="button" href=@Url.Action("Login", "Identification") class="dropdown-item notify-item">
+            <i class="mdi mdi-login"></i>
+            <span>Login</span>
         </a>
     </li>
 }
 
-if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
-{
-    <li class="dropdown notification-list">
-        <a class="nav-link dropdown-toggle  " href="@Url.Action("Index","Admin")">
-           <i class=" remixicon-file-add-fill" ></i>
-        </a>
-    </li>
-}}
+
+
 <li class="dropdown notification-list">
-            <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                <i class=" remixicon-bookmark-3-line"></i>
-                <span class="badge badge-danger rounded-bottom-pill noti-icon-badge">2</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-lg">
-
-                <!-- item-->
-                <div class="dropdown-item noti-title">
-                    <h5 class="m-0">
-                        <span class="float-right">
-                            <a href="" class="text-dark">
-                                <small>Clear All</small>
-                            </a>
-                        </span>Bookmark exp
-                    </h5>
-                </div>
-
-                <div class="slimscroll noti-scroll">
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item active">
-                        <div class="notify-icon bg-soft-primary text-primary">
-                            <img src="/images/Movie/Guillermo_del_Toros_Cabinet_of_Curiosities.jpg" class="img-fluid rounded-circle" alt="" />
-                        </div>
-                        <p class="notify-details">
-                            Guillermo del Toros Cabinet of Curiosities
-                            <small class="text-muted">1 min ago</small>
-                        </p>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
-                        <div class="notify-icon">
-                            <img src="/images/Movie/silent_hill.png" class="img-fluid rounded-circle" alt="" />
-                        </div>
-                        <p class="notify-details">Silent Hill</p>
-                        <p class="text-muted mb-0 user-msg">
-                            <small class="text-muted">1 min ago</small>
-                        </p>
-                    </a>
-
-                </div>
-
-                <!-- All-->
-                <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item notify-all">
-                    View all bookmarks
-                    <i class="fi-arrow-right"></i>
-                </a>
-
-            </div>
-        </li>
-
-        @if (userModel != null)
-        {
+    <a href="javascript:void(0);" class="nav-link right-bar-toggle waves-effect waves-light">
+        <i class="fe-settings noti-icon"></i>
+    </a>
+</li>
 
 
-
-                <li class="dropdown notification-list">
-                <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                    @if (userModel.Avatar==null)
-                    {
-                        <img src="/images/users/default_avatar.png" alt="user-image" class="rounded-circle">
-                    }
-                    else
-                    {
-                        <img src="@Url.Content(userModel.Avatar)" alt="user-image" class="rounded-circle">
-                    }
-
-                    <span class="pro-user-name ml-1">
-                        @userModel.Username <i class="mdi mdi-chevron-down"></i>
-                    </span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
-                    <div class="dropdown-header noti-title">
-                        <h6 class="text-overflow m-0">Welcome !</h6>
-                    </div>
-
-                    <a href=@Url.Action("PersonalProfile","InformationSynchronization") class="dropdown-item notify-item">
-                        <i class="mdi mdi-account-circle"></i>
-                        <span>My Account</span>
-                    </a>
-
-                    <a href=@Url.Action("ProfileEditing","InformationSynchronization") class="dropdown-item notify-item">
-                        <i class="mdi mdi-settings"></i>
-                        <span>Settings</span>
-                    </a>
-
-                    <a href=@Url.Action("ViewedList","SearchSortAdd") class="dropdown-item notify-item">
-                        <i class="remixicon-movie-2-line"></i>
-                        <span>My viewed list </span>
-                    </a>
-
-                    <a href=@Url.Action("PersonalPromotionStatistics","Statistic") class="dropdown-item notify-item">
-                        <i class="remixicon-focus-2-fill"></i>
-                        <span> MY Statistic</span>
-                    </a>
-
-                    <div class="dropdown-divider"></div>
-
-                    <a href=@Url.Action("Logout","Identification") class="dropdown-item notify-item">
-                        <i class="mdi mdi-logout"></i>
-                        <span>Logout</span>
-                    </a>
-
-                </div>
-            </li>
-        }
-        else
-        {
-            <li class="dropdown notification-list">
-                <a class="nav-link dropdown-toggle waves-effect waves-light"  role="button" href=@Url.Action("Login","Identification") class="dropdown-item notify-item">
-                    <i class="mdi mdi-login"></i>
-                    <span>Login</span>
-                </a>
-            </li>
-        }
-
-       
-
-        <li class="dropdown notification-list">
-            <a href="javascript:void(0);" class="nav-link right-bar-toggle waves-effect waves-light">
-                <i class="fe-settings noti-icon"></i>
-            </a>
-        </li>
-
-
-    </ul>
-    <!-- LOGO -->
-    <div class="logo-box">
-        <a href=@Url.Action("Index", "MainPage") class="logo text-center">
-            <span class="logo-lg">
-                <img src="/images/logo_text.png" alt="" height="40">
-                <span class="logo-lg-text-light"></span>
-            </span>
-            <span class="logo-sm">
-                <span class="logo-sm-text-dark"></span>
-                <img src="/images/logo.png" alt="" height="44">
-            </span>
-        </a>
-    </div>
-
-    <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
-        <li>
-            <button class="button-menu-mobile waves-effect waves-light">
-                <i class="fe-menu"></i>
-            </button>
-        </li>
-
-
-            <li class="dropdown dropdown-mega d-none d-lg-block">
-                <a class="nav-link dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                Mega Menu
-                <i class="mdi mdi-chevron-down"></i>
-            </a>
-            <div class="dropdown-menu dropdown-megamenu">
-                <div class="row">
-                    <div class="col-sm-8">
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <h5 class="text-dark mt-0">UI Components</h5>
-                                <ul class="list-unstyled megamenu-list">
-                                    <li>
-                                        <a href="javascript:void(0);">Widgets</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Nestable List</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Range Sliders</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Masonry Items</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Sweet Alerts</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Treeview Page</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Tour Page</a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="col-md-4">
-                                <h5 class="text-dark mt-0">Applications</h5>
-                                <ul class="list-unstyled megamenu-list">
-                                    <li>
-                                        <a href="javascript:void(0);">eCommerce Pages</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">CRM Pages</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Email</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Calendar</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Team Contacts</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Task Board</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Email Templates</a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="col-md-4">
-                                <h5 class="text-dark mt-0">Extra Pages</h5>
-                                <ul class="list-unstyled megamenu-list">
-                                    <li>
-                                        <a href="javascript:void(0);">Left Sidebar with User</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Menu Collapsed</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Small Left Sidebar</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">New Header Style</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Search Result</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Gallery Pages</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">Maintenance & Coming Soon</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="text-center mt-3">
-                            <h3 class="text-dark">Special Discount Sale!</h3>
-                            <h4>Save up to 70% off.</h4>
-                            <button class="btn btn-primary mt-3">Download Now <i class="ml-1 mdi mdi-arrow-right"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </li>
-    </ul>
+</ul>
+<!-- LOGO -->
+<div class="logo-box">
+    <a href=@Url.Action("Index", "MainPage") class="logo text-center">
+        <span class="logo-lg">
+            <img src="/images/logo_text.png" alt="" height="40">
+            <span class="logo-lg-text-light"></span>
+        </span>
+        <span class="logo-sm">
+            <span class="logo-sm-text-dark"></span>
+            <img src="/images/logo.png" alt="" height="44">
+        </span>
+    </a>
 </div>
+
+<ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+    <li>
+        <button class="button-menu-mobile waves-effect waves-light">
+            <i class="fe-menu"></i>
+        </button>
+    </li>
+
+
+    <li class="dropdown dropdown-mega d-none d-lg-block">
+        <a class="nav-link dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+            Mega Menu
+            <i class="mdi mdi-chevron-down"></i>
+        </a>
+        <div class="dropdown-menu dropdown-megamenu">
+            <div class="row">
+                <div class="col-sm-8">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5 class="text-dark mt-0">UI Components</h5>
+                            <ul class="list-unstyled megamenu-list">
+                                <li>
+                                    <a href="javascript:void(0);">Widgets</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Nestable List</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Range Sliders</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Masonry Items</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Sweet Alerts</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Treeview Page</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Tour Page</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h5 class="text-dark mt-0">Applications</h5>
+                            <ul class="list-unstyled megamenu-list">
+                                <li>
+                                    <a href="javascript:void(0);">eCommerce Pages</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">CRM Pages</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Email</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Calendar</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Team Contacts</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Task Board</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Email Templates</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h5 class="text-dark mt-0">Extra Pages</h5>
+                            <ul class="list-unstyled megamenu-list">
+                                <li>
+                                    <a href="javascript:void(0);">Left Sidebar with User</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Menu Collapsed</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Small Left Sidebar</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">New Header Style</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Search Result</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Gallery Pages</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);">Maintenance & Coming Soon</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="text-center mt-3">
+                        <h3 class="text-dark">Special Discount Sale!</h3>
+                        <h4>Save up to 70% off.</h4>
+                        <button class="btn btn-primary mt-3">Download Now <i class="ml-1 mdi mdi-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </li>
+</ul>
+</div>
+
+<script>
+    function clearBookmarks() {
+        $.ajax({
+            url: '@Url.Action("ClearBookmarks", "InformationSynchronization")', 
+            type: 'POST',
+            success: function(response) {
+                location.reload();
+            },
+            error: function () {
+                alert('An error occurred while processing your request.');
+            }
+        });
+    }
+    function triggerSearch() {
+        clearTimeout(window.searchTimer);
+        window.searchTimer = setTimeout(() => {
+            document.getElementById('searchForm').submit();
+        }, 300); 
+    }
+
+
+    function closeSearchResults() {
+        document.getElementById("searchResults").style.display = "none";
+        document.getElementById("buttonCloss").style.display = "none";
+        document.getElementById("contButtonClos").style.display = "none";
+    }
+
+    var baseUrl = '@Url.Content("~")';
+    // URL к изображению, если нет другого изображения
+    var noImageUrl = '@Url.Content("~/images/Movie/no_image.jpg")';
+    function handleSuccess(data) {
+        if (data.success) {
+            const newTableBody =` <button class="close-btn" onclick="closeSearchResults()">&times;</button>
+        <div>Результаты поиска</div>`+ data.newListV.map(item => {
+                let posterImageUrl = item.PosterImage ? `${item.PosterImage}` : noImageUrl; 
+                let detailsUrl = `/InformationSynchronization/MovieTemplatePage/${item.Id}`; 
+
+                
+                return `<a href="${detailsUrl}" class='dropdown-item notify-item'>
+                <div class='notify-icon bg-soft-primary text-primary'>
+                    <img src="${item.PosterImage}" class='img-fluid rounded-circle' alt='${item.Title}'>
+                </div>
+                <p class='notify-details'>${item.Title} <small class='text-muted'>${item.ProductionYearS}</small></p>
+            </a>`;
+            }).join('');
+            $('#searchResults').html(newTableBody);
+            document.getElementById("searchResults").style.display = "block";
+            document.getElementById("buttonCloss").style.display = "block";
+            
+            
+        } else {
+            console.error('Operation failed');
+        }
+    }
+    function closeB() {
+        document.getElementById("searchResults").style.display = "none";
+        document.getElementById("buttonCloss").style.display = "none";
+        document.getElementById("contButtonClos").style.display = "none";
+        
+        
+}
+
+    document.getElementById('movieSearchInput').addEventListener('keyup', triggerSearch);
+   
+
+
+</script>

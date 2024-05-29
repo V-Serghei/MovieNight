@@ -1,0 +1,79 @@
+﻿[
+  {
+    "Name": "Registration",
+    "AchievementType": 0,
+    "ImgA":"~/images/Achievement/reg.png",
+    "Description": "You are now a registered user!",
+    "Condition": "Become a registered user!",
+    "AdditionalRecords": "Do good, and enjoy the movie!",
+    "SuccessСount": 0,
+    "ProgressСount": 1,
+    "Unlocked": false
+  },
+  {
+    "Name": "Full profile",
+    "AchievementType": 1,
+    "ImgA":"~/images/Achievement/Full_profile.png",
+    "Description": "You have successfully added all data about yourself!",
+    "Condition": "Add all data so users can see you as a friend",
+    "AdditionalRecords": "Add all data so users can see you as a friend",
+    "SuccessСount": 0,
+    "ProgressСount": 10,
+    "Unlocked": false
+  },
+  {
+    "Name": "First Movie",
+    "AchievementType": 2,
+    "ImgA": "~/images/Achievement/first_movie.png",
+    "Description": "You have watched your first movie!",
+    "Condition": "Watch your first movie",
+    "AdditionalRecords": "Watch your first movie",
+    "SuccessСount": 0,
+    "ProgressСount": 1,
+    "Unlocked": false
+  },
+  {
+    "Name": "Movie Buff",
+    "AchievementType": 3,
+    "ImgA": "~/images/Achievement/movie_buff.png",
+    "Description": "You have watched 100 movies!",
+    "Condition": "Watch 100 movies",
+    "AdditionalRecords": "Watch 100 movies",
+    "SuccessСount": 0,
+    "ProgressСount": 100,
+    "Unlocked": false
+  },
+  {
+    "Name": "First Friend",
+    "AchievementType": 4,
+    "ImgA": "~/images/Achievement/first_friend.png",
+    "Description": "You have added your first friend!",
+    "Condition": "Add your first friend",
+    "AdditionalRecords": "Add your first friend",
+    "SuccessСount": 0,
+    "ProgressСount": 1,
+    "Unlocked": false
+  },
+  {
+    "Name": "Social Butterfly",
+    "AchievementType": 5,
+    "ImgA": "~/images/Achievement/social_butterfly.png",
+    "Description": "You have added 10 friends!",
+    "Condition": "Add 10 friends",
+    "AdditionalRecords": "Add 10 friends",
+    "SuccessСount": 0,
+    "ProgressСount": 10,
+    "Unlocked": false
+  },
+  {
+    "Name": "Horror Enthusiast",
+    "AchievementType": 6,
+    "ImgA": "~/images/Achievement/horror_enthusiast.png",
+    "Description": "You have watched 20 horror movies!",
+    "Condition": "Watch 20 horror movies",
+    "AdditionalRecords": "Watch 20 horror movies",
+    "SuccessСount": 0,
+    "ProgressСount": 20,
+    "Unlocked": false
+  }
+]

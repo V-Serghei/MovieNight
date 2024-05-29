@@ -8,7 +8,7 @@ namespace MovieNight.BusinessLogic.DBModel
     {
     public SessionContext() : base("name=MovieNight")
     {
-
+        this.Database.CommandTimeout = 180;
     }
 
 

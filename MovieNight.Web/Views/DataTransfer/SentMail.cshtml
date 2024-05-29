@@ -3,10 +3,7 @@
     ViewBag.Title = "SentMail";
 }
 
-@{
-    ViewBag.Title = "Inbox";
-}
-
+@model List<MovieNight.Web.Models.Mail.InboxModel>
 <div>
     <div class="content">
 
@@ -43,7 +40,7 @@
                             <a href=@Url.Action("Compose","DataTransfer") class="btn btn-primary btn-block waves-effect waves-light">Compose</a>
 
                             <div class="mail-list mt-4">
-                                <a href=@Url.Action("Inbox","DataTransfer") class="list-group-item border-0 text-primary font-weight-bold"><i class="mdi mdi-inbox font-18 align-middle mr-2"></i>Inbox<span class="badge badge-danger float-right ml-2 mt-1">8</span></a>
+                                <a href=@Url.Action("Inbox","DataTransfer") class="list-group-item border-0 text-primary font-weight-bold"><i class="mdi mdi-inbox font-18 align-middle mr-2"></i>Inbox</a>
                                 <a href=@Url.Action("Starred","DataTransfer") class="list-group-item border-0 text-warning font-weight-bold"><i class="mdi mdi-star font-18 align-middle mr-2"></i>Starred</a>
                                 </div>
                             <div class="list-group b-0 mail-list">
@@ -63,18 +60,6 @@
                             </div>
                             <div class="btn-group">
                             </div>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-light dropdown-toggle waves-effect" data-toggle="dropdown" aria-expanded="false">
-                                    <i class="mdi mdi-dots-horizontal font-18"></i> More
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <span class="dropdown-header">More Option :</span>
-                                    <a class="dropdown-item" href="javascript: void(0);">Mark as Unread</a>
-                                    <a class="dropdown-item" href="javascript: void(0);">Add Star</a>
-                                    <a class="dropdown-item" href="javascript: void(0);">Mute</a>
-                                </div>
-                            </div>
 
                             <div class="mt-3">
                                 <ul class="message-list">
@@ -82,24 +67,34 @@
                                     {
                                     if(ms.IsChecked) {
                                     <li class="unread">
-                                        <div class="col-mail col-mail-1">
-                                            <div class="checkbox-wrapper-mail">
-                                                <input type="checkbox" id="chk1">
-                                                <label for="chk1" class="toggle"></label>
-                                            </div>
-                                            <span class="star-toggle far fa-star text-warning"></span>
-                                            <a href=@Url.Action("Read","DataTransfer") class="title">@ms.SenderName</a>
+                                        <div class>
+                                            <a href="@Url.Action("Trash", "DataTransfer", new { mailId = ms.Id })" class="subject">
+                                                <span class=" remixicon-delete-bin-3-line text-primary"></span>
+                                            </a>
+                                            @if(ms.IsStarred==false)
+                                            {
+                                            <a href="@Url.Action("AddStarMail", "DataTransfer", new { mailId = ms.Id })" class="subject">
+                                                <span class="remixicon-moon-fill text-dark"></span>
+                                            </a>
+                                            }
+                                            else
+                                            {
+                                            <a href="@Url.Action("DeleteStarMail", "DataTransfer", new { mailId = ms.Id })" class="subject">
+                                                <span class="remixicon-moon-fill text-warning"></span>
+                                            </a>
+                                            }
+                                            <a href="@Url.Action("Read", "DataTransfer",new { mailId = ms.Id })" class="title">@ms.RecipientName</a>
                                         </div>
                                         <div class="col-mail col-mail-2">
                                             @if(ms.Theme!=null)
                                             {
-                                            <a href=@Url.Action("Read", "DataTransfer") class="subject">
+                                            <a href="@Url.Action("Read", "DataTransfer",new { mailId = ms.Id })" class="subject">
                                                 <span class="teaser">@ms.Theme</span>
                                             </a>
                                             }
                                             else
                                             {
-                                            <a href=@Url.Action("Read", "DataTransfer") class="subject">
+                                            <a href="@Url.Action("Read", "DataTransfer",new { mailId = ms.Id })" class="subject">
                                                 <span class="teaser"></span>
                                             </a>
                                             }
@@ -108,24 +103,34 @@
                                     </li>}
                                     else{
                                     <li class="unread">
-                                        <div class="col-mail col-mail-1">
-                                            <div class="checkbox-wrapper-mail">
-                                                <input type="checkbox" id="chk1">
-                                                <label for="chk1" class="toggle"></label>
-                                            </div>
-                                            <span class="star-toggle far fa-star text-warning"></span>
-                                            <a href=@Url.Action("Read","DataTransfer") class="title">@ms.SenderName</a>
+                                        <div>
+                                        <a href="@Url.Action("Trash", "DataTransfer", new { mailId = ms.Id })" class="subject">
+                                            <span class=" remixicon-delete-bin-3-line text-primary"></span>
+                                        </a>
+                                        @if(ms.IsStarred==false)
+                                        {
+                                        <a href="@Url.Action("AddStarMail", "DataTransfer", new { mailId = ms.Id })" class="subject">
+                                            <span class="remixicon-moon-fill text-dark"></span>
+                                        </a>
+                                        }
+                                        else
+                                        {
+                                        <a href="@Url.Action("DeleteStarMail", "DataTransfer", new { mailId = ms.Id })" class="subject">
+                                            <span class="remixicon-moon-fill text-warning"></span>
+                                        </a>
+                                        }
+                                            <a href="@Url.Action("Read", "DataTransfer",new { mailId = ms.Id })" class="title">@ms.RecipientName</a>
                                         </div>
                                         <div class="col-mail col-mail-2">
                                             @if(ms.Theme!=null)
                                             {
-                                            <a href=@Url.Action("Read", "DataTransfer") class="subject">
+                                            <a href="@Url.Action("Read", "DataTransfer",new { mailId = ms.Id })" class="subject">
                                                 <span class="teaser">@ms.Theme</span>
                                             </a>
                                             }
                                             else
                                             {
-                                            <a href=@Url.Action("Read", "DataTransfer") class="subject">
+                                            <a href="@Url.Action("Read", "DataTransfer",new { mailId = ms.Id })" class="subject">
                                                 <span class="teaser"></span>
                                             </a>
                                             }
@@ -140,7 +145,7 @@
 
                             <div class="row">
                                 <div class="col-7 mt-1">
-                                    Showing 1 - 20 of 289
+                                    Showing 1 - 20
                                 </div> <!-- end col-->
                                 <div class="col-5">
                                     <div class="btn-group float-right">

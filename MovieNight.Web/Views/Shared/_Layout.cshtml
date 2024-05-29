@@ -30,7 +30,7 @@
     @Styles.Render("~/bundles/dataTables_buttons_bootstrap4/css")
     @Styles.Render("~/bundles/dataTables_select_bootstrap4/css")
     @* STATISTIC *@
-    @Styles.Render("~/bundles/jquery_jvectormap_1_2_2/css")
+   
     @* News *@
     @Styles.Render("~/bundles/magnific_popup/css")
     @* Are watching *@
@@ -72,9 +72,13 @@
     <div id="wrapper">
         <div class="navbar-custom">
             @Html.Partial("_Hbar")
+            
         </div>
         <div class="left-side-menu">
             @Html.Partial("_Lbar")
+        </div>
+        <div class="show">
+            @Html.Partial("_AchievementL")
         </div>
         <div class="content-page">
             @RenderBody()
