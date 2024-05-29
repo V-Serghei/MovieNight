@@ -1077,17 +1077,23 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                     var currentTime = DateTime.Now;
                     var timeThreshold = currentTime.AddHours(-24);
 
+                    
                     var expiredBookmarks = db.Bookmark
                         .Where(b => b.BookmarkTimeOf && !b.BookMark && b.TimeAdd < timeThreshold)
                         .ToList();
-                    
                     db.Bookmark.RemoveRange(expiredBookmarks);
+
+                    
                     var expiredBookmarksAndInBookmark = db.Bookmark
-                        .Where(b => b.BookmarkTimeOf && b.BookMark && b.TimeAdd < timeThreshold);
+                        .Where(b => b.BookmarkTimeOf && b.BookMark && b.TimeAdd < timeThreshold)
+                        .ToList(); 
+
                     foreach (var bookmark in expiredBookmarksAndInBookmark)
                     {
                         bookmark.BookmarkTimeOf = false;
                     }
+
+                     
                     db.SaveChanges();
                 }
             }
@@ -1097,6 +1103,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 throw;
             }
         }
+
 
         protected void ClearBookmarksDb()
         {
