@@ -207,6 +207,7 @@ namespace MovieNight.Web.Controllers
         }
         public ActionResult SetNewFriendPage(int? _friendId)
         {
+            SessionStatus();
             var _userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             var _userVsFriend = _serviceFriend.setAddFriend((_userId, _friendId));
             if (_userVsFriend)
@@ -222,6 +223,7 @@ namespace MovieNight.Web.Controllers
 
         public ActionResult SetDeleteFriendPage(int? _friendId)
         {
+            SessionStatus();
             var _userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             var _userVsFriend = _serviceFriend.setDeleteFriend((_userId, _friendId));
             if (_userVsFriend == true)
@@ -262,7 +264,6 @@ namespace MovieNight.Web.Controllers
             [GuestMod]
             public ActionResult SerialsSearch()
             {
-                SessionStatus();
                 int numP = 1;
                 SessionStatus();
                 if (System.Web.HttpContext.Current.GetListFilmS() != null)
@@ -277,7 +278,11 @@ namespace MovieNight.Web.Controllers
                         {
                             PageNom = numP,
                             Category = FilmCategory.Serial,
-                            Direction = System.Web.HttpContext.Current.GetListFilmS() == null ?  Direction.Non: System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction,
+                            Direction = System.Web.HttpContext.Current.GetListFilmS() == null
+                                ? Direction.Non
+                                : System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction == Direction.ForYou
+                                    ?Direction.Non:
+                                    System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction,
                             SortingDirection = System.Web.HttpContext.Current.GetListFilmS() == null ? SortDirection.Non : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortingDirection,
                             SortPar = System.Web.HttpContext.Current.GetListFilmS() == null ? SortingOption.All : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortPar,
                             UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
@@ -312,7 +317,6 @@ namespace MovieNight.Web.Controllers
             [GuestMod]
             public ActionResult CartoonsSearch()
             {
-                SessionStatus();
                 int numP = 1;
                 SessionStatus();
                 if (System.Web.HttpContext.Current.GetListFilmS() != null)
@@ -327,7 +331,11 @@ namespace MovieNight.Web.Controllers
                         {
                             PageNom = numP,
                             Category = FilmCategory.Cartoon,
-                            Direction = System.Web.HttpContext.Current.GetListFilmS() == null ?  Direction.Non: System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction,
+                            Direction = System.Web.HttpContext.Current.GetListFilmS() == null
+                                ? Direction.Non
+                                : System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction == Direction.ForYou
+                                    ?Direction.Non:
+                                    System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction,
                             SortingDirection = System.Web.HttpContext.Current.GetListFilmS() == null ? SortDirection.Non : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortingDirection,
                             SortPar = System.Web.HttpContext.Current.GetListFilmS() == null ? SortingOption.All : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortPar,
                             UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
@@ -362,7 +370,6 @@ namespace MovieNight.Web.Controllers
             [GuestMod]
             public ActionResult AnimeSearch()
             {
-                SessionStatus();
                 int numP = 1;
                 SessionStatus();
                 if (System.Web.HttpContext.Current.GetListFilmS() != null)
@@ -377,7 +384,11 @@ namespace MovieNight.Web.Controllers
                         {
                             PageNom = numP,
                             Category = FilmCategory.Anime,
-                            Direction = System.Web.HttpContext.Current.GetListFilmS() == null ?  Direction.Non: System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction,
+                            Direction = System.Web.HttpContext.Current.GetListFilmS() == null
+                                ? Direction.Non
+                                : System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction == Direction.ForYou
+                                    ?Direction.Non:
+                                    System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction,
                             SortingDirection = System.Web.HttpContext.Current.GetListFilmS() == null ? SortDirection.Non : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortingDirection,
                             SortPar = System.Web.HttpContext.Current.GetListFilmS() == null ? SortingOption.All : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortPar,
                             UserId = System.Web.HttpContext.Current.GetMySessionObject()?.Id ?? null
@@ -414,7 +425,6 @@ namespace MovieNight.Web.Controllers
             [HttpGet]
             public ActionResult MovieSearch()
             {
-                SessionStatus();
                 int numP = 1;
                 SessionStatus();
                 if (System.Web.HttpContext.Current.GetListFilmS() != null)
@@ -433,7 +443,9 @@ namespace MovieNight.Web.Controllers
                             Category = FilmCategory.Film,
                             Direction = System.Web.HttpContext.Current.GetListFilmS() == null
                                 ? Direction.Non
-                                : System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction,
+                                : System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction == Direction.ForYou
+                            ?Direction.Non:
+                            System.Web.HttpContext.Current.GetListFilmS().CommandSort.Direction,
                             SortingDirection = System.Web.HttpContext.Current.GetListFilmS() == null
                                 ? SortDirection.Non
                                 : System.Web.HttpContext.Current.GetListFilmS().CommandSort.SortingDirection,

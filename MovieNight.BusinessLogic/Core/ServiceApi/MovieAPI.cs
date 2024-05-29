@@ -835,7 +835,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
                 using (var dbMovie = new MovieContext())
                 {
                     IQueryable<MovieDbTable> query = dbMovie.MovieDb;
-
+                    
                     if (movieSCommand.Direction != Direction.ForYou)
                     {
                         if (movieSCommand.Category != FilmCategory.Non)
