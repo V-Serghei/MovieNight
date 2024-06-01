@@ -2200,6 +2200,235 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             return result;
         }
 
+        protected MovieAddResult UpdateMovieTemplateDb(MovieTemplateInfE movieTemplateInfE)
+        {
+            GetMappersSettings();
+            var result = new MovieAddResult();
+            using (var db = new MovieContext())
+            {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var movieDb = db.MovieDb.Include(m => m.CastMembers)
+                            .Include(m => m.MovieCards)
+                            .Include(m => m.InterestingFacts)
+                            .FirstOrDefault(m => m.Id == movieTemplateInfE.Id);
+
+                        if (movieDb == null)
+                        {
+                            result.Result = false;
+                            result.Message = "Movie not found.";
+                            return result;
+                        }
+
+                        if (string.IsNullOrWhiteSpace(movieTemplateInfE.Title) ||
+                            string.IsNullOrWhiteSpace(movieTemplateInfE.Description) ||
+                            movieTemplateInfE.ProductionYear == default(DateTime) ||
+                            string.IsNullOrWhiteSpace(movieTemplateInfE.Country))
+                        {
+                            result.Result = false;
+                            result.Message = "Required fields are not filled in.";
+                            return result;
+                        }
+
+                        movieDb.Title = movieTemplateInfE.Title;
+                        movieDb.Category = movieTemplateInfE.Category;
+                        movieDb.PosterImage = string.IsNullOrWhiteSpace(movieTemplateInfE.PosterImage)
+                            ? movieDb.PosterImage
+                            : movieTemplateInfE.PosterImage;
+                        movieDb.Quote = movieTemplateInfE.Quote;
+                        movieDb.Description = movieTemplateInfE.Description;
+                        movieDb.ProductionYear = movieTemplateInfE.ProductionYear;
+                        movieDb.Country = movieTemplateInfE.Country;
+                        movieDb.Genres = JsonConvert.SerializeObject(movieTemplateInfE.Genre);
+                        movieDb.Location = movieTemplateInfE.Location;
+                        movieDb.Director = movieTemplateInfE.Director;
+                        movieDb.Duration = movieTemplateInfE.Duration;
+                        movieDb.MovieNightGrade = movieTemplateInfE.MovieNightGrade;
+                        movieDb.Certificate = movieTemplateInfE.Certificate;
+                        movieDb.ProductionCompany = movieTemplateInfE.ProductionCompany;
+                        movieDb.Budget = movieTemplateInfE.Budget;
+                        movieDb.GrossWorldwide = movieTemplateInfE.GrossWorldwide;
+                        movieDb.Language = movieTemplateInfE.Language;
+
+                        
+                        var existingCastMembers = movieDb.CastMembers.ToList();
+                        db.CastDbTables.RemoveRange(existingCastMembers);
+                        movieDb.CastMembers.Clear();
+
+                        foreach (var member in movieTemplateInfE.CastMembers)
+                        {
+                            var castMemberDb = new CastMemDbTable
+                            {
+                                Name = member.Name,
+                                ImageUrl = string.IsNullOrWhiteSpace(member.ImageUrl)
+                                    ? existingCastMembers.FirstOrDefault(m => m.Name == member.Name)?.ImageUrl
+                                    : member.ImageUrl,
+                                Role = member.Role
+                            };
+                            movieDb.CastMembers.Add(castMemberDb);
+                            db.CastDbTables.Add(castMemberDb);
+                        }
+
+                        var existingMovieCards = movieDb.MovieCards.ToList();
+                        db.MovieCard.RemoveRange(existingMovieCards);
+                        movieDb.MovieCards.Clear();
+
+                        foreach (var card in movieTemplateInfE.MovieCards)
+                        {
+                            var movieCardDb = new MovieCardDbTable
+                            {
+                                Title = card.Title,
+                                ImageUrl = string.IsNullOrWhiteSpace(card.ImageUrl)
+                                    ? existingMovieCards.FirstOrDefault(c => c.Title == card.Title)?.ImageUrl
+                                    : card.ImageUrl,
+                                Description = card.Description
+                            };
+                            movieDb.MovieCards.Add(movieCardDb);
+                            db.MovieCard.Add(movieCardDb);
+                        }
+
+                        
+                        db.InterestingFact.RemoveRange(movieDb.InterestingFacts);
+                        movieDb.InterestingFacts.Clear();
+
+                        foreach (var fact in movieTemplateInfE.InterestingFacts)
+                        {
+                            var interestingFactDb = new InterestingFactDbTable
+                            {
+                                FactName = fact.FactName,
+                                FactText = fact.FactText
+                            };
+                            movieDb.InterestingFacts.Add(interestingFactDb);
+                            db.InterestingFact.Add(interestingFactDb);
+                        }
+
+                        db.SaveChanges();
+                        transaction.Commit();
+
+                        result.Result = true;
+                        result.Movie = MapperFilm.Map<MovieTemplateInfE>(movieDb);
+                        result.Message = "Film successfully updated.";
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        transaction.Rollback();
+
+                        foreach (var entityValidationError in ex.EntityValidationErrors)
+                        {
+                            Console.WriteLine(
+                                $"Entity of type \"{entityValidationError.Entry.Entity.GetType().Name}\" in state \"{entityValidationError.Entry.State}\" has the following validation errors:");
+                            foreach (var validationError in entityValidationError.ValidationErrors)
+                            {
+                                Console.WriteLine(
+                                    $"- Property: \"{validationError.PropertyName}\", Error: \"{validationError.ErrorMessage}\"");
+                            }
+                        }
+
+                        result.Result = false;
+                        result.Message = "Validation Error: " + string.Join("; ",
+                            ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors).Select(e => e.ErrorMessage));
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        result.Result = false;
+                        result.Message = "Error updating film: " + ex.Message;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        protected MovieDeleteResult DeleteMovieDb(int? id)
+        {
+            var result = new MovieDeleteResult();
+            using (var dbMovie = new MovieContext())
+            using (var dbUser = new UserContext())
+            {
+                dbMovie.Database.CommandTimeout = 300; 
+                dbUser.Database.CommandTimeout = 300;
+
+                using (var transaction = dbMovie.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var movieDb = dbMovie.MovieDb.Include(m => m.CastMembers)
+                            .Include(m => m.MovieCards)
+                            .Include(m => m.InterestingFacts)
+                            .FirstOrDefault(m => m.Id == id);
+
+                        if (movieDb == null)
+                        {
+                            result.Result = false;
+                            result.Message = "Movie not found.";
+                            return result;
+                        }
+
+                        
+                        var viewListEntries = dbUser.ViewList.Where(v => v.MovieId == id).ToList();
+                        dbUser.ViewList.RemoveRange(viewListEntries);
+                        dbUser.SaveChanges(); 
+
+                        
+                        var bookmarks = dbUser.Bookmark.Where(b => b.MovieId == id).ToList();
+                        dbUser.Bookmark.RemoveRange(bookmarks);
+                        dbUser.SaveChanges(); 
+
+                        
+                        var reviews = dbMovie.Review.Where(r => r.FilmId == id).ToList();
+                        dbMovie.Review.RemoveRange(reviews);
+                        dbMovie.SaveChanges(); 
+
+                        
+                        dbMovie.CastDbTables.RemoveRange(movieDb.CastMembers);
+                        dbMovie.MovieCard.RemoveRange(movieDb.MovieCards);
+                        dbMovie.InterestingFact.RemoveRange(movieDb.InterestingFacts);
+
+                        
+                        dbMovie.MovieDb.Remove(movieDb);
+
+                        dbMovie.SaveChanges(); 
+
+                        transaction.Commit();
+
+                        result.Result = true;
+                        result.Message = "Film successfully deleted.";
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        transaction.Rollback();
+
+                        foreach (var entityValidationError in ex.EntityValidationErrors)
+                        {
+                            Console.WriteLine(
+                                $"Entity of type \"{entityValidationError.Entry.Entity.GetType().Name}\" in state \"{entityValidationError.Entry.State}\" has the following validation errors:");
+                            foreach (var validationError in entityValidationError.ValidationErrors)
+                            {
+                                Console.WriteLine(
+                                    $"- Property: \"{validationError.PropertyName}\", Error: \"{validationError.ErrorMessage}\"");
+                            }
+                        }
+
+                        result.Result = false;
+                        result.Message = "Validation Error: " + string.Join("; ",
+                            ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors).Select(e => e.ErrorMessage));
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        result.Result = false;
+                        result.Message = "Error deleting film: " + ex.Message;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
 
     }
 }

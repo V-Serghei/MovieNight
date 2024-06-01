@@ -7,7 +7,7 @@ using MovieNight.Domain.Entities.UserId;
 namespace MovieNight.Domain.Entities.PersonalP.PersonalPDb
 {
     public class BookmarkDbTable
-    {//We should think about it
+    {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
