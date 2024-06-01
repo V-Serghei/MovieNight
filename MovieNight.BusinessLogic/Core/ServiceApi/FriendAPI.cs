@@ -10,6 +10,7 @@ using System.Web;
 using AutoMapper;
 using MovieNight.BusinessLogic.DBModel;
 using MovieNight.Domain.Entities;
+using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Domain.Entities.UserId;
 
@@ -293,8 +294,173 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             }
         }
 
-       
+        #region Information - friends movies
 
+        /// <summary>
+        /// friend ratings for a certain movie
+        /// </summary>
+        /// <param name="idU"></param>
+        /// <returns>List<MovieTemplateInfE />
+        /// </returns>
+
+        protected List<ScoresFriendsGaveTheMovieE> GetFriendsMovieD(int? idU)
+        {
+            var result = new List<ScoresFriendsGaveTheMovieE>();
+
+            var userId = HttpContext.Current.Session["UserId"] as int?;
+
+            if (!userId.HasValue || !idU.HasValue)
+            {
+                if (!userId.HasValue)
+                {
+                    using (var dbUser = new UserContext())
+                    {
+                        var otherRatings = dbUser.ViewList
+                            .Where(v => v.MovieId == idU.Value)
+                            .Select(v => new ScoresFriendsGaveTheMovieE
+                            {
+                                UserName = dbUser.UsersT.FirstOrDefault(u => u.Id == v.UserId).UserName,
+                                Score = v.UserValues,
+                                ReviewData = v.ReviewDate
+                            })
+                            .Take(5)
+                            .ToList();
+
+                        result.AddRange(otherRatings);
+                    }
+                }
+
+                return result;
+            }
+
+            using (var dbUser = new UserContext())
+            using (var dbMovie = new MovieContext())
+            {
+                try
+                {
+                    var friends = dbUser.Friends
+                        .Where(f => f.IdUser == userId.Value)
+                        .Select(f => f.IdFriend)
+                        .ToList();
+
+                    var friendsRatings = dbUser.ViewList
+                        .Where(v => friends.Contains(v.UserId) && v.MovieId == idU.Value)
+                        .Select(v => new ScoresFriendsGaveTheMovieE
+                        {
+                            UserName = dbUser.UsersT.FirstOrDefault(u => u.Id == v.UserId).UserName,
+                            Score = v.UserValues,
+                            ReviewData = v.ReviewDate
+                        })
+                        .Take(5) 
+                        .ToList();
+
+                    if (friendsRatings.Any())
+                    {
+                        result.AddRange(friendsRatings);
+                    }
+                    else
+                    {
+                        
+                        var otherRatings = dbUser.ViewList
+                            .Where(v => v.MovieId == idU.Value)
+                            .Select(v => new ScoresFriendsGaveTheMovieE
+                            {
+                                UserName = dbUser.UsersT.FirstOrDefault(u => u.Id == v.UserId).UserName,
+                                Score = v.UserValues,
+                                ReviewData = v.ReviewDate
+                            })
+                            .Take(5) 
+                            .ToList();
+
+                        result.AddRange(otherRatings);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+            }
+
+            return result;
+        }
+
+        protected List<ScoresFriendsGaveTheMovieE> GetFriendsMovieAllD(int? idU)
+        {
+            var result = new List<ScoresFriendsGaveTheMovieE>();
+
+            var userId = HttpContext.Current.Session["UserId"] as int?;
+
+            if (!userId.HasValue || !idU.HasValue)
+            {
+                return result;
+            }
+
+            using (var dbUser = new UserContext())
+            using (var dbMovie = new MovieContext())
+            {
+                try
+                {
+                    var friends = dbUser.Friends
+                        .Where(f => f.IdUser == userId.Value)
+                        .Select(f => f.IdFriend)
+                        .ToList();
+
+                    var friendsRatings = dbUser.ViewList
+                        .Where(v => friends.Contains(v.UserId) && v.MovieId == idU.Value)
+                        .Select(v => new ScoresFriendsGaveTheMovieE
+                        {
+                            UserName = dbUser.UsersT.FirstOrDefault(u => u.Id == v.UserId).UserName,
+                            Score = v.UserValues,
+                            ReviewData = v.ReviewDate
+                        })
+                        .ToList();
+
+                    if (friendsRatings.Any())
+                    {
+                        result.AddRange(friendsRatings);
+                    }
+                    
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+            }
+
+            return result;
+        }
+
+        protected int GetCountFriendsGradeD(int? idU)
+        {
+            var result = 0;
+
+            var userId = HttpContext.Current.Session["UserId"] as int?;
+
+            if (!userId.HasValue || !idU.HasValue)
+            {
+                return result;
+            }
+
+            using (var dbUser = new UserContext())
+            {
+                try
+                {
+                    var friends = dbUser.Friends
+                        .Where(f => f.IdUser == userId.Value)
+                        .Select(f => f.IdFriend)
+                        .Count();
+
+                    result = friends;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+            }
+
+            return result;
+        }
+        #endregion
     }
     
 }

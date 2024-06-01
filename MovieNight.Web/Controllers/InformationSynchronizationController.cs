@@ -74,14 +74,17 @@ namespace MovieNight.Web.Controllers
                     .ForMember(cnf => cnf.InterestingFacts,
                         src => src.MapFrom(sr=>sr.InterestingFacts))
                     .ForMember(cnf => cnf.MovieCards,
-                        src => src.MapFrom(sr=>sr.MovieCards));
+                        src => src.MapFrom(sr=>sr.MovieCards))
+                    .ForMember(cnf=>cnf.MovieFriends,
+                        src=>src.Ignore());
                 cfg.CreateMap<ListOfFilmsE, ListOfFilmsModel>();
                 cfg.CreateMap<ListOfFilmsModel, ListOfFilmsE>();
                 cfg.CreateMap<ViewingHistoryM,ViewingHistoryModel>();
                 cfg.CreateMap<ViewingHistoryModel,ViewingHistoryM>();
                 cfg.CreateMap<AchievementModel, AchievementE>();
                 cfg.CreateMap<AchievementE, AchievementModel>();
-
+                cfg.CreateMap<ScoresFriendsGaveTheMovieE, ScoresFriendsGaveTheMovieModel>();
+                cfg.CreateMap<ScoresFriendsGaveTheMovieModel, ScoresFriendsGaveTheMovieE>();
 
                 cfg.CreateMap<FriendsPageD, FriendPageModel>()
                     .ForMember(dest=>dest.BUserE, 
@@ -307,18 +310,11 @@ namespace MovieNight.Web.Controllers
         public ActionResult MovieTemplatePage(int? id)
         {
             SessionStatus();
-            
-          
-            
-            
             int idU = 0;
-            
             if (id != null)
             {
                 idU = (int)id;
             }
-           
-
             try
             {
                 var movie = _movie.GetMovieInf(id);
@@ -335,17 +331,25 @@ namespace MovieNight.Web.Controllers
                         movieModel.UserRating =
                             _movie.GetUserRating((System.Web.HttpContext.Current.GetMySessionObject().Id, idU));
                     }
-                    foreach (var GEN in movie.Genre)
-                    {
-                        movieModel.Genre.Add(GEN);
-                    }
 
+                    if(movie.Genre!=null){
+                        foreach (var GEN in movie.Genre)
+                        {
+                            movieModel.Genre.Add(GEN);
+                        }
+                    }
+                    else
+                    {
+                        movieModel.Genre.Add("No genre");
+                    }
+                    movieModel.MovieFriends = 
+                        _mapper.Map<List<ScoresFriendsGaveTheMovieModel>>
+                            (_serviceFriend.GetFriendsMovie(idU));
                     movieModel.Id = idU;
+                    movieModel.CountFriendsGrade = _serviceFriend.GetCountFriendsGrade(idU);
+                    
                     return View(movieModel);
                 }
-
-                // return View("Error404", "Error");
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -353,7 +357,11 @@ namespace MovieNight.Web.Controllers
                 {
                     foreach (var validationError in validationErrors.ValidationErrors)
                     {
-                        Console.WriteLine($@"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                        Console.WriteLine($@"Property: {
+                            validationError.PropertyName
+                        } Error: {
+                            validationError.ErrorMessage
+                        }");
                     }
                 }
                 return null;
@@ -840,6 +848,7 @@ namespace MovieNight.Web.Controllers
             }
 
             var movieData = _mapper.Map<MovieTemplateInfE>(model);
+            if(movieData.Country==null)movieData.Country = _movie.GetMovieInf(model.Id).Country;
             var result = _movie.UpdateMovieTemplate(movieData);
             if (result.Result)
             {
@@ -850,6 +859,21 @@ namespace MovieNight.Web.Controllers
                 return RedirectToAction("Error404Page", "Error");
             }
         }
+        [HttpPost]
+        public ActionResult GetMoreFriendsRatings(int movieId)
+        {
+            var moreRatings = _serviceFriend.GetFriendsMovieAll(movieId);
+            var result = _mapper
+                .Map<IEnumerable<ScoresFriendsGaveTheMovieModel>>(moreRatings)
+                .Skip(5)
+                .Select(r => 
+                {
+                    r.ReviewDateString = r.ReviewData.ToString("dd/MM/yyyy");
+                    return r;
+                });
+            return Json(new { success = true, data = result });
+        }
+
 
         public ActionResult DeleteMovie(int? id)
         {

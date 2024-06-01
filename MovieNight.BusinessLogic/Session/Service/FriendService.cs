@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MovieNight.Domain.Entities.MovieM;
 
 namespace MovieNight.BusinessLogic.Session.Service
 {
@@ -42,5 +43,31 @@ namespace MovieNight.BusinessLogic.Session.Service
         {
             return GetTotalFriendsCountD(_searchParameter);
         }
+
+        #region Information - friends movies
+
+        /// <summary>
+        /// friend ratings for a certain movie
+        /// </summary>
+        /// <param name="idU"></param>
+        /// <returns>List<MovieTemplateInfE />
+        /// </returns>
+        public List<ScoresFriendsGaveTheMovieE> GetFriendsMovie(int? idU)
+        {
+            return GetFriendsMovieD(idU);
+        }
+
+        public List<ScoresFriendsGaveTheMovieE> GetFriendsMovieAll(int? movieId)
+        {
+            return GetFriendsMovieAllD(movieId);
+        }
+
+        public int GetCountFriendsGrade(int? idU)
+        {
+            return GetCountFriendsGradeD(idU);
+        }
+
+        #endregion
+        
     }
 }

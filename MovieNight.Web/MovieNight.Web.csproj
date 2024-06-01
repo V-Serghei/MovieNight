@@ -742,6 +742,7 @@
     <Compile Include="Models\Friends\FriendListModel.cs" />
     <Compile Include="Models\Friends\FriendPageModel.cs" />
     <Compile Include="Models\Friends\PaginationModel.cs" />
+    <Compile Include="Models\Friends\ScoresFriendsGaveTheMovieModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\Mail\InboxModel.cs" />
     <Compile Include="Models\Movie\CastMember.cs" />
