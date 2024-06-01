@@ -66,6 +66,7 @@
     <Compile Include="Entities\Friends\FriendsDbTable.cs" />
     <Compile Include="Entities\Friends\FriendsListD.cs" />
     <Compile Include="Entities\Friends\FriendsPageD.cs" />
+    <Compile Include="Entities\Friends\ScoresFriendsGaveTheMovieE.cs" />
     <Compile Include="Entities\MailE\InboxD.cs" />
     <Compile Include="Entities\MailE\MailDbTable.cs" />
     <Compile Include="Entities\MovieM\CastMemberE.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Entities\MovieM\Poster.cs" />
     <Compile Include="Entities\MovieM\RespAddViewListElDb.cs" />
     <Compile Include="Entities\MovieM\ResultsOfTheOperation\MovieAddResult.cs" />
+    <Compile Include="Entities\MovieM\ResultsOfTheOperation\MovieDeleteResult.cs" />
     <Compile Include="Entities\MovieM\SearchParam\ListSortCommandE.cs" />
     <Compile Include="Entities\MovieM\SearchParam\MovieCommandS.cs" />
     <Compile Include="Entities\MovieM\ViewingHistoryM.cs" />

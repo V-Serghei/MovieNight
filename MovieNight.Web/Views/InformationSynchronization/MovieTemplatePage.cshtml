@@ -1,21 +1,18 @@
 ﻿@using System.Web.UI.WebControls
+@using MovieNight.Domain.enams
 @using MovieNight.Web.Infrastructure
 @using MovieNight.Web.Models.PersonalP.Bookmark
 @model MovieNight.Web.Models.Movie.MovieTemplateInfModel
 
-
 @{
-    ViewBag.Title = Model == null ? "Movie" : @Model.Title;
+ViewBag.Title = Model == null ? "Movie" : @Model.Title;
 }
 
-
-@if(Model != null) {
-    <div>
+@if (Model != null) {
+<div>
     <div class="content">
-
         <!-- Start Content-->
         <div class="container-fluid">
-
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
@@ -34,178 +31,148 @@
             </div>
             <!-- end page title -->
 
-
             <div class="row">
                 <div class="col-lg-4 col-xl-4">
                     <div class="card-box text-center">
                         @if (Model.PosterImage != null)
                         {
-                            <img src="@Url.Content(Model.PosterImage)" class="img-fluid" alt="work-thumbnail">
-                            
+                        <img src="@Url.Content(Model.PosterImage)" class="img-fluid" alt="work-thumbnail">
                         }
                         else
                         {
-                            <img src="~/images/Movie/no_image.jpg" class="img-fluid" alt="work-thumbnail">
-
+                        <img src="~/images/Movie/no_image.jpg" class="img-fluid" alt="work-thumbnail">
                         }
                         <h4 class="mb-0">@Model.Title</h4>
                         @if (Model.Quote != null)
                         {
-                            <p class="text-muted">"@Model.Quote"</p>
-                            
+                        <p class="text-muted">"@Model.Quote"</p>
                         }
 
-                        @* <button type="button" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Will watch</button> *@
                         @if (System.Web.HttpContext.Current.GetMySessionObject() != null)
                         {
-                            <a href="@Url.Action("AddToViewed", "InformationSynchronization", new { movieId = @Model.Id })" > <button type="button" class="btn btn-rounded btn-bordered-pink btn-lg waves-effect mb-2 waves-light">Looked</button></a>
+                        <a href="@Url.Action("AddToViewed", "InformationSynchronization", new { movieId = @Model.Id })">
+                            <button type="button" class="btn btn-rounded btn-bordered-pink btn-lg waves-effect mb-2 waves-light">Looked</button>
+                        </a>
                         }
-                        <a href="@Url.Action("MoviePlayer","InformationSynchronization", new { movieId = @Model.Id })"> <button type="button"  class="btn btn-rounded btn-purple btn-lg waves-effect mb-2 waves-light">Watch Now</button></a>
+                        <a href="@Url.Action("MoviePlayer", "InformationSynchronization", new { movieId = @Model.Id })">
+                            <button type="button" class="btn btn-rounded btn-purple btn-lg waves-effect mb-2 waves-light">Watch Now</button>
+                        </a>
 
-                        
-                        
-                        
-                        @if(System.Web.HttpContext.Current.GetMySessionObject()!=null)
+                        @if (System.Web.HttpContext.Current.GetMySessionObject() != null &&
+                        (HttpContext.Current.GetMySessionObject().Role == LevelOfAccess.Admin
+                        || HttpContext.Current.GetMySessionObject().Role == LevelOfAccess.Moderator))
                         {
-                            <div id="bookmarkStatus">
-                     @{
-                         string buttonText = Model.Bookmark ? "Delete" : "Bookmark";
-                         string buttonColor = Model.Bookmark ? "btn-danger" : "btn-primary";
-                         var linkModel = new BookmarkModel()
-                         {
-                              
-                             IdMovie = Model.Id,
-                         };
-                     }
-                     @if (!Model.Bookmark)
-                     {
-                         @Ajax.ActionLink(
-                             buttonText,
-                             "BookmarkMovie",
-                             "InformationSynchronization",
-                             new
-                             {
-                                 movieId = linkModel.IdMovie
-                             },
-                             new AjaxOptions
-                             {
-                                 HttpMethod = "POST",
-                                 UpdateTargetId = "bookmarkStatus",
-                                 OnSuccess = @"function(response) {
-                                 $('#bookmarkStatus').html(response.statusMsg); 
-                                 if (response.bookM && response.bookM.newButtonTitle && response.bookM.newButtonColor) {
-                                     $('#bookmarkButton').text(response.bookM.newButtonTitle); 
-                                     $('#bookmarkButton').addClass(response.bookM.newButtonColor); 
-                                     $('#bookmarkButton').prop('disabled', true); 
-                                 }
-                             }"
-                             },
-                             new { @class = "btn btn-lg waves-effect mb-2 waves-light " + buttonColor, title = buttonText }
-                         )
+                        <a href="@Url.Action("MovieTemplateModify", "InformationSynchronization", new { id = Model.Id })">
+                            <button type="button" class="btn btn-warning btn-lg waves-effect mb-2 waves-light">
+                                <i class="mdi mdi-pencil mr-1"></i> Edit
+                            </button>
+                        </a>
+                        if (HttpContext.Current.GetMySessionObject().Role == LevelOfAccess.Admin)
+                        {
+                        <a href="@Url.Action("DeleteMovie", "InformationSynchronization", new { id = Model.Id })" onclick="return confirm('Are you sure you want to delete this movie?');">
+                            <button type="button" class="btn btn-danger btn-lg waves-effect mb-2 waves-light">
+                                <i class="mdi mdi-delete mr-1"></i> Delete
+                            </button>
+                        </a>
+                        }
+                        }
 
-                     }
-                     else
-                     {
-                         @Ajax.ActionLink(
-                             buttonText,
-                             "DeleteBookmarkMovie",
-                             "InformationSynchronization",
-                             new
-                             {
-                                 movieId = linkModel.IdMovie
-                             },
-                             new AjaxOptions
-                             {
-                                 HttpMethod = "POST",
-                                 UpdateTargetId = "bookmarkStatus",
-                                 OnSuccess = @"function(response) {
-                                 $('#bookmarkStatus').html(response.statusMsg); 
-                                 if (response.bookM && response.bookM.newButtonTitle && response.bookM.newButtonColor) {
-                                     $('#bookmarkButton').text(response.bookM.newButtonTitle); 
-                                     $('#bookmarkButton').addClass(response.bookM.newButtonColor); 
-                                     $('#bookmarkButton').prop('disabled', true); 
-                                 }
-                             }"
-                             },
-                             new { @class = "btn btn-lg waves-effect mb-2 waves-light " + buttonColor, title = buttonText }
-                         )
-
-                     }
-                     
-
-                       </div>}
-
-
-
-
-
-                   <style>
-                       .star-rating {
-                           display: flex;
-                           justify-content: center; 
-                           align-items: center; 
-                           width: 100%; 
-                       }
-                   
-                       .star-rating .star {
-                           width: 20px;
-                           height: 20px;
-                           cursor: pointer;
-                           font-size: 20px;
-                       }
-                   
-                       .star-rating .star.active {
-                           color: #f00;
-                       }
-                   </style>
-                   <h1>The film's score</h1>
-                       @if(HttpContext.Current.GetMySessionObject()!=null){ 
-                            <div class="star-rating">
-                            @if (Model.UserRating != null && Model.UserRating!= 0)
+                        @if (System.Web.HttpContext.Current.GetMySessionObject() != null)
+                        {
+                        <div id="bookmarkStatus">
+                            @{
+                            string buttonText = Model.Bookmark ? "Delete Bookmark" : "Add Bookmark";
+                            string buttonColor = Model.Bookmark ? "btn-danger" : "btn-primary";
+                            var linkModel = new BookmarkModel()
                             {
-                                for (int i = 1; i <= 10; i++)
-                                {
-                                    if (i <= Model.UserRating)
-                                    {
-                                        <span class="star active" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-fill"></i></span>
-                                    }
-                                    else
-                                    {
-                                        <span class="star" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-line"></i></span>
-                                    }
-                                }
+                            IdMovie = Model.Id
+                            };
+                            }
+                            @Ajax.ActionLink(
+                            buttonText,
+                            Model.Bookmark ? "DeleteBookmarkMovie" : "BookmarkMovie",
+                            "InformationSynchronization",
+                            new { movieId = linkModel.IdMovie },
+                            new AjaxOptions
+                            {
+                            HttpMethod = "POST",
+                            UpdateTargetId = "bookmarkStatus",
+                            OnSuccess = "bookmarkAddDel"
+                            },
+                            new { @class = "btn btn-lg waves-effect mb-2 waves-light " + buttonColor, title = buttonText, id = "bookmarkButton" }
+                            )
+                        </div>
+                        }
+
+                        <style>
+                            .star-rating {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                width: 100%;
+                            }
+
+                            .star-rating .star {
+                                width: 20px;
+                                height: 20px;
+                                cursor: pointer;
+                                font-size: 20px;
+                            }
+
+                            .star-rating .star.active {
+                                color: #f00;
+                            }
+                        </style>
+                        <h1>The film's score</h1>
+                        @if (HttpContext.Current.GetMySessionObject() != null)
+                        {
+                        <div class="star-rating">
+                            @if (Model.UserRating != null && Model.UserRating != 0)
+                            {
+                            for (int i = 1; i <= 10; i++)
+                            {
+                            if (i <= Model.UserRating)
+                            {
+                            <span class="star active" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-fill"></i></span>
                             }
                             else
                             {
-                                for (int i = 1; i <= 10; i++)
-                                {
-                                    if (i <= Model.MovieNightGrade)
-                                    {
-                                        <span class="star active" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-fill"></i></span>
-                                    }
-                                    else
-                                    {
-                                        <span class="star" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-line"></i></span>
-                                    }
-                                }
+                            <span class="star" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-line"></i></span>
                             }
-                            
-                        </div>}
-                        else if(Model.MovieNightGrade!=null){<div class="star-rating">
+                            }
+                            }
+                            else
+                            {
+                            for (int i = 1; i <= 10; i++)
+                            {
+                            if (i <= Model.MovieNightGrade)
+                            {
+                            <span class="star active" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-fill"></i></span>
+                            }
+                            else
+                            {
+                            <span class="star" onclick="rate(@i,@Model.Id)"><i class="remixicon-star-s-line"></i></span>
+                            }
+                            }
+                            }
+                        </div>
+                        }
+                        else if (Model.MovieNightGrade != null)
+                        {
+                        <div class="star-rating">
                             @for (int i = 1; i <= 10; i++)
                             {
                             if (i <= Model.MovieNightGrade)
                             {
-                            <span class="star active" ><i class="remixicon-star-s-fill"></i></span>
+                            <span class="star active"><i class="remixicon-star-s-fill"></i></span>
                             }
                             else
                             {
-                            <span class="star" ><i class="remixicon-star-s-line"></i></span>
+                            <span class="star"><i class="remixicon-star-s-line"></i></span>
                             }
                             }
-                            
-                        </div>}
-                        
+                        </div>
+                        }
 
                         <script>
                             function rate(star, movieId) {
@@ -218,13 +185,12 @@
                                     }
                                 }
 
-                               
                                 fetch('/InformationSynchronization/RateMovie', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
                                     },
-                                    body: JSON.stringify({ rating: star,  movieId: movieId   })
+                                    body: JSON.stringify({ rating: star, movieId: movieId })
                                 })
                                     .then(response => {
                                         if (!response.ok) {
@@ -257,66 +223,60 @@
                                     }
                                 }
                             }
-
                         </script>
 
-
-
-
                         <div class="text-left mt-3">
-                            
-                            @if(Model.Description!=null)
+                            @if (Model.Description != null)
                             {
                             <h4 class="font-13 text-uppercase">Brief description :</h4>
                             <p class="text-muted font-13 mb-3">
-                              @Model.Description
+                                @Model.Description
                             </p>
                             }
-                            @if(Model.ProductionYear!=default(DateTime)){<p class="text-bg-dark mb-1 font-12"><strong>Year of production : </strong> <span class="ml-2">1994</span></p>}
-                            
-                            @if(Model.Country!=null){<p class="text-bg-dark mb-1 font-12">
+                            @if (Model.ProductionYear != default(DateTime))
+                            {
+                            <p class="text-bg-dark mb-1 font-12"><strong>Year of production : </strong> <span class="ml-2">1994</span></p>
+                            }
+                            @if (Model.Country != null)
+                            {
+                            <p class="text-bg-dark mb-1 font-12">
                                 <strong>Country :</strong>
                                 <span class="ml-2">
-                                    @Model.Country
-                                </span>
-                            </p>}
-
+                                            @Model.Country
+                                        </span>
+                            </p>
+                            }
                             @if (Model.Genre.Any())
                             {
-                                <strong>Genre :</strong> 
-                                foreach (var gen in Model.Genre)
-                                {
-                                    <span class="text-bg-dark mb-1 font-12 ml-2">@gen</span>
-                                }
-
-                            }
-
-                          @if (Model.Location != null)
+                            <strong>Genre :</strong>
+                            foreach (var gen in Model.Genre)
                             {
-                                <p class="text-bg-dark mb-1 font-12"><strong>Location :</strong> <span class="ml-2">@Model.Location</span></p>
+                            <span class="text-bg-dark mb-1 font-12 ml-2">@gen</span>
                             }
-                           @if (Model.Director != null)
+                            }
+                            @if (Model.Location != null)
                             {
-                                <p class="text-bg-dark mb-1 font-12"><strong>Director :</strong> <span class="ml-2">@Model.Director</span></p>
+                            <p class="text-bg-dark mb-1 font-12"><strong>Location :</strong> <span class="ml-2">@Model.Location</span></p>
                             }
-                         @if (Model.Duration != default(DateTime))
-                         {
-                             DateTime duration = Model.Duration;
-                             string formattedDuration = $"{duration.Hour} hours {duration.Minute} minutes";
-                         
-                             <p class="text-bg-dark mb-1 font-12">
-                                 <strong>Duration :</strong> 
-                                 <span class="ml-2">@formattedDuration</span>
-                             </p>
-                         }
+                            @if (Model.Director != null)
+                            {
+                            <p class="text-bg-dark mb-1 font-12"><strong>Director :</strong> <span class="ml-2">@Model.Director</span></p>
+                            }
+                            @if (Model.Duration != default(DateTime))
+                            {
+                            DateTime duration = Model.Duration;
+                            string formattedDuration = $"{duration.Hour} hours {duration.Minute} minutes";
+                            <p class="text-bg-dark mb-1 font-12">
+                                <strong>Duration :</strong>
+                                <span class="ml-2">@formattedDuration</span>
+                            </p>
+                            }
                             <br>
-                            <a href="@Url.Action("ReviewPage","InformationSynchronization", new { filmId = @Model.Id })"> <button type="button"  class="btn btn-warning btn-lg waves-effect mb-2 waves-light">See reviews</button></a>
-
+                            <a href="@Url.Action("ReviewPage", "InformationSynchronization", new { filmId = @Model.Id })">
+                                <button type="button" class="btn btn-warning btn-lg waves-effect mb-2 waves-light">See reviews</button>
+                            </a>
                         </div>
-
                     </div> <!-- end card-box -->
-
-
                 </div> <!-- end col-->
 
                 <div class="col-lg-8 col-xl-8">
@@ -327,25 +287,20 @@
                                     <i class="mdi mdi-face-profile mr-1"></i>About the film
                                 </a>
                             </li>
-
                         </ul>
 
                         <div class="tab-content">
-
                             <div class="tab-pane show active" id="about-me">
-
-                                @if(Model.Description!=null){<h5 class="mb-4 text-uppercase">
+                                @if (Model.Description != null)
+                                {
+                                <h5 class="mb-4 text-uppercase">
                                     <i class="remixicon-honour-line"></i>
                                     Description
                                 </h5>
                                 <p class="text-muted mt-0">
-                                   @Model.Description
-                                </p>}
-
-
-
-
-
+                                    @Model.Description
+                                </p>
+                                }
                                 <h5 class="mb-3 mt-4 text-uppercase">
                                     <i class="mdi mdi-cards-variant mr-1"></i>
                                     Extra
@@ -353,7 +308,6 @@
                                 <div class="col-lg-15">
                                     <div class="card-box">
                                         <h4 class="header-title mb-4">Find out more</h4>
-
                                         <div class="row">
                                             <div class="col-sm-3">
                                                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -366,113 +320,107 @@
                                             <div class="col-sm-9">
                                                 <div class="tab-content pt-0">
                                                     <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                                                       @if(Model.MovieNightGrade!=0) {
-                                                        <p class="text-bg-dark mb-1 font-12"><strong>Grade on MovieNight : </strong><i class="fe-star"></i> <span class="ml-2">@Model.MovieNightGrade</span></p>}
-
-                                                        @if(Model.Certificate!=null){<p class="text-bg-dark mb-1 font-12">
+                                                        @if (Model.MovieNightGrade != 0)
+                                                        {
+                                                        <p class="text-bg-dark mb-1 font-12"><strong>Grade on MovieNight : </strong><i class="fe-star"></i> <span class="ml-2">@Model.MovieNightGrade</span></p>
+                                                        }
+                                                        @if (Model.Certificate != null)
+                                                        {
+                                                        <p class="text-bg-dark mb-1 font-12">
                                                             <strong>Certificate :</strong><span class="ml-2">
-                                                                @Model.Certificate
-                                                            </span>
-                                                        </p>}
-
-                                                      @if (Model.ProductionCompany != null)
-                                                      {
-                                                          <p class="text-bg-dark mb-1 font-12"><strong>Production company :</strong> <span class="ml-2 ">@Model.ProductionCompany</span></p>
-                                                      }
-
-                                                      @if(Model.Budget!=null){
-                                                      <p class="text-bg-dark mb-1 font-12"><strong>Budget :</strong> <span class="ml-2">$25,000,000 (estimated)</span></p>}
-                                                       @if(Model.GrossWorldwide!=null){ <p class="text-bg-dark mb-1 font-12">
-                                                           <strong>Gross worldwide :</strong> <span class="ml-2">
-                                                               @Model.GrossWorldwide
-                                                           </span>
-                                                        </p>}
-                                                       @if (Model.Duration != default(DateTime))
-                                                       {
-                                                           DateTime duration = Model.Duration;
-                                                           string formattedDuration = $"{duration.Hour} hours {duration.Minute} minutes";
-                         
-                                                           <p class="text-bg-dark mb-1 font-12">
-                                                               <strong>Time :</strong> 
-                                                               <span class="ml-2">@formattedDuration</span>
-                                                           </p>
-                                                           
-                                                       }
-                                                      @if (Model.Language != null)
-                                                      {
-                                                          <p class="text-bg-dark mb-1 font-12"><strong>Language :</strong> <span class="ml-2">@Model.Language</span></p>
-                                                      }
-
+                                                                        @Model.Certificate
+                                                                    </span>
+                                                        </p>
+                                                        }
+                                                        @if (Model.ProductionCompany != null)
+                                                        {
+                                                        <p class="text-bg-dark mb-1 font-12"><strong>Production company :</strong> <span class="ml-2 ">@Model.ProductionCompany</span></p>
+                                                        }
+                                                        @if (Model.Budget != null)
+                                                        {
+                                                        <p class="text-bg-dark mb-1 font-12"><strong>Budget :</strong> <span class="ml-2">$25,000,000 (estimated)</span></p>
+                                                        }
+                                                        @if (Model.GrossWorldwide != null)
+                                                        {
+                                                        <p class="text-bg-dark mb-1 font-12">
+                                                            <strong>Gross worldwide :</strong> <span class="ml-2">
+                                                                        @Model.GrossWorldwide
+                                                                    </span>
+                                                        </p>
+                                                        }
+                                                        @if (Model.Duration != default(DateTime))
+                                                        {
+                                                        DateTime duration = Model.Duration;
+                                                        string formattedDuration = $"{duration.Hour} hours {duration.Minute} minutes";
+                                                        <p class="text-bg-dark mb-1 font-12">
+                                                            <strong>Time :</strong>
+                                                            <span class="ml-2">@formattedDuration</span>
+                                                        </p>
+                                                        }
+                                                        @if (Model.Language != null)
+                                                        {
+                                                        <p class="text-bg-dark mb-1 font-12"><strong>Language :</strong> <span class="ml-2">@Model.Language</span></p>
+                                                        }
                                                     </div>
                                                     <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                                                        @if(Model.CastMembers.Any()){
-                                                          <strong>Actors :</strong>
-                                                            foreach (var cast in Model.CastMembers)
-                                                            {
-                                                                <p class="text-bg-dark mb-1 font-12"> <span class="ml-2">@cast.Name</span></p>
-                                                                    
-                                                            }
+                                                        @if (Model.CastMembers.Any())
+                                                        {
+                                                        <strong>Actors :</strong>
+                                                        foreach (var cast in Model.CastMembers)
+                                                        {
+                                                        <p class="text-bg-dark mb-1 font-12"> <span class="ml-2">@cast.Name</span></p>
                                                         }
-                                                   @if(Model.Description!=null) {
-                                                       <p class="mb-0">Director: @Model.Director
-                                                          </p> }
+                                                        }
+                                                        @if (Model.Description != null)
+                                                        {
+                                                        <p class="mb-0">Director: @Model.Director</p>
+                                                        }
                                                         <p class="mb-0">and others.</p>
-
                                                     </div>
                                                     <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-
                                                         <div class="card-box">
                                                             <h4 class="header-title">Movie cards</h4>
+                                                            <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                                                                <div class="carousel-inner" role="listbox">
+                                                                    @if (Model.MovieCards.Any())
+                                                                    {
+                                                                    int index = 0;
+                                                                    foreach (var card in Model.MovieCards)
+                                                                    {
+                                                                    <div class="carousel-item @(index == 0 ? "active" : "")" onmouseover="showDescription(@index)">
+                                                                        <img class="d-block img-fluid" src="@Url.Content(@card.ImageUrl)" alt="@card.Title">
+                                                                    </div>
+                                                                    index++;
+                                                                    }
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            <div id="descriptionContainer"></div>
+                                                            <script>
+                                                                function showDescription(index) {
+                                                                    var descriptions = [
+                                                                        @if (Model.MovieCards.Any())
+                                                                        {
+                                                                        string.Join(", ", Model.MovieCards.Select(card => $"\"{card.Description}\""));
+                                                                        }
+                                                                    ];
 
-
-                                                           <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-                                                               <div class="carousel-inner" role="listbox">
-                                                                   @if (Model.MovieCards.Any())
-                                                                   {
-                                                                       int index = 0;
-                                                                       foreach (var card in Model.MovieCards)
-                                                                       {
-                                                                           <div class="carousel-item @(index == 0 ? "active" : "")" onmouseover="showDescription(@index)">
-                                                                               <img class="d-block img-fluid" src="@Url.Content(@card.ImageUrl)" alt="@card.Title">
-                                                                           </div>
-                                                                           index++;
-                                                                       }
-                                                                   }
-                                                               </div>
-                                                           </div>
-                                                           
-                                                           <div id="descriptionContainer"></div>
-                                                           
-                                                           <script>
-                                                               function showDescription(index) {
-                                                                   var descriptions = [
-                                                                       @if (Model.MovieCards.Any())
-                                                                       {
-                                                                           string.Join(", ", Model.MovieCards.Select(card => $"\"{card.Description}\""));
-                                                                       }
-                                                                   ];
-                                                           
-                                                                   var descriptionContainer = document.getElementById("descriptionContainer");
-                                                                   descriptionContainer.textContent = descriptions[index];
-                                                               }
-                                                           </script>
-
-
+                                                                    var descriptionContainer = document.getElementById("descriptionContainer");
+                                                                    descriptionContainer.textContent = descriptions[index];
+                                                                }
+                                                            </script>
                                                         </div>
-
                                                     </div>
                                                     <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                                                         @if (Model.InterestingFacts.Any())
                                                         {
-                                                            foreach (var FACT in Model.InterestingFacts)
-                                                            {
-                                                                <p class="mb-0"><h4>@FACT.FactName</h4></p><br>
-                                                                <p class="mb-0">Andy and Red's opening chat in the prison yard, in which Red is throwing a baseball, took nine hours to shoot. Morgan Freeman threw the baseball for the entire nine hours without a word of complaint. He showed up for work the next day with his left arm in a sling.</p>
-                                                                <br>
-                                                            }
+                                                        foreach (var FACT in Model.InterestingFacts)
+                                                        {
+                                                        <p class="mb-0"><h4>@FACT.FactName</h4></p><br>
+                                                        <p class="mb-0">Andy and Red's opening chat in the prison yard, in which Red is throwing a baseball, took nine hours to shoot. Morgan Freeman threw the baseball for the entire nine hours without a word of complaint. He showed up for work the next day with his left arm in a sling.</p>
+                                                        <br>
                                                         }
-                                                       
-
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
@@ -480,7 +428,6 @@
                                         <!-- end row -->
                                     </div>
                                 </div> <!-- end col -->
-
                                 <h5 class="mb-3 mt-4 text-uppercase">
                                     <i class="remixicon-send-plane-2-fill"></i>
                                     FRIENDS RATING
@@ -488,145 +435,142 @@
                                 <div class="table-responsive">
                                     <table class="table table-borderless mb-0">
                                         <thead class="thead-light">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Friend's name.</th>
-                                                <th>Review date</th>
-                                                <th style="width:200px">Grade </th>
-                                            </tr>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Friend's name.</th>
+                                            <th>Review date</th>
+                                            <th style="width:200px">Grade </th>
+                                        </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Nelli</td>
-                                                <td>01/01/2023</td>
-                                                <td>
-                                                    <div class="rating-mini">
-                                                        <span class="active"></span>
-                                                        <span class="active"></span>
-                                                        <span class="active"></span>
-                                                        <span class="active"></span>    <span class="active"></span>
-                                                        <span class="active"></span>
-                                                        <span class="active"></span>
-                                                        <span class="active"></span>
-                                                        <span class="active"></span>
-                                                        <span class="active"></span>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                        @if (Model.MovieFriends != null && Model.MovieFriends.Any())
+                                        {
+                                        for (int i = 0; i < Model.MovieFriends.Count; i++)
+                                        {
+                                        var friend = Model.MovieFriends[i];
                                         <tr>
-                                            <td>1</td>
-                                            <td>Nelli</td>
-                                            <td>01/01/2023</td>
+                                            <td>@(i + 1)</td>
+                                            <td>@friend.UserName</td>
+                                            <td>@friend.ReviewData.ToShortDateString()</td>
                                             <td>
                                                 <div class="rating-mini">
+                                                    @for (int j = 1; j <= 10; j++)
+                                                    {
+                                                    if (j <= friend.Score)
+                                                    {
                                                     <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
+                                                    }
+                                                    else
+                                                    {
                                                     <span class=""></span>
-                                                </div>
-                                            </td>
-                                        </tr> <tr>
-                                            <td>1</td>
-                                            <td>Nelli</td>
-                                            <td>01/01/2023</td>
-                                            <td>
-                                                <div class="rating-mini">
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class=""></span>
-                                                </div>
-                                            </td>
-                                        </tr> <tr>
-                                            <td>1</td>
-                                            <td>Nelli</td>
-                                            <td>01/01/2023</td>
-                                            <td>
-                                                <div class="rating-mini">
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>    
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class=""></span>
-                                                    <span class=""></span>
+                                                    }
+                                                    }
                                                 </div>
                                             </td>
                                         </tr>
+                                        }
+                                        }
+                                        else
+                                        {
                                         <tr>
-                                            <td>1</td>
-                                            <td>Nelli</td>
-                                            <td>01/01/2023</td>
-                                            <td>
-                                                <div class="rating-mini">
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                    <span class="active"></span>
-                                                </div>
-                                            </td>
+                                            <td colspan="4" class="text-center">No ratings from friends available.</td>
                                         </tr>
-
+                                        }
                                         </tbody>
                                     </table>
-                                </div>
+                                    @if (Model.CountFriendsGrade > 5)
+                                    {
+                                        <div class="text-center mt-3">
+                                            @Ajax.ActionLink("Show more", "GetMoreFriendsRatings", 
+                                        new { movieId = Model.Id }, 
+                                        new AjaxOptions
+                                        {
+                                            HttpMethod = "POST", 
+                                            OnSuccess = "onShowMoreSuccess"
+                                        }, 
+                                        new { @class = "btn btn-primary", 
+                                            id = "showMoreButton" })
+                                            <button type="button" class="btn btn-secondary" id="showLessButton" style="display:none" onclick="showLess()">Show less</button>
+                                        </div>
 
+                                    }
+                                </div>
                             </div>
                             <!-- end timeline content-->
                             <!-- end settings content-->
-
                         </div> <!-- end tab-content -->
                     </div> <!-- end card-box-->
-
                 </div> <!-- end col -->
             </div>
             <!-- end row-->
-
         </div> <!-- container -->
-
     </div> <!-- content -->
-
-
-
 </div>
 }
 else
 {
-    <div class="content">
-        <!-- Start Content-->
-        <div class="container-fluid">
-            <!-- Centering the message -->
-            <div class="row justify-content-center align-items-center" style="height: 80vh;">
-                <div class="col-md-6 text-center">
-                    <img src="~/images/logo.png" class="img-fluid" alt="Movie Night Logo">
-                    <h2 class="mt-3">Movie Not Available</h2>
-                    <p class="text-muted">Sorry, the movie you are trying to access is not available or you don't have permission to view this page.</p>
-                </div>
+<div class="content">
+    <!-- Start Content-->
+    <div class="container-fluid">
+        <!-- Centering the message -->
+        <div class="row justify-content-center align-items-center" style="height: 80vh;">
+            <div class="col-md-6 text-center">
+                <img src="~/images/logo.png" class="img-fluid" alt="Movie Night Logo">
+                <h2 class="mt-3">Movie Not Available</h2>
+                <p class="text-muted">Sorry, the movie you are trying to access is not available or you don't have permission to view this page.</p>
             </div>
-        </div> <!-- container -->
-    </div> <!-- content -->
+        </div>
+    </div> <!-- container -->
+</div> <!-- content -->
 }
 <script>
-    function restaartPage(){
+    function restaartPage() {
         location.reload();
     }
+
+    function bookmarkAddDel(response) {
+        if (response.success) {
+            $('#bookmarkButton').text(response.newButtonTitle)
+                .removeClass('btn-primary btn-danger')
+                .addClass(response.newButtonColor)
+                .prop('disabled', false);
+        } else {
+            $('#bookmarkStatus').text(response.Msg);
+        }
+        location.reload();
+    }
+
+    function onShowMoreSuccess(response) {
+        if (response.success) {
+            var friendsRatingsTable = $('table tbody');
+            response.data.forEach(function (friend, index) {
+                var row = '<tr>' +
+                    '<td>' + (friendsRatingsTable.children().length + 1) + '</td>' +
+                    '<td>' + friend.UserName + '</td>' +
+                    '<td>' + new Date(friend.ReviewDateString).toLocaleDateString() + '</td>' +
+                    '<td>' +
+                    '<div class="rating-mini">';
+                for (var i = 1; i <= 10; i++) {
+                    row += '<span class="' + (i <= friend.Score ? 'active' : '') + '"></span>';
+                }
+                row += '</div>' +
+                    '</td>' +
+                    '</tr>';
+                friendsRatingsTable.append(row);
+            });
+            if (response.data.length < 5) {
+                $('#showMoreButton').hide();
+            }
+            $('#showMoreButton').hide();
+            $('#showLessButton').show();
+        }
+    }
+
+    function showLess() {
+        var friendsRatingsTable = $('table tbody');
+        friendsRatingsTable.children().slice(5).remove();
+        $('#showMoreButton').show();
+        $('#showLessButton').hide();
+    }
 </script>
+

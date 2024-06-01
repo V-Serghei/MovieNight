@@ -186,6 +186,16 @@ namespace MovieNight.BusinessLogic.Session.Service
         {
             return AddMovieTemplateDb(movieData);
         }
+
+        public MovieAddResult UpdateMovieTemplate(MovieTemplateInfE movieData)
+        {
+            return UpdateMovieTemplateDb(movieData);
+        }
+
+        public MovieDeleteResult DeleteMovie(int? id)
+        {
+            return DeleteMovieDb(id);
+        }
     }
 
     

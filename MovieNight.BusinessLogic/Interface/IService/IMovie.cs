@@ -50,5 +50,7 @@ namespace MovieNight.BusinessLogic.Interface.IService
         int? DeleteReview(int? reviewE);
         List<AreWatchingE> GetMoviesAreWatching(int? userId);
         MovieAddResult AddMovieTemplate(MovieTemplateInfE movieData);
+        MovieAddResult UpdateMovieTemplate(MovieTemplateInfE movieData);
+        MovieDeleteResult DeleteMovie(int? id);
     }
 }

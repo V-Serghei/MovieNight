@@ -60,13 +60,7 @@ namespace MovieNight.Web.Controllers
                 cfg.CreateMap<PersonalProfileM, PersonalProfileModel>()
                     .ForMember(dist => dist.BUserE,
                         src => src.Ignore());
-                cfg.CreateMap<MovieTemplateInfE, MovieTemplateInfModel>()
-                    .ForMember(cnf => cnf.CastMembers,
-                        src => src.Ignore())
-                    .ForMember(cnf => cnf.InterestingFacts,
-                        src => src.Ignore())
-                    .ForMember(cnf => cnf.MovieCards,
-                        src => src.Ignore());
+                
                 cfg.CreateMap<MovieTemplateInfModel, MovieTemplateInfE>();
                 cfg.CreateMap<InterestingFact, InterestingFactE>();
                 cfg.CreateMap<InterestingFactE, InterestingFact>();
@@ -74,13 +68,23 @@ namespace MovieNight.Web.Controllers
                 cfg.CreateMap<MovieCard, MovieCardE>();
                 cfg.CreateMap<CastMemberE, CastMember>();
                 cfg.CreateMap<CastMember, CastMemberE>();
+                cfg.CreateMap<MovieTemplateInfE, MovieTemplateInfModel>()
+                    .ForMember(cnf => cnf.CastMembers,
+                        src => src.MapFrom(sr=>sr.CastMembers))
+                    .ForMember(cnf => cnf.InterestingFacts,
+                        src => src.MapFrom(sr=>sr.InterestingFacts))
+                    .ForMember(cnf => cnf.MovieCards,
+                        src => src.MapFrom(sr=>sr.MovieCards))
+                    .ForMember(cnf=>cnf.MovieFriends,
+                        src=>src.Ignore());
                 cfg.CreateMap<ListOfFilmsE, ListOfFilmsModel>();
                 cfg.CreateMap<ListOfFilmsModel, ListOfFilmsE>();
                 cfg.CreateMap<ViewingHistoryM,ViewingHistoryModel>();
                 cfg.CreateMap<ViewingHistoryModel,ViewingHistoryM>();
                 cfg.CreateMap<AchievementModel, AchievementE>();
                 cfg.CreateMap<AchievementE, AchievementModel>();
-
+                cfg.CreateMap<ScoresFriendsGaveTheMovieE, ScoresFriendsGaveTheMovieModel>();
+                cfg.CreateMap<ScoresFriendsGaveTheMovieModel, ScoresFriendsGaveTheMovieE>();
 
                 cfg.CreateMap<FriendsPageD, FriendPageModel>()
                     .ForMember(dest=>dest.BUserE, 
@@ -306,18 +310,11 @@ namespace MovieNight.Web.Controllers
         public ActionResult MovieTemplatePage(int? id)
         {
             SessionStatus();
-            
-          
-            
-            
             int idU = 0;
-            
             if (id != null)
             {
                 idU = (int)id;
             }
-           
-
             try
             {
                 var movie = _movie.GetMovieInf(id);
@@ -334,17 +331,25 @@ namespace MovieNight.Web.Controllers
                         movieModel.UserRating =
                             _movie.GetUserRating((System.Web.HttpContext.Current.GetMySessionObject().Id, idU));
                     }
-                    foreach (var GEN in movie.Genre)
-                    {
-                        movieModel.Genre.Add(GEN);
-                    }
 
+                    if(movie.Genre!=null){
+                        foreach (var GEN in movie.Genre)
+                        {
+                            movieModel.Genre.Add(GEN);
+                        }
+                    }
+                    else
+                    {
+                        movieModel.Genre.Add("No genre");
+                    }
+                    movieModel.MovieFriends = 
+                        _mapper.Map<List<ScoresFriendsGaveTheMovieModel>>
+                            (_serviceFriend.GetFriendsMovie(idU));
                     movieModel.Id = idU;
+                    movieModel.CountFriendsGrade = _serviceFriend.GetCountFriendsGrade(idU);
+                    
                     return View(movieModel);
                 }
-
-                // return View("Error404", "Error");
-
             }
             catch (DbEntityValidationException ex)
             {
@@ -352,7 +357,11 @@ namespace MovieNight.Web.Controllers
                 {
                     foreach (var validationError in validationErrors.ValidationErrors)
                     {
-                        Console.WriteLine($@"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                        Console.WriteLine($@"Property: {
+                            validationError.PropertyName
+                        } Error: {
+                            validationError.ErrorMessage
+                        }");
                     }
                 }
                 return null;
@@ -439,9 +448,8 @@ namespace MovieNight.Web.Controllers
         [HttpPost]
         public async Task<JsonResult> BookmarkMovie(int movieId)
         {   
-            var bookMe = await _movie.SetNewBookmark((System.Web.HttpContext.
-                Current.GetMySessionObject().Id,movieId));
-                var bookM = new BookmarkModel
+            var bookMe = await _movie.SetNewBookmark((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId));
+            var bookM = new BookmarkModel
             {
                 IdUser = bookMe.IdUser,
                 IdMovie = bookMe.IdMovie,
@@ -449,30 +457,47 @@ namespace MovieNight.Web.Controllers
                 Success = bookMe.Success,
                 BookmarkTimeOf = bookMe.BookmarkTimeOf,
                 BookMark = bookMe.BookMark
-
             };
-            
-            
-            
-            return Json(new { success = true, Msg = "StatusMsg", newButtonColor = "red", bookM}); 
+    
+            return Json(new
+            {
+                success = true, 
+                Msg = "Added to bookmarks", 
+                newButtonColor = "btn-danger",
+                newButtonTitle = "Delete Bookmark",
+                bookM = bookMe
+            }); 
         }
-        
+
         [HttpPost]
         public async Task<JsonResult> DeleteBookmarkMovie(int movieId)
         {   
-            var deleteBookmark = await _movie.DeleteBookmark((System.Web.HttpContext.
-                Current.GetMySessionObject().Id,movieId));
+            var deleteBookmark = await _movie.DeleteBookmark((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId));
 
             if (deleteBookmark)
             {
-                return Json(new { success = true, Msg = "Deleted"}); 
+                return Json(new
+                {
+                    success = true,
+                    Msg = "Bookmark removed",
+                    newButtonTitle = "Add Bookmark",
+                    newButtonColor = "btn-primary"
+                }); 
+            }
+            else
+            {
+                return Json(new
+                {
+                    success = true,
+                    Msg = "Bookmark removed",
+                    newButtonTitle = "Add Bookmark",
+                    newButtonColor = "btn-primary"
+                }); 
 
             }
 
-            return Json(new { success = false, Msg = "Error"});
-
-
         }
+
         public async Task<JsonResult> DeleteBookmarkTimeOf(int movieId)
         {   
             var deleteBookmark = await _movie.DeleteBookmarkTimeOf((System.Web.HttpContext.
@@ -718,6 +743,8 @@ namespace MovieNight.Web.Controllers
         [HttpPost]
         public ActionResult MovieTemplateAdding(MovieTemplateInfModel model, HttpPostedFileBase AvatarFile, IEnumerable<HttpPostedFileBase> CastImages, IEnumerable<HttpPostedFileBase> CardImages)
         {
+            SessionStatus();
+            
             if (!ModelState.IsValid)
             {
                 return RedirectToAction("Error404Page","Error");
@@ -766,6 +793,109 @@ namespace MovieNight.Web.Controllers
                 return RedirectToAction("Error404Page","Error");
             }
         }
+        
+        [ModeratorMod]
+        [HttpGet]
+        public ActionResult MovieTemplateModify(int? id)
+        {
+            SessionStatus();
+            var movieTemplate = _movie.GetMovieInf(id);
+            if (movieTemplate == null) return RedirectToAction("Error404Page", "Error");
+            var movieModel = _mapper.Map<MovieTemplateInfModel>(movieTemplate);
+            return View(movieModel);
+        }
 
+        [ModeratorMod]
+        [HttpPost]
+        public ActionResult MovieEditing(MovieTemplateInfModel model, HttpPostedFileBase AvatarFile, IEnumerable<HttpPostedFileBase> CastImages, IEnumerable<HttpPostedFileBase> CardImages)
+        {
+            SessionStatus();
+
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Error404Page", "Error");
+            }
+
+            if (AvatarFile != null && AvatarFile.ContentLength > 0)
+            {
+                string posterPath = Path.Combine(Server.MapPath("~/images/Movie"), Path.GetFileName(AvatarFile.FileName));
+                AvatarFile.SaveAs(posterPath);
+                model.PosterImage = "/images/Movie/" + Path.GetFileName(AvatarFile.FileName);
+            }
+
+            int castIndex = 0;
+            foreach (var file in CastImages)
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    string castImagePath = Path.Combine(Server.MapPath("~/images/Cast"), Path.GetFileName(file.FileName));
+                    file.SaveAs(castImagePath);
+                    model.CastMembers[castIndex].ImageUrl = "/images/Cast/" + Path.GetFileName(file.FileName);
+                }
+                castIndex++;
+            }
+
+            int cardIndex = 0;
+            foreach (var file in CardImages)
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    string cardImagePath = Path.Combine(Server.MapPath("~/images/Cards"), Path.GetFileName(file.FileName));
+                    file.SaveAs(cardImagePath);
+                    model.MovieCards[cardIndex].ImageUrl = "/images/Cards/" + Path.GetFileName(file.FileName);
+                }
+                cardIndex++;
+            }
+
+            var movieData = _mapper.Map<MovieTemplateInfE>(model);
+            if(movieData.Country==null)movieData.Country = _movie.GetMovieInf(model.Id).Country;
+            var result = _movie.UpdateMovieTemplate(movieData);
+            if (result.Result)
+            {
+                return RedirectToAction("MovieTemplatePage", new { id = model.Id });
+            }
+            else
+            {
+                return RedirectToAction("Error404Page", "Error");
+            }
+        }
+        [HttpPost]
+        public ActionResult GetMoreFriendsRatings(int movieId)
+        {
+            var moreRatings = _serviceFriend.GetFriendsMovieAll(movieId);
+            var result = _mapper
+                .Map<IEnumerable<ScoresFriendsGaveTheMovieModel>>(moreRatings)
+                .Skip(5)
+                .Select(r => 
+                {
+                    r.ReviewDateString = r.ReviewData.ToString("dd/MM/yyyy");
+                    return r;
+                });
+            return Json(new { success = true, data = result });
+        }
+
+
+        public ActionResult DeleteMovie(int? id)
+        {
+            var exist = _movie.GetMovieInf(id);
+            if (exist != null)
+            {
+                var category = exist.Category;
+                var result = _movie.DeleteMovie(id);
+                if (result.Result)
+                {
+                    switch (category)
+                    {
+                        case FilmCategory.Film:return RedirectToAction("MovieSearch","SearchSortAdd");
+                        case FilmCategory.Cartoon:return RedirectToAction("CartoonsSearch","SearchSortAdd");
+                        case FilmCategory.Anime:return RedirectToAction("AnimeSearch","SearchSortAdd");
+                        case FilmCategory.Serial:return RedirectToAction("SerialsSearch","SearchSortAdd");
+                        case FilmCategory.Non:return RedirectToAction("Novelty","SearchSortAdd");
+                        default:return RedirectToAction("Error404Page","Error");
+                    }
+                }
+            }
+            return RedirectToAction("Error404Page", "Error");
+        }
     }
 }
