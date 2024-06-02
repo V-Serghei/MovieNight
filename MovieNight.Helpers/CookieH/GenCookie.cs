@@ -20,10 +20,6 @@ namespace MovieNight.Helpers.CookieH
             return DecryptStringAes(value, salt,key);
         }
         
-        
-        
-
-       
         private static string EncryptStringAes(string plainText,string salt, string sharedSecret)
         {
             if (string.IsNullOrEmpty(plainText))

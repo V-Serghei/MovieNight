@@ -81,15 +81,15 @@ namespace MovieNight.Web.Controllers
         public void SessionStatus()
         {
             var apiCookie = Request.Cookies["X-KEY"];
-            
+            _session.CleanupExpiredSessionRange();
             
             if (apiCookie != null)
             {
                 var profile = _session.GetUserByCookie(apiCookie.Value,HttpContextInfrastructure.GetUserAgentInfo(Request));
                 
                 if (profile != null)
-                {                var us = _mapper.Map<UserModel>(profile);
-
+                {                
+                    var us = _mapper.Map<UserModel>(profile);
                     System.Web.HttpContext.Current.SetMySessionObject(us);
                     System.Web.HttpContext.Current.Session["LoginStatus"] = "login";
                     System.Web.HttpContext.Current.Session["UserId"] = us.Id;
@@ -108,6 +108,7 @@ namespace MovieNight.Web.Controllers
                         }
                     }
                     System.Web.HttpContext.Current.Session.Clear();
+                    
                     System.Web.HttpContext.Current.Session["LoginStatus"] = "logout";
                 }
             }
@@ -119,7 +120,6 @@ namespace MovieNight.Web.Controllers
         }
 
         #endregion
-        
         
         #region transition tools
         protected async Task<ActionResult> SortingAndFilteringCommand<TModel, TEntity>(
@@ -170,8 +170,6 @@ namespace MovieNight.Web.Controllers
         
         #endregion
         
-        
-
         #region Temporary Data
         /// <summary>
         /// Update and obtain information on temporary bookmarks

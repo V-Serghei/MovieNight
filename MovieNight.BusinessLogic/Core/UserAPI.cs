@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities.UserId.ResultE;
 
 namespace MovieNight.BusinessLogic.Core
 {
@@ -581,12 +582,101 @@ namespace MovieNight.BusinessLogic.Core
                 }
             }
             
-
-          
-
-
             return false;
         }
+        internal  HttpCookie CookieLongTime(LogInData userD)
+        {
+            using (var us = new UserContext())
+            {
+                var user = (from u in us.UsersT where u.Email == userD.Email select u).FirstOrDefault();
+
+                Debug.Assert(user != null, nameof(user) + " != null");
+                var apiCookie = new HttpCookie("X-KEY")
+                {
+                    Value = GenCookie.Create(userD.Email + userD.Agent, 
+                        user.Salt, HashInfo.HashInf(userD.Email + userD.Agent,user.Salt))
+                };
+
+                using (var db = new SessionContext())
+                {
+                    var userCookie = (from e in db.Sessions where e.Email == userD.Email select e).FirstOrDefault();
+
+                    if (userCookie != null)
+                    {
+                        userCookie.CookieString = apiCookie.Value;
+                        userCookie.ExpireTime = DateTime.Now.AddDays(20);
+                        using (var todo = new SessionContext())
+                        {
+                            todo.Entry(userCookie).State = EntityState.Modified;
+                            todo.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+
+                        db.Sessions.Add(new SessionCookie
+                        {
+                            CookieString = apiCookie.Value,
+                            ExpireTime = DateTime.Now.AddDays(20),
+                            Email = userD.Email,
+                            UserName = userD.Username,
+
+                        });
+
+                        db.SaveChanges();
+                    }
+                }
+
+                return apiCookie;
+            }
+        }
+        protected void CleanupExpiredSessions()
+        {
+            using (var db = new SessionContext())
+            {
+                var expiredSessions = db.Sessions.Where(s => s.ExpireTime <= DateTime.Now).ToList();
+                if (expiredSessions.Any())
+                {
+                    db.Sessions.RemoveRange(expiredSessions);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        protected async Task<ReserPasswordResult> UserResetPasswordDb(string modelEmail, string modelNewPassword)
+        {
+            using (var db = new UserContext())
+            {
+                var user = db.UsersT.FirstOrDefault(u => u.Email == modelEmail);
+                if (user != null)
+                {
+                    user.Password = HashPassword.HashPass(modelNewPassword, user.Salt);
+            
+                    db.Entry(user).State = EntityState.Modified; 
+                    await db.SaveChangesAsync();
+            
+                    return new ReserPasswordResult
+                    {
+                        Success = true,
+                        Message = "Password reset successfully"
+                    };
+                }
+                else
+                {
+                    return new ReserPasswordResult
+                    {
+                        Success = false,
+                        Message = "User not found"
+                    };
+                }
+            }
+        }
+
+
+
+
+
+
 
     }
 }

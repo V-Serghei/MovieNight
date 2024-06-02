@@ -689,6 +689,8 @@
     <Content Include="vendor\tablesaw\tablesaw.js" />
     <Content Include="Video\viedeo_Test.mp4" />
     <Content Include="Views\Error\Error404Page.cshtml" />
+    <Content Include="Views\Identification\VerifyCode.cshtml" />
+    <Content Include="Views\Identification\VerifyCodeAndResetPassword.cshtml" />
     <Content Include="Views\InformationSynchronization\MoviePlayer.cshtml" />
     <Content Include="Views\InformationSynchronization\MovieTemplateEditing.cshtml" />
     <Content Include="Views\InformationSynchronization\MovieTemplateModify.cshtml" />
@@ -730,6 +732,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\CacheI\ViewListCacheKey.cs" />
+    <Compile Include="Infrastructure\Different\SendEmail.cs" />
     <Compile Include="Infrastructure\Different\ValidationStr.cs" />
     <Compile Include="Infrastructure\HttpContextInfrastructure.cs" />
     <Compile Include="Infrastructure\SessionExchanges.cs" />
@@ -761,6 +764,9 @@
     <Compile Include="Models\PersonalP\Bookmark\BookmarkPageInfoTableModel.cs" />
     <Compile Include="Models\PersonalP\PEditingM.cs" />
     <Compile Include="Models\PersonalP\PersonalProfilModel.cs" />
+    <Compile Include="Models\PersonalP\RecoverM\RecoverPasswordViewModel.cs" />
+    <Compile Include="Models\PersonalP\RecoverM\ResetPasswordViewModel.cs" />
+    <Compile Include="Models\PersonalP\RecoverM\VerifyCodeViewModel.cs" />
     <Compile Include="Models\RegistViewModel.cs" />
     <Compile Include="Models\Review\ReviewPageModel.cs" />
     <Compile Include="Models\SortingSearchingFiltering\ListSortCommand.cs" />
@@ -852,7 +858,7 @@
     <Content Include="Views\Identification\Login.cshtml" />
     <Content Include="Views\Identification\Register.cshtml" />
     <Content Include="Views\Notification\Calendar.cshtml" />
-    <Content Include="Views\Identification\PagesRecoverpw.cshtml" />
+    <Content Include="Views\Identification\PagesRecoverPassword.cshtml" />
     <Content Include="Views\DataTransfer\Inbox.cshtml" />
     <Content Include="Views\DataTransfer\Read.cshtml" />
     <Content Include="Views\DataTransfer\Compose.cshtml" />

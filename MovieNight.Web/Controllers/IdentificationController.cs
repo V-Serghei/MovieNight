@@ -1,23 +1,22 @@
 ﻿using MovieNight.Web.Models;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Deployment.Internal;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MovieNight.BusinessLogic.Interface;
 using MovieNight.Domain.Entities.UserId;
-using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
+using MovieNight.BusinessLogic.DBModel;
 using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.AchievementE;
+using MovieNight.Helpers.CryptographyH;
 using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Infrastructure.Different;
 using MovieNight.Web.Models.Achievement;
+using MovieNight.Web.Models.PersonalP.RecoverM;
 
 namespace MovieNight.Web.Controllers
 {
@@ -52,16 +51,34 @@ namespace MovieNight.Web.Controllers
         
         #endregion
         
-
+        #region Login
+        
+        /// <summary>
+        /// Login page for the user
+        /// Login is a guest mod
+        /// Login get and post methods
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [GuestMod]
         public async Task<JsonResult> LoginPost(LoginViewModel model)
         {
+            if (!ModelState.IsValid) return Json(new
+            {
+                success = false, 
+                errors = ModelState.Values.SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+            });
+            string rememberMe = "off";
+            if (model.RememberMe == "on")
+                rememberMe = "on";
+            
             var logD = new LogInData
             {
                 Password = model.Password,
-                RememberMe = model.RememberMe,
+                RememberMe = rememberMe == "on",
                 LoginTime = DateTime.Now,
                 Ip = Request.UserHostAddress,
                 Agent = HttpContextInfrastructure.GetUserAgentInfo(Request)
@@ -70,8 +87,9 @@ namespace MovieNight.Web.Controllers
             else logD.Username = model.Username;
             var verification = await _sessionUser.UserVerification(logD);
             if (verification.IsVerified)
-            {
-                HttpCookie cookie = _sessionUser.GenCookie(verification.LogInData);
+            {   
+                HttpCookie cookie = rememberMe == "on"? _sessionUser.GenCookieLongTime(verification.LogInData) : 
+                    _sessionUser.GenCookie(verification.LogInData);
                 ControllerContext.HttpContext.Response.Cookies.Add(cookie);
                 var us = _mapper.Map<UserModel>(verification.LogInData);
                 System.Web.HttpContext.Current.SetMySessionObject(us);
@@ -80,7 +98,18 @@ namespace MovieNight.Web.Controllers
             }
             return Json(new { success = false, statusMsg = verification.StatusMsg });
         }
+        
+        [HttpGet]
+        [GuestMod]
+        public ActionResult Login()
+        {
+            return View();
+        }
+        
+        #endregion
 
+        #region Registeration
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [GuestMod]
@@ -134,28 +163,122 @@ namespace MovieNight.Web.Controllers
                 return Json(new { success = false, statusMsg = rUserVerification.StatusMsg });
             }
         }
-
-        // GET: Identification
-        [HttpGet]
-        [GuestMod]
-        public ActionResult Login()
-        {
-            
-            return View();
-        }
+        
         [HttpGet]
         [GuestMod]
         public ActionResult Register()
         {
             return View();
         }
+        
+        #endregion
+
+        #region Recover Password
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> RecoverPassword(RecoverPasswordViewModel rModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid email address" });
+            }
+
+            var code = new Random().Next(100000, 999999).ToString();
+
+            HttpContext.Session["RecoveryCode"] = code;
+            HttpContext.Session["RecoveryEmail"] = rModel.Email;
+
+            SendEmail.SendRecoveryEmail(rModel.Email, code);
+            return Json(new { success = true, message = "Recovery email sent" });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult VerifyCode(VerifyCodeViewModel vModel)
+        {
+            var storedCode = HttpContext.Session["RecoveryCode"] as string;
+            var storedEmail = HttpContext.Session["RecoveryEmail"] as string;
+
+            if (vModel.Code == storedCode)
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Invalid code" });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> VerifyCodeAndResetPassword(ResetPasswordViewModel model)
+        {
+            var storedEmail = HttpContext.Session["RecoveryEmail"] as string;
+            
+            var newPasswordResult = await _sessionUser.UserResetPassword(storedEmail, model.NewPassword);
+
+            if(newPasswordResult!=null){
+                if (newPasswordResult.Success)
+                {
+                    HttpContext.Session.Remove("RecoveryCode");
+                    HttpContext.Session.Remove("RecoveryEmail");
+                    return Json(new { success = true, message = newPasswordResult.Message });
+
+                }
+                else
+                {
+                    return Json(new { success = false, message = newPasswordResult.Message });
+
+                }
+            }
+            
+            return Json(new { success = false, message = "Invalid code or email" });
+        }
+        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [GuestMod]
+        public JsonResult ResetPassword(ResetPasswordViewModel rModel)
+        {
+            var storedCode = HttpContext.Session["RecoveryCode"] as string;
+            var storedEmail = HttpContext.Session["RecoveryEmail"] as string;
+
+            if (rModel.Code == storedCode && rModel.Email == storedEmail)
+            {
+                using (var db = new UserContext())
+                {
+                    var user = db.UsersT.FirstOrDefault(u => u.Email == rModel.Email);
+                    if (user != null)
+                    {
+                        user.Password = HashPassword.HashPass(rModel.NewPassword, user.Salt);
+                        db.SaveChanges();
+
+                        HttpContext.Session.Remove("RecoveryCode");
+                        HttpContext.Session.Remove("RecoveryEmail");
+
+                        return Json(new { success = true, message = "Password reset successfully" });
+                    }
+                }
+            }
+
+            return Json(new { success = false, message = "Invalid code or email" });
+        }
+        public ActionResult VerifyCode()
+        {
+            return View();
+        }
         [HttpGet]
         [GuestMod]
-        public ActionResult PagesRecoverpw()
+        public ActionResult PagesRecoverPassword()
         {
             return View();
         }
 
+        #endregion
+        
+        #region Logout
         [HttpGet]
         [GuestMod]
         public ActionResult Logout()
@@ -176,5 +299,6 @@ namespace MovieNight.Web.Controllers
             
             return View("Login");
         }
+        #endregion
     }
 }
