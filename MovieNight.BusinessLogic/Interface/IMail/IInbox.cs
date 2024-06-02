@@ -18,5 +18,6 @@ namespace MovieNight.BusinessLogic.Interface.IMail
         bool SetMailStar(int? mailId);
         bool DeleteMailStar(int? mailId);
         bool DeleteMail(int? mailId);
+        List<InboxD> InboxUnread(int? userId);
     }
 }

@@ -239,5 +239,41 @@ namespace MovieNight.BusinessLogic.Core
                 }
             }
         }
+        
+        public List<InboxD> InboxUnreadFromData (int? userId)
+        {
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<MailDbTable,InboxD>()
+                    .ForMember(dest => dest.SenderName, 
+                        opt=>opt.MapFrom(src 
+                            => src.Sender.UserName));
+                c.CreateMap<MailDbTable,InboxD>()
+                    .ForMember(dest => dest.RecipientName, 
+                        opt=>opt.MapFrom(src 
+                            => src.Recipient.UserName));
+            });
+            
+            var mapper = config.CreateMapper();
+            using (var db = new UserContext())
+            {
+                try
+                {
+                    var existsInMailDb = db.MailE.Where(f => f.RecipientId == userId 
+                                                             && !f.IsChecked);
+                    var listOfMessages = mapper.Map<List<InboxD>>(existsInMailDb);
+                    foreach (var listOfMessage in listOfMessages)
+                    {
+                        listOfMessage.SenderName =
+                            db.UsersT.FirstOrDefault(g => g.Id == listOfMessage.SenderId)?.UserName;
+                    }
+                    return listOfMessages;
+                }
+                catch (Exception exception)
+                {
+                    return null;
+                }
+            }
+        }
     }
 }

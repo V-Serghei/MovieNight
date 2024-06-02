@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using Microsoft.AspNet.Http.Features;
+using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
 using ISession = MovieNight.BusinessLogic.Interface.ISession;
 
@@ -28,6 +29,7 @@ namespace MovieNight.Web.Controllers
         }
         // GET: DataTransfer
         [HttpGet]
+        [UserMod]
         public ActionResult Inbox()
         {
             var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
@@ -116,6 +118,24 @@ namespace MovieNight.Web.Controllers
             var sendMail = сompleteInbox.DeleteMail(mailId);
             return RedirectToAction("Inbox");
         }
-       
+
+        public ActionResult GetUnreadMessages()
+        {
+            var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<InboxD, InboxModel>();
+            });
+            var mapper = config.CreateMapper();
+            List<InboxD> messageD = сompleteInbox.InboxUnread(userId);
+            var message = mapper.Map<List<InboxModel>>(messageD);
+            return View(message);
+        }
+        public JsonResult GetUnreadMessagesCount()
+        {
+            var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+            var unreadMessagesCount = сompleteInbox.InboxUnread(userId).Count(m => !m.IsChecked);
+            return Json(new { count = unreadMessagesCount }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

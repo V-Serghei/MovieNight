@@ -12,43 +12,50 @@ namespace MovieNight.Web
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new StyleBundle("~/bundles/bootstrap/css").Include(
-                "~/Content/bootstrap.min.css", new CssRewriteUrlTransform()));
-            bundles.Add(new StyleBundle("~/bundles/icons/css").Include(
-                "~/Content/icons.min.css", new CssRewriteUrlTransform()));
-            bundles.Add(new StyleBundle("~/bundles/app/css").Include(
+                "~/Content/bootstrap.min.css", new CssRewriteUrlTransform()).Include(
+                "~/Content/icons.min.css", new CssRewriteUrlTransform()).Include(
                 "~/Content/app.min.css", new CssRewriteUrlTransform()));
+            // bundles.Add(new StyleBundle("~/bundles/icons/css").Include(
+            //     "~/Content/icons.min.css", new CssRewriteUrlTransform()));
+            // bundles.Add(new StyleBundle("~/bundles/app/css").Include(
+            //     "~/Content/app.min.css", new CssRewriteUrlTransform()));
 
             bundles.Add(new ScriptBundle("~/bundles/vendor/js").Include(
                 "~/scripts/vendor.min.js"));
-            bundles.Add(new ScriptBundle("~/bundles/app/js").Include(
-                "~/scripts/app.min.js"));
+             bundles.Add(new ScriptBundle("~/bundles/app/js").Include(
+                 "~/scripts/app.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/AdditionalScripts/js").Include(
-                "~/vendor/AdditionalScripts.js"));
+             bundles.Add(new ScriptBundle("~/bundles/AdditionalScripts/js").Include(
+                 "~/vendor/AdditionalScripts.js"));
 
-            bundles.Add(new StyleBundle("~/bundles/slider/css").Include(
-                "~/vendor/myStyle.css", new CssRewriteUrlTransform()));
+             bundles.Add(new StyleBundle("~/bundles/slider/css").Include(
+                 "~/vendor/myStyle.css", new CssRewriteUrlTransform()));
 
             //page of friends
-            bundles.Add(new StyleBundle("~/bundles/custombox/css").Include(
-                "~/vendor/custombox.min.css", new CssRewriteUrlTransform()));
-            bundles.Add(new ScriptBundle("~/bundles/custombox/js").Include(
-               "~/vendor/custombox.min.js"));
+            
+             bundles.Add(new StyleBundle("~/bundles/custombox/css").Include(
+                 "~/vendor/custombox.min.css", new CssRewriteUrlTransform()));
+             bundles.Add(new ScriptBundle("~/bundles/custombox/js").Include(
+                "~/vendor/custombox.min.js"));
 
             //viewed list
-            bundles.Add(new StyleBundle("~/bundles/dataTables_bootstrap4/css").Include(
-                "~/vendor/datatables/dataTables.bootstrap4.css", new CssRewriteUrlTransform()));
-            bundles.Add(new StyleBundle("~/bundles/dataTables_responsive_bootstrap4/css").Include(
-                "~/vendor/datatables/responsive.bootstrap4.css", new CssRewriteUrlTransform()));
-            bundles.Add(new StyleBundle("~/bundles/dataTables_buttons_bootstrap4/css").Include(
-                "~/vendor/datatables/buttons.bootstrap4.css", new CssRewriteUrlTransform()));
-            bundles.Add(new StyleBundle("~/bundles/dataTables_select_bootstrap4/css").Include(
-                    "~/vendor/datatables/select.bootstrap4.css", new CssRewriteUrlTransform()));
+            
+             bundles.Add(new StyleBundle("~/bundles/dataTables_bootstrap4/css").Include(
+                 "~/vendor/datatables/dataTables.bootstrap4.css", new CssRewriteUrlTransform()).Include(
+                 "~/vendor/datatables/responsive.bootstrap4.css", new CssRewriteUrlTransform()).Include(
+                 "~/vendor/datatables/buttons.bootstrap4.css", new CssRewriteUrlTransform()).Include(
+                 "~/vendor/datatables/select.bootstrap4.css", new CssRewriteUrlTransform()));
+             // bundles.Add(new StyleBundle("~/bundles/dataTables_responsive_bootstrap4/css").Include(
+             //     "~/vendor/datatables/responsive.bootstrap4.css", new CssRewriteUrlTransform()));
+             // bundles.Add(new StyleBundle("~/bundles/dataTables_buttons_bootstrap4/css").Include(
+             //     "~/vendor/datatables/buttons.bootstrap4.css", new CssRewriteUrlTransform()));
+             // bundles.Add(new StyleBundle("~/bundles/dataTables_select_bootstrap4/css").Include(
+             //         "~/vendor/datatables/select.bootstrap4.css", new CssRewriteUrlTransform()));
 
-            bundles.Add(new ScriptBundle("~/bundles/jquery_dataTables_min/js").Include(
-                  "~/vendor/datatables/jquery.dataTables.min.js"));
-            bundles.Add(new ScriptBundle("~/bundles/dataTables_bootstrap4/js").Include(
-                         "~/vendor/datatables/dataTables.bootstrap4.js"));
+             bundles.Add(new ScriptBundle("~/bundles/jquery_dataTables_min/js").Include(
+                   "~/vendor/datatables/jquery.dataTables.min.js"));
+             bundles.Add(new ScriptBundle("~/bundles/dataTables_bootstrap4/js").Include(
+                          "~/vendor/datatables/dataTables.bootstrap4.js"));
             bundles.Add(new ScriptBundle("~/bundles/dataTables_responsive/js").Include(
                      "~/vendor/datatables/dataTables.responsive.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/dataTables_bootstrap4_min/js").Include(

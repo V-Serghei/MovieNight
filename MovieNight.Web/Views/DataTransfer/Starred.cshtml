@@ -39,10 +39,9 @@
                             <a href=@Url.Action("Compose","DataTransfer") class="btn btn-primary btn-block waves-effect waves-light">Compose</a>
 
                             <div class="mail-list mt-4">
-                                <a href=@Url.Action("Inbox","DataTransfer") class="list-group-item border-0 text-primary font-weight-bold"><i class="mdi mdi-inbox font-18 align-middle mr-2"></i>Inbox<span class="badge badge-danger float-right ml-2 mt-1">@Model.Count(l=>!l.IsChecked)</span></a>
-                                <a href=@Url.Action("SentMail","DataTransfer") class="list-group-item border-0"><i class="mdi mdi-send font-18 align-middle mr-2"></i>Sent Mail</a>
-                                </div>
-                            <div class="list-group b-0 mail-list">
+                                <a href=@Url.Action("Inbox","DataTransfer") class="list-group-item border-0 "><i class="mdi mdi-inbox font-18 align-middle mr-2"></i>Inbox</a>
+                                <a href=@Url.Action("Starred","DataTransfer") class="list-group-item border-0 text-warning font-weight-bold"><i class="mdi mdi-star font-18 align-middle mr-2"></i>Starred</a>
+                                <a href=@Url.Action("SentMail","DataTransfer") class="list-group-item border-0 "><i class="mdi mdi-send font-18 align-middle mr-2"></i>Sent Mail</a>
                             </div>
 
                         </div>
@@ -147,23 +146,4 @@
         </div> <!-- container -->
 
     </div> <!-- content -->
-    <!-- Footer Start -->
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-6">
-                    2016 - 2019 &copy; Minton theme by <a href="">Coderthemes</a>
-                </div>
-                <div class="col-md-6">
-                    <div class="text-md-right footer-links d-none d-sm-block">
-                        <a href="javascript:void(0);">About Us</a>
-                        <a href="javascript:void(0);">Help</a>
-                        <a href="javascript:void(0);">Contact Us</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- end Footer -->
-
 </div>
