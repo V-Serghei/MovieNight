@@ -85,7 +85,8 @@ namespace MovieNight.Web.Controllers
             
             if (apiCookie != null)
             {
-                var profile = _session.GetUserByCookie(apiCookie.Value,HttpContextInfrastructure.GetUserAgentInfo(Request));
+                var profile = _session
+                    .GetUserByCookie(apiCookie.Value,HttpContextInfrastructure.GetUserAgentInfo(Request));
                 
                 if (profile != null)
                 {                
@@ -184,7 +185,8 @@ namespace MovieNight.Web.Controllers
                 var listBookmark = new BookmarkTimeOf
                 {
                     Bookmark = _mapper.Map<List<BookmarkModel>>(listBookmarkE.Bookmark),
-                    MovieInTimeOfBookmark = _mapper.Map<List<MovieTemplateInfModel>>(listBookmarkE.MovieInTimeOfBookmark)
+                    MovieInTimeOfBookmark = _mapper
+                        .Map<List<MovieTemplateInfModel>>(listBookmarkE.MovieInTimeOfBookmark)
                 };
                 System.Web.HttpContext.Current.SetBookmarkTimeOf(listBookmark);
             }
