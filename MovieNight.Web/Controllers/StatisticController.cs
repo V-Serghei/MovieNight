@@ -67,8 +67,8 @@ namespace MovieNight.Web.Controllers
                 return View(statisticModel);
 
             }
-
-            return View();
+            
+            return View(new StatisticModel());
         }
         #endregion
 
