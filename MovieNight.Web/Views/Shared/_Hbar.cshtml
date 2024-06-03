@@ -403,14 +403,36 @@ else
         </a>
     </li>
 }
-
-
-
-<li class="dropdown notification-list">
+    <li class="dropdown notification-list">
     <a href="javascript:void(0);" class="nav-link right-bar-toggle waves-effect waves-light">
         <i class="fe-bell noti-icon"></i>
         <span class="badge badge-danger rounded-circle noti-icon-badge" id="notificationCount"></span>
     </a>
+    <script>
+        function RestartPage() {
+            location.reload();
+        }
+
+        function updateUnreadMessagesCount() {
+            $.ajax({
+                url: '@Url.Action("GetUnreadMessagesCount", "DataTransfer")',
+                type: 'GET',
+                success: function(data) {
+                    $('#notificationCount').text(data.count);
+                },
+                error: function() {
+                    console.error('Failed to fetch unread messages count.');
+                }
+            });
+        }
+
+        // Call the function on page load
+        updateUnreadMessagesCount();
+
+        // Optionally, set an interval to update the count periodically
+        setInterval(updateUnreadMessagesCount, 60000); // Update every 60 seconds
+    </script>
+
 </li>
 <script>
     function RestartPage()
