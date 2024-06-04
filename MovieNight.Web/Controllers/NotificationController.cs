@@ -27,14 +27,11 @@ namespace MovieNight.Web.Controllers
         [HttpPost]
         public JsonResult EventSave(CalendarEvent model)
         {
-            
+            SessionStatus();
             if (model == null || string.IsNullOrEmpty(model.Title) || string.IsNullOrEmpty(model.Category))
             {
                 return Json(new { success = false, message = "Title and Category are required." });
             }
-
-            
-
             return Json(new { success = true, message = "Event saved successfully!" });
         }
         public ActionResult Calendar()

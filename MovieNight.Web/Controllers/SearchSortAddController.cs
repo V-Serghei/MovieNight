@@ -107,12 +107,13 @@ namespace MovieNight.Web.Controllers
         #region Friends
 
         [UserMod]
+        [HttpGet]
         public ActionResult FriendsPage(int _skipParametr = 0, string searchTerm = "")
         {
             SessionStatus();
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
             {
-                return RedirectToAction("Error404Page", "Error");
+                return RedirectToAction("Error403Page", "Error");
             }
 
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
@@ -162,7 +163,7 @@ namespace MovieNight.Web.Controllers
             SessionStatus();
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
             {
-                return RedirectToAction("Error404Page", "Error");
+                return RedirectToAction("Error403Page", "Error");
             }
 
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
@@ -189,8 +190,6 @@ namespace MovieNight.Web.Controllers
                 };
                 friendListModel.ListOfFriends.Add(listOfUsers);
             }
-
-
             int totalItems = _serviceFriend.GetTotalUserCount(searchTerm);
             int itemsPerPage = 9;
             friendListModel.Pagination = new PaginationModel
@@ -205,6 +204,8 @@ namespace MovieNight.Web.Controllers
             return View(friendListModel);
             
         }
+        [UserMod]
+        [HttpPost]
         public ActionResult SetNewFriendPage(int? _friendId)
         {
             SessionStatus();
@@ -212,7 +213,6 @@ namespace MovieNight.Web.Controllers
             var _userVsFriend = _serviceFriend.setAddFriend((_userId, _friendId));
             if (_userVsFriend)
             {
-            
                 return RedirectToAction("FindFriends");
             }
             else
@@ -220,7 +220,8 @@ namespace MovieNight.Web.Controllers
                 return RedirectToAction("Error404Page", "Error");
             }
         }
-
+        [UserMod]
+        [HttpPost]
         public ActionResult SetDeleteFriendPage(int? _friendId)
         {
             SessionStatus();
@@ -749,17 +750,7 @@ namespace MovieNight.Web.Controllers
         
         
             #endregion
-        
-       
-        
-       
-
-       
-        
-        
-        
             
-        
             #region ViewedList
 
             /// <summary>
@@ -860,8 +851,6 @@ namespace MovieNight.Web.Controllers
 
 
             }
-
-
 
 //     public async Task<ActionResult> CurrentSortingAndFilteringAction(ViewListSort command)
 //     {
@@ -1051,18 +1040,7 @@ namespace MovieNight.Web.Controllers
             // }
 
             #endregion
-        
-
-
-   
-
-    
-
-    
-    
-    
-    
-    
+            
             #region Bookmark Page
 
             

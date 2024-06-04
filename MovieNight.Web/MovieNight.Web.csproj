@@ -883,6 +883,7 @@
     <Content Include="vendor\x-editable\bootstrap-editable.css" />
     <Content Include="vendor\x-editable\bootstrap-editable.min.js" />
     <Content Include="Video\viedeo_Test.mp4" />
+    <Content Include="Views\Error\Error403Page.cshtml" />
     <Content Include="Views\Error\Error404Page.cshtml" />
     <Content Include="Views\InformationSynchronization\MoviePlayer.cshtml" />
     <Content Include="Views\InformationSynchronization\MovieTemplateEditing.cshtml" />

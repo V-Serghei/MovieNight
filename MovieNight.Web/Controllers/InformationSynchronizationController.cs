@@ -255,6 +255,7 @@ namespace MovieNight.Web.Controllers
         [UserMod]
         public ActionResult UserTemplatePage(int? id)
         {
+            SessionStatus();
             var friendsDate = _serviceFriend.getFriendDate(id);
             var friendmodel = _mapper.Map<FriendPageModel>(friendsDate);
             if (friendmodel != null)
@@ -363,6 +364,7 @@ namespace MovieNight.Web.Controllers
         [UserMod]
         public ActionResult ProfileEditing()
         {
+            SessionStatus();
             var used = _sessionUser.GetPersonalProfileM(HttpContextInfrastructure.GetGlobalParam());
             
             var model = _mapper.Map<PersonalProfileModel>(used);
@@ -433,10 +435,11 @@ namespace MovieNight.Web.Controllers
             });
         }
 
-        
+        [UserMod]
         [HttpPost]
         public async Task<JsonResult> BookmarkMovie(int movieId)
         {   
+            SessionStatus();
             var bookMe = await _movie.SetNewBookmark((System.Web.HttpContext.
                 Current.GetMySessionObject().Id,movieId));
                 var bookM = new BookmarkModel
@@ -454,10 +457,11 @@ namespace MovieNight.Web.Controllers
             
             return Json(new { success = true, Msg = "StatusMsg", newButtonColor = "red", bookM}); 
         }
-        
+        [UserMod]
         [HttpPost]
         public async Task<JsonResult> DeleteBookmarkMovie(int movieId)
         {   
+            SessionStatus();
             var deleteBookmark = await _movie.DeleteBookmark((System.Web.HttpContext.
                 Current.GetMySessionObject().Id,movieId));
 
@@ -535,7 +539,7 @@ namespace MovieNight.Web.Controllers
         
         public async Task<ActionResult> AddToViewed(int? movieId)
         {
-
+            SessionStatus();
             if (movieId != null)
             {
                 var respAddViewed = await 
@@ -569,7 +573,7 @@ namespace MovieNight.Web.Controllers
         [HttpPost]
         public async Task<JsonResult> RateMovie(int rating, int movieId)
         {
-
+            SessionStatus();
             var resp =  await _movie.SetReteMovieAndView((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId,
                 rating));
 
@@ -630,9 +634,11 @@ namespace MovieNight.Web.Controllers
             }
 
         }
+        [UserMod]
         [HttpPost]
         public JsonResult ClearBookmarks()
         {
+            SessionStatus();
             try
             {
                 _movie.ClearBookmarks();
@@ -648,10 +654,12 @@ namespace MovieNight.Web.Controllers
         }
 
         #region Review
-
+        
         [HttpGet]
+        [UserMod]
         public ActionResult ReviewPage(int? filmId)
         {
+            SessionStatus();
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<ReviewE, ReviewModel>();
@@ -669,9 +677,11 @@ namespace MovieNight.Web.Controllers
             };
             return View(model);
         }
+        [UserMod]
         [HttpPost]
         public ActionResult ReviewPageWrite(ReviewModel movieReview)
         {
+            SessionStatus();
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<ReviewModel, ReviewE>();
@@ -689,8 +699,10 @@ namespace MovieNight.Web.Controllers
             return RedirectToAction("Error404Page","Error");
         }
         [ModeratorMod]
+        [HttpPost]
         public ActionResult DeleteReviewData(int? movieId)
         {
+            SessionStatus();
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<ReviewModel, ReviewE>();
