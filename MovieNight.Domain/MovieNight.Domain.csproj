@@ -63,6 +63,7 @@
     <Compile Include="Entities\DifferentE\AreWatchingE.cs" />
     <Compile Include="Entities\DifferentE\PhoneNumE.cs" />
     <Compile Include="Entities\DifferentE\Tag.cs" />
+    <Compile Include="Entities\DifferentE\TopFilmsE.cs" />
     <Compile Include="Entities\Friends\FriendsDbTable.cs" />
     <Compile Include="Entities\Friends\FriendsListD.cs" />
     <Compile Include="Entities\Friends\FriendsPageD.cs" />

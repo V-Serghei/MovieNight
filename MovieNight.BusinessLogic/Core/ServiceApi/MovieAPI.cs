@@ -2023,5 +2023,54 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
             }
         }
 
+        protected List<TopFilmsE> GetMoviesTopDb(int? userId)
+        {
+            try
+            {
+                using (var mDb = new MovieContext())
+                using (var uDb = new UserContext())
+                {
+                    var lastMonth = DateTime.Now.AddMonths(-1);
+
+                    var viewListEntries = uDb.ViewList
+                        .Where(v => v.ReviewDate >= lastMonth)
+                        .ToList();
+
+                    var movieCounts = viewListEntries
+                        .GroupBy(v => v.MovieId)
+                        .Select(g => new
+                        {
+                            MovieId = g.Key,
+                            Count = g.Count()
+                        })
+                        .OrderByDescending(mc => mc.Count)
+                        .ToList();
+
+                    var movieIds = movieCounts.Select(mc => mc.MovieId).ToList();
+                    var movies = mDb.MovieDb
+                        .Where(m => movieIds.Contains(m.Id))
+                        .OrderByDescending(k=>k.MovieNightGrade)
+                        .ToList();
+                    
+                    var result = movieCounts.Select(mc => new TopFilmsE()
+                    {
+                        MovieId = mc.MovieId,
+                        Name = movies.First(m => m.Id == mc.MovieId).Title,
+                        Star = movies.First(m => m.Id == mc.MovieId).MovieNightGrade,
+                        PosterImage = movies.First(m => m.Id == mc.MovieId).PosterImage,
+                        Genre = JsonConvert.DeserializeObject<List<string>>(
+                            movies.First(m => m.Id == mc.MovieId).Genres)
+                    }).Take(30).ToList();
+
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
     }
 }

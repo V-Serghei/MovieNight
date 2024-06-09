@@ -175,6 +175,11 @@ namespace MovieNight.BusinessLogic.Session.Service
         {
             return GetMoviesAreWatchingDb(userId);
         }
+
+        public List<TopFilmsE> GetMoviesTop(int? userId)
+        {
+            return GetMoviesTopDb(userId);
+        }
     }
 
     

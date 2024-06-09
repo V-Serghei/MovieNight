@@ -86,6 +86,8 @@ namespace MovieNight.Web.Controllers
                 cfg.CreateMap<AreWatchingModel, MovieTemplateInfE>();
                 cfg.CreateMap<MovieTemplateInfE, AreWatchingModel>();
 
+                cfg.CreateMap<TopFilmsModel, TopFilmsE>();
+                cfg.CreateMap<TopFilmsE , TopFilmsModel>();
               });
 
             _mapper = config.CreateMapper();
@@ -155,12 +157,21 @@ namespace MovieNight.Web.Controllers
         public ActionResult Top()
         {
             SessionStatus();
+            if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
+            {
+                var listMovie = _movie.GetMoviesTop(null);
+                var listModel = _mapper.Map<List<TopFilmsModel>>(listMovie);
+                return View(listModel);
+            }
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
             {
                 return RedirectToAction("Login", "Identification");
             }
             var user = System.Web.HttpContext.Current.GetMySessionObject();
-            return View();
+            var listMovieExUser = _movie.GetMoviesTop(user.Id);
+            var listModelExUser = _mapper.Map<List<TopFilmsModel>>(listMovieExUser);
+            
+            return View(listModelExUser);
         }
 
         public ActionResult AreWatching()

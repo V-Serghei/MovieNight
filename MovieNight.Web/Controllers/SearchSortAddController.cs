@@ -138,7 +138,8 @@ namespace MovieNight.Web.Controllers
                 {
                     Id = tmp.BUserE.Id,
                     Username = tmp.BUserE.Username,
-                    Email = tmp.BUserE.Email
+                    Email = tmp.BUserE.Email,
+                    Avatar = tmp.Avatar
                 };
                 friendListModel.ListOfFriends.Add(listOfFriends);
             }
@@ -186,7 +187,8 @@ namespace MovieNight.Web.Controllers
                 {
                     Id = tmp.BUserE.Id,
                     Username = tmp.BUserE.Username,
-                    Email = tmp.BUserE.Email
+                    Email = tmp.BUserE.Email,
+                    Avatar = tmp.Avatar
                 };
                 friendListModel.ListOfFriends.Add(listOfUsers);
             }

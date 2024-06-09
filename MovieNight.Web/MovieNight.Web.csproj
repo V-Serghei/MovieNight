@@ -643,6 +643,7 @@
     <Content Include="images\Movie\vlrings.jpg" />
     <Content Include="images\Movie\YoureNext.jpeg" />
     <Content Include="images\Movie\Zootopia.jpg" />
+    <Content Include="images\Nelea\file-bQKB7Sp4KFwAEIUdrY9xoQgH.png" />
     <Content Include="images\Nelea\Nelea.png" />
     <Content Include="images\Nelea\Pooh.jpg" />
     <Content Include="images\Nelea\Richi.jpg" />
@@ -934,6 +935,7 @@
     <Compile Include="Models\Different\PhoneNumModel.cs" />
     <Compile Include="Models\Different\TagModel.cs" />
     <Compile Include="Models\DifModel\AreWatchingModel.cs" />
+    <Compile Include="Models\DifModel\TopFilmsModel.cs" />
     <Compile Include="Models\Friends\FriendListModel.cs" />
     <Compile Include="Models\Friends\FriendPageModel.cs" />
     <Compile Include="Models\Friends\PaginationModel.cs" />
