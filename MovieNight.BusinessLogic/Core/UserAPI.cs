@@ -57,8 +57,6 @@ namespace MovieNight.BusinessLogic.Core
         // \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/
         private IMapper _mapper;
         
-        
-        
         private bool IsValid(LogInData rData)
         {
             if (string.IsNullOrEmpty(rData.Password) || (string.IsNullOrEmpty(rData.Email) && string.IsNullOrEmpty(rData.Username)))
@@ -66,7 +64,6 @@ namespace MovieNight.BusinessLogic.Core
 
             return rData.Password.Length >= 10;
         }
-
         protected async Task<UserVerification> GetUserVerification(LogInData logInData)
         {
             var userL = new UserVerification();
@@ -120,7 +117,6 @@ namespace MovieNight.BusinessLogic.Core
             }
 
         }
-        
         /// <param name="rData"></param>
         /// <returns></returns>
 
@@ -143,7 +139,6 @@ namespace MovieNight.BusinessLogic.Core
 
             return true;
         }
-
         protected async Task<UserRegister> AddNewUserSuccess(RegData rData)
         {
             var userRegister = new UserRegister();
@@ -181,9 +176,6 @@ namespace MovieNight.BusinessLogic.Core
            
             return userRegister;
         }
-
-        
-        
         protected static bool UserAdding(RegData rData)
         {
             var user = new UserDbTable()
@@ -260,7 +252,6 @@ namespace MovieNight.BusinessLogic.Core
 
             return userE;
         }
-
         protected PersonalProfileM GetPersonalProfileDatabase(int? userId)
         {
             
@@ -388,7 +379,6 @@ namespace MovieNight.BusinessLogic.Core
                 return db.UsersT.FirstOrDefault(u => u.Id == userId);
             }
         }
-
         internal int? GetUserId()
         {
             if (HttpContext.Current?.Session != null)
@@ -397,7 +387,6 @@ namespace MovieNight.BusinessLogic.Core
             }
             return null;
         }
-
         protected static int? GetIdCurrUserDb(string userName)
         {
             using (var db = new UserContext())
@@ -522,7 +511,6 @@ namespace MovieNight.BusinessLogic.Core
                 return apiCookie;
             }
         }
-        
         internal static LogInData UserCookie(string cookie, string agent)
         {
             SessionCookie session;
@@ -565,7 +553,6 @@ namespace MovieNight.BusinessLogic.Core
 
             return userLog;
         }
-
         protected bool DelSessionCurrUserDb(string userN)
         {
             SessionCookie session;
@@ -642,7 +629,6 @@ namespace MovieNight.BusinessLogic.Core
                 }
             }
         }
-
         protected async Task<ReserPasswordResult> UserResetPasswordDb(string modelEmail, string modelNewPassword)
         {
             using (var db = new UserContext())
@@ -671,11 +657,6 @@ namespace MovieNight.BusinessLogic.Core
                 }
             }
         }
-
-
-
-
-
 
 
     }

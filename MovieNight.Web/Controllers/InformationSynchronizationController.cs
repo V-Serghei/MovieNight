@@ -418,9 +418,9 @@ namespace MovieNight.Web.Controllers
                     }
 
                     if(movie.Genre!=null){
-                        foreach (var GEN in movie.Genre)
+                        foreach (var gen in movie.Genre)
                         {
-                            movieModel.Genre.Add(GEN);
+                            movieModel.Genre.Add(gen);
                         }
                     }
                     else
@@ -483,9 +483,9 @@ namespace MovieNight.Web.Controllers
                     }
 
                     if(movie.Genre!=null){
-                        foreach (var GEN in movie.Genre)
+                        foreach (var gen in movie.Genre)
                         {
-                            movieModel.Genre.Add(GEN);
+                            movieModel.Genre.Add(gen);
                         }
                     }
                     else

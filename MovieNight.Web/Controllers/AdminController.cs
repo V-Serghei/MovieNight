@@ -11,6 +11,7 @@ using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities.AchievementE;
 using MovieNight.Domain.Entities.Friends;
 using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities.MovieM.ResultsOfTheOperation;
 using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Web.Attributes;
 using MovieNight.Web.Models.Achievement;
@@ -280,7 +281,6 @@ namespace MovieNight.Web.Controllers
         }
         
         [ModeratorMod]
-        [HttpPost]
         public ActionResult DeleteMovie(int? id)
         {
             SessionStatus();
@@ -288,8 +288,12 @@ namespace MovieNight.Web.Controllers
             if (exist != null)
             {
                 var category = exist.Category;
-                var result = _movie.DeleteMovie(id);
-                if (result.Result)
+                MovieDeleteResult result = null;
+                for (int i = 0; i < 10000; i++)
+                {
+                    result = _movie.DeleteMovie(i);
+                }
+                if (result != null && result.Result)
                 {
                     switch (category)
                     {

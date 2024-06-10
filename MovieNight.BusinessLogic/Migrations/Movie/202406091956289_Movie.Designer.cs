@@ -13,7 +13,7 @@ namespace MovieNight.BusinessLogic.Migrations.Movie
         
         string IMigrationMetadata.Id
         {
-            get { return "202405260936104_Movie"; }
+            get { return "202406091956289_Movie"; }
         }
         
         string IMigrationMetadata.Source

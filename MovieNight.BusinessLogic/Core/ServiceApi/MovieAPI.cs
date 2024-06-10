@@ -1806,7 +1806,7 @@ namespace MovieNight.BusinessLogic.Core.ServiceApi
         }
         
         
-          protected async Task<List<BookmarkInfoE>> GetNewBookmarkListDb(ListSortCommandE commandE)
+        protected async Task<List<BookmarkInfoE>> GetNewBookmarkListDb(ListSortCommandE commandE)
         {
             List<BookmarkInfoE> currStateViewList;
             GetMappersSettings();

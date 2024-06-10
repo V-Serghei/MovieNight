@@ -298,7 +298,7 @@ namespace MovieNight.Web.Controllers
                 filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
                 System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
                 var partList = filmsListModel.ListFilm.Skip(
-                    30 * numP - 1).Take(30).ToList();
+                    30 * (numP - 1)).Take(30).ToList();
                 var listModel = new MovieListModel
                 {
                     CommandSort = filmsListModel.CommandSort,
@@ -355,7 +355,7 @@ namespace MovieNight.Web.Controllers
                 filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
                 System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
                 var partList = filmsListModel.ListFilm.Skip(
-                    30 * numP - 1).Take(30).ToList();
+                    30 * (numP - 1)).Take(30).ToList();
                 var listModel = new MovieListModel
                 {
                     CommandSort = filmsListModel.CommandSort,
@@ -412,7 +412,7 @@ namespace MovieNight.Web.Controllers
                 filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
                 System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
                 var partList = filmsListModel.ListFilm.Skip(
-                    30 * numP - 1).Take(30).ToList();
+                    30 * (numP - 1)).Take(30).ToList();
                 var listModel = new MovieListModel
                 {
                     CommandSort = filmsListModel.CommandSort,
@@ -528,7 +528,7 @@ namespace MovieNight.Web.Controllers
                 filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
                 System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
                 var partList = filmsListModel.ListFilm.Skip(
-                    30 * numP - 1).Take(30).ToList();
+                    30 * (numP - 1)).Take(30).ToList();
                 var listModel = new MovieListModel
                 {
                     CommandSort = filmsListModel.CommandSort,
@@ -584,7 +584,7 @@ namespace MovieNight.Web.Controllers
                 filmsListModel.ListFilm = _mapper.Map<List<MovieTemplateInfModel>>(movieList);
                 System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
                 var partList = filmsListModel.ListFilm.Skip(
-                    30 * numP - 1).Take(30).ToList();
+                    30 * (numP - 1)).Take(30).ToList();
                 var listModel = new MovieListModel
                 {
                     CommandSort = filmsListModel.CommandSort,
@@ -702,7 +702,7 @@ namespace MovieNight.Web.Controllers
             filmsListModel.CommandSort.PageNom = pageNumber;
             System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
             var partList = filmsListModel.ListFilm.Skip(
-                30 * pageNumber - 1).Take(30).ToList();
+                30 * (pageNumber - 1)).Take(30).ToList();
             var listModel = new MovieListModel
             {
                 CommandSort = filmsListModel.CommandSort,
@@ -723,7 +723,7 @@ namespace MovieNight.Web.Controllers
             if (filmsListModel.CommandSort.PageNom - 1 >= 1) filmsListModel.CommandSort.PageNom -= 1;
             System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
             var partList = filmsListModel.ListFilm.Skip(
-                30 * filmsListModel.CommandSort.PageNom - 1).Take(30).ToList();
+                30 * (filmsListModel.CommandSort.PageNom - 1)).Take(30).ToList();
             var listModel = new MovieListModel
             {
                 CommandSort = filmsListModel.CommandSort,
@@ -746,7 +746,7 @@ namespace MovieNight.Web.Controllers
                 filmsListModel.CommandSort.PageNom += 1;
             System.Web.HttpContext.Current.SetListFilmS(filmsListModel);
             var partList = filmsListModel.ListFilm.Skip(
-                30 * filmsListModel.CommandSort.PageNom - 1).Take(30).ToList();
+                30 * (filmsListModel.CommandSort.PageNom - 1)).Take(30).ToList();
             var listModel = new MovieListModel
             {
                 CommandSort = filmsListModel.CommandSort,
