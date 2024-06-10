@@ -31,7 +31,7 @@ ViewBag.Title = "Movie Editing";
                 <div>
                     <div class="card-box">
                         <div class="tab-pane" id="settings">
-                            @using (Html.BeginForm("MovieEditing", "InformationSynchronization", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            @using (Html.BeginForm("MovieEditing", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
                             {
                             <div class="text-right">
                                 <button type="submit" name="submit" class="btn btn-primary waves-effect waves-light mt-2"><i class=" remixicon-brush-line"></i> Accept changes </button>

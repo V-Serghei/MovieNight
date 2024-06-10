@@ -141,7 +141,43 @@ namespace MovieNight.Web.Infrastructure
         {
             current.Session.Add("__ListFilmSearch", list);
         }
-        
+        private const string FilmDictionaryKey = "__FilmPageDictionary";
+
+        public static Dictionary<int, List<MovieTemplateInfModel>> GetFilmPageDictionary(this HttpContext current)
+        {
+            return current?.Session[FilmDictionaryKey] as Dictionary<int, List<MovieTemplateInfModel>> 
+                   ?? new Dictionary<int, List<MovieTemplateInfModel>>();
+        }
+
+        public static void SetFilmPageDictionary(this HttpContext current, Dictionary<int, List<MovieTemplateInfModel>> dictionary)
+        {
+            current.Session[FilmDictionaryKey] = dictionary;
+        }
+
+        public static bool IsPageLoaded(this HttpContext current, int pageNumber)
+        {
+            var dictionary = current.GetFilmPageDictionary();
+            return dictionary.ContainsKey(pageNumber);
+        }
+
+        public static List<MovieTemplateInfModel> GetPageFilms(this HttpContext current, int pageNumber)
+        {
+            var dictionary = current.GetFilmPageDictionary();
+            return dictionary.ContainsKey(pageNumber) ? dictionary[pageNumber] : new List<MovieTemplateInfModel>();
+        }
+
+        public static void AddPageFilms(this HttpContext current, int pageNumber, List<MovieTemplateInfModel> films)
+        {
+            var dictionary = current.GetFilmPageDictionary();
+            dictionary[pageNumber] = films;
+            current.SetFilmPageDictionary(dictionary);
+        }
+
+        public static void ClearFilmPageDictionary(this HttpContext current)
+        {
+            current.Session.Remove(FilmDictionaryKey);
+        }
+
         #endregion
         
 

@@ -38,14 +38,24 @@ namespace MovieNight.Web.Attributes
                 var agent = HttpContext.Current.Request.UserAgent;
                 var profile = _sessionBL.GetUserByCookie(apiCookie.Value, agent);
                 us = _mapper.Map<UserModel>(profile);
-
-                if (profile == null || (profile.Role != LevelOfAccess.Guest && profile.Role != LevelOfAccess.User && profile.Role != LevelOfAccess.Admin && profile.Role != LevelOfAccess.Moderator))
+                if (profile != null && (profile.Role == LevelOfAccess.Guest ||
+                                        profile.Role == LevelOfAccess.User ||
+                                        profile.Role == LevelOfAccess.Admin ||
+                                        profile.Role == LevelOfAccess.Moderator))
                 {
-                    filterContext.Result = new RedirectToRouteResult(
-                        new RouteValueDictionary(
-                            new { controller = "Error", action = "Error404Page" }));
+                    HttpContext.Current.SetMySessionObject(us);
                     return;
                 }
+                if(profile==null)
+                {
+                    HttpContext.Current.SetMySessionObject(us);
+                    return;
+                }
+                
+                filterContext.Result = new RedirectToRouteResult(
+                    new RouteValueDictionary(
+                        new { controller = "Error", action = "Error404Page" }));
+                
             }
             
             HttpContext.Current.SetMySessionObject(us);

@@ -1,6 +1,7 @@
 ﻿@using MovieNight.Domain.enams
 @using MovieNight.Web.Infrastructure
 @using MovieNight.Web.Models
+@using MovieNight.Web.Models.Mail
 @using MovieNight.Web.Models.Movie
 @using MovieNight.Web.Models.PersonalP.Bookmark
 @model dynamic
@@ -101,109 +102,109 @@
 
 
 
-<li class="dropdown notification-list">
-    <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-        <i class="fe-bell noti-icon"></i>
-        <span class="badge badge-danger rounded-circle noti-icon-badge">3</span>
-    </a>
-    <div class="dropdown-menu dropdown-menu-right dropdown-lg">
-
-        <!-- item-->
-        <div class="dropdown-item noti-title">
-            <h5 class="m-0">
-                <span class="float-right">
-                    <a href="#" class="text-dark" onclick="clearBookmarks()">
-                        <small>Clear All</small>
-                    </a>
-                </span>Notification
-            </h5>
-        </div>
-
-
-        <div class="slimscroll noti-scroll">
-
-            <!-- item-->
-            <a href="javascript:void(0);" class="dropdown-item notify-item active">
-                <div class="notify-icon bg-soft-primary text-primary">
-                    <i class="mdi mdi-comment-account-outline"></i>
-                </div>
-                <p class="notify-details">
-                    Doug Dukes commented on Admin Dashboard
-                    <small class="text-muted">1 min ago</small>
-                </p>
-            </a>
-
-            <!-- item-->
-            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                <div class="notify-icon">
-                    <img src="/images/users/avatar-2.jpg" class="img-fluid rounded-circle" alt=""/>
-                </div>
-                <p class="notify-details">Mario Drummond</p>
-                <p class="text-muted mb-0 user-msg">
-                    <small>Hi, How are you? What about our next meeting</small>
-                </p>
-            </a>
-
-            <!-- item-->
-            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                <div class="notify-icon">
-                    <img src="/images/users/avatar-4.jpg" class="img-fluid rounded-circle" alt=""/>
-                </div>
-                <p class="notify-details">Karen Robinson</p>
-                <p class="text-muted mb-0 user-msg">
-                    <small>Wow ! this admin looks good and awesome design</small>
-                </p>
-            </a>
-
-            <!-- item-->
-            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                <div class="notify-icon bg-soft-warning text-warning">
-                    <i class="mdi mdi-account-plus"></i>
-                </div>
-                <p class="notify-details">
-                    New user registered.
-                    <small class="text-muted">5 hours ago</small>
-                </p>
-            </a>
-
-            <!-- item-->
-            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                <div class="notify-icon bg-info">
-                    <i class="mdi mdi-comment-account-outline"></i>
-                </div>
-                <p class="notify-details">
-                    Caleb Flakelar commented on Admin
-                    <small class="text-muted">4 days ago</small>
-                </p>
-            </a>
-
-            <!-- item-->
-            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                <div class="notify-icon bg-secondary">
-                    <i class="mdi mdi-heart"></i>
-                </div>
-                <p class="notify-details">
-                    Carlos Crouch liked
-                    <b>Admin</b>
-                    <small class="text-muted">13 days ago</small>
-                </p>
-            </a>
-        </div>
-
-        <!-- All-->
-        <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item notify-all">
-            View all
-            <i class="fi-arrow-right"></i>
-        </a>
-
-    </div>
-</li>
+@* <li class="dropdown notification-list"> *@
+@*     <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false"> *@
+@*         <i class="fe-bell noti-icon"></i> *@
+@*         <span class="badge badge-danger rounded-circle noti-icon-badge">3</span> *@
+@*     </a> *@
+@*     <div class="dropdown-menu dropdown-menu-right dropdown-lg"> *@
+@* *@
+@*         <!-- item--> *@
+@*         <div class="dropdown-item noti-title"> *@
+@*             <h5 class="m-0"> *@
+@*                 <span class="float-right"> *@
+@*                     <a href="#" class="text-dark" onclick="clearBookmarks()"> *@
+@*                         <small>Clear All</small> *@
+@*                     </a> *@
+@*                 </span>Notification *@
+@*             </h5> *@
+@*         </div> *@
+@* *@
+@* *@
+@*         <div class="slimscroll noti-scroll"> *@
+@* *@
+@*             <!-- item--> *@
+@*             <a href="javascript:void(0);" class="dropdown-item notify-item active"> *@
+@*                 <div class="notify-icon bg-soft-primary text-primary"> *@
+@*                     <i class="mdi mdi-comment-account-outline"></i> *@
+@*                 </div> *@
+@*                 <p class="notify-details"> *@
+@*                     Doug Dukes commented on Admin Dashboard *@
+@*                     <small class="text-muted">1 min ago</small> *@
+@*                 </p> *@
+@*             </a> *@
+@* *@
+@*             <!-- item--> *@
+@*             <a href="javascript:void(0);" class="dropdown-item notify-item"> *@
+@*                 <div class="notify-icon"> *@
+@*                     <img src="/images/users/avatar-2.jpg" class="img-fluid rounded-circle" alt=""/> *@
+@*                 </div> *@
+@*                 <p class="notify-details">Mario Drummond</p> *@
+@*                 <p class="text-muted mb-0 user-msg"> *@
+@*                     <small>Hi, How are you? What about our next meeting</small> *@
+@*                 </p> *@
+@*             </a> *@
+@* *@
+@*             <!-- item--> *@
+@*             <a href="javascript:void(0);" class="dropdown-item notify-item"> *@
+@*                 <div class="notify-icon"> *@
+@*                     <img src="/images/users/avatar-4.jpg" class="img-fluid rounded-circle" alt=""/> *@
+@*                 </div> *@
+@*                 <p class="notify-details">Karen Robinson</p> *@
+@*                 <p class="text-muted mb-0 user-msg"> *@
+@*                     <small>Wow ! this admin looks good and awesome design</small> *@
+@*                 </p> *@
+@*             </a> *@
+@* *@
+@*             <!-- item--> *@
+@*             <a href="javascript:void(0);" class="dropdown-item notify-item"> *@
+@*                 <div class="notify-icon bg-soft-warning text-warning"> *@
+@*                     <i class="mdi mdi-account-plus"></i> *@
+@*                 </div> *@
+@*                 <p class="notify-details"> *@
+@*                     New user registered. *@
+@*                     <small class="text-muted">5 hours ago</small> *@
+@*                 </p> *@
+@*             </a> *@
+@* *@
+@*             <!-- item--> *@
+@*             <a href="javascript:void(0);" class="dropdown-item notify-item"> *@
+@*                 <div class="notify-icon bg-info"> *@
+@*                     <i class="mdi mdi-comment-account-outline"></i> *@
+@*                 </div> *@
+@*                 <p class="notify-details"> *@
+@*                     Caleb Flakelar commented on Admin *@
+@*                     <small class="text-muted">4 days ago</small> *@
+@*                 </p> *@
+@*             </a> *@
+@* *@
+@*             <!-- item--> *@
+@*             <a href="javascript:void(0);" class="dropdown-item notify-item"> *@
+@*                 <div class="notify-icon bg-secondary"> *@
+@*                     <i class="mdi mdi-heart"></i> *@
+@*                 </div> *@
+@*                 <p class="notify-details"> *@
+@*                     Carlos Crouch liked *@
+@*                     <b>Admin</b> *@
+@*                     <small class="text-muted">13 days ago</small> *@
+@*                 </p> *@
+@*             </a> *@
+@*         </div> *@
+@* *@
+@*         <!-- All--> *@
+@*         <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item notify-all"> *@
+@*             View all *@
+@*             <i class="fi-arrow-right"></i> *@
+@*         </a> *@
+@* *@
+@*     </div> *@
+@* </li> *@
 @if (userModel != null)
 {
     if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
     {
         <li class="dropdown notification-list">
-            <a class="nav-link dropdown-toggle" href="@Url.Action("MovieTemplateEditing", "InformationSynchronization")" role="button">
+            <a class="nav-link dropdown-toggle" href="@Url.Action("MovieTemplateEditing", "Admin")" role="button">
                 <i class=" remixicon-quill-pen-line"></i>
             </a>
         </li>
@@ -402,16 +403,57 @@ else
         </a>
     </li>
 }
-
-
-
-<li class="dropdown notification-list">
+    <li class="dropdown notification-list">
     <a href="javascript:void(0);" class="nav-link right-bar-toggle waves-effect waves-light">
-        <i class="fe-settings noti-icon"></i>
+        <i class="fe-bell noti-icon"></i>
+        <span class="badge badge-danger rounded-circle noti-icon-badge" id="notificationCount"></span>
     </a>
+    <script>
+        function RestartPage() {
+            location.reload();
+        }
+
+        function updateUnreadMessagesCount() {
+            $.ajax({
+                url: '@Url.Action("GetUnreadMessagesCount", "DataTransfer")',
+                type: 'GET',
+                success: function(data) {
+                    $('#notificationCount').text(data.count);
+                },
+                error: function() {
+                    console.error('Failed to fetch unread messages count.');
+                }
+            });
+        }
+
+        // Call the function on page load
+        updateUnreadMessagesCount();
+
+        // Optionally, set an interval to update the count periodically
+        setInterval(updateUnreadMessagesCount, 60000); // Update every 60 seconds
+    </script>
+
 </li>
-
-
+<script>
+    function RestartPage()
+    { location.reload();}
+    function updateUnreadMessagesCount() {
+        $.ajax({
+            url: '@Url.Action("GetUnreadMessagesCount", "DataTransfer")',
+            type: 'GET',
+            success: function(data) {
+                $('#notificationCount').text(data.count);
+            },
+            error: function() {
+                console.error('Failed to fetch unread messages count.');
+            }
+        });
+    }
+    // Call the function on page load
+    updateUnreadMessagesCount();
+    // Optionally, set an interval to update the count periodically
+    setInterval(updateUnreadMessagesCount, 60000); // Update every 60 seconds
+</script>
 </ul>
 <!-- LOGO -->
 <div class="logo-box">

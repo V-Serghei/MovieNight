@@ -196,6 +196,11 @@ namespace MovieNight.BusinessLogic.Session.Service
         {
             return DeleteMovieDb(id);
         }
+
+        public List<TopFilmsE> GetMoviesTop(int? userId)
+        {
+            return GetMoviesTopDb(userId);
+        }
     }
 
     

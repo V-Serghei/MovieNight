@@ -49,6 +49,7 @@ namespace MovieNight.BusinessLogic.Interface.IService
         bool setNewReview(ReviewE reviewE);
         int? DeleteReview(int? reviewE);
         List<AreWatchingE> GetMoviesAreWatching(int? userId);
+        List<TopFilmsE> GetMoviesTop(int? userId);
         MovieAddResult AddMovieTemplate(MovieTemplateInfE movieData);
         MovieAddResult UpdateMovieTemplate(MovieTemplateInfE movieData);
         MovieDeleteResult DeleteMovie(int? id);

@@ -113,7 +113,7 @@ ViewBag.Title = "Novelty";
                             <a hhref="@Url.Action("MoviePlayer","InformationSynchronization", new { movieId = Model.ListFilm[index+currIndex].Id })" class="btn btn-light btn-sm waves-effect"><i class="mdi mdi-movie mr-1"></i> Watch</a>
                             @if(System.Web.HttpContext.Current.GetMySessionObject()!=null &&
                             (HttpContext.Current.GetMySessionObject().Role == LevelOfAccess.Admin
-                            || HttpContext.Current.GetMySessionObject().Role == LevelOfAccess.Moderator) ){  <a href="@Url.Action("MovieTemplateModify","InformationSynchronization", new { id = Model.ListFilm[index+currIndex].Id})" ><button  type="button" class="btn btn-warning btn-sm waves-effect waves-light">
+                            || HttpContext.Current.GetMySessionObject().Role == LevelOfAccess.Moderator) ){  <a href="@Url.Action("MovieTemplateModify","Admin", new { id = Model.ListFilm[index+currIndex].Id})" ><button  type="button" class="btn btn-warning btn-sm waves-effect waves-light">
                                     <i class="mdi mdi-pencil mr-1"></i> Edit
                                 </button></a>}
                             </div> <!-- end .padding -->

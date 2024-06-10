@@ -31,6 +31,8 @@ namespace MovieNight.Web.Controllers
 {
     public class InformationSynchronizationController : MasterController
     {
+        #region Basic Settings
+        
         private readonly ISession _sessionUser;
 
         private readonly IMovie _movie;
@@ -95,12 +97,14 @@ namespace MovieNight.Web.Controllers
 
         }
 
-       
+        #endregion
+        
+        #region Personal Profile
+        
         [HttpGet]
         [UserMod]
         public ActionResult PersonalProfile()
         {
-
             try
             {
                 SessionStatus();
@@ -256,124 +260,12 @@ namespace MovieNight.Web.Controllers
                                                            "To view this page, you must first log in."});
 
         }
-
-        [HttpGet]
-        [UserMod]
-        public ActionResult UserTemplatePage(int? id)
-        {
-            var friendsDate = _serviceFriend.getFriendDate(id);
-            var friendmodel = _mapper.Map<FriendPageModel>(friendsDate);
-            if (friendmodel != null)
-            {
-                {
-                    var listInPl = _movie.GetListPlain(id);
-                    friendmodel.ListInThePlans = _mapper.Map<List<ListOfFilmsModel>>(listInPl);
-                    var lisrViewing = _movie.GetViewingList(id);
-                    friendmodel.ViewingHistory = _mapper.Map<List<ViewingHistoryModel>>(lisrViewing);
-                    var defInf = _sessionUser.GetUserData(id);
-                    friendmodel.BUserE = new UserModel
-                    {
-                        Username = defInf.Username,
-                        Email = defInf.Email
-                    };
-                    var statistic = _movie.GetDataStatisticPage(id);
-                    if (statistic != null)
-                    {
-                        friendmodel.AnimeCount = statistic.AnimeCount;
-                        friendmodel.AnimeTotal = statistic.AnimeTotal;
-                        friendmodel.CartonsCount = statistic.CartonsCount;
-                        friendmodel.CartonTotal = statistic.CartonTotal;
-                        friendmodel.FilmCount = statistic.FilmCount;
-                        friendmodel.FilTotal = statistic.FilTotal;
-                        friendmodel.SerialsCount = statistic.SerialsCount;
-                        friendmodel.SerialTotal = statistic.SerialTotal;
-                    }
-
-                    var achievements = _achievements.GetAchievements(id);
-                    if (achievements != null)
-                    {
-                        var achiev = _mapper.Map<List<AchievementModel>>(achievements);
-                        if (achiev != null)
-                        {
-                            friendmodel.Achievements = achiev;
-                        }
-                    }
-                }
-            }
-
-            return View(friendmodel);
-        }
-
         
-        
-        [HttpGet]
-        public ActionResult MovieTemplatePage(int? id)
-        {
-            SessionStatus();
-            int idU = 0;
-            if (id != null)
-            {
-                idU = (int)id;
-            }
-            try
-            {
-                var movie = _movie.GetMovieInf(id);
-                if (movie != null)
-                {
-                    var movieModel = _mapper.Map<MovieTemplateInfModel>(movie);
-                    movieModel.MovieCards = _mapper.Map<List<MovieCard>>(movie.MovieCards);
-                    movieModel.CastMembers = _mapper.Map<List<CastMember>>(movie.CastMembers);
-                    movieModel.InterestingFacts = _mapper.Map<List<InterestingFact>>(movie.InterestingFacts);
-                    movieModel.Genre = new List<string>();
-                    if(System.Web.HttpContext.Current.GetMySessionObject()!=null){movieModel.Bookmark = _movie.GetInfBookmark((System.Web.HttpContext.
-                        Current.GetMySessionObject()?.Id??null,idU));
-                    
-                        movieModel.UserRating =
-                            _movie.GetUserRating((System.Web.HttpContext.Current.GetMySessionObject().Id, idU));
-                    }
-
-                    if(movie.Genre!=null){
-                        foreach (var GEN in movie.Genre)
-                        {
-                            movieModel.Genre.Add(GEN);
-                        }
-                    }
-                    else
-                    {
-                        movieModel.Genre.Add("No genre");
-                    }
-                    movieModel.MovieFriends = 
-                        _mapper.Map<List<ScoresFriendsGaveTheMovieModel>>
-                            (_serviceFriend.GetFriendsMovie(idU));
-                    movieModel.Id = idU;
-                    movieModel.CountFriendsGrade = _serviceFriend.GetCountFriendsGrade(idU);
-                    
-                    return View(movieModel);
-                }
-            }
-            catch (DbEntityValidationException ex)
-            {
-                foreach (var validationErrors in ex.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Console.WriteLine($@"Property: {
-                            validationError.PropertyName
-                        } Error: {
-                            validationError.ErrorMessage
-                        }");
-                    }
-                }
-                return null;
-            }
-
-            return View();
-        }
-
         [HttpGet]
         [UserMod]
         public ActionResult ProfileEditing()
         {
+            SessionStatus();
             var used = _sessionUser.GetPersonalProfileM(HttpContextInfrastructure.GetGlobalParam());
             
             var model = _mapper.Map<PersonalProfileModel>(used);
@@ -400,7 +292,7 @@ namespace MovieNight.Web.Controllers
 
         [HttpPost]
         [UserMod]
-        public async Task< ActionResult> ProfileEdit(PEditingM profEd)
+        public async Task<ActionResult> ProfileEdit(PEditingM profEd)
         {
             SessionStatus();
             if (profEd.AvatarFile != null)
@@ -443,37 +335,234 @@ namespace MovieNight.Web.Controllers
                 }
             });
         }
+        #endregion
 
+        #region Other User
+        [HttpGet]
+        [GuestMod]
+        public ActionResult UserTemplatePage(int? id)
+        {
+            SessionStatus();
+            var friendsDate = _serviceFriend.getFriendDate(id);
+            var friendmodel = _mapper.Map<FriendPageModel>(friendsDate);
+            if (friendmodel != null)
+            {
+                {
+                    var listInPl = _movie.GetListPlain(id);
+                    friendmodel.ListInThePlans = _mapper.Map<List<ListOfFilmsModel>>(listInPl);
+                    var lisrViewing = _movie.GetViewingList(id);
+                    friendmodel.ViewingHistory = _mapper.Map<List<ViewingHistoryModel>>(lisrViewing);
+                    var defInf = _sessionUser.GetUserData(id);
+                    friendmodel.BUserE = new UserModel
+                    {
+                        Username = defInf.Username,
+                        Email = defInf.Email
+                    };
+                    var statistic = _movie.GetDataStatisticPage(id);
+                    if (statistic != null)
+                    {
+                        friendmodel.AnimeCount = statistic.AnimeCount;
+                        friendmodel.AnimeTotal = statistic.AnimeTotal;
+                        friendmodel.CartonsCount = statistic.CartonsCount;
+                        friendmodel.CartonTotal = statistic.CartonTotal;
+                        friendmodel.FilmCount = statistic.FilmCount;
+                        friendmodel.FilTotal = statistic.FilTotal;
+                        friendmodel.SerialsCount = statistic.SerialsCount;
+                        friendmodel.SerialTotal = statistic.SerialTotal;
+                    }
+
+                    var achievements = _achievements.GetAchievements(id);
+                    if (achievements != null)
+                    {
+                        var achiev = _mapper.Map<List<AchievementModel>>(achievements);
+                        if (achiev != null)
+                        {
+                            friendmodel.Achievements = achiev;
+                        }
+                    }
+                }
+            }
+
+            return View(friendmodel);
+        }
+        #endregion
         
+        #region Movies
+        [GuestMod]
+        [HttpGet]
+        public ActionResult MovieTemplatePage(int? id)
+        {
+            SessionStatus();
+            int idU = 0;
+            if (id != null)
+            {
+                idU = (int)id;
+            }
+            try
+            {
+                var movie = _movie.GetMovieInf(id);
+                if (movie != null)
+                {
+                    var movieModel = _mapper.Map<MovieTemplateInfModel>(movie);
+                    movieModel.MovieCards = _mapper.Map<List<MovieCard>>(movie.MovieCards);
+                    movieModel.CastMembers = _mapper.Map<List<CastMember>>(movie.CastMembers);
+                    movieModel.InterestingFacts = _mapper.Map<List<InterestingFact>>(movie.InterestingFacts);
+                    movieModel.Genre = new List<string>();
+                    if(System.Web.HttpContext.Current.GetMySessionObject()!=null)
+                    {
+                        movieModel.Bookmark = _movie.GetInfBookmark((System.Web.HttpContext.
+                        Current.GetMySessionObject()?.Id??null,idU));
+                    
+                        movieModel.UserRating =
+                            _movie.GetUserRating((System.Web.HttpContext.Current.GetMySessionObject().Id, idU));
+                    }
+
+                    if(movie.Genre!=null){
+                        foreach (var gen in movie.Genre)
+                        {
+                            movieModel.Genre.Add(gen);
+                        }
+                    }
+                    else
+                    {
+                        movieModel.Genre.Add("No genre");
+                    }
+                    movieModel.MovieFriends = 
+                        _mapper.Map<List<ScoresFriendsGaveTheMovieModel>>
+                            (_serviceFriend.GetFriendsMovie(idU));
+                    movieModel.Id = idU;
+                    movieModel.CountFriendsGrade = _serviceFriend.GetCountFriendsGrade(idU);
+                    
+                    return View(movieModel);
+                }
+            }
+            catch (DbEntityValidationException ex)
+            {
+                foreach (var validationErrors in ex.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        Console.WriteLine($@"Property: {
+                            validationError.PropertyName
+                        } Error: {
+                            validationError.ErrorMessage
+                        }");
+                    }
+                }
+                return null;
+            }
+
+            return View();
+        }
+        
+        [GuestMod]
+        [HttpGet]
+        public ActionResult MoviePlayer(int? movieId)
+        {
+            SessionStatus();
+            int idU = 0;
+            if (movieId != null)
+            {
+                idU = (int)movieId;
+            }
+            try
+            {
+                var movie = _movie.GetMovieInf(movieId);
+                if (movie != null)
+                {
+                    var movieModel = _mapper.Map<MovieTemplateInfModel>(movie);
+                    movieModel.MovieCards = _mapper.Map<List<MovieCard>>(movie.MovieCards);
+                    movieModel.CastMembers = _mapper.Map<List<CastMember>>(movie.CastMembers);
+                    movieModel.InterestingFacts = _mapper.Map<List<InterestingFact>>(movie.InterestingFacts);
+                    movieModel.Genre = new List<string>();
+                    if(System.Web.HttpContext.Current.GetMySessionObject()!=null){
+                        movieModel.Bookmark =
+                            _movie.GetInfBookmark((System.Web.HttpContext.Current.GetMySessionObject().Id, idU));
+                        movieModel.UserRating =
+                            _movie.GetUserRating((System.Web.HttpContext.Current.GetMySessionObject().Id, idU));
+                    }
+
+                    if(movie.Genre!=null){
+                        foreach (var gen in movie.Genre)
+                        {
+                            movieModel.Genre.Add(gen);
+                        }
+                    }
+                    else
+                    {
+                        movieModel.Genre.Add("Genre not exist");
+                    }
+
+                    movieModel.Id = idU;
+                    return View(movieModel);
+                }
+                return RedirectToAction("Error404Page", "Error");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return RedirectToAction("Error404Page", "Error");
+
+            }
+
+        }
+        
+        #endregion
+
+        #region Bookmarks
+        
+        [UserMod]
         [HttpPost]
         public async Task<JsonResult> BookmarkMovie(int movieId)
         {   
-            var bookMe = await _movie.SetNewBookmark((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId));
-            var bookM = new BookmarkModel
-            {
-                IdUser = bookMe.IdUser,
-                IdMovie = bookMe.IdMovie,
-                Msg = bookMe.Msg,
-                Success = bookMe.Success,
-                BookmarkTimeOf = bookMe.BookmarkTimeOf,
-                BookMark = bookMe.BookMark
-            };
-    
+            SessionStatus();
+            
+            if(System.Web.HttpContext.Current.GetMySessionObject()!=null){
+                var bookMe = await _movie
+                    .SetNewBookmark((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId));
+                var bookM = new BookmarkModel
+                {
+                    IdUser = bookMe.IdUser,
+                    IdMovie = bookMe.IdMovie,
+                    Msg = bookMe.Msg,
+                    Success = bookMe.Success,
+                    BookmarkTimeOf = bookMe.BookmarkTimeOf,
+                    BookMark = bookMe.BookMark
+                };
+                return Json(new
+                {
+                    success = true, 
+                    Msg = "Added to bookmarks", 
+                    newButtonColor = "btn-danger",
+                    newButtonTitle = "Delete Bookmark",
+                    bookM = bookMe
+                }); 
+            }
             return Json(new
             {
-                success = true, 
-                Msg = "Added to bookmarks", 
+                success = false, 
+                Msg = "Session Error!", 
                 newButtonColor = "btn-danger",
                 newButtonTitle = "Delete Bookmark",
-                bookM = bookMe
+                bookM = new BookmarkModel()
             }); 
+    
+            
         }
 
         [HttpPost]
+        [UserMod]
         public async Task<JsonResult> DeleteBookmarkMovie(int movieId)
-        {   
-            var deleteBookmark = await _movie.DeleteBookmark((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId));
-
+        {
+            
+            SessionStatus();
+            bool deleteBookmark = false;
+            if (System.Web.HttpContext.Current.GetMySessionObject() != null)
+            {
+                deleteBookmark = await _movie
+                    .DeleteBookmark((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId));
+            }
             if (deleteBookmark)
             {
                 return Json(new
@@ -488,8 +577,8 @@ namespace MovieNight.Web.Controllers
             {
                 return Json(new
                 {
-                    success = true,
-                    Msg = "Bookmark removed",
+                    success = false,
+                    Msg = "Bookmark removed Error",
                     newButtonTitle = "Add Bookmark",
                     newButtonColor = "btn-primary"
                 }); 
@@ -498,11 +587,19 @@ namespace MovieNight.Web.Controllers
 
         }
 
+        [HttpPost]
+        [UserMod]
         public async Task<JsonResult> DeleteBookmarkTimeOf(int movieId)
         {   
-            var deleteBookmark = await _movie.DeleteBookmarkTimeOf((System.Web.HttpContext.
-                Current.GetMySessionObject().Id,movieId));
-            
+            SessionStatus();
+            bool deleteBookmark = false;
+            if (System.Web.HttpContext.Current.GetMySessionObject() != null)
+            {
+                deleteBookmark =
+                    await _movie.DeleteBookmarkTimeOf((System.Web.HttpContext.Current.GetMySessionObject().Id,
+                        movieId));
+            }
+
             if (System.Web.HttpContext.Current.VerifyExistBookmark(new BookmarkModel{IdMovie = movieId}))
             {
                 System.Web.HttpContext.Current.RemoveBookmark(new BookmarkModel{IdMovie = movieId});
@@ -518,6 +615,8 @@ namespace MovieNight.Web.Controllers
 
         }
 
+        [HttpPost]
+        [UserMod]
         public async Task<JsonResult> AddToBookmarkTimeOf(int movieId)
         {
             var resp = await _movie.SetNewBookmarkTimeOf((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId));
@@ -560,16 +659,39 @@ namespace MovieNight.Web.Controllers
 
         }
         
+        [UserMod]
+        [HttpPost]
+        public JsonResult ClearBookmarks()
+        {
+            try
+            {
+                _movie.ClearBookmarks();
+                System.Web.HttpContext.Current.GetBookmarkTimeOf().Bookmark.Clear();
+                System.Web.HttpContext.Current.GetBookmarkTimeOf().MovieInTimeOfBookmark.Clear();
+        
+                return Json(new { success = true, message = "Bookmarks cleared successfully" });
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = "An error occurred: " + e.Message });
+            }
+        }
+        #endregion
+        
+        #region Movie add to viewed
+        [UserMod]
         public async Task<ActionResult> AddToViewed(int? movieId)
         {
-
+            SessionStatus();
             if (movieId != null)
             {
                 var respAddViewed = await 
                     _movie.SetViewList((movieId, System.Web.HttpContext.Current.GetMySessionObject()?.Id));
                 if (respAddViewed.IsSuccese)
                 {
-                    var achievement = await _achievements.AchievementСheck((System.Web.HttpContext.Current.GetMySessionObject()?.Id, AchievementType.FirstMovie));
+                    var achievement = await _achievements
+                        .AchievementСheck((System.Web.HttpContext.Current.GetMySessionObject()?.Id, 
+                            AchievementType.FirstMovie));
                     if (achievement != null && achievement.Unlocked)
                     {
                         var achiev = _mapper.Map<AchievementModel>(achievement);
@@ -587,22 +709,26 @@ namespace MovieNight.Web.Controllers
             return RedirectToAction("Error404Page", "Error");
 
         }
-
-        // public async Task<JsonResult> AddToGrade()
-        // {
-        //     return Json(new { success = true, statusMsg = "StatusMsg", newButtonTitle = "Новое сообщение", newButtonColor = "red" }); 
-        // }
-
+        
+        [UserMod]
         [HttpPost]
         public async Task<JsonResult> RateMovie(int rating, int movieId)
         {
-
-            var resp =  await _movie.SetReteMovieAndView((System.Web.HttpContext.Current.GetMySessionObject().Id, movieId,
-                rating));
+            SessionStatus();
+            bool resp = false;
+            if (System.Web.HttpContext.Current.GetMySessionObject() != null)
+            {
+                resp = await _movie
+                    .SetReteMovieAndView((System.Web.HttpContext.Current.GetMySessionObject().Id,
+                    movieId,
+                    rating));
+            }
 
             if (resp)
             {
-                var achievement = await _achievements.AchievementСheck((System.Web.HttpContext.Current.GetMySessionObject()?.Id, AchievementType.FirstMovie));
+                var achievement = await _achievements
+                    .AchievementСheck((System.Web.HttpContext.Current.GetMySessionObject()?.Id,
+                        AchievementType.FirstMovie));
                 if (achievement != null && achievement.Unlocked)
                 {
                     var achiev = _mapper.Map<AchievementModel>(achievement);
@@ -612,73 +738,15 @@ namespace MovieNight.Web.Controllers
             
             return (Json(new { star = rating }));
         }
+        #endregion
         
-        [GuestMod]
-        public ActionResult MoviePlayer(int? movieId)
-        {
-            int idU = 0;
-            if (movieId != null)
-            {
-                idU = (int)movieId;
-            }
-
-            try
-            {
-                var movie = _movie.GetMovieInf(movieId);
-                if (movie != null)
-                {
-                    var movieModel = _mapper.Map<MovieTemplateInfModel>(movie);
-                    movieModel.MovieCards = _mapper.Map<List<MovieCard>>(movie.MovieCards);
-                    movieModel.CastMembers = _mapper.Map<List<CastMember>>(movie.CastMembers);
-                    movieModel.InterestingFacts = _mapper.Map<List<InterestingFact>>(movie.InterestingFacts);
-                    movieModel.Genre = new List<string>();
-                    if(System.Web.HttpContext.Current.GetMySessionObject()!=null){
-                        movieModel.Bookmark =
-                            _movie.GetInfBookmark((System.Web.HttpContext.Current.GetMySessionObject().Id, idU));
-                        movieModel.UserRating =
-                            _movie.GetUserRating((System.Web.HttpContext.Current.GetMySessionObject().Id, idU));
-                    }
-                    foreach (var GEN in movie.Genre)
-                    {
-                        movieModel.Genre.Add(GEN);
-                    }
-
-                    movieModel.Id = idU;
-                    return View(movieModel);
-                }
-                return RedirectToAction("Error404Page", "Error");
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return RedirectToAction("Error404Page", "Error");
-
-            }
-
-        }
-        [HttpPost]
-        public JsonResult ClearBookmarks()
-        {
-            try
-            {
-                _movie.ClearBookmarks();
-                System.Web.HttpContext.Current.GetBookmarkTimeOf().Bookmark.Clear();
-                System.Web.HttpContext.Current.GetBookmarkTimeOf().MovieInTimeOfBookmark.Clear();
-        
-                return Json(new { success = true, message = "Bookmarks cleared successfully" });
-            }
-            catch (Exception e)
-            {
-                return Json(new { success = false, message = "An error occurred: " + e.Message });
-            }
-        }
-
         #region Review
-
+        
         [HttpGet]
+        [UserMod]
         public ActionResult ReviewPage(int? filmId)
         {
+            SessionStatus();
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<ReviewE, ReviewModel>();
@@ -696,9 +764,11 @@ namespace MovieNight.Web.Controllers
             };
             return View(model);
         }
+        [UserMod]
         [HttpPost]
         public ActionResult ReviewPageWrite(ReviewModel movieReview)
         {
+            SessionStatus();
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<ReviewModel, ReviewE>();
@@ -716,8 +786,10 @@ namespace MovieNight.Web.Controllers
             return RedirectToAction("Error404Page","Error");
         }
         [ModeratorMod]
+        [HttpPost]
         public ActionResult DeleteReviewData(int? movieId)
         {
+            SessionStatus();
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<ReviewModel, ReviewE>();
@@ -733,169 +805,7 @@ namespace MovieNight.Web.Controllers
 
         #endregion
 
-        [ModeratorMod]
-        public ActionResult MovieTemplateEditing()
-        {
-            return View();
-        }
+       
 
-        [ModeratorMod]
-        [HttpPost]
-        public ActionResult MovieTemplateAdding(MovieTemplateInfModel model, HttpPostedFileBase AvatarFile, IEnumerable<HttpPostedFileBase> CastImages, IEnumerable<HttpPostedFileBase> CardImages)
-        {
-            SessionStatus();
-            
-            if (!ModelState.IsValid)
-            {
-                return RedirectToAction("Error404Page","Error");
-            }
-
-            if (AvatarFile != null && AvatarFile.ContentLength > 0)
-            {
-                string posterPath = Path.Combine(Server.MapPath("~/images/Movie"), Path.GetFileName(AvatarFile.FileName));
-                AvatarFile.SaveAs(posterPath);
-                model.PosterImage = "/images/Movie/" + Path.GetFileName(AvatarFile.FileName);
-            }
-
-            int castIndex = 0;
-            foreach (var file in CastImages)
-            {
-                if (file != null && file.ContentLength > 0)
-                {
-                    string castImagePath = Path.Combine(Server.MapPath("~/images/Cast"), Path.GetFileName(file.FileName));
-                    file.SaveAs(castImagePath);
-                    model.CastMembers[castIndex].ImageUrl = "/images/Cast/" + Path.GetFileName(file.FileName);
-                }
-                castIndex++;
-            }
-
-            int cardIndex = 0;
-            foreach (var file in CardImages)
-            {
-                if (file != null && file.ContentLength > 0)
-                {
-                    string cardImagePath = Path.Combine(Server.MapPath("~/images/Cards"), Path.GetFileName(file.FileName));
-                    file.SaveAs(cardImagePath);
-                    model.MovieCards[cardIndex].ImageUrl = "/images/Cards/" + Path.GetFileName(file.FileName);
-                }
-                cardIndex++;
-            }
-            var movieData = _mapper.Map<MovieTemplateInfE>(model);
-            var result = _movie.AddMovieTemplate(movieData);
-            if (result.Result)
-            {
-                var idM =  _movie.GetMovieId(movieData);
-                return RedirectToAction("MovieTemplatePage", new { id = idM });
-
-            }
-            else
-            {
-                return RedirectToAction("Error404Page","Error");
-            }
-        }
-        
-        [ModeratorMod]
-        [HttpGet]
-        public ActionResult MovieTemplateModify(int? id)
-        {
-            SessionStatus();
-            var movieTemplate = _movie.GetMovieInf(id);
-            if (movieTemplate == null) return RedirectToAction("Error404Page", "Error");
-            var movieModel = _mapper.Map<MovieTemplateInfModel>(movieTemplate);
-            return View(movieModel);
-        }
-
-        [ModeratorMod]
-        [HttpPost]
-        public ActionResult MovieEditing(MovieTemplateInfModel model, HttpPostedFileBase AvatarFile, IEnumerable<HttpPostedFileBase> CastImages, IEnumerable<HttpPostedFileBase> CardImages)
-        {
-            SessionStatus();
-
-            if (!ModelState.IsValid)
-            {
-                return RedirectToAction("Error404Page", "Error");
-            }
-
-            if (AvatarFile != null && AvatarFile.ContentLength > 0)
-            {
-                string posterPath = Path.Combine(Server.MapPath("~/images/Movie"), Path.GetFileName(AvatarFile.FileName));
-                AvatarFile.SaveAs(posterPath);
-                model.PosterImage = "/images/Movie/" + Path.GetFileName(AvatarFile.FileName);
-            }
-
-            int castIndex = 0;
-            foreach (var file in CastImages)
-            {
-                if (file != null && file.ContentLength > 0)
-                {
-                    string castImagePath = Path.Combine(Server.MapPath("~/images/Cast"), Path.GetFileName(file.FileName));
-                    file.SaveAs(castImagePath);
-                    model.CastMembers[castIndex].ImageUrl = "/images/Cast/" + Path.GetFileName(file.FileName);
-                }
-                castIndex++;
-            }
-
-            int cardIndex = 0;
-            foreach (var file in CardImages)
-            {
-                if (file != null && file.ContentLength > 0)
-                {
-                    string cardImagePath = Path.Combine(Server.MapPath("~/images/Cards"), Path.GetFileName(file.FileName));
-                    file.SaveAs(cardImagePath);
-                    model.MovieCards[cardIndex].ImageUrl = "/images/Cards/" + Path.GetFileName(file.FileName);
-                }
-                cardIndex++;
-            }
-
-            var movieData = _mapper.Map<MovieTemplateInfE>(model);
-            if(movieData.Country==null)movieData.Country = _movie.GetMovieInf(model.Id).Country;
-            var result = _movie.UpdateMovieTemplate(movieData);
-            if (result.Result)
-            {
-                return RedirectToAction("MovieTemplatePage", new { id = model.Id });
-            }
-            else
-            {
-                return RedirectToAction("Error404Page", "Error");
-            }
-        }
-        [HttpPost]
-        public ActionResult GetMoreFriendsRatings(int movieId)
-        {
-            var moreRatings = _serviceFriend.GetFriendsMovieAll(movieId);
-            var result = _mapper
-                .Map<IEnumerable<ScoresFriendsGaveTheMovieModel>>(moreRatings)
-                .Skip(5)
-                .Select(r => 
-                {
-                    r.ReviewDateString = r.ReviewData.ToString("dd/MM/yyyy");
-                    return r;
-                });
-            return Json(new { success = true, data = result });
-        }
-
-
-        public ActionResult DeleteMovie(int? id)
-        {
-            var exist = _movie.GetMovieInf(id);
-            if (exist != null)
-            {
-                var category = exist.Category;
-                var result = _movie.DeleteMovie(id);
-                if (result.Result)
-                {
-                    switch (category)
-                    {
-                        case FilmCategory.Film:return RedirectToAction("MovieSearch","SearchSortAdd");
-                        case FilmCategory.Cartoon:return RedirectToAction("CartoonsSearch","SearchSortAdd");
-                        case FilmCategory.Anime:return RedirectToAction("AnimeSearch","SearchSortAdd");
-                        case FilmCategory.Serial:return RedirectToAction("SerialsSearch","SearchSortAdd");
-                        case FilmCategory.Non:return RedirectToAction("Novelty","SearchSortAdd");
-                        default:return RedirectToAction("Error404Page","Error");
-                    }
-                }
-            }
-            return RedirectToAction("Error404Page", "Error");
-        }
     }
 }

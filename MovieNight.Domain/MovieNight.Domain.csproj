@@ -63,6 +63,7 @@
     <Compile Include="Entities\DifferentE\AreWatchingE.cs" />
     <Compile Include="Entities\DifferentE\PhoneNumE.cs" />
     <Compile Include="Entities\DifferentE\Tag.cs" />
+    <Compile Include="Entities\DifferentE\TopFilmsE.cs" />
     <Compile Include="Entities\Friends\FriendsDbTable.cs" />
     <Compile Include="Entities\Friends\FriendsListD.cs" />
     <Compile Include="Entities\Friends\FriendsPageD.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Entities\UserE.cs" />
     <Compile Include="Entities\UserId\LogInData.cs" />
     <Compile Include="Entities\UserId\RegData.cs" />
+    <Compile Include="Entities\UserId\ResultE\ReserPasswordResult.cs" />
     <Compile Include="Entities\UserId\SessionCookie.cs" />
     <Compile Include="Entities\UserId\SuccessOfTheActivity.cs" />
     <Compile Include="Entities\UserId\UserDbTable.cs" />

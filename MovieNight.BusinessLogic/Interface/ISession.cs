@@ -7,6 +7,7 @@ using System.Web;
 using MovieNight.Domain.Entities;
 using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Domain.Entities.UserId;
+using MovieNight.Domain.Entities.UserId.ResultE;
 
 namespace MovieNight.BusinessLogic.Interface
 {
@@ -24,5 +25,8 @@ namespace MovieNight.BusinessLogic.Interface
 
         int? GetIdCurrUser(string userName);
         bool DelSessionCurrUser(string userCurrent);
+        HttpCookie GenCookieLongTime(LogInData verificationLogInData);
+        void CleanupExpiredSessionRange();
+        Task<ReserPasswordResult> UserResetPassword(string modelEmail, string modelNewPassword);
     }
 }

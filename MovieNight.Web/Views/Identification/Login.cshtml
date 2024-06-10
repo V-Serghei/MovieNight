@@ -40,7 +40,14 @@
                                 </a>
                                 <p class="text-muted mb-4 mt-3">Enter your email address and password to access admin panel.</p>
                             </div>
-                            @using (Ajax.BeginForm("LoginPost", "Identification", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "result", OnSuccess = "onSuccess", OnFailure = "onFailure" }, new { id = "loginForm", autocomplete = "off" }))
+                            @using (Ajax.BeginForm("LoginPost", "Identification", new AjaxOptions
+                                    {
+                                        HttpMethod = "POST", 
+                                        InsertionMode = InsertionMode.Replace,
+                                        UpdateTargetId = "result", 
+                                        OnSuccess = "onSuccess", 
+                                        OnFailure = "onFailure"
+                                    }, new { id = "loginForm", autocomplete = "off" }))
                             {
                                 @Html.AntiForgeryToken()
                                 <div class="alert alert-danger" style="display:none;"></div>
@@ -102,7 +109,7 @@
 
                     <div class="row mt-3">
                         <div class="col-12 text-center">
-                            <p> <a href=@Url.Action("PagesRecoverpw","Identification") class="text-muted ml-1">Forgot your password?</a></p>
+                            <p> <a href=@Url.Action("PagesRecoverPassword","Identification") class="text-muted ml-1">Forgot your password?</a></p>
                             <p class="text-muted">Don't have an account? <a href=@Url.Action("Register","Identification") class="text-warning font-weight-medium ml-1">Sign Up</a></p>
                         </div> <!-- end col -->
                     </div>
