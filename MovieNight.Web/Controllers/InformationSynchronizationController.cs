@@ -742,10 +742,12 @@ namespace MovieNight.Web.Controllers
         #endregion
         
         #region Review
-
+        
         [HttpGet]
+        [UserMod]
         public ActionResult ReviewPage(int? filmId)
         {
+            SessionStatus();
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<ReviewE, ReviewModel>();
@@ -763,9 +765,11 @@ namespace MovieNight.Web.Controllers
             };
             return View(model);
         }
+        [UserMod]
         [HttpPost]
         public ActionResult ReviewPageWrite(ReviewModel movieReview)
         {
+            SessionStatus();
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<ReviewModel, ReviewE>();
@@ -783,8 +787,10 @@ namespace MovieNight.Web.Controllers
             return RedirectToAction("Error404Page","Error");
         }
         [ModeratorMod]
+        [HttpPost]
         public ActionResult DeleteReviewData(int? movieId)
         {
+            SessionStatus();
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<ReviewModel, ReviewE>();

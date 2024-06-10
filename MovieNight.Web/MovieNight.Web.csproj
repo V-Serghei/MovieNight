@@ -539,6 +539,7 @@
     <Content Include="images\Movie\vlrings.jpg" />
     <Content Include="images\Movie\YoureNext.jpeg" />
     <Content Include="images\Movie\Zootopia.jpg" />
+    <Content Include="images\Nelea\file-bQKB7Sp4KFwAEIUdrY9xoQgH.png" />
     <Content Include="images\Nelea\Nelea.png" />
     <Content Include="images\Nelea\Pooh.jpg" />
     <Content Include="images\Nelea\Richi.jpg" />
@@ -692,6 +693,7 @@
     <Content Include="vendor\tablesaw\tablesaw.css" />
     <Content Include="vendor\tablesaw\tablesaw.js" />
     <Content Include="Video\viedeo_Test.mp4" />
+    <Content Include="Views\Error\Error403Page.cshtml" />
     <Content Include="Views\Admin\MovieTemplateEditing.cshtml" />
     <Content Include="Views\Admin\MovieTemplateModify.cshtml" />
     <Content Include="Views\Error\Error404Page.cshtml" />
@@ -747,6 +749,7 @@
     <Compile Include="Models\Different\PhoneNumModel.cs" />
     <Compile Include="Models\Different\TagModel.cs" />
     <Compile Include="Models\DifModel\AreWatchingModel.cs" />
+    <Compile Include="Models\DifModel\TopFilmsModel.cs" />
     <Compile Include="Models\Friends\FriendListModel.cs" />
     <Compile Include="Models\Friends\FriendPageModel.cs" />
     <Compile Include="Models\Friends\PaginationModel.cs" />
@@ -869,7 +872,6 @@
     <Content Include="Views\DataTransfer\Compose.cshtml" />
     <Content Include="Views\DataTransfer\Starred.cshtml" />
     <Content Include="Views\DataTransfer\SentMail.cshtml" />
-    <Content Include="Views\DataTransfer\Trash.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\InformationSynchronization\ProfileEditing.cshtml" />
     <None Include="Web.Debug.config">

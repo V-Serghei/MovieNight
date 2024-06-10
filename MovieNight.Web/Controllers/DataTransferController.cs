@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using Microsoft.AspNet.Http.Features;
+using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
 using ISession = MovieNight.BusinessLogic.Interface.ISession;
 
@@ -29,11 +30,10 @@ namespace MovieNight.Web.Controllers
         }
         // GET: DataTransfer
         [HttpGet]
+        [UserMod]
         public ActionResult Inbox()
         {
             SessionStatus();
-            
-            
             var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             var config = new MapperConfiguration(c =>
             {
@@ -44,8 +44,11 @@ namespace MovieNight.Web.Controllers
             var message = mapper.Map<List<InboxModel>>(messageD);
             return View(message);
         }
+        [HttpGet]
+        [UserMod]
         public ActionResult Read(int? mailId)
         {
+            SessionStatus();
             var config = new MapperConfiguration(c =>
             {
                 c.CreateMap<InboxD, InboxModel>();
@@ -55,8 +58,10 @@ namespace MovieNight.Web.Controllers
             var message = mapper.Map<InboxModel>(messageD);
             return View(message);
         }
+        [UserMod]
         public ActionResult Compose(int? id)
         {
+            SessionStatus();
             var model = new InboxModel
             {
                 RecipientName = _session.GetUserData(id).Username
@@ -65,8 +70,10 @@ namespace MovieNight.Web.Controllers
         }
 
         [HttpPost]
+        [UserMod]
         public ActionResult ComposeAdd(InboxModel model)
         {
+            SessionStatus();
             var messageDb = new InboxD
             {
                 Theme = model.Theme,
@@ -80,8 +87,11 @@ namespace MovieNight.Web.Controllers
             var sendMail = сompleteInbox.SetAddMessage(messageDb);
             return RedirectToAction("SentMail");
         }
+        [HttpGet]
+        [UserMod]
         public ActionResult Starred()
         {
+            SessionStatus();
             var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             var config = new MapperConfiguration(c =>
             {
@@ -92,19 +102,27 @@ namespace MovieNight.Web.Controllers
             var message = mapper.Map<List<InboxModel>>(messageD);
             return View(message);
         }
-
+        [HttpPost]
+        [UserMod]
         public ActionResult AddStarMail(int? mailId)
         {
+            SessionStatus();
             var sendMail = сompleteInbox.SetMailStar(mailId);
             return RedirectToAction("Starred");
         }
+        [HttpPost]
+        [UserMod]
         public ActionResult DeleteStarMail(int? mailId)
         {
+            SessionStatus();
             var sendMail = сompleteInbox.DeleteMailStar(mailId);
             return RedirectToAction("Starred");
         }
+        [HttpGet]
+        [UserMod]
         public ActionResult SentMail()
         {
+            SessionStatus();
             var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             var config = new MapperConfiguration(c =>
             {
@@ -115,11 +133,36 @@ namespace MovieNight.Web.Controllers
             var message = mapper.Map<List<InboxModel>>(messageD);
             return View(message);
         }
+        [UserMod]
         public ActionResult Trash(int? mailId)
         {
+            SessionStatus();
             var sendMail = сompleteInbox.DeleteMail(mailId);
             return RedirectToAction("Inbox");
         }
-       
+        [HttpGet]
+        [UserMod]
+        public ActionResult GetUnreadMessages()
+        {
+            SessionStatus();
+            var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+            var config = new MapperConfiguration(c =>
+            {
+                c.CreateMap<InboxD, InboxModel>();
+            });
+            var mapper = config.CreateMapper();
+            List<InboxD> messageD = сompleteInbox.InboxUnread(userId);
+            var message = mapper.Map<List<InboxModel>>(messageD);
+            return View(message);
+        }
+        [HttpGet]
+        [UserMod]
+        public JsonResult GetUnreadMessagesCount()
+        {
+            SessionStatus();
+            var userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
+            var unreadMessagesCount = сompleteInbox.InboxUnread(userId).Count(m => !m.IsChecked);
+            return Json(new { count = unreadMessagesCount }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

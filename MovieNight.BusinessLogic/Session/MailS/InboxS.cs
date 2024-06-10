@@ -49,5 +49,10 @@ namespace MovieNight.BusinessLogic.Session.MailS
         {
             return DeleteMailDb(mailId);
         }
+        
+        public List<InboxD> InboxUnread(int? userId)
+        {
+            return InboxUnreadFromData(userId);
+        } 
     }
 }

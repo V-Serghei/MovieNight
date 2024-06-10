@@ -13,11 +13,7 @@ namespace MovieNight.BusinessLogic.Migrations.Movie
         
         string IMigrationMetadata.Id
         {
-<<<<<<<< HEAD:MovieNight.BusinessLogic/Migrations/Movie/202406091956289_Movie.Designer.cs
-            get { return "202406091956289_Movie"; }
-========
-            get { return "202405291117463_Movie"; }
->>>>>>>> origin/edit_template:MovieNight.BusinessLogic/Migrations/Movie/202405291117463_Movie.Designer.cs
+            get { return "202405291119132_Movie"; }
         }
         
         string IMigrationMetadata.Source

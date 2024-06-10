@@ -109,12 +109,13 @@ namespace MovieNight.Web.Controllers
         #region Friends
 
         [UserMod]
+        [HttpGet]
         public ActionResult FriendsPage(int _skipParametr = 0, string searchTerm = "")
         {
             SessionStatus();
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
             {
-                return RedirectToAction("Error404Page", "Error");
+                return RedirectToAction("Error403Page", "Error");
             }
 
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
@@ -139,7 +140,8 @@ namespace MovieNight.Web.Controllers
                 {
                     Id = tmp.BUserE.Id,
                     Username = tmp.BUserE.Username,
-                    Email = tmp.BUserE.Email
+                    Email = tmp.BUserE.Email,
+                    Avatar = tmp.Avatar
                 };
                 friendListModel.ListOfFriends.Add(listOfFriends);
             }
@@ -164,7 +166,7 @@ namespace MovieNight.Web.Controllers
             SessionStatus();
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] == "zero")
             {
-                return RedirectToAction("Error404Page", "Error");
+                return RedirectToAction("Error403Page", "Error");
             }
 
             if ((string)System.Web.HttpContext.Current.Session["LoginStatus"] != "login")
@@ -187,12 +189,11 @@ namespace MovieNight.Web.Controllers
                 {
                     Id = tmp.BUserE.Id,
                     Username = tmp.BUserE.Username,
-                    Email = tmp.BUserE.Email
+                    Email = tmp.BUserE.Email,
+                    Avatar = tmp.Avatar
                 };
                 friendListModel.ListOfFriends.Add(listOfUsers);
             }
-
-
             int totalItems = _serviceFriend.GetTotalUserCount(searchTerm);
             int itemsPerPage = 9;
             friendListModel.Pagination = new PaginationModel
@@ -207,13 +208,15 @@ namespace MovieNight.Web.Controllers
             return View(friendListModel);
             
         }
+        [UserMod]
+        [HttpPost]
         public ActionResult SetNewFriendPage(int? _friendId)
         {
+            SessionStatus();
             var _userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             var _userVsFriend = _serviceFriend.setAddFriend((_userId, _friendId));
             if (_userVsFriend)
             {
-            
                 return RedirectToAction("FindFriends");
             }
             else
@@ -221,9 +224,11 @@ namespace MovieNight.Web.Controllers
                 return RedirectToAction("Error404Page", "Error");
             }
         }
-
+        [UserMod]
+        [HttpPost]
         public ActionResult SetDeleteFriendPage(int? _friendId)
         {
+            SessionStatus();
             var _userId = System.Web.HttpContext.Current.GetMySessionObject().Id;
             var _userVsFriend = _serviceFriend.setDeleteFriend((_userId, _friendId));
             if (_userVsFriend == true)
