@@ -209,7 +209,6 @@ namespace MovieNight.Web.Controllers
             
         }
         [UserMod]
-        [HttpPost]
         public ActionResult SetNewFriendPage(int? _friendId)
         {
             SessionStatus();

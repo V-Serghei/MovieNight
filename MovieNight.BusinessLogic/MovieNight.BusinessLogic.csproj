@@ -74,13 +74,6 @@
     <Compile Include="Interface\IService\IFriendsService.cs" />
     <Compile Include="Interface\IService\IMovie.cs" />
     <Compile Include="Interface\ISession.cs" />
-    <Compile Include="Migrations\Movie\202405291119132_Movie.cs" />
-    <Compile Include="Migrations\Movie\202405291119132_Movie.Designer.cs">
-      <DependentUpon>202405291119132_Movie.cs</DependentUpon>
-    <Compile Include="Migrations\Movie\202406091956289_Movie.cs" />
-    <Compile Include="Migrations\Movie\202406091956289_Movie.Designer.cs">
-      <DependentUpon>202406091956289_Movie.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Movie\Configuration.cs" />
     <Compile Include="Migrations\Session\Configuration.cs" />
     <Compile Include="Migrations\User\Configuration.cs" />
@@ -111,13 +104,6 @@
   <ItemGroup>
     <Content Include="DBModel\Seed\AchievementInfo.json" />
     <Content Include="DBModel\Seed\SeedData.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\Movie\202406091956289_Movie.resx">
-      <DependentUpon>202406091956289_Movie.cs</DependentUpon>
-    <EmbeddedResource Include="Migrations\Movie\202405291119132_Movie.resx">
-      <DependentUpon>202405291119132_Movie.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

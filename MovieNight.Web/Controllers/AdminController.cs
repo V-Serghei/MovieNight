@@ -289,10 +289,7 @@ namespace MovieNight.Web.Controllers
             {
                 var category = exist.Category;
                 MovieDeleteResult result = null;
-                for (int i = 0; i < 10000; i++)
-                {
-                    result = _movie.DeleteMovie(i);
-                }
+                    result = _movie.DeleteMovie(id);
                 if (result != null && result.Result)
                 {
                     switch (category)

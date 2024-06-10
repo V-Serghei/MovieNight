@@ -679,7 +679,6 @@ namespace MovieNight.Web.Controllers
         #endregion
         
         #region Movie add to viewed
-        [HttpPost]
         [UserMod]
         public async Task<ActionResult> AddToViewed(int? movieId)
         {

@@ -102,7 +102,6 @@ namespace MovieNight.Web.Controllers
             var message = mapper.Map<List<InboxModel>>(messageD);
             return View(message);
         }
-        [HttpPost]
         [UserMod]
         public ActionResult AddStarMail(int? mailId)
         {
