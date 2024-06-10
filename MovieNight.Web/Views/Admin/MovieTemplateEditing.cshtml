@@ -1,0 +1,333 @@
+﻿@using System.Web.Optimization
+@model MovieNight.Web.Models.Movie.MovieTemplateInfModel
+@using MovieNight.Domain.enams
+@using MovieNight.Web.Infrastructure
+
+@{
+var userModel = HttpContext.Current.GetMySessionObject();
+}
+
+<div>
+    <div class="content">
+        @if (userModel.Role is LevelOfAccess.Admin or LevelOfAccess.Moderator)
+        {
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Movie Night</a></li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Movie</a></li>
+                            </ol>
+                        </div>
+                        <h4 class="page-title">Movie Editing</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+                <div >
+                    <div class="card-box">
+                        <div class="tab-pane" id="settings">
+                            @using (Html.BeginForm("MovieTemplateAdding", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                            <div class="text-right">
+                                <button type="submit" name="submit" class="btn btn-primary waves-effect waves-light mt-2"><i class=" remixicon-brush-line"></i> Accept changes </button>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="AvatarFile">Poster Image</label>
+                                <input type="file" class="form-control" id="AvatarFile" name="AvatarFile" accept="image/*">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Title">Title</label>
+                                <input type="text" name="Title" class="form-control" id="Title" placeholder="Enter Title" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="Category">Category</label>
+                                <select class="form-control" id="Category" name="Category">
+                                    <option value="0">Non</option>
+                                    <option value="1">Film</option>
+                                    <option value="2">Serial</option>
+                                    <option value="3">Cartoon</option>
+                                    <option value="4">Anime</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="Quote">Quote</label>
+                                <input type="text" name="Quote" class="form-control" id="Quote" placeholder="Enter Quote" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Description">Description</label>
+                                <textarea class="form-control" id="Description" rows="4" placeholder="Write something..." name="Description"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ProductionYear">Production Year</label>
+                                <input class="form-control" type="date" name="ProductionYear" id="ProductionYear">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Country">Country</label>
+                                <select id="Country" name="Country" class="form-control">
+                                    <option value="">Select the country...</option>
+                                    <option value="Russia">Russia</option>
+                                    <option value="Ukraine">Ukraine</option>
+                                    <option value="Belarus">Belarus</option>
+                                    <option value="Moldova">Moldova</option>
+                                    <option value="UNITED STATES">UNITED STATES</option>
+                                    <option value="Britain">Britain</option>
+                                    <option value="OTHER">Other (Please Specify)</option>
+                                </select>
+                                <input type="text" id="OtherCountryInput" name="OtherCountry" class="form-control" style="display: none;" placeholder="Enter your country">
+                                <script>
+                                    document.getElementById("Country").addEventListener("change", function () {
+                                        var countrySelect = document.getElementById("Country");
+                                        var otherInput = document.getElementById("OtherCountryInput");
+
+                                        if (countrySelect.value === "OTHER") {
+                                            otherInput.style.display = "block";
+                                        } else {
+                                            otherInput.style.display = "none";
+                                        }
+                                    });
+                                </script>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Genre">Genres</label>
+                                <table class="table" id="GenresTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Genre</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="GenresTableBody">
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" name="Genre[0]" placeholder="Enter Genre">
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn btn-primary" onclick="addGenreRow()">Add Genre</button>
+                            </div>
+                            <script>
+                                function addGenreRow() {
+                                    var tableBody = document.getElementById("GenresTableBody");
+                                    var rowCount = tableBody.rows.length;
+                                    var row = tableBody.insertRow(rowCount);
+                                    var genreCell = row.insertCell(0);
+                                    var actionCell = row.insertCell(1);
+
+                                    genreCell.innerHTML = '<input type="text" class="form-control" name="Genre[' + rowCount + ']" placeholder="Enter Genre">';
+                                    actionCell.innerHTML = '<button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>';
+                                }
+                            </script>
+
+                            <div class="form-group">
+                                <label for="Location">Location</label>
+                                <input type="text" class="form-control" id="Location" name="Location" placeholder="Enter Location" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Director">Director</label>
+                                <input type="text" class="form-control" id="Director" name="Director" placeholder="Enter Director" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Duration">Duration</label>
+                                <input type="time" class="form-control" id="Duration" name="Duration">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="MovieNightGrade">Movie Night Grade</label>
+                                <input type="number" step="0.1" class="form-control" id="MovieNightGrade" name="MovieNightGrade" min="0" max="10" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Certificate">Certificate</label>
+                                <select class="form-control" id="Certificate" name="Certificate">
+                                    <option value="G">G</option>
+                                    <option value="PG">PG</option>
+                                    <option value="PG-13">PG-13</option>
+                                    <option value="R">R</option>
+                                    <option value="NC-17">NC-17</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ProductionCompany">Production Company</label>
+                                <input type="text" class="form-control" id="ProductionCompany" name="ProductionCompany" placeholder="Enter Production Company" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Budget">Budget</label>
+                                <input type="text" class="form-control" id="Budget" name="Budget" placeholder="Enter Budget" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="GrossWorldwide">Gross Worldwide</label>
+                                <input type="text" class="form-control" id="GrossWorldwide" name="GrossWorldwide" placeholder="Enter Gross Worldwide" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Language">Language</label>
+                                <input type="text" class="form-control" id="Language" name="Language" placeholder="Enter Language" value="">
+                            </div>
+
+                            <!-- Form group for Cast Members with file upload -->
+                            <div class="form-group">
+                                <label for="CastMembers">Cast Members</label>
+                                <table class="table" id="CastMembersTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Role</th>
+                                        <th>Image</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="CastMembersTableBody">
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" name="CastMembers[0].Name" placeholder="Enter Name">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="CastMembers[0].Role" placeholder="Enter Role">
+                                        </td>
+                                        <td>
+                                            <input type="file" class="form-control" name="CastImages" accept="image/*">
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn btn-primary" onclick="addCastMemberRow()">Add Cast Member</button>
+                            </div>
+
+                            <script>
+                                function addCastMemberRow() {
+                                    var tableBody = document.getElementById("CastMembersTableBody");
+                                    var rowCount = tableBody.rows.length;
+                                    var row = tableBody.insertRow(rowCount);
+                                    var nameCell = row.insertCell(0);
+                                    var roleCell = row.insertCell(1);
+                                    var imageCell = row.insertCell(2);
+                                    var actionCell = row.insertCell(3);
+
+                                    nameCell.innerHTML = '<input type="text" class="form-control" name="CastMembers[' + rowCount + '].Name" placeholder="Enter Name">';
+                                    roleCell.innerHTML = '<input type="text" class="form-control" name="CastMembers[' + rowCount + '].Role" placeholder="Enter Role">';
+                                    imageCell.innerHTML = '<input type="file" class="form-control" name="CastImages" accept="image/*">';
+                                    actionCell.innerHTML = '<button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>';
+                                }
+                            </script>
+
+                            <!-- Form group for Movie Cards with file upload -->
+                            <div class="form-group">
+                                <label for="MovieCards">Movie Cards</label>
+                                <table class="table" id="MovieCardsTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Image</th>
+                                        <th>Description</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="MovieCardsTableBody">
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" name="MovieCards[0].Title" placeholder="Enter Title">
+                                        </td>
+                                        <td>
+                                            <input type="file" class="form-control" name="CardImages" accept="image/*">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="MovieCards[0].Description" placeholder="Enter Description">
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn btn-primary" onclick="addMovieCardRow()">Add Movie Card</button>
+                            </div>
+
+                            <script>
+                                function addMovieCardRow() {
+                                    var tableBody = document.getElementById("MovieCardsTableBody");
+                                    var rowCount = tableBody.rows.length;
+                                    var row = tableBody.insertRow(rowCount);
+                                    var titleCell = row.insertCell(0);
+                                    var imageCell = row.insertCell(1);
+                                    var descriptionCell = row.insertCell(2);
+                                    var actionCell = row.insertCell(3);
+
+                                    titleCell.innerHTML = '<input type="text" class="form-control" name="MovieCards[' + rowCount + '].Title" placeholder="Enter Title">';
+                                    imageCell.innerHTML = '<input type="file" class="form-control" name="CardImages" accept="image/*">';
+                                    descriptionCell.innerHTML = '<input type="text" class="form-control" name="MovieCards[' + rowCount + '].Description" placeholder="Enter Description">';
+                                    actionCell.innerHTML = '<button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>';
+                                }
+                            </script>
+
+                            <div class="form-group">
+                                <label for="InterestingFacts">Interesting Facts</label>
+                                <table class="table" id="InterestingFactsTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Fact Name</th>
+                                        <th>Fact Text</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="InterestingFactsTableBody">
+                                    <tr>
+                                        <td><input type="text" class="form-control" name="InterestingFacts[0].FactName" placeholder="Enter Fact Name"></td>
+                                        <td><input type="text" class="form-control" name="InterestingFacts[0].FactText" placeholder="Enter Fact Text"></td>
+                                        <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn btn-primary" onclick="addInterestingFactRow()">Add Interesting Fact</button>
+                            </div>
+
+                            <script>
+                                function addInterestingFactRow() {
+                                    var tableBody = document.getElementById("InterestingFactsTableBody");
+                                    var rowCount = tableBody.rows.length;
+                                    var row = tableBody.insertRow(rowCount);
+                                    var factNameCell = row.insertCell(0);
+                                    var factTextCell = row.insertCell(1);
+                                    var actionCell = row.insertCell(2);
+
+                                    factNameCell.innerHTML = '<input type="text" class="form-control" name="InterestingFacts[' + rowCount + '].FactName" placeholder="Enter Fact Name">';
+                                    factTextCell.innerHTML = '<input type="text" class="form-control" name="InterestingFacts[' + rowCount + '].FactText" placeholder="Enter Fact Text">';
+                                    actionCell.innerHTML = '<button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>';
+                                }
+                            </script>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+<script>
+    function removeRow(button) {
+        var row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+    }
+</script>

@@ -10,6 +10,7 @@ using MovieNight.Domain.enams;
 using MovieNight.Domain.Entities;
 using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Domain.Entities.UserId;
+using MovieNight.Domain.Entities.UserId.ResultE;
 
 namespace MovieNight.BusinessLogic.Session
 {
@@ -74,6 +75,22 @@ namespace MovieNight.BusinessLogic.Session
         
        public bool DelSessionCurrUser(string userCurrent){
             return DelSessionCurrUserDb(userCurrent);
+        }
+
+        public HttpCookie GenCookieLongTime(LogInData verificationLogInData)
+        {
+            return CookieLongTime(verificationLogInData);
+        }
+
+
+        public void CleanupExpiredSessionRange()
+        {
+            CleanupExpiredSessions();
+        }
+
+        public async Task<ReserPasswordResult> UserResetPassword(string modelEmail, string modelNewPassword)
+        {
+            return await UserResetPasswordDb(modelEmail, modelNewPassword);
         }
 
         //  - > user data update

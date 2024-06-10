@@ -40,8 +40,16 @@
                                 </a>
                                 <p class="text-muted mb-4 mt-3">Enter your email address and password to access admin panel.</p>
                             </div>
-                            @using (Ajax.BeginForm("LoginPost", "Identification", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "result", OnSuccess = "onSuccess", OnFailure = "onFailure" }, new { id = "loginForm", autocomplete = "off" }))
+                            @using (Ajax.BeginForm("LoginPost", "Identification", new AjaxOptions
+                                    {
+                                        HttpMethod = "POST", 
+                                        InsertionMode = InsertionMode.Replace,
+                                        UpdateTargetId = "result", 
+                                        OnSuccess = "onSuccess", 
+                                        OnFailure = "onFailure"
+                                    }, new { id = "loginForm", autocomplete = "off" }))
                             {
+                                @Html.AntiForgeryToken()
                                 <div class="alert alert-danger" style="display:none;"></div>
 
                                 @* <form action="@Url.Action("Login", "Identification")" method="post"> *@
@@ -101,7 +109,7 @@
 
                     <div class="row mt-3">
                         <div class="col-12 text-center">
-                            <p> <a href=@Url.Action("PagesRecoverpw","Identification") class="text-muted ml-1">Forgot your password?</a></p>
+                            <p> <a href=@Url.Action("PagesRecoverPassword","Identification") class="text-muted ml-1">Forgot your password?</a></p>
                             <p class="text-muted">Don't have an account? <a href=@Url.Action("Register","Identification") class="text-warning font-weight-medium ml-1">Sign Up</a></p>
                         </div> <!-- end col -->
                     </div>
@@ -115,11 +123,13 @@
     </div>
     <!-- end page -->
 
+    
+    <footer id="footer" style="margin-right: 0!important; margin-left: 0!important;" class=" bg-dark text-white py-4">
+        <div style="margin-left: 240px">
 
-    <footer class="footer footer-alt">
-        2024  &copy; Movie Night <a href="" class="text-muted"> </a>
-    </footer>
-
+        @Html.Partial("_Footer")
+        </div>
+</footer>
     @Scripts.Render("~/bundles/vendor/js")
     @Scripts.Render("~/bundles/app/js")
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>

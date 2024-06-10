@@ -10,6 +10,7 @@ using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
+using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Models.DifModel;
 using MovieNight.Web.Models.Friends;
@@ -22,6 +23,7 @@ namespace MovieNight.Web.Controllers
 {
     public class MainPageController : MasterController
     {
+        #region Basic Settings
         private readonly ISession _sessionUser;
         private readonly IMapper _mapper;
         private readonly IMovie _movie;
@@ -36,7 +38,7 @@ namespace MovieNight.Web.Controllers
               var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<FriendsPageD , FriendPageModel>()
                     .ForMember(dest=>dest.BUserE, 
-                        opt=>opt.Ignore())
+                        opt => opt.Ignore())
                     .ForMember(dest=>dest.ViewingHistory, 
                         opt=>opt.Ignore())
                     .ForMember(dest=>dest.ListInThePlans, 
@@ -93,7 +95,11 @@ namespace MovieNight.Web.Controllers
             _mapper = config.CreateMapper();
             
         }
-        // GET: MainPage
+        #endregion
+        
+        #region Home Page
+        [GuestMod]
+        [HttpGet]
         public ActionResult Index()
         {
             SessionStatus();
@@ -115,7 +121,8 @@ namespace MovieNight.Web.Controllers
             }
             return View();
         }
-
+        [GuestMod]
+        [HttpGet]
         public ActionResult Primary()
         {
             SessionStatus();
@@ -138,7 +145,8 @@ namespace MovieNight.Web.Controllers
             
             return View();
         }
-
+        [GuestMod]
+        [HttpGet]
         public ActionResult News()
         {
             SessionStatus();
@@ -153,7 +161,8 @@ namespace MovieNight.Web.Controllers
             var user = System.Web.HttpContext.Current.GetMySessionObject();
             return View();
         }
-
+        [GuestMod]
+        [HttpGet]
         public ActionResult Top()
         {
             SessionStatus();
@@ -173,7 +182,8 @@ namespace MovieNight.Web.Controllers
             
             return View(listModelExUser);
         }
-
+        [GuestMod]
+        [HttpGet]
         public ActionResult AreWatching()
         {
             SessionStatus();
@@ -194,5 +204,6 @@ namespace MovieNight.Web.Controllers
             return View(listModelExUser);
             
         }
+        #endregion
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MovieNight.Domain.Entities.MovieM;
 
 namespace MovieNight.BusinessLogic.Interface.IService
 {
@@ -17,5 +18,16 @@ namespace MovieNight.BusinessLogic.Interface.IService
         bool setDeleteFriend((int _userId, int? _friendId) valueTuple);
         int GetTotalUserCount(string _searchParameter);
         int GetTotalFriendsCount(string _searchParameter);
+        #region Information - friends movies
+
+        /// <summary>
+        /// friend ratings for a certain movie
+        /// </summary>
+        
+        List<ScoresFriendsGaveTheMovieE> GetFriendsMovie(int? idU);
+        #endregion
+
+        List<ScoresFriendsGaveTheMovieE> GetFriendsMovieAll(int? movieId);
+        int GetCountFriendsGrade(int? idU);
     }
 }

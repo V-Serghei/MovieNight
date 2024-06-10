@@ -17,7 +17,7 @@ namespace MovieNight.Domain.Entities.MovieM
         public DateTime ProductionYear { get; set; }
         public string ProductionYearS { get; set; }
 
-        public string Country { get; set; }
+        public string Country { get; set; } = "Other";
         public List<string> Genre { get; set; }
         public string Location { get; set; }
         public string Director { get; set; }

@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
-using Microsoft.AspNet.Http.Features;
 using MovieNight.BusinessLogic.Interface.IService;
-using MovieNight.BusinessLogic.Session.Service;
 using MovieNight.Domain.Entities.AchievementE;
 using MovieNight.Domain.Entities.MovieM;
 using MovieNight.Domain.Entities.Statistics;
-using MovieNight.Domain.Entities.UserId;
+using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
 using MovieNight.Web.Models;
 using MovieNight.Web.Models.Achievement;
@@ -55,16 +49,16 @@ namespace MovieNight.Web.Controllers
         
 
         #endregion
+
+        #region Get Page
+
         
-        
-        
-        
-        // GET: Statistic
-        
-        
-        
+
+        [UserMod]
+        [HttpGet]
         public ActionResult PersonalPromotionStatistics()
         {
+            SessionStatus();
             var userId = System.Web.HttpContext.Current.GetMySessionObject()?.Id;
             var dataStatistic = _movie.GetDataStatisticPage(userId);
             if (dataStatistic != null)
@@ -73,12 +67,19 @@ namespace MovieNight.Web.Controllers
                 return View(statisticModel);
 
             }
-
-            return View();
+            
+            return View(new StatisticModel());
         }
+        #endregion
 
+        
+        #region Get Chart Data
+        
+        [HttpGet]
+        [UserMod]
         public async Task<JsonResult> GetChartDataRating()
         {
+            SessionStatus();
             var user = System.Web.HttpContext.Current.GetMySessionObject();
             if (user != null)
             {
@@ -100,8 +101,11 @@ namespace MovieNight.Web.Controllers
 
         }
         
+        [HttpGet]
+        [UserMod]
         public async Task<JsonResult> GetChartDataGenre()
         {
+            SessionStatus();
             var user = System.Web.HttpContext.Current.GetMySessionObject();
             if (user != null)
             {
@@ -119,9 +123,11 @@ namespace MovieNight.Web.Controllers
             return Json(null);
 
         }
-        
+        [HttpGet]
+        [UserMod]
         public async Task<JsonResult> GetChartDataCountry()
         {
+            SessionStatus();
             var user = System.Web.HttpContext.Current.GetMySessionObject();
             if (user != null)
             {
@@ -139,7 +145,7 @@ namespace MovieNight.Web.Controllers
             return Json(null);
 
         }
-        
+        #endregion
         
     }
 }

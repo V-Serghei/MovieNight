@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using MovieNight.Domain.enams;
+using MovieNight.Web.Models.Friends;
 
 namespace MovieNight.Web.Models.Movie
 {
     public class MovieTemplateInfModel
     {
         public int Id { get; set; }
+        public FilmCategory Category { get; set; }
         public string Title { get; set; }
         public string PosterImage { get; set; }
         public string Quote { get; set; }
@@ -26,12 +29,23 @@ namespace MovieNight.Web.Models.Movie
         public List<CastMember> CastMembers { get; set; }
         public List<MovieCard> MovieCards { get; set; }
         public List<InterestingFact> InterestingFacts { get; set; }
-        
+        public List<ScoresFriendsGaveTheMovieModel> MovieFriends { get; set; }
         public bool Bookmark { get; set; }
         
         public bool BookmarkTomeOf { get; set; }
         
         public float UserRating { get; set; }
+
+        public int CountFriendsGrade { get; set; }
+        public MovieTemplateInfModel()
+        {
+            InterestingFacts = new List<InterestingFact>();
+            CastMembers = new List<CastMember>();
+            MovieCards = new List<MovieCard>();
+            MovieFriends = new List<ScoresFriendsGaveTheMovieModel>();
+            Genre = new List<string>();
+            
+        }
         
     }
     

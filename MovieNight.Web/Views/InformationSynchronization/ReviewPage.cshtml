@@ -31,7 +31,16 @@ var userModel = HttpContext.Current.GetMySessionObject();
     </div>
     <!-- end page title -->
 
-
+    <style>
+        .wrapped-text {
+            white-space: pre-wrap;
+            word-wrap: break-word; 
+        }
+        .review-container {
+            width: 100%; 
+            overflow-wrap: break-word; 
+        }
+    </style>
     <div class="row">
         <div class="col-lg-4">
             <div class="card-box">
@@ -54,8 +63,10 @@ var userModel = HttpContext.Current.GetMySessionObject();
                                 </a>
                             }
                                 <h5 class="mt-0"><a href="@Url.Action("UserTemplatePage", "InformationSynchronization", new { id = review.UserId })" class="text-dark">@review.User</a></h5>
-                                <p>@review.Text</p>
-                                <div class="row">
+                                <div class="text-info review-container">
+                                    <p class="wrapped-text">@review.Text</p>
+                                </div>
+                        <div class="row">
                                     <div class="col-auto">
                                         <a href="javascript: void(0);" class="text-muted">
                                             @if(userModel.Avatar!=null)

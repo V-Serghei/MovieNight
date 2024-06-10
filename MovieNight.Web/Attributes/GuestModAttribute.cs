@@ -12,7 +12,7 @@ using MovieNight.Web.Models;
 
 namespace MovieNight.Web.Attributes
 {
-    public class GuestModAttribute: ActionFilterAttribute
+    public class GuestModAttribute : ActionFilterAttribute
     {
         private readonly ISession _sessionBL;
         private readonly IMapper _mapper;
@@ -24,7 +24,6 @@ namespace MovieNight.Web.Attributes
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<LogInData, UserModel>();
-
             });
             _mapper = config.CreateMapper();
         }
@@ -32,23 +31,34 @@ namespace MovieNight.Web.Attributes
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var apiCookie = HttpContext.Current.Request.Cookies["X-KEY"];
-            if (apiCookie != null )
+            UserModel us = null;
+            
+            if (apiCookie != null)
             {
                 var agent = HttpContext.Current.Request.UserAgent;
                 var profile = _sessionBL.GetUserByCookie(apiCookie.Value, agent);
-                var us = _mapper.Map<UserModel>(profile);
-                if (profile != null && (profile.Role == LevelOfAccess.Guest || profile.Role == LevelOfAccess.User || profile.Role == LevelOfAccess.Admin || profile.Role == LevelOfAccess.Moderator))
+                us = _mapper.Map<UserModel>(profile);
+                if (profile != null && (profile.Role == LevelOfAccess.Guest ||
+                                        profile.Role == LevelOfAccess.User ||
+                                        profile.Role == LevelOfAccess.Admin ||
+                                        profile.Role == LevelOfAccess.Moderator))
                 {
                     HttpContext.Current.SetMySessionObject(us);
+                    return;
                 }
-                else
+                if(profile==null)
                 {
-                    filterContext.Result = new RedirectToRouteResult(
-                        new RouteValueDictionary(
-                            new { controller = "Error", action = "Error404Page" }));
+                    HttpContext.Current.SetMySessionObject(us);
+                    return;
                 }
+                
+                filterContext.Result = new RedirectToRouteResult(
+                    new RouteValueDictionary(
+                        new { controller = "Error", action = "Error404Page" }));
+                
             }
+            
+            HttpContext.Current.SetMySessionObject(us);
         }
-
     }
 }

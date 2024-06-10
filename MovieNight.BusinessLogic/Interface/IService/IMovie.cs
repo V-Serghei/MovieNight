@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MovieNight.Domain.Entities.DifferentE;
 using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities.MovieM.ResultsOfTheOperation;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 using MovieNight.Domain.Entities.Review;
@@ -12,6 +13,8 @@ namespace MovieNight.BusinessLogic.Interface.IService
     public interface IMovie
     {
         MovieTemplateInfE GetMovieInf(int? id);
+        int? GetMovieId(MovieTemplateInfE id);
+
 
         Task<BookmarkE> SetNewBookmark((int,int) movieid);
         bool GetInfBookmark((int?,int) movieid);
@@ -47,5 +50,8 @@ namespace MovieNight.BusinessLogic.Interface.IService
         int? DeleteReview(int? reviewE);
         List<AreWatchingE> GetMoviesAreWatching(int? userId);
         List<TopFilmsE> GetMoviesTop(int? userId);
+        MovieAddResult AddMovieTemplate(MovieTemplateInfE movieData);
+        MovieAddResult UpdateMovieTemplate(MovieTemplateInfE movieData);
+        MovieDeleteResult DeleteMovie(int? id);
     }
 }

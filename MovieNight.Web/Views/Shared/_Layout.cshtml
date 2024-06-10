@@ -12,15 +12,15 @@
     <link rel="shortcut icon" href="/images/logo.ico">
 
     <!-- App css -->
-
-
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    
     @Styles.Render("~/bundles/bootstrap/css")
     @* @Styles.Render("~/bundles/icons/css") *@
     @* @Styles.Render("~/bundles/app/css") *@
     @Styles.Render("~/bundles/slider/css")
     @* friends styles *@
     @Styles.Render("~/bundles/custombox/css")
+
     @* viewed list *@
     @Styles.Render("~/bundles/dataTables_bootstrap4/css")
     @* @Styles.Render("~/bundles/dataTables_responsive_bootstrap4/css") *@
@@ -47,10 +47,7 @@
     @* email *@
     @Styles.Render("~/bundles/summernote_bs4/css")
     @Styles.Render("~/bundles/dropzone/css")
-  
-  
-
-
+    
 
 
     @if (IsSectionDefined("Styles"))
@@ -79,10 +76,11 @@
         </div>
         <div class="content-page">
             @RenderBody()
-            <footer class="footer">
-                @Html.Partial("_Footer")
-            </footer>
+            
         </div>
+        <footer id="footer" class="footer bg-dark text-white py-4">
+            @Html.Partial("_Footer")
+        </footer>
 
         <div class="right-bar">
             @Html.Partial("_Rbar")
@@ -149,9 +147,12 @@
         });
         </script>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.js" integrity="sha512-f04GBpoqEZhbyjlRTuXeg8FIHDb+xfCJ0LVdqiN1fEl5B3jz3Z0SPe9IxDumOVdTeeXmKMcMJhb26VuGf1Laqw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        @* Error - Double form sending in asynchronous methods *@
+        @* <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.js" integrity="sha512-f04GBpoqEZhbyjlRTuXeg8FIHDb+xfCJ0LVdqiN1fEl5B3jz3Z0SPe9IxDumOVdTeeXmKMcMJhb26VuGf1Laqw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> *@
 
 
         @RenderSection("scripts", required: false)

@@ -4,6 +4,7 @@ using MovieNight.BusinessLogic.Core.ServiceApi;
 using MovieNight.BusinessLogic.Interface.IService;
 using MovieNight.Domain.Entities.DifferentE;
 using MovieNight.Domain.Entities.MovieM;
+using MovieNight.Domain.Entities.MovieM.ResultsOfTheOperation;
 using MovieNight.Domain.Entities.MovieM.SearchParam;
 using MovieNight.Domain.Entities.PersonalP.PersonalPDb;
 using MovieNight.Domain.Entities.Review;
@@ -18,6 +19,11 @@ namespace MovieNight.BusinessLogic.Session.Service
         public MovieTemplateInfE GetMovieInf(int? id)
         {
             return GetMovieFromDb( id);
+        }
+
+        public int? GetMovieId(MovieTemplateInfE movie)
+        {
+            return GetMovieFromDb(movie);
         }
 
         public async Task<BookmarkE> SetNewBookmark((int, int) idAdd)
@@ -174,6 +180,21 @@ namespace MovieNight.BusinessLogic.Session.Service
         public List<AreWatchingE> GetMoviesAreWatching(int? userId)
         {
             return GetMoviesAreWatchingDb(userId);
+        }
+
+        public MovieAddResult AddMovieTemplate(MovieTemplateInfE movieData)
+        {
+            return AddMovieTemplateDb(movieData);
+        }
+
+        public MovieAddResult UpdateMovieTemplate(MovieTemplateInfE movieData)
+        {
+            return UpdateMovieTemplateDb(movieData);
+        }
+
+        public MovieDeleteResult DeleteMovie(int? id)
+        {
+            return DeleteMovieDb(id);
         }
 
         public List<TopFilmsE> GetMoviesTop(int? userId)

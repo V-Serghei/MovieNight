@@ -23,6 +23,7 @@ namespace MovieNight.Web.Controllers
         internal ISession _session;
         public DataTransferController()
         {
+            
             var BL = new BusinessLogic.BusinessLogic();
             сompleteInbox = BL.GetInbox();
             _session = BL.Session();
@@ -101,7 +102,6 @@ namespace MovieNight.Web.Controllers
             var message = mapper.Map<List<InboxModel>>(messageD);
             return View(message);
         }
-        [HttpPost]
         [UserMod]
         public ActionResult AddStarMail(int? mailId)
         {
