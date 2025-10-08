@@ -5,11 +5,12 @@
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<MovieNight.BusinessLogic.DBModel.SessionContext>
+    public sealed class Configuration : DbMigrationsConfiguration<MovieNight.BusinessLogic.DBModel.SessionContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
             MigrationsDirectory = @"Migrations\Session";
            
         }

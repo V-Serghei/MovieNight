@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Optimization;
+using MovieNight.BusinessLogic.DBModel;
 
 
 namespace MovieNight.Web
@@ -183,7 +185,7 @@ namespace MovieNight.Web
                 //Review page
             bundles.Add(new ScriptBundle("~/bundles/kanban/js").Include(
                         "~/scripts/pages/kanban.init.js"));
-                
+            
 
 
         }
