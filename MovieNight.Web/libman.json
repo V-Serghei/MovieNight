@@ -1,0 +1,48 @@
+﻿{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib/jquery/",
+      "files": [ "jquery.js" ]
+    },
+    {
+      "library": "bootstrap@5.3.8",
+      "destination": "wwwroot/lib/bootstrap/",
+      "files": [ "css/bootstrap.min.css", "js/bootstrap.bundle.min.js" ]
+    },
+    {
+      "library": "jquery-ajax-unobtrusive@3.2.6",
+      "destination": "wwwroot/lib/jquery-ajax-unobtrusive/",
+      "files": [ "jquery.unobtrusive-ajax.min.js" ]
+    },
+    {
+      "library": "metisMenu@3.0.7",
+      "destination": "wwwroot/lib/metisMenu/",
+      "files": [ "metisMenu.min.js", "metisMenu.min.css" ]
+    },
+    {
+      "library": "jQuery-slimScroll@1.3.8",
+      "destination": "wwwroot/lib/jQuery-slimScroll/",
+      "files": [ "jquery.slimscroll.min.js" ]
+    },
+    {
+      "library": "node-waves@0.7.6",
+      "destination": "wwwroot/lib/node-waves/",
+      "files": [ "waves.min.js", "waves.min.css" ]
+    },
+    {
+      "library": "remixicon@4.6.0",
+      "destination": "wwwroot/lib/remixicon/",
+      "files": [
+        "remixicon.css",
+        "remixicon.min.css",
+        "remixicon.woff2",
+        "remixicon.woff",
+        "remixicon.ttf",
+        "remixicon.eot"
+      ]
+    }
+  ]
+}

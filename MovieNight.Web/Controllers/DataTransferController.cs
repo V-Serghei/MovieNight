@@ -10,7 +10,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
-using Microsoft.AspNet.Http.Features;
 using MovieNight.Web.Attributes;
 using MovieNight.Web.Infrastructure;
 using ISession = MovieNight.BusinessLogic.Interface.ISession;

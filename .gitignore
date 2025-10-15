@@ -81,3 +81,5 @@ Desktop.ini
 
 # Local tools
 .localtoolsettings.json
+# wwwroot folder can be ignored if you are using a front-end package manager
+MovieNight.Web/wwwroot/

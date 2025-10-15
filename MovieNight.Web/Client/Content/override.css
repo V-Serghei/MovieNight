@@ -1,0 +1,38 @@
+﻿/* ===== NAVBAR: раскрепощаем выпадашки и поднимаем слой поверх контента ===== */
+.navbar-custom {
+    overflow: visible !important;
+    z-index: 1052 !important; /* выше всего обычного контента и оверлеев таблиц */
+}
+
+/* У узлов меню должен быть контекст позиционирования для dropdown */
+.navbar-custom .topnav-menu > li,
+.navbar-custom .dropdown {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+/* Само меню: никаких искусственных скрытий, только класс .show управляет показом */
+.navbar-custom .dropdown-menu,
+.navbar-custom .profile-dropdown,
+.navbar-custom .dropdown-megamenu {
+    z-index: 2000 !important;   /* выше .navbar-custom */
+    visibility: hidden;
+    opacity: 0;
+    display: block;             /* даём блочное, но прячем через visibility/opacity */
+    transform: none !important; /* гасим возможные трансформы темы */
+}
+
+.navbar-custom .dropdown.show > .dropdown-menu,
+.navbar-custom .dropdown-menu.show {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Поиск в шапке не должен резать подсказки/меню */
+.navbar-custom .app-search { overflow: visible !important; }
+
+/* Правый сайдбар не должен перекрывать клики, когда он закрыт */
+.rightbar-overlay { pointer-events: none; }
+
+/* На всякий случай — отключаем клиппинг у фиксированных шапок/логотипа */
+.logo-box { overflow: visible !important; }
