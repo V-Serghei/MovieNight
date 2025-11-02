@@ -19,6 +19,11 @@ builder.Services.AddOpenApi();
 //                     .AllowCredentials() 
 //      );
 // });
+builder.Services.AddHttpClient("auth", c =>
+{
+     var baseUrl = builder.Configuration["Services:Auth"] ?? "http://localhost:7010";
+     c.BaseAddress = new Uri(baseUrl);
+});
 
 var app = builder.Build();
  
@@ -38,5 +43,6 @@ app.UseHttpsRedirection();
 app.MapHealth();
 app.MapDebug();
 app.MapApiV1();
+app.MapAuthProxy();
 
 app.Run();

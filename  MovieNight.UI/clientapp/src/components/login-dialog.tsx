@@ -21,28 +21,41 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
     const { login } = useAuth()
     const { toast } = useToast()
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
 
         if (!email || !password) {
-            toast({
-                title: "Missing fields",
-                description: "Please enter both email and password.",
-                variant: "destructive",
-            })
-            return
+            toast({ title: "Missing fields", description: "Please enter both email and password.", variant: "destructive" });
+            return;
         }
 
-        // Mock login
-        login({ id: "1", name: email.split("@")[0], email })
-        toast({
-            title: "Welcome back!",
-            description: "You have successfully logged in.",
-        })
-        onOpenChange(false)
-        setEmail("")
-        setPassword("")
-    }
+        try {
+            const res = await fetch(`/api/gw/auth/login`, {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const text = await res.text();
+            if (!res.ok) {
+                toast({ title: "Login failed", description: text || `HTTP ${res.status}`, variant: "destructive" });
+                return;
+            }
+            const data = JSON.parse(text); // { user:{id,email,displayName}, token, exp }
+
+            // save if(when) need
+            // localStorage.setItem("access_token", data.token);
+
+            login({ id: data.user.id, name: data.user.displayName ?? data.user.email, email: data.user.email });
+
+            toast({ title: "Welcome back!", description: "You have successfully logged in." });
+            onOpenChange(false);
+            setEmail("");
+            setPassword("");
+        } catch (err: any) {
+            toast({ title: "Network error", description: err?.message ?? String(err), variant: "destructive" });
+        }
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
