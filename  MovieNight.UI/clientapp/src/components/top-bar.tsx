@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, Search, Bookmark, LogIn, User, LogOut, Film } from "lucide-react"
+import { Menu, Search, Bookmark, LogIn, User, LogOut, Film, Bug } from "lucide-react" // + Bug
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -25,7 +25,7 @@ export function TopBar() {
         e.preventDefault()
         if (searchQuery.trim()) {
             console.log("[v0] Searching for:", searchQuery)
-            // In a real app, navigate to search results
+            // TODO: navigate to search
         }
     }
 
@@ -67,8 +67,16 @@ export function TopBar() {
                         </div>
                     </form>
 
-                    {/* Right: Bookmarks and Auth */}
+                    {/* Right: Debug, Bookmarks and Auth */}
                     <div className="flex items-center gap-2 shrink-0">
+                        {/* NEW: Debug button */}
+                        <Button variant="ghost" size="sm" asChild className="gap-2 hover:text-primary">
+                            <Link href="/debug/ping" title="Open Gateway debug page">
+                                <Bug className="h-4 w-4" />
+                                <span className="hidden sm:inline">Debug</span>
+                            </Link>
+                        </Button>
+
                         <Button variant="ghost" size="icon" asChild className="hover:text-primary">
                             <Link href="/bookmarks">
                                 <Bookmark className="h-5 w-5" />

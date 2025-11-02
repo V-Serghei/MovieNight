@@ -1,0 +1,6 @@
+@MovieNight.Gateway_HostAddress = http://localhost:5243
+
+GET {{MovieNight.Gateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
