@@ -1,0 +1,6 @@
+@Achievements.API_HostAddress = http://localhost:5102
+
+GET {{Achievements.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
