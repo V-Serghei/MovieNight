@@ -295,7 +295,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Global.asax" />
     <Content Include="images\Achievement\first_friend.png" />
     <Content Include="images\Achievement\first_movie.png" />
     <Content Include="images\Achievement\Full_profile.png" />
@@ -500,7 +499,6 @@
     <Content Include="images\Movie\outlander.webp" />
     <Content Include="images\cadr\card1.webp" />
     <Content Include="images\Movie\ThreeHeroesandtheSeaKing.webp" />
-    <Content Include="Video\viedeo_Test.mp4" />
     <Content Include="Views\Error\Error403Page.cshtml" />
     <Content Include="Views\Admin\MovieTemplateEditing.cshtml" />
     <Content Include="Views\Admin\MovieTemplateModify.cshtml" />
@@ -523,16 +521,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Attributes\AdminModAttribute.cs" />
     <Compile Include="Attributes\GuestModAttribute.cs" />
     <Compile Include="Attributes\ModeratorModAttribute.cs" />
     <Compile Include="Attributes\UserModAttribute.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DataTransferController.cs" />
-    <Compile Include="Controllers\IdentificationController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\InformationSynchronizationController.cs" />
     <Compile Include="Controllers\MainPageController.cs" />
@@ -542,9 +537,6 @@
     <Compile Include="Controllers\SettingController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Filter\ClearSessionFilter.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
     <Compile Include="Infrastructure\CacheI\FilmCache.cs" />
     <Compile Include="Infrastructure\CacheI\ViewListCacheKey.cs" />
     <Compile Include="Infrastructure\Different\SendEmail.cs" />
@@ -591,12 +583,9 @@
     <Compile Include="Models\StatisticModel.cs" />
     <Compile Include="Models\TimeModel.cs" />
     <Compile Include="Models\UserModel.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
-    <Content Include="data\ajax_children.json" />
-    <Content Include="data\ajax_roots.json" />
     <None Include="packages.config" />
     <Content Include="Views\MainPage\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -640,7 +629,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="uploads\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MovieNight.BusinessLogic\MovieNight.BusinessLogic.csproj">

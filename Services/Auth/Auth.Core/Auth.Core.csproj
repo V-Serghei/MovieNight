@@ -18,4 +18,8 @@
         <PackageReference Include="Scalar.AspNetCore" Version="2.9.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Auth.Domain\Auth.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

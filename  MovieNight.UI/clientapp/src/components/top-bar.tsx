@@ -14,10 +14,12 @@ import { SideNav } from "@/components/side-nav"
 import { useAuth } from "@/lib/auth-context"
 import { LoginDialog } from "@/components/login-dialog"
 import { useRouter } from "next/navigation"
+import {RegisterDialog} from "@/components/register-dialog";
 
 export function TopBar() {
     const [searchQuery, setSearchQuery] = useState("")
     const [loginOpen, setLoginOpen] = useState(false)
+    const [registerOpen, setRegisterOpen] = useState(false)
     const { user, logout } = useAuth()
     const router = useRouter()
 
@@ -116,7 +118,18 @@ export function TopBar() {
                 </div>
             </header>
 
-            <LoginDialog open={loginOpen} onOpenChange={setLoginOpen} />
+            <LoginDialog
+                open={loginOpen}
+                onOpenChange={setLoginOpen}
+                onOpenRegister={() => setRegisterOpen(true)}
+            />
+
+            <RegisterDialog
+                open={registerOpen}
+                onOpenChange={setRegisterOpen}
+                onOpenLogin={() => setLoginOpen(true)}
+            />
+            
         </>
     )
 }
