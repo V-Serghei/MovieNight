@@ -1,4 +1,6 @@
-﻿using Auth.Domain.Repository.User;
+﻿using System;
+using Auth.Domain.Repository.Tokens;
+using Auth.Infrastructure.Clients;
 using Auth.Infrastructure.Data;
 using Auth.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -9,13 +11,20 @@ namespace Auth.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddAuthInfrastructure(this IServiceCollection services, IConfiguration cfg)
+    public static IServiceCollection AddTokensInfrastructure(this IServiceCollection services, IConfiguration cfg)
     {
-        var cs = cfg.GetConnectionString("AuthDb")
-                 ??
-                 "Server=localhost,1433;Database=MNAuthDB;User Id=sa;Password=zaq1!xsw2@;TrustServerCertificate=true;";
-        services.AddDbContext<AuthDbContext>(opt => opt.UseSqlServer(cs));
-        services.AddScoped<IUserRepository, UserRepository>();
+        var cs = cfg.GetConnectionString("TokensDb")
+                 ?? "Server=localhost,1433;Database=MN.Tokens;User Id=sa;Password=zaq1!xsw2@;TrustServerCertificate=true;";
+
+        services.AddDbContext<AuthDbContext>(o => o.UseSqlServer(cs));
+
+        services.AddScoped<IRefreshTokensRepository, RefreshTokenRepository>();
+
+        services.AddHttpClient<UsersClient>(c =>
+        {
+            var baseUrl = cfg["UsersService:BaseUrl"] ?? "http://localhost:7001";
+            c.BaseAddress = new Uri(baseUrl);
+        });
 
         return services;
     }

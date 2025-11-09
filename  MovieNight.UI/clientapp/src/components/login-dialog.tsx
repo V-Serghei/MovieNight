@@ -13,20 +13,21 @@ import { useToast } from "@/hooks/use-toast"
 interface LoginDialogProps {
     open: boolean
     onOpenChange: (open: boolean) => void
+    onOpenRegister?: () => void
 }
 
-export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
+export function LoginDialog({ open, onOpenChange, onOpenRegister }: LoginDialogProps) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const { login } = useAuth()
     const { toast } = useToast()
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault()
 
         if (!email || !password) {
-            toast({ title: "Missing fields", description: "Please enter both email and password.", variant: "destructive" });
-            return;
+            toast({ title: "Missing fields", description: "Please enter both email and password.", variant: "destructive" })
+            return
         }
 
         try {
@@ -34,28 +35,32 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
                 method: "POST",
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify({ email, password }),
-            });
+            })
 
-            const text = await res.text();
+            const text = await res.text()
             if (!res.ok) {
-                toast({ title: "Login failed", description: text || `HTTP ${res.status}`, variant: "destructive" });
-                return;
+                toast({ title: "Login failed", description: text || `HTTP ${res.status}`, variant: "destructive" })
+                return
             }
-            const data = JSON.parse(text); // { user:{id,email,displayName}, token, exp }
+            const data = JSON.parse(text) // { user:{id,email,displayName}, token?, exp? }
 
-            // save if(when) need
-            // localStorage.setItem("access_token", data.token);
+            login({ id: data.user.id, name: data.user.displayName ?? data.user.email, email: data.user.email })
 
-            login({ id: data.user.id, name: data.user.displayName ?? data.user.email, email: data.user.email });
-
-            toast({ title: "Welcome back!", description: "You have successfully logged in." });
-            onOpenChange(false);
-            setEmail("");
-            setPassword("");
+            toast({ title: "Welcome back!", description: "You have successfully logged in." })
+            onOpenChange(false)
+            setEmail("")
+            setPassword("")
         } catch (err: any) {
-            toast({ title: "Network error", description: err?.message ?? String(err), variant: "destructive" });
+            toast({ title: "Network error", description: err?.message ?? String(err), variant: "destructive" })
         }
-    };
+    }
+
+    const openRegister = () => {
+        if (onOpenRegister) {
+            onOpenChange(false)
+            onOpenRegister()
+        }
+    }
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -86,9 +91,23 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
                             required
                         />
                     </div>
+
                     <Button type="submit" className="w-full">
                         Log in
                     </Button>
+
+                    {onOpenRegister && (
+                        <div className="text-sm text-center text-muted-foreground">
+                            Don&apos;t have an account?{" "}
+                            <button
+                                type="button"
+                                onClick={openRegister}
+                                className="text-primary hover:underline"
+                            >
+                                Create account
+                            </button>
+                        </div>
+                    )}
                 </form>
             </DialogContent>
         </Dialog>
