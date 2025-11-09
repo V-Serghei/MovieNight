@@ -17,4 +17,9 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="DTO\" />
+      <Folder Include="Endpoints\" />
+    </ItemGroup>
+
 </Project>
