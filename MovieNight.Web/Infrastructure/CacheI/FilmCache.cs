@@ -23,7 +23,7 @@ namespace MovieNight.Web.Infrastructure.CacheI
         {
             var cacheItemPolicy = new CacheItemPolicy
             {
-                AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(30) // Кэш будет действителен 30 минут
+                AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(30) 
             };
             _cache.Set($"Page_{pageNumber}", movies, cacheItemPolicy);
         }

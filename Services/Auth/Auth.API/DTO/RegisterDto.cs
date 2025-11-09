@@ -1,3 +1,3 @@
 ﻿namespace Auth.API.DTO;
 
-public record RegisterDto(string Email, string Password, string? DisplayName);
+public sealed record RegisterDto(string Email, string Password, string? DisplayName, bool TermsAccepted);
