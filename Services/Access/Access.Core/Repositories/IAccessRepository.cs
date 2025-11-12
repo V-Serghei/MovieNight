@@ -14,4 +14,5 @@ public interface IAccessRepository
     Task LinkRolePolicyAsync(Guid roleId, Guid policyId, CancellationToken ct);
     Task LinkUserRoleAsync(Guid userId, Guid roleId, CancellationToken ct);
     Task SaveChangesAsync(CancellationToken ct);
+    Task<IReadOnlyList<Role>> GetRolesForUserAsync(Guid userId, CancellationToken ct = default);
 }

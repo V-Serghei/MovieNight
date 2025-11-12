@@ -22,27 +22,42 @@ public static class AuthEndpoints
 
         return routes;
 
-        async Task<IResult> Login(HttpContext http, [FromBody] LoginDto dto, UsersClient users, IRefreshTokensRepository rtRepo, JwtTokenService jwt, CancellationToken ct)
+        async Task<IResult> Login(HttpContext http, [FromBody] LoginDto dto,
+            UsersClient users, AccessClient access, IRefreshTokensRepository rtRepo,
+            JwtTokenService jwt, CancellationToken ct)
         {
             var verify = await users.VerifyAsync(dto.Email, dto.Password, ct);
             if (!verify.ok || verify.user is null) return Results.Unauthorized();
 
-            var user = verify.user;
-            var (access, accessExp) = jwt.CreateAccessToken(user.Id, user.Email, user.Role ?? "user", TimeSpan.FromMinutes(30));
-            http.Response.Cookies.Append("access_token", access, AccessCookie(accessExp, secureCookies));
+            var u = verify.user;
 
-            var rawRefresh  = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
-            var refreshHash = HashToken.HashTokenEncoding(rawRefresh);
-            var refreshExp  = DateTimeOffset.UtcNow.AddDays(dto.RememberMe ? 30 : 14);
+            var role = await access.GetPrimaryRoleAsync(u.Id, ct) ?? "user";
 
-            await rtRepo.AddAsync(new RefreshToken { UserId = user.Id, Token = refreshHash, ExpiresAt = refreshExp }, ct);
-            await rtRepo.SaveChangesAsync(ct);
+            var (accessToken, accessExp) = jwt.CreateAccessToken(u.Id, u.Email, role, u.DisplayName, TimeSpan.FromMinutes(30));
 
-            http.Response.Cookies.Append("refresh_token", rawRefresh, RefreshCookie(refreshExp, secureCookies));
-            return Results.Ok(new { user });
+            if (dto.RememberMe)
+            {
+                http.Response.Cookies.Append("access_token", accessToken, PersistCookie(accessExp, secureCookies));
+
+                var rawRefresh  = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+                var refreshHash = HashToken.HashTokenEncoding(rawRefresh);
+                var refreshExp  = DateTimeOffset.UtcNow.AddDays(30);
+
+                await rtRepo.AddAsync(new RefreshToken { UserId = u.Id, Token = refreshHash, ExpiresAt = refreshExp }, ct);
+                await rtRepo.SaveChangesAsync(ct);
+
+                http.Response.Cookies.Append("refresh_token", rawRefresh, PersistCookie(refreshExp, secureCookies));
+            }
+            else
+            {
+                http.Response.Cookies.Append("access_token", accessToken, SessionCookie(secureCookies));
+            }
+
+            return Results.Ok(new { user = new { u.Id, u.Email, u.DisplayName, role } });
         }
 
-        async Task<IResult> Refresh(HttpContext http, JwtTokenService jwt, IRefreshTokensRepository rtRepo, UsersClient users, CancellationToken ct)
+        async Task<IResult> Refresh(HttpContext http, JwtTokenService jwt,
+            IRefreshTokensRepository rtRepo, UsersClient users, AccessClient access, CancellationToken ct)
         {
             var raw = http.Request.Cookies["refresh_token"];
             if (string.IsNullOrEmpty(raw)) return Results.Unauthorized();
@@ -52,22 +67,34 @@ public static class AuthEndpoints
             if (rt is null || rt.Revoked || rt.ExpiresAt <= DateTimeOffset.UtcNow)
                 return Results.Unauthorized();
 
-            var user = await users.GetUser(rt.UserId, ct);
-            if (user is null || !user.IsActive) return Results.Unauthorized();
+            var u = await users.GetUser(rt.UserId, ct);
+            if (u is null || !u.IsActive) return Results.Unauthorized();
 
             await rtRepo.RevokeAsync(rt.Id, ct); // rotate
 
             var newRaw  = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
             var newHash = HashToken.HashTokenEncoding(newRaw);
-            var newExp  = DateTimeOffset.UtcNow.AddDays(14);
-            await rtRepo.AddAsync(new RefreshToken { UserId = user.Id, Token = newHash, ExpiresAt = newExp }, ct);
+            var newExp  = DateTimeOffset.UtcNow.AddDays(30);
+            await rtRepo.AddAsync(new RefreshToken { UserId = u.Id, Token = newHash, ExpiresAt = newExp }, ct);
             await rtRepo.SaveChangesAsync(ct);
 
-            var (access, accessExp) = jwt.CreateAccessToken(user.Id, user.Email!, user.Role ?? "user", TimeSpan.FromMinutes(30));
-            http.Response.Cookies.Append("access_token", access,  AccessCookie(accessExp, secureCookies));
-            http.Response.Cookies.Append("refresh_token", newRaw, RefreshCookie(newExp,   secureCookies));
+            var role = await access.GetPrimaryRoleAsync(u.Id, ct) ?? "user";
+            var (accessToken, accessExp) = jwt.CreateAccessToken(u.Id, u.Email!, role, u.DisplayName, TimeSpan.FromMinutes(30));
+
+            http.Response.Cookies.Append("access_token", accessToken, PersistCookie(accessExp, secureCookies));
+            http.Response.Cookies.Append("refresh_token", newRaw,   PersistCookie(newExp,   secureCookies));
             return Results.NoContent();
         }
+
+        IResult Me(ClaimsPrincipal principal)
+        {
+            var id    = principal.FindFirstValue(ClaimTypes.NameIdentifier) ?? principal.FindFirstValue("sub");
+            var email = principal.FindFirstValue(ClaimTypes.Email);
+            var role  = principal.FindFirstValue(ClaimTypes.Role) ?? "user";
+            var name  = principal.FindFirstValue(ClaimTypes.Name) ?? email;
+            return Results.Ok(new { user = new { id, email, role, name } });
+        }
+
 
         async Task<IResult> Logout(HttpContext http, IRefreshTokensRepository rtRepo, CancellationToken ct)
         {
@@ -84,17 +111,13 @@ public static class AuthEndpoints
             return Results.NoContent();
         }
 
-        IResult Me(ClaimsPrincipal principal)
-        {
-            var id    = principal.FindFirstValue(ClaimTypes.NameIdentifier) ?? principal.FindFirstValue("sub");
-            var email = principal.FindFirstValue(ClaimTypes.Email);
-            var role  = principal.FindFirstValue(ClaimTypes.Role) ?? "user";
-            return Results.Ok(new { user = new { id, email, role } });
-        }
+        static CookieOptions SessionCookie(bool secure) => new()
+            { HttpOnly = true, SameSite = SameSiteMode.Lax, Secure = secure, Path = "/" }; 
 
-        static CookieOptions AccessCookie(DateTimeOffset exp, bool secure) => new()
-        { HttpOnly = true, SameSite = SameSiteMode.Lax, Secure = secure, Expires = exp.UtcDateTime, Path = "/" };
-        static CookieOptions RefreshCookie(DateTimeOffset exp, bool secure) => new()
-        { HttpOnly = true, SameSite = SameSiteMode.Lax, Secure = secure, Expires = exp.UtcDateTime, Path = "/" };
+        static CookieOptions PersistCookie(DateTimeOffset exp, bool secure) => new()
+            { HttpOnly = true, SameSite = SameSiteMode.Lax, Secure = secure, Expires = exp.UtcDateTime, Path = "/" };
+
+
+       
     }
 }

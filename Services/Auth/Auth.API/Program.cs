@@ -1,6 +1,7 @@
 using Auth.API.Endpoints;
 using Auth.Core.Security;
 using Auth.Infrastructure;
+using Auth.Infrastructure.Clients;
 using Auth.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,10 @@ builder.Services.AddTokensInfrastructure(builder.Configuration);
 
 var jwt = new JwtTokenService(builder.Configuration);
 builder.Services.AddSingleton(jwt);
-
+builder.Services.AddHttpClient<AccessClient>(c =>
+{
+    c.BaseAddress = new Uri(builder.Configuration["Gateway:BaseUrl"]!);
+});
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(o =>

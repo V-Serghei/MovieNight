@@ -81,3 +81,6 @@ Desktop.ini
 
 # Local tools
 .localtoolsettings.json
+
+# Image files
+avatars/

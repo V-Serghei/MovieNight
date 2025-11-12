@@ -6,13 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Auth.Core.Security;
 
-
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-
 public sealed class JwtTokenService
 {
     private readonly string _issuer;
@@ -25,41 +18,75 @@ public sealed class JwtTokenService
         _audience = cfg["AUTH_JWT_AUDIENCE"] ?? "MovieNight.Client";
         var secret = cfg["AUTH_JWT_SECRET"]  ?? "dev-super-secret-change-me-but-32+bytes";
 
-        byte[] keyBytes;
         const string b64Prefix = "base64:";
-        keyBytes = secret.StartsWith(b64Prefix, StringComparison.OrdinalIgnoreCase)
+        var keyBytes = secret.StartsWith(b64Prefix, StringComparison.OrdinalIgnoreCase)
             ? Convert.FromBase64String(secret[b64Prefix.Length..])
             : Encoding.UTF8.GetBytes(secret);
-        if (keyBytes.Length < 32) throw new InvalidOperationException("AUTH_JWT_SECRET must be >= 32 bytes");
+
+        if (keyBytes.Length < 32)
+            throw new InvalidOperationException("AUTH_JWT_SECRET must be >= 32 bytes");
+
         _key = new SymmetricSecurityKey(keyBytes);
     }
 
-    public (string token, DateTimeOffset exp) CreateAccessToken(Guid userId, string email, string role, TimeSpan? lifetime = null)
+    public (string token, DateTimeOffset exp) CreateAccessToken(
+        Guid userId,
+        string email,
+        string role,
+        string? displayName = null,
+        TimeSpan? lifetime = null,
+        IEnumerable<Claim>? extraClaims = null)
     {
         var now = DateTimeOffset.UtcNow;
         var exp = now.Add(lifetime ?? TimeSpan.FromMinutes(30));
         var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
+
+        var claims = new List<Claim>
+        {
+            new(JwtRegisteredClaimNames.Sub, userId.ToString()),
+            new(ClaimTypes.NameIdentifier,   userId.ToString()),
+
+            new(JwtRegisteredClaimNames.Email, email),
+            new(ClaimTypes.Email,              email),
+
+            new(ClaimTypes.Role, role),
+            new(ClaimTypes.Name, displayName ?? email),
+
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new(JwtRegisteredClaimNames.Iat, now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+        };
+
+        if (extraClaims is not null)
+            claims.AddRange(extraClaims);
+
         var jwt = new JwtSecurityToken(
             issuer: _issuer,
             audience: _audience,
-            claims: new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, email),
-                new Claim(ClaimTypes.Role, role)
-            },
+            claims: claims,
             notBefore: now.UtcDateTime,
             expires: exp.UtcDateTime,
-            signingCredentials: creds);
+            signingCredentials: creds
+        );
+
         var token = new JwtSecurityTokenHandler().WriteToken(jwt);
         return (token, exp);
     }
 
     public TokenValidationParameters GetValidationParameters() => new()
     {
-        ValidateIssuer = true, ValidIssuer = _issuer,
-        ValidateAudience = true, ValidAudience = _audience,
-        ValidateIssuerSigningKey = true, IssuerSigningKey = _key,
-        ValidateLifetime = true, ClockSkew = TimeSpan.FromSeconds(30)
+        ValidateIssuer = true,
+        ValidIssuer = _issuer,
+
+        ValidateAudience = true,
+        ValidAudience = _audience,
+
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = _key,
+
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.FromSeconds(30),
+
+        NameClaimType = ClaimTypes.Name,
+        RoleClaimType = ClaimTypes.Role
     };
 }
