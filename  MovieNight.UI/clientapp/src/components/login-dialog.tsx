@@ -1,66 +1,78 @@
-﻿"use client"
+﻿"use client";
 
-import type React from "react"
-
-import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useAuth } from "@/lib/auth-context"
-import { useToast } from "@/hooks/use-toast"
+import type React from "react";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/lib/auth-context";
+import { useToast } from "@/hooks/use-toast";
 
 interface LoginDialogProps {
-    open: boolean
-    onOpenChange: (open: boolean) => void
-    onOpenRegister?: () => void
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    onOpenRegister?: () => void;
 }
 
 export function LoginDialog({ open, onOpenChange, onOpenRegister }: LoginDialogProps) {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const { login } = useAuth()
-    const { toast } = useToast()
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [rememberMe, setRememberMe] = useState(false);
+    const { setUserFromMe } = useAuth();
+    const { toast } = useToast();
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!email || !password) {
-            toast({ title: "Missing fields", description: "Please enter both email and password.", variant: "destructive" })
-            return
+            toast({
+                title: "Missing fields",
+                description: "Please enter both email and password.",
+                variant: "destructive",
+            });
+            return;
         }
 
         try {
             const res = await fetch(`/api/gw/auth/login`, {
                 method: "POST",
                 headers: { "content-type": "application/json" },
-                body: JSON.stringify({ email, password }),
-            })
+                credentials: "include",
+                body: JSON.stringify({ email, password, rememberMe }),
+            });
 
-            const text = await res.text()
+            const text = await res.text();
             if (!res.ok) {
-                toast({ title: "Login failed", description: text || `HTTP ${res.status}`, variant: "destructive" })
-                return
+                toast({
+                    title: "Login failed",
+                    description: text || `HTTP ${res.status}`,
+                    variant: "destructive",
+                });
+                return;
             }
-            const data = JSON.parse(text) // { user:{id,email,displayName}, token?, exp? }
 
-            login({ id: data.user.id, name: data.user.displayName ?? data.user.email, email: data.user.email })
+            await setUserFromMe();
 
-            toast({ title: "Welcome back!", description: "You have successfully logged in." })
-            onOpenChange(false)
-            setEmail("")
-            setPassword("")
+            toast({ title: "Welcome back!", description: "You have successfully logged in." });
+            onOpenChange(false);
+            setEmail("");
+            setPassword("");
         } catch (err: any) {
-            toast({ title: "Network error", description: err?.message ?? String(err), variant: "destructive" })
+            toast({
+                title: "Network error",
+                description: err?.message ?? String(err),
+                variant: "destructive",
+            });
         }
-    }
+    };
 
     const openRegister = () => {
         if (onOpenRegister) {
-            onOpenChange(false)
-            onOpenRegister()
+            onOpenChange(false);
+            onOpenRegister();
         }
-    }
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -91,6 +103,17 @@ export function LoginDialog({ open, onOpenChange, onOpenRegister }: LoginDialogP
                             required
                         />
                     </div>
+                    <div>
+                        <label className="inline-flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                className="form-checkbox"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
+                            />
+                            <span className="text-sm">Remember me</span>
+                        </label>
+                    </div>
 
                     <Button type="submit" className="w-full">
                         Log in
@@ -99,11 +122,7 @@ export function LoginDialog({ open, onOpenChange, onOpenRegister }: LoginDialogP
                     {onOpenRegister && (
                         <div className="text-sm text-center text-muted-foreground">
                             Don&apos;t have an account?{" "}
-                            <button
-                                type="button"
-                                onClick={openRegister}
-                                className="text-primary hover:underline"
-                            >
+                            <button type="button" onClick={openRegister} className="text-primary hover:underline">
                                 Create account
                             </button>
                         </div>
@@ -111,5 +130,5 @@ export function LoginDialog({ open, onOpenChange, onOpenRegister }: LoginDialogP
                 </form>
             </DialogContent>
         </Dialog>
-    )
+    );
 }

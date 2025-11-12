@@ -39,15 +39,52 @@ public static class AuthProxyEndpoints
     }
 
     // Users.Service
-    private static async Task RegisterProxy(HttpContext ctx, [FromBody] RegisterRequest body, IHttpClientFactory http, CancellationToken ct)
+    private static async Task RegisterProxy(
+        HttpContext ctx,
+        [FromBody] RegisterRequest body,
+        IHttpClientFactory http,
+        IConfiguration cfg,
+        CancellationToken ct)
     {
-        var client = http.CreateClient("users");
-        using var msg = new HttpRequestMessage(HttpMethod.Post, "/users/register")
+        var users = http.CreateClient("users");
+        using var regMsg = new HttpRequestMessage(HttpMethod.Post, "/users/register")
         {
             Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json")
         };
-        using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
-        await ProxyCopyResponse(ctx, resp, ct);
+
+        using var regResp = await users.SendAsync(regMsg, HttpCompletionOption.ResponseHeadersRead, ct);
+        var regJson = await regResp.Content.ReadAsStringAsync(ct);
+
+        if (!regResp.IsSuccessStatusCode)
+        {
+            ctx.Response.StatusCode = (int)regResp.StatusCode;
+            ctx.Response.ContentType = regResp.Content.Headers.ContentType?.ToString() ?? "application/json";
+            await ctx.Response.WriteAsync(regJson, ct);
+            return;
+        }
+
+        Guid userId;
+        try
+        {
+            using var doc = JsonDocument.Parse(regJson);
+            userId = doc.RootElement.GetProperty("id").GetGuid();
+        }
+        catch
+        {
+            ctx.Response.StatusCode = 201;
+            ctx.Response.ContentType = "application/json";
+            await ctx.Response.WriteAsync(regJson, ct);
+            return;
+        }
+
+        var access = http.CreateClient("access");
+        var roleId = Guid.Parse(cfg["Access:DefaultUserRoleId"]!);
+        using var linkMsg = new HttpRequestMessage(HttpMethod.Post, $"/access/users/{userId}/link-role/{roleId}");
+        using var linkResp = await access.SendAsync(linkMsg, ct);
+
+        ctx.Response.StatusCode = 201;
+        ctx.Response.ContentType = "application/json";
+        await ctx.Response.WriteAsync(regJson, ct);
     }
 
     // Tokens.Service
@@ -73,7 +110,6 @@ public static class AuthProxyEndpoints
     {
         var client = http.CreateClient("auth");
         using var msg = new HttpRequestMessage(HttpMethod.Get, "/auth/me");
-        // Передаём Authorization (если есть) и/или cookie
         CopyAuthOrCookie(ctx, msg);
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
         await ProxyCopyResponse(ctx, resp, ct);

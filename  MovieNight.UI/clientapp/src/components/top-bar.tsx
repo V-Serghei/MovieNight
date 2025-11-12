@@ -1,35 +1,49 @@
-﻿"use client"
+﻿"use client";
 
-import type React from "react"
-
-import { useState } from "react"
-import Link from "next/link"
-import { Menu, Search, Bookmark, LogIn, User, LogOut, Film, Bug } from "lucide-react" // + Bug
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { SideNav } from "@/components/side-nav"
-import { useAuth } from "@/lib/auth-context"
-import { LoginDialog } from "@/components/login-dialog"
-import { useRouter } from "next/navigation"
-import {RegisterDialog} from "@/components/register-dialog";
+import type React from "react";
+import { useState } from "react";
+import Link from "next/link";
+import {
+    Menu,
+    Search,
+    Bookmark,
+    LogIn,
+    User as UserIcon,
+    LogOut,
+    Film,
+    Bug,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { SideNav } from "@/components/side-nav";
+import { useAuth } from "@/lib/auth-context";
+import { LoginDialog } from "@/components/login-dialog";
+import { RegisterDialog } from "@/components/register-dialog";
+import { useRouter } from "next/navigation";
 
 export function TopBar() {
-    const [searchQuery, setSearchQuery] = useState("")
-    const [loginOpen, setLoginOpen] = useState(false)
-    const [registerOpen, setRegisterOpen] = useState(false)
-    const { user, logout } = useAuth()
-    const router = useRouter()
+    const [searchQuery, setSearchQuery] = useState("");
+    const [loginOpen, setLoginOpen] = useState(false);
+    const [registerOpen, setRegisterOpen] = useState(false);
+    const { user, isLoading, logout } = useAuth();
+    const router = useRouter();
 
     const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
         if (searchQuery.trim()) {
-            console.log("[v0] Searching for:", searchQuery)
-            // TODO: navigate to search
+            // TODO: navigate to search page with query param
+            // router.push(`/search?q=${encodeURIComponent(searchQuery)}`)
+            console.log("[MovieNight] Search:", searchQuery);
         }
-    }
+    };
 
     return (
         <>
@@ -51,7 +65,9 @@ export function TopBar() {
 
                         <Link href="/" className="flex items-center gap-2 shrink-0">
                             <Film className="h-6 w-6 text-primary" />
-                            <span className="font-serif font-bold text-xl hidden sm:inline">Movie Night</span>
+                            <span className="font-serif font-bold text-xl hidden sm:inline">
+                Movie Night
+              </span>
                         </Link>
                     </div>
 
@@ -71,35 +87,53 @@ export function TopBar() {
 
                     {/* Right: Debug, Bookmarks and Auth */}
                     <div className="flex items-center gap-2 shrink-0">
-                        {/* NEW: Debug button */}
-                        <Button variant="ghost" size="sm" asChild className="gap-2 hover:text-primary">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            asChild
+                            className="gap-2 hover:text-primary"
+                        >
                             <Link href="/debug/ping" title="Open Gateway debug page">
                                 <Bug className="h-4 w-4" />
                                 <span className="hidden sm:inline">Debug</span>
                             </Link>
                         </Button>
 
-                        <Button variant="ghost" size="icon" asChild className="hover:text-primary">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            asChild
+                            className="hover:text-primary"
+                        >
                             <Link href="/bookmarks">
                                 <Bookmark className="h-5 w-5" />
                                 <span className="sr-only">Bookmarks</span>
                             </Link>
                         </Button>
 
-                        {user ? (
+                        {/* Auth area */}
+                        {isLoading ? (
+                            <div className="h-8 w-[120px] flex items-center gap-2">
+                                <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
+                                <div className="hidden sm:block h-4 w-16 rounded bg-muted animate-pulse" />
+                            </div>
+                        ) : user ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="rounded-full">
+                                    <Button variant="ghost" className="gap-2 pr-3">
                                         <Avatar className="h-8 w-8">
                                             <AvatarFallback className="bg-primary text-primary-foreground">
-                                                {user.name.charAt(0)}
+                                                {user.name?.charAt(0)?.toUpperCase()}
                                             </AvatarFallback>
                                         </Avatar>
+                                        <span className="hidden sm:block max-w-[140px] truncate text-sm font-medium">
+                      {user.name}
+                    </span>
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-48">
+                                <DropdownMenuContent align="end" className="w-56">
                                     <DropdownMenuItem onClick={() => router.push("/profile")}>
-                                        <User className="mr-2 h-4 w-4" />
+                                        <UserIcon className="mr-2 h-4 w-4" />
                                         Profile
                                     </DropdownMenuItem>
                                     <DropdownMenuItem onClick={logout}>
@@ -109,7 +143,12 @@ export function TopBar() {
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         ) : (
-                            <Button variant="default" size="sm" onClick={() => setLoginOpen(true)} className="gap-2">
+                            <Button
+                                variant="default"
+                                size="sm"
+                                onClick={() => setLoginOpen(true)}
+                                className="gap-2"
+                            >
                                 <LogIn className="h-4 w-4" />
                                 <span className="hidden sm:inline">Log in</span>
                             </Button>
@@ -129,7 +168,6 @@ export function TopBar() {
                 onOpenChange={setRegisterOpen}
                 onOpenLogin={() => setLoginOpen(true)}
             />
-            
         </>
-    )
+    );
 }

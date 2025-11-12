@@ -1,31 +1,37 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Access.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using MovieNight.Gateway.Endpoints;
+using MovieNight.Gateway.Infrastructure;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-
+builder.Services.AddHttpClient();
 // === HTTP clients ===
-builder.Services.AddHttpClient<AccessClientHttp>(c =>
+builder.Services.AddHttpClient("users", (sp, c) =>
 {
-    c.BaseAddress = new Uri(builder.Configuration["Services:Access"] ?? "http://localhost:7003");
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var url = cfg["Services:Users"] ?? throw new InvalidOperationException("Services:users not configured");
+    c.BaseAddress = new Uri(url, UriKind.Absolute);
 });
-builder.Services.AddHttpClient("auth", c =>
+
+builder.Services.AddHttpClient("auth", (sp, c) =>
 {
-    // Tokens.Service (login/refresh/logout/me)
-    c.BaseAddress = new Uri(builder.Configuration["Services:Auth"] ?? "http://localhost:7010");
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var url = cfg["Services:Auth"] ?? throw new InvalidOperationException("Services:auth not configured");
+    c.BaseAddress = new Uri(url, UriKind.Absolute);
 });
-builder.Services.AddHttpClient("users", c =>
+
+builder.Services.AddHttpClient("access", (sp, c) =>
 {
-    // Users.Service (register, get user)
-    c.BaseAddress = new Uri(builder.Configuration["Services:Users"] ?? "http://localhost:7001");
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var url = cfg["Services:Access"] ?? throw new InvalidOperationException("Services:access not configured");
+    c.BaseAddress = new Uri(url, UriKind.Absolute);
 });
 builder.Services.AddHttpClient("movies", c =>
 {
@@ -35,11 +41,12 @@ builder.Services.AddHttpClient("movies", c =>
 
 // === Access Proxy (Proxy pattern + cache) ===
 builder.Services.AddMemoryCache();
-builder.Services.AddScoped<IAccessClient>(sp =>
+builder.Services.AddHttpClient<IAclClient, AclClientHttp>((sp, c) =>
 {
-    var inner = sp.GetRequiredService<AccessClientHttp>();
-    var cache = sp.GetRequiredService<IMemoryCache>();
-    return new AccessClientProxy(inner, cache, TimeSpan.FromSeconds(5));
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var url = cfg["Services:Access"] 
+              ?? throw new InvalidOperationException("Services:Access not configured");
+    c.BaseAddress = new Uri(url, UriKind.Absolute);
 });
 
 var issuer   = builder.Configuration["AUTH_JWT_ISSUER"]   ?? "MovieNight.Auth";
@@ -101,17 +108,24 @@ string[] aclSkipPrefixes =
     "/health", "/debug"
 };
 
-app.Use(async (ctx, next) =>
+app.Use(async (HttpContext ctx, Func<Task> next) =>
 {
+    if (ctx.Request.Path.StartsWithSegments("/_internal"))
+    {
+        await next();
+        return;
+    }
+
     var path = ctx.Request.Path.Value ?? "/";
     if (aclSkipPrefixes.Any(p => path.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
     {
-        await next(); return;
+        await next();
+        return;
     }
 
     var user = ctx.User;
     var idStr = user.FindFirstValue(ClaimTypes.NameIdentifier)
-             ?? user.FindFirstValue(JwtRegisteredClaimNames.Sub);
+                ?? user.FindFirstValue(JwtRegisteredClaimNames.Sub);
 
     if (string.IsNullOrWhiteSpace(idStr) || !Guid.TryParse(idStr, out var userId))
     {
@@ -124,8 +138,8 @@ app.Use(async (ctx, next) =>
     var resource = path;
     var method   = ctx.Request.Method;
 
-    var acl = ctx.RequestServices.GetRequiredService<IAccessClient>();
-    var allowed = await acl.IsAllowedAsync(userId, resource, method, null, null, ctx.RequestAborted);
+    var acl = ctx.RequestServices.GetRequiredService<IAclClient>();
+    var allowed = await acl.IsAllowedAsync(userId, resource, method, ctx.RequestAborted);
 
     if (!allowed)
     {
@@ -140,8 +154,10 @@ app.Use(async (ctx, next) =>
     await next();
 });
 
+app.MapInternalUsersProxy();
+app.MapInternalAccessProxy();
 app.MapAuthProxy();
-
 app.MapMoviesProxy();
+app.MapUsersPublic();
 
 app.Run();

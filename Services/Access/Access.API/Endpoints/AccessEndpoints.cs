@@ -35,7 +35,12 @@ public static class AccessEndpoints
 
         g.MapPost("/roles/{roleId:guid}/link-policy/{policyId:guid}", async (Guid roleId, Guid policyId, IAccessRepository repo, CancellationToken ct) => { await repo.LinkRolePolicyAsync(roleId, policyId, ct); await repo.SaveChangesAsync(ct); return Results.NoContent(); });
         g.MapPost("/users/{userId:guid}/link-role/{roleId:guid}", async (Guid userId, Guid roleId, IAccessRepository repo, CancellationToken ct) => { await repo.LinkUserRoleAsync(userId, roleId, ct); await repo.SaveChangesAsync(ct); return Results.NoContent(); });
-
+        
+        g.MapGet("/users/{userId:guid}/roles", async (Guid userId, IAccessRepository repo, CancellationToken ct) =>
+        {
+            var roles = await repo.GetRolesForUserAsync(userId, ct); // IEnumerable<Role>
+            return Results.Ok(new { roles = roles.Select(r => r.Name).ToArray() });
+        });
         return app;
     }
 }

@@ -23,8 +23,5 @@
       </Content>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Services\Access\Access.Client\Access.Client.csproj" />
-    </ItemGroup>
 
 </Project>

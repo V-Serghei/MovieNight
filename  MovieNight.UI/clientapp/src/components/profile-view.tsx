@@ -1,15 +1,51 @@
-﻿"use client"
+﻿"use client";
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Mail, Calendar, Film } from "lucide-react"
-import { useAuth } from "@/lib/auth-context"
-import { useBookmarks } from "@/lib/bookmarks-context"
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Mail, Calendar, Film } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { useBookmarks } from "@/lib/bookmarks-context";
+
+type PublicProfile = {
+    id: string;
+    email?: string;
+    displayName?: string;
+    createdAt?: string; // ISO
+    avatarUrl?: string | null;
+    roles?: string[];
+};
 
 export function ProfileView() {
-    const { user } = useAuth()
-    const { bookmarks } = useBookmarks()
+    const { user } = useAuth();
+    const { bookmarks } = useBookmarks();
+    const [profile, setProfile] = useState<PublicProfile | null>(null);
+
+    useEffect(() => {
+        let cancelled = false;
+        const run = async () => {
+            if (!user) {
+                setProfile(null);
+                return;
+            }
+            try {
+                const res = await fetch("/api/gw/users/me", { credentials: "include" });
+                if (!res.ok) {
+                    setProfile(null);
+                    return;
+                }
+                const data = (await res.json()) as PublicProfile;
+                if (!cancelled) setProfile(data);
+            } catch {
+                if (!cancelled) setProfile(null);
+            }
+        };
+        run();
+        return () => {
+            cancelled = true;
+        };
+    }, [user]);
 
     if (!user) {
         return (
@@ -18,8 +54,15 @@ export function ProfileView() {
                     <p className="text-muted-foreground">Please log in to view your profile</p>
                 </CardContent>
             </Card>
-        )
+        );
     }
+
+    const displayName = profile?.displayName ?? user.name;
+    const email = profile?.email ?? user.email;
+    const createdAt = profile?.createdAt ? new Date(profile.createdAt) : null;
+    const memberSince = createdAt
+        ? createdAt.toLocaleString(undefined, { month: "long", year: "numeric" })
+        : "—";
 
     return (
         <div className="max-w-3xl mx-auto">
@@ -29,13 +72,13 @@ export function ProfileView() {
                 <CardHeader className="text-center pb-6">
                     <Avatar className="h-24 w-24 mx-auto mb-4">
                         <AvatarFallback className="bg-primary text-primary-foreground text-3xl">
-                            {user.name.charAt(0)}
+                            {displayName?.charAt(0)?.toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
-                    <h2 className="text-2xl font-serif font-bold">{user.name}</h2>
+                    <h2 className="text-2xl font-serif font-bold">{displayName}</h2>
                     <div className="flex items-center justify-center gap-2 text-muted-foreground mt-2">
                         <Mail className="h-4 w-4" />
-                        {user.email}
+                        {email}
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -53,21 +96,24 @@ export function ProfileView() {
                                 <Calendar className="h-5 w-5 text-primary" />
                                 <span className="font-semibold">Member Since</span>
                             </div>
-                            <p className="text-lg font-medium">January 2025</p>
+                            <p className="text-lg font-medium">{memberSince}</p>
                         </div>
                     </div>
 
-                    <div>
-                        <h3 className="font-semibold mb-3">Favorite Genres</h3>
-                        <div className="flex flex-wrap gap-2">
-                            <Badge variant="secondary">Action</Badge>
-                            <Badge variant="secondary">Sci-Fi</Badge>
-                            <Badge variant="secondary">Drama</Badge>
-                            <Badge variant="secondary">Thriller</Badge>
+                    {Array.isArray(profile?.roles) && profile!.roles!.length > 0 && (
+                        <div>
+                            <h3 className="font-semibold mb-3">Roles</h3>
+                            <div className="flex flex-wrap gap-2">
+                                {profile!.roles!.map((r) => (
+                                    <Badge key={r} variant="secondary">
+                                        {r}
+                                    </Badge>
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </CardContent>
             </Card>
         </div>
-    )
+    );
 }

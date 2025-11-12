@@ -22,8 +22,10 @@ public static class DependencyInjection
 
         services.AddHttpClient<UsersClient>(c =>
         {
-            var baseUrl = cfg["UsersService:BaseUrl"] ?? "http://localhost:7001";
+            var baseUrl = cfg["Gateway:BaseUrl"] ?? "http://localhost:7000";
             c.BaseAddress = new Uri(baseUrl);
+            var secret = cfg["Gateway:InternalSecret"] ?? "dev-internal-secret";
+            c.DefaultRequestHeaders.Add("X-Internal-Secret", secret);
         });
 
         return services;

@@ -1,74 +1,107 @@
-﻿"use client"
+﻿"use client";
 
-import type React from "react"
-
-import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useAuth } from "@/lib/auth-context"
-import { useToast } from "@/hooks/use-toast"
+import type React from "react";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/lib/auth-context";
+import { useToast } from "@/hooks/use-toast";
 
 interface RegisterDialogProps {
-    open: boolean
-    onOpenChange: (open: boolean) => void
-    onOpenLogin?: () => void
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    onOpenLogin?: () => void;
 }
 
 export function RegisterDialog({ open, onOpenChange, onOpenLogin }: RegisterDialogProps) {
-    const [email, setEmail] = useState("")
-    const [displayName, setDisplayName] = useState("")
-    const [password, setPassword] = useState("")
-    const [confirm, setConfirm] = useState("")
-    const { login } = useAuth()
-    const { toast } = useToast()
+    const [email, setEmail] = useState("");
+    const [displayName, setDisplayName] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirm, setConfirm] = useState("");
+    const { setUserFromMe } = useAuth();
+    const { toast } = useToast();
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!email || !password) {
-            toast({ title: "Missing fields", description: "Email and password are required.", variant: "destructive" })
-            return
+            toast({
+                title: "Missing fields",
+                description: "Email and password are required.",
+                variant: "destructive",
+            });
+            return;
         }
         if (password !== confirm) {
-            toast({ title: "Passwords mismatch", description: "Please confirm your password.", variant: "destructive" })
-            return
+            toast({
+                title: "Passwords mismatch",
+                description: "Please confirm your password.",
+                variant: "destructive",
+            });
+            return;
         }
 
         try {
+            // 1) create account
             const res = await fetch(`/api/gw/auth/register`, {
                 method: "POST",
                 headers: { "content-type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify({ email, password, displayName: displayName || null }),
-            })
+            });
 
-            const text = await res.text()
+            const text = await res.text();
             if (!res.ok) {
-                toast({ title: "Registration failed", description: text || `HTTP ${res.status}`, variant: "destructive" })
-                return
+                toast({
+                    title: "Registration failed",
+                    description: text || `HTTP ${res.status}`,
+                    variant: "destructive",
+                });
+                return;
             }
-            const data = JSON.parse(text) // { user:{id,email,displayName}, token?, exp? }
 
-            login({ id: data.user.id, name: data.user.displayName ?? data.user.email, email: data.user.email })
+            // 2) auto-login to establish cookie
+            const log = await fetch(`/api/gw/auth/login`, {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ email, password }),
+            });
+            if (!log.ok) {
+                toast({
+                    title: "Auto-login failed",
+                    description: await log.text(),
+                    variant: "destructive",
+                });
+                return;
+            }
 
-            toast({ title: "Welcome!", description: "Your account has been created." })
-            onOpenChange(false)
-            setEmail("")
-            setPassword("")
-            setConfirm("")
-            setDisplayName("")
+            // 3) load canonical user
+            await setUserFromMe();
+
+            toast({ title: "Welcome!", description: "Your account has been created." });
+            onOpenChange(false);
+            setEmail("");
+            setDisplayName("");
+            setPassword("");
+            setConfirm("");
         } catch (err: any) {
-            toast({ title: "Network error", description: err?.message ?? String(err), variant: "destructive" })
+            toast({
+                title: "Network error",
+                description: err?.message ?? String(err),
+                variant: "destructive",
+            });
         }
-    }
+    };
 
     const openLogin = () => {
         if (onOpenLogin) {
-            onOpenChange(false)
-            onOpenLogin()
+            onOpenChange(false);
+            onOpenLogin();
         }
-    }
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -132,11 +165,7 @@ export function RegisterDialog({ open, onOpenChange, onOpenLogin }: RegisterDial
                     {onOpenLogin && (
                         <div className="text-sm text-center text-muted-foreground">
                             Already have an account?{" "}
-                            <button
-                                type="button"
-                                onClick={openLogin}
-                                className="text-primary hover:underline"
-                            >
+                            <button type="button" onClick={openLogin} className="text-primary hover:underline">
                                 Log in
                             </button>
                         </div>
@@ -144,5 +173,5 @@ export function RegisterDialog({ open, onOpenChange, onOpenLogin }: RegisterDial
                 </form>
             </DialogContent>
         </Dialog>
-    )
+    );
 }

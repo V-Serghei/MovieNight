@@ -13,7 +13,7 @@ public static class AccessSeeder
         if (await db.Roles.AnyAsync()) return;
 
         var admin = new Role { Name = "admin" };
-        var user  = new Role { Name = "user" };
+        var user  = new Role { Id = Guid.Parse("22222222-2222-2222-2222-222222222222"), Name = "user" };
 
         var p1 = new Policy { Resource = "/movies/**", Method = "GET", Effect = Effect.Allow, Description = "Read any movie" };
         var p2 = new Policy { Resource = "/movies/*", Method = "POST", Effect = Effect.Deny, Description = "Users cannot POST movies" };
