@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieNight.Helpers", "Movie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieNight.BusinessLogic", "MovieNight.BusinessLogic\MovieNight.BusinessLogic.csproj", "{2DF2E2DD-23F6-41FA-9E3E-38C9E4FBF263}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieNight.UI", " MovieNight.UI\MovieNight.UI.csproj", "{C11FA649-A0F1-4A55-851E-92354774AD0A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieNight.UI", "MovieNight.UI\MovieNight.UI.csproj", "{C11FA649-A0F1-4A55-851E-92354774AD0A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth.API", "Services\Auth\Auth.API\Auth.API.csproj", "{E40B0669-AAD2-4455-8AAC-5906EF1D9CCE}"
 EndProject
@@ -58,6 +58,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieNight.Gateway", "MovieNight.Gateway\MovieNight.Gateway.csproj", "{E4F78F84-8E23-4C10-B7D5-D2ADC1AA6295}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth.Infrastructure", "Services\Auth\Auth.Infrastructure\Auth.Infrastructure.csproj", "{819BC9B0-D63E-4108-972D-995E3ADC4C4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoviePlayer.Infrastructure", "Services\MoviePlayer\MoviePlayer.Infrastructure\MoviePlayer.Infrastructure.csproj", "{1FDD3379-4622-4CDF-929C-45C0CDD2E62D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Users.API", "Services\User\Users.API\Users.API.csproj", "{08103242-5099-465E-AD39-6E45C43BFCEA}"
 EndProject
@@ -195,6 +197,10 @@ Global
 		{819BC9B0-D63E-4108-972D-995E3ADC4C4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{819BC9B0-D63E-4108-972D-995E3ADC4C4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{819BC9B0-D63E-4108-972D-995E3ADC4C4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FDD3379-4622-4CDF-929C-45C0CDD2E62D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FDD3379-4622-4CDF-929C-45C0CDD2E62D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FDD3379-4622-4CDF-929C-45C0CDD2E62D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FDD3379-4622-4CDF-929C-45C0CDD2E62D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{08103242-5099-465E-AD39-6E45C43BFCEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{08103242-5099-465E-AD39-6E45C43BFCEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08103242-5099-465E-AD39-6E45C43BFCEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
