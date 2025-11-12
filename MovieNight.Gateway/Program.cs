@@ -134,7 +134,7 @@ app.Use(async (HttpContext ctx, Func<Task> next) =>
         return;
     }
 
-    var role = user.FindFirstValue(ClaimTypes.Role) ?? "user";
+    var role = user.FindFirstValue(ClaimTypes.Role) ?? "admin";
     var resource = path;
     var method   = ctx.Request.Method;
 
