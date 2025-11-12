@@ -109,33 +109,33 @@ app.Use(async (ctx, next) =>
         await next(); return;
     }
 
-    var user = ctx.User;
-    var idStr = user.FindFirstValue(ClaimTypes.NameIdentifier)
-             ?? user.FindFirstValue(JwtRegisteredClaimNames.Sub);
+    // var user = ctx.User;
+    // var idStr = user.FindFirstValue(ClaimTypes.NameIdentifier)
+    //          ?? user.FindFirstValue(JwtRegisteredClaimNames.Sub);
 
-    if (string.IsNullOrWhiteSpace(idStr) || !Guid.TryParse(idStr, out var userId))
-    {
-        ctx.Response.StatusCode = 401;
-        await ctx.Response.WriteAsJsonAsync(new { error = "Unauthorized" });
-        return;
-    }
-
-    var role = user.FindFirstValue(ClaimTypes.Role) ?? "user";
-    var resource = path;
-    var method   = ctx.Request.Method;
-
-    var acl = ctx.RequestServices.GetRequiredService<IAccessClient>();
-    var allowed = await acl.IsAllowedAsync(userId, resource, method, null, null, ctx.RequestAborted);
-
-    if (!allowed)
-    {
-        ctx.Response.StatusCode = 403;
-        await ctx.Response.WriteAsJsonAsync(new { error = "Forbidden" });
-        return;
-    }
-
-    ctx.Request.Headers["X-UserId"] = userId.ToString();
-    ctx.Request.Headers["X-UserRole"] = role;
+    // if (string.IsNullOrWhiteSpace(idStr) || !Guid.TryParse(idStr, out var userId))
+    // {
+    //     ctx.Response.StatusCode = 401;
+    //     await ctx.Response.WriteAsJsonAsync(new { error = "Unauthorized" });
+    //     return;
+    // }
+    //
+    // var role = user.FindFirstValue(ClaimTypes.Role) ?? "user";
+    // var resource = path;
+    // var method   = ctx.Request.Method;
+    //
+    // var acl = ctx.RequestServices.GetRequiredService<IAccessClient>();
+    // var allowed = await acl.IsAllowedAsync(userId, resource, method, null, null, ctx.RequestAborted);
+    //
+    // if (!allowed)
+    // {
+    //     ctx.Response.StatusCode = 403;
+    //     await ctx.Response.WriteAsJsonAsync(new { error = "Forbidden" });
+    //     return;
+    // }
+    //
+    // ctx.Request.Headers["X-UserId"] = userId.ToString();
+    // ctx.Request.Headers["X-UserRole"] = role;
 
     await next();
 });

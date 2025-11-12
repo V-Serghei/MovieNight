@@ -14,7 +14,7 @@ public class MoviePlayerDbContextFactory : IDesignTimeDbContextFactory<MoviePlay
             .Build();
 
         var cs = cfg.GetConnectionString("MoviePlayerDb")
-                 ?? "Server=localhost,1433;Database=MNMoviePlayerDB;User Id=sa;Password=HardModNice373;TrustServerCertificate=true;";
+                 ?? "Server=localhost,1433;Database=MoviePlayerDB;User Id=sa;Password=HardModNice373;TrustServerCertificate=true;";
 
         var b = new DbContextOptionsBuilder<MoviePlayerDbContext>()
             .UseSqlServer(cs);

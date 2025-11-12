@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieNight.Helpers", "Movie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieNight.BusinessLogic", "MovieNight.BusinessLogic\MovieNight.BusinessLogic.csproj", "{2DF2E2DD-23F6-41FA-9E3E-38C9E4FBF263}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieNight.UI", " MovieNight.UI\MovieNight.UI.csproj", "{C11FA649-A0F1-4A55-851E-92354774AD0A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieNight.UI", "MovieNight.UI\MovieNight.UI.csproj", "{C11FA649-A0F1-4A55-851E-92354774AD0A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth.API", "Services\Auth\Auth.API\Auth.API.csproj", "{E40B0669-AAD2-4455-8AAC-5906EF1D9CCE}"
 EndProject

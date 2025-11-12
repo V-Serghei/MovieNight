@@ -12,8 +12,8 @@ using MoviePlayer.Infrastructure.Data.Migrations;
 namespace MoviePlayer.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(MoviePlayerDbContext))]
-    [Migration("20251109192346_InitialMovie")]
-    partial class InitialMovie
+    [Migration("20251112201858_InitialMoviePlayer")]
+    partial class InitialMoviePlayer
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,12 +30,6 @@ namespace MoviePlayer.Infrastructure.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Bookmark")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("BookmarkTomeOf")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Budget")
                         .IsRequired()
@@ -60,10 +54,7 @@ namespace MoviePlayer.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Duration")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DurationJ")
+                    b.Property<string>("Duration")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -90,12 +81,8 @@ namespace MoviePlayer.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ProductionYear")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ProductionYearS")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ProductionYear")
+                        .HasColumnType("int");
 
                     b.Property<string>("Quote")
                         .IsRequired()

@@ -4,17 +4,18 @@ import type React from "react"
 
 import { createContext, useContext, useState, useEffect } from "react"
 import type { Movie } from "@/lib/types"
+import {UIMovie} from "@/lib/types/movie/movie";
 
 interface BookmarksContextType {
-    bookmarks: Movie[]
-    addBookmark: (movie: Movie) => void
+    bookmarks: UIMovie[]
+    addBookmark: (movie: UIMovie) => void
     removeBookmark: (id: string) => void
 }
 
 const BookmarksContext = createContext<BookmarksContextType | undefined>(undefined)
 
 export function BookmarksProvider({ children }: { children: React.ReactNode }) {
-    const [bookmarks, setBookmarks] = useState<Movie[]>([])
+    const [bookmarks, setBookmarks] = useState<UIMovie[]>([])
 
     useEffect(() => {
         // Load bookmarks from localStorage on mount
@@ -24,7 +25,7 @@ export function BookmarksProvider({ children }: { children: React.ReactNode }) {
         }
     }, [])
 
-    const addBookmark = (movie: Movie) => {
+    const addBookmark = (movie: UIMovie) => {
         setBookmarks((prev) => {
             const updated = [...prev, movie]
             localStorage.setItem("movie-night-bookmarks", JSON.stringify(updated))

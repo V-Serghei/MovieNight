@@ -5,10 +5,11 @@ import { MovieCard } from "@/components/movie-card"
 import { SortDropdown } from "@/components/sort-dropdown"
 import type { Movie, SortOption } from "@/lib/types"
 import { sortMovies } from "@/lib/utils"
+import {UIMovie} from "@/lib/types/movie/movie";
 
 interface MovieGridProps {
     title: string
-    movies: Movie[]
+    movies: UIMovie[]
 }
 
 export function MovieGrid({ title, movies }: MovieGridProps) {

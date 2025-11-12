@@ -11,13 +11,10 @@ public class Movie
     public string PosterImage { get; set; } = default!;
     public string Quote { get; set; } = default!;
     public string Description { get; set; } = default!;
-    public DateTime ProductionYear { get; set; }
-    public string ProductionYearS { get; set; } = default!;
+    public int ProductionYear { get; set; } = default!;
     public string Country { get; set; } = "Other";
     public string Director { get; set; } = default!;
-    public string DurationJ { get; set; } = default!;
-    [JsonIgnore]
-    public DateTime Duration { get; set; }
+    public string Duration { get; set; }
     public float MovieNightGrade { get; set; }
     public string Certificate { get; set; } = default!;
     public string ProductionCompany { get; set; } = default!;

@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
-using Auth.API.DTO;
 using Microsoft.AspNetCore.Routing;
 using MoviePlayer.Domain.Entities;
 using MoviePlayer.Domain.Repository.Movie;
 using MoviePlayer.API.DTO;
+using MoviePlayer.Domain.Enums;
 
 namespace MoviePlayer.API.Endpoints;
 
@@ -17,6 +17,15 @@ public static class MoviePlayerEndpoints
         {
             var all = await repo.GetAllAsync(ct);
             return Results.Ok(all);
+        });
+        
+        g.MapGet("/by-category/{category}", async (string category, IMovieRepository repo, CancellationToken ct) =>
+        {
+            if (!Enum.TryParse<MovieCategory>(category, ignoreCase: true, out var cat))
+                return Results.BadRequest($"Unknown category: {category}");
+
+            var list = await repo.GetByCategoryAsync(cat, ct);
+            return Results.Ok(list);
         });
         
         g.MapGet("/{id:guid}", async (Guid id, IMovieRepository repo, CancellationToken ct) =>
@@ -41,14 +50,15 @@ public static class MoviePlayerEndpoints
                 Quote = movieDto.Quote,
                 Description = movieDto.Description,
                 ProductionYear = movieDto.ProductionYear,
-                ProductionYearS = movieDto.ProductionYearS,
                 Country = movieDto.Country,
                 Director = movieDto.Director,
                 Duration = movieDto.Duration,
                 Certificate = movieDto.Certificate,
                 ProductionCompany = movieDto.ProductionCompany,
                 Budget = movieDto.Budget,
-                Genre = movieDto.Genre
+                Genre = movieDto.Genre,
+                GrossWorldwide = movieDto.GrossWorldwide,
+                Language = movieDto.Language
             };
             await repo.AddAsync(movie, ct);
             await repo.SaveChangesAsync(ct);
@@ -72,7 +82,7 @@ public static class MoviePlayerEndpoints
             int added = 0;
             foreach (var m in movies)
             {
-                var exists = await repo.FindByInfoAsync(m.Title, m.ProductionYear.Year, m.Director, ct);
+                var exists = await repo.FindByInfoAsync(m.Title, m.ProductionYear, m.Director, ct);
                 if (exists is not null)
                     continue;
 
@@ -86,6 +96,11 @@ public static class MoviePlayerEndpoints
         
         // //Получить только сериалы
         // g.MapGet("/cartoons", async (IMovieRepository movies, CancellationToken ct) =>
+        // {
+        //     var list = await movies.FindByCategotyAsync("cartoons", ct);
+        //     return Results.Ok(list);
+        // });
+        // g.MapGet("/films", async (IMovieRepository movies, CancellationToken ct) =>
         // {
         //     var list = await movies.FindByCategotyAsync("cartoons", ct);
         //     return Results.Ok(list);

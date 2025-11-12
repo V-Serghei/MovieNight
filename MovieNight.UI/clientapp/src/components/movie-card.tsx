@@ -7,9 +7,10 @@ import { Play, Bookmark, BookmarkCheck, Star } from "lucide-react"
 import type { Movie } from "@/lib/types"
 import { useBookmarks } from "@/lib/bookmarks-context"
 import { useToast } from "@/hooks/use-toast"
+import {UIMovie} from "@/lib/types/movie/movie";
 
 interface MovieCardProps {
-    movie: Movie
+    movie: UIMovie
 }
 
 export function MovieCard({ movie }: MovieCardProps) {
@@ -37,7 +38,7 @@ export function MovieCard({ movie }: MovieCardProps) {
         <Card className="overflow-hidden bg-card/50 backdrop-blur border-border hover:border-primary/50 transition-all group">
             <div className="aspect-[2/3] relative overflow-hidden bg-muted">
                 <img
-                    src={movie.poster || "/placeholder.svg"}
+                    src={movie.posterImage || "/placeholder.svg"}
                     alt={movie.title}
                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                 />

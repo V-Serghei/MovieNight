@@ -28,12 +28,6 @@ namespace MoviePlayer.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Bookmark")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("BookmarkTomeOf")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Budget")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -57,10 +51,7 @@ namespace MoviePlayer.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Duration")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DurationJ")
+                    b.Property<string>("Duration")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -87,12 +78,8 @@ namespace MoviePlayer.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ProductionYear")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ProductionYearS")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ProductionYear")
+                        .HasColumnType("int");
 
                     b.Property<string>("Quote")
                         .IsRequired()

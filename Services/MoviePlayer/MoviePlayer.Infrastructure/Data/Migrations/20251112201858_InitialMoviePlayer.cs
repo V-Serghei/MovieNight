@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MoviePlayer.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMovie : Migration
+    public partial class InitialMoviePlayer : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,21 +21,17 @@ namespace MoviePlayer.Infrastructure.Data.Migrations
                     PosterImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quote = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductionYear = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProductionYearS = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductionYear = table.Column<int>(type: "int", nullable: false),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Director = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DurationJ = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Duration = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Duration = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MovieNightGrade = table.Column<float>(type: "real", nullable: false),
                     Certificate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductionCompany = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Budget = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GrossWorldwide = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Bookmark = table.Column<bool>(type: "bit", nullable: false),
-                    BookmarkTomeOf = table.Column<bool>(type: "bit", nullable: false)
+                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
