@@ -93,38 +93,6 @@ public static class MoviePlayerEndpoints
             await repo.SaveChangesAsync(ct);
             return Results.Ok(new { added, total = movies.Count });
         });
-        
-        // //Получить только сериалы
-        // g.MapGet("/cartoons", async (IMovieRepository movies, CancellationToken ct) =>
-        // {
-        //     var list = await movies.FindByCategotyAsync("cartoons", ct);
-        //     return Results.Ok(list);
-        // });
-        // g.MapGet("/films", async (IMovieRepository movies, CancellationToken ct) =>
-        // {
-        //     var list = await movies.FindByCategotyAsync("cartoons", ct);
-        //     return Results.Ok(list);
-        // });
-        // // 🔹 Получить только сериалы
-        // g.MapGet("/series", async (IMovieRepository movies, CancellationToken ct) =>
-        // {
-        //     var list = await movies.GetByCategoryAsync("series", ct);
-        //     return Results.Ok(list);
-        // });
-        //
-        // // 🔹 Получить только аниме
-        // g.MapGet("/anime", async (IMovieRepository movies, CancellationToken ct) =>
-        // {
-        //     var list = await movies.GetByCategoryAsync("anime", ct);
-        //     return Results.Ok(list);
-        // });
-        //
-        // // 🔹 Получить рандомный фильм
-        // g.MapGet("/random", async (IMovieRepository movies, CancellationToken ct) =>
-        // {
-        //     var random = await movies.GetRandomAsync(ct);
-        //     return random is not null ? Results.Ok(random) : Results.NotFound();
-        // });
         return routes;
     }
 }
