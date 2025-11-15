@@ -14,12 +14,13 @@ public static class AccessSeeder
 
         var admin = new Role { Name = "admin" };
         var user  = new Role { Id = Guid.Parse("22222222-2222-2222-2222-222222222222"), Name = "user" };
+        var moderator = new Role { Name = "moderator" };
 
         var p1 = new Policy { Resource = "/movies/**", Method = "GET", Effect = Effect.Allow, Description = "Read any movie" };
         var p2 = new Policy { Resource = "/movies/*", Method = "POST", Effect = Effect.Deny, Description = "Users cannot POST movies" };
         var p3 = new Policy { Resource = "/admin/**", Effect = Effect.Allow, Description = "Admin everything" };
 
-        await db.Roles.AddRangeAsync(admin, user);
+        await db.Roles.AddRangeAsync(admin, user, moderator);
         await db.Policies.AddRangeAsync(p1, p2, p3);
         await db.SaveChangesAsync();
 

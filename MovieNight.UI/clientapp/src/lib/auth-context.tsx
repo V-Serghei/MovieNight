@@ -21,7 +21,6 @@ type AuthContextType = {
     user: AuthUser | null;
     isLoading: boolean;
     setUserFromMe: () => Promise<void>;
-    loginLocal: (user: AuthUser | null) => void;
     logout: () => Promise<void>;
 };
 
@@ -35,6 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
             const res = await fetch("/api/gw/auth/me", {
                 credentials: "include",
+                cache: "no-store",           
             });
             if (!res.ok) {
                 setUser(null);
@@ -64,26 +64,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         })();
     }, [setUserFromMe]);
 
-    const loginLocal = useCallback((u: AuthUser | null) => {
-        setUser(u);
-    }, []);
-
     const logout = useCallback(async () => {
         try {
             await fetch("/api/gw/auth/logout", {
                 method: "POST",
                 credentials: "include",
+                cache: "no-store",
             });
         } catch {
             // ignore
         } finally {
-            setUser(null);
+            setUser(null);                 
         }
     }, []);
 
     const value = useMemo(
-        () => ({ user, isLoading, setUserFromMe, loginLocal, logout }),
-        [user, isLoading, setUserFromMe, loginLocal, logout]
+        () => ({ user, isLoading, setUserFromMe, logout }),
+        [user, isLoading, setUserFromMe, logout]
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
