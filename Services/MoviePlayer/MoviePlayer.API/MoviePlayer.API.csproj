@@ -10,7 +10,6 @@
     <ItemGroup>
         <ProjectReference Include="..\MoviePlayer.Core\MoviePlayer.Core.csproj" />
         <ProjectReference Include="..\MoviePlayer.Infrastructure\MoviePlayer.Infrastructure.csproj" />
-        
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.2.25502.7" />
