@@ -12,6 +12,7 @@ import {
     LogOut,
     Film,
     Bug,
+    ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,12 +29,14 @@ import { useAuth } from "@/lib/auth-context";
 import { LoginDialog } from "@/components/login-dialog";
 import { RegisterDialog } from "@/components/register-dialog";
 import { useRouter } from "next/navigation";
+import { useCurrentProfile } from "@/lib/use-current-profile";
 
 export function TopBar() {
     const [searchQuery, setSearchQuery] = useState("");
     const [loginOpen, setLoginOpen] = useState(false);
     const [registerOpen, setRegisterOpen] = useState(false);
     const { user, isLoading, logout } = useAuth();
+    const { hasAdminAccess } = useCurrentProfile();
     const router = useRouter();
 
     const handleSearch = (e: React.FormEvent) => {
@@ -98,7 +101,32 @@ export function TopBar() {
                                 <span className="hidden sm:inline">Debug</span>
                             </Link>
                         </Button>
+                        {hasAdminAccess && (
+                            <>
+                                {/* Кнопка для больших экранов */}
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="gap-2 hidden sm:inline-flex hover:text-primary"
+                                    onClick={() => router.push("/admin")}
+                                >
+                                    <ShieldCheck className="h-4 w-4" />
+                                    <span>Admin</span>
+                                </Button>
 
+                                {/* Иконка для мобилок */}
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="sm:hidden hover:text-primary"
+                                    onClick={() => router.push("/admin")}
+                                    title="Admin panel"
+                                >
+                                    <ShieldCheck className="h-5 w-5" />
+                                    <span className="sr-only">Admin panel</span>
+                                </Button>
+                            </>
+                        )}
                         <Button
                             variant="ghost"
                             size="icon"

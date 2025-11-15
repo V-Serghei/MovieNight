@@ -17,8 +17,8 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0-rc.2.25502.107">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Scalar.AspNetCore" Version="2.9.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0-rc.2.25502.107" />
@@ -31,7 +31,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Access.Infrastructure\Access.Infrastructure.csproj" />
+      <ProjectReference Include="..\Media.Core\Media.Core.csproj" />
+      <ProjectReference Include="..\Media.Domain\Media.Domain.csproj" />
+      <ProjectReference Include="..\Media.Infrastructure\Media.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
