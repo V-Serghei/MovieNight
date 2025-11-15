@@ -11,4 +11,6 @@ public class User
     public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
     public DateTimeOffset? LastLoginAt { get; set; }
     public bool IsActive { get; set; } = true;
+
+    public UserProfile? Profile { get; set; }
 }

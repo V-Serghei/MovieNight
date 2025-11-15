@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Users.Core.Entities;
 using Users.Core.Repositories;
 using Users.Infrastructure.Configurations;
 using Users.Infrastructure.Data;
@@ -15,6 +16,7 @@ public static class DependencyInjection
                  ?? "Server=localhost,1433;Database=MN.Users;User Id=sa;Password=zaq1!xsw2@;TrustServerCertificate=true;";
         services.AddDbContext<UsersDbContext>(o => o.UseSqlServer(cs));
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserProfileRepository, UserProfileRepository>();
         return services;
     }
 }
