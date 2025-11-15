@@ -38,9 +38,9 @@ export function MovieCard({ movie }: MovieCardProps) {
         <Card className="overflow-hidden bg-card/50 backdrop-blur border-border hover:border-primary/50 transition-all group">
             <div className="aspect-[2/3] relative overflow-hidden bg-muted">
                 <img
-                    src={movie.posterImage || "/placeholder.svg"}
+                    src={`/api/gw${movie.posterImage}`}
                     alt={movie.title}
-                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover"
                 />
                 <div className="absolute top-2 right-2">
                     <Badge variant="secondary" className="bg-background/80 backdrop-blur">

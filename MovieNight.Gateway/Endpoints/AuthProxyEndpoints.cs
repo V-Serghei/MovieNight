@@ -111,8 +111,22 @@ public static class AuthProxyEndpoints
         var client = http.CreateClient("auth");
         using var msg = new HttpRequestMessage(HttpMethod.Get, "/auth/me");
         CopyAuthOrCookie(ctx, msg);
+
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
-        await ProxyCopyResponse(ctx, resp, ct);
+
+        ctx.Response.StatusCode = (int)resp.StatusCode;
+        foreach (var h in resp.Headers)
+            ctx.Response.Headers[h.Key] = h.Value.ToArray();
+        foreach (var h in resp.Content.Headers)
+            ctx.Response.Headers[h.Key] = h.Value.ToArray();
+
+        ctx.Response.Headers.Remove("transfer-encoding");
+
+        ctx.Response.Headers["Cache-Control"] = "no-store, private";
+        ctx.Response.Headers["Pragma"] = "no-cache";
+        ctx.Response.Headers["Vary"] = "Cookie";
+
+        await resp.Content.CopyToAsync(ctx.Response.Body, ct);
     }
 
     private static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)

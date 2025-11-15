@@ -15,7 +15,7 @@ public static class InternalAccessProxyEndpoints
         g.MapGet("/users/{id:guid}/roles", async ([FromRoute] Guid id, HttpContext ctx, IHttpClientFactory http, CancellationToken ct) =>
         {
             var client = http.CreateClient("access");
-            using var msg = new HttpRequestMessage(HttpMethod.Get, $"/access/users/{id}/roles");
+            using var msg = CommonProxy.BuildOutgoingMessage(ctx, $"/access/users/{id}/roles");
             using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
             await CommonProxy.CopyBack(ctx, resp, ct);
         });

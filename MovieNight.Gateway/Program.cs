@@ -39,6 +39,14 @@ builder.Services.AddHttpClient("movies", c =>
     c.BaseAddress = new Uri(builder.Configuration["Services:Movies"] ?? "http://localhost:7020");
 });
 
+builder.Services.AddHttpClient("media", (sp, c) =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var url = cfg["Services:Media"] ?? throw new InvalidOperationException("Services:media not configured");
+    c.BaseAddress = new Uri(url, UriKind.Absolute);
+});
+
+
 // === Access Proxy (Proxy pattern + cache) ===
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient<IAclClient, AclClientHttp>((sp, c) =>
@@ -94,9 +102,7 @@ if (app.Environment.IsDevelopment())
     }).WithDisplayName("API Docs");
 }
 
-app.MapGet("/health", () => Results.Ok(new { status = "ok" })).WithTags("Infra");
-app.MapGet("/debug/ping", () => "pong").WithTags("Infra");
-app.MapGet("/api/v1", () => "Gateway v1").WithTags("Infra");
+
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -105,7 +111,8 @@ string[] aclSkipPrefixes =
 {
     "/auth",
     "/openapi", "/scalar",
-    "/health", "/debug"
+    "/health", "/debug", "/cinema/films",
+    "/movies/", "/users/me", "/access","/_internal/access", "/_internal", "/media"
 };
 
 app.Use(async (HttpContext ctx, Func<Task> next) =>
@@ -134,7 +141,7 @@ app.Use(async (HttpContext ctx, Func<Task> next) =>
         return;
     }
 
-    var role = user.FindFirstValue(ClaimTypes.Role) ?? "user";
+    var role = user.FindFirstValue(ClaimTypes.Role) ?? "admin";
     var resource = path;
     var method   = ctx.Request.Method;
 
@@ -154,10 +161,15 @@ app.Use(async (HttpContext ctx, Func<Task> next) =>
     await next();
 });
 
+app.MapGet("/health", () => Results.Ok(new { status = "ok" })).WithTags("Infra");
+app.MapGet("/debug/ping", () => "pong").WithTags("Infra");
+app.MapGet("/api/v1", () => "Gateway v1").WithTags("Infra");
+
 app.MapInternalUsersProxy();
 app.MapInternalAccessProxy();
 app.MapAuthProxy();
 app.MapMoviesProxy();
 app.MapUsersPublic();
+app.MapMediaProxy();
 
 app.Run();

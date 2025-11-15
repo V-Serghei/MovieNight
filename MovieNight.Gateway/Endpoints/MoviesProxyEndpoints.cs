@@ -23,7 +23,6 @@ public static class MoviesProxyEndpoints
             .Accepts<SeedMoviesRequest>("application/json")
             .WithOpenApi();
 
-        // (необязательно) алиас под твой старый маршрут /movies/films
         g.MapGet("/films",       FilmsAliasProxy).WithOpenApi();
         g.Map("/{**path}", ProxyAny).WithMetadata(new HttpMethodMetadata(new[] { "GET", "POST", "PUT", "DELETE", "PATCH" }));
 

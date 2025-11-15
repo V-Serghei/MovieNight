@@ -27,6 +27,13 @@ public static class DependencyInjection
             var secret = cfg["Gateway:InternalSecret"] ?? "dev-internal-secret";
             c.DefaultRequestHeaders.Add("X-Internal-Secret", secret);
         });
+        services.AddHttpClient<AccessClient>(c =>
+        {
+            var baseUrl = cfg["Gateway:BaseUrl"] ?? "http://localhost:7000";
+            c.BaseAddress = new Uri(baseUrl);
+            var secret = cfg["Gateway:InternalSecret"] ?? "dev-internal-secret";
+            c.DefaultRequestHeaders.Add("X-Internal-Secret", secret);
+        });
 
         return services;
     }
