@@ -112,7 +112,7 @@ string[] aclSkipPrefixes =
     "/auth",
     "/openapi", "/scalar",
     "/health", "/debug", "/cinema/films",
-    "/movies/", "/users/me", "/access","/_internal/access", "/_internal", "/media"
+    "/movies/","/movies", "/users/me", "/access","/_internal/access", "/_internal", "/media"
 };
 
 app.Use(async (HttpContext ctx, Func<Task> next) =>

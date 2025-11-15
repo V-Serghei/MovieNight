@@ -8,13 +8,14 @@ public record CreateMovieRequest(
     string PosterImage,
     string Quote,
     string Description,
-    DateTime ProductionYear,
-    string ProductionYearS,
+    int ProductionYear,
     string Country,
     string Director,
-    DateTime Duration,
+    string Duration,
     string Certificate,
     string ProductionCompany,
     string Budget,
+    string GrossWorldwide,
+    string Language,
     List<string> Genre
 );

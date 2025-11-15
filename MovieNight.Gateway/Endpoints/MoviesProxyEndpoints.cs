@@ -109,7 +109,6 @@ public static class MoviesProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    // Пасстру на случай нестандартных маршрутов
     private static async Task ProxyAny(
         [FromRoute] string? path,
         HttpContext ctx,
@@ -169,7 +168,6 @@ public static class MoviesProxyEndpoints
                 ctx.Response.Headers[h.Key] = h.Value.ToArray();
         }
 
-        // Kestrel сам управляет transfer-encoding
         ctx.Response.Headers.Remove("transfer-encoding");
 
         if (resp.Content != null)

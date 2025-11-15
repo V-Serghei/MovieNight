@@ -24,32 +24,13 @@ public static class MediaProxyEndpoints
         CancellationToken ct)
     {
         var client = http.CreateClient("media");
-        using var msg = new HttpRequestMessage(HttpMethod.Post, "/media");
 
-        msg.Content = new StreamContent(ctx.Request.Body);
-
-        if (!string.IsNullOrWhiteSpace(ctx.Request.ContentType))
-        {
-            msg.Content.Headers.TryAddWithoutValidation("Content-Type", ctx.Request.ContentType);
-        }
-
-        foreach (var (key, value) in ctx.Request.Headers)
-        {
-            if (key.Equals("Host", StringComparison.OrdinalIgnoreCase) ||
-                key.Equals("Content-Length", StringComparison.OrdinalIgnoreCase))
-                continue;
-
-            if (!msg.Headers.TryAddWithoutValidation(key, value.ToArray()))
-            {
-                msg.Content?.Headers.TryAddWithoutValidation(key, value.ToArray());
-            }
-        }
-
-        CopyAuthOrCookie(ctx, msg);
+        using var msg = CommonProxy.BuildOutgoingMessage(ctx, "/media");
 
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
-        await ProxyCopyResponse(ctx, resp, ct);
+        await CommonProxy.CopyBack(ctx, resp, ct);
     }
+
 
     // GET /media/{id}
     private static async Task DownloadProxy(
