@@ -170,7 +170,6 @@ public static class MoviePlayerEndpoints
 
             return Results.Ok(new { added, total = movies.Count });
         });
-
         return routes;
     }
 
