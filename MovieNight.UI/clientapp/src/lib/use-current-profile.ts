@@ -10,6 +10,28 @@ export type CurrentProfile = {
     createdAt?: string;
     avatarUrl?: string | null;
     roles?: string[];
+
+    userName?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    aboutMe?: string | null;
+    quote?: string | null;
+    phoneNumber?: string | null;
+    gender?: string | null;
+    dateOfBirth?: string | null;
+    country?: string | null;
+
+    facebook?: string | null;
+    twitter?: string | null;
+    instagram?: string | null;
+    gitHub?: string | null;
+
+    personalInfoFriendsOnly?: boolean;
+    showOnlyBasicInfo?: boolean;
+    hideBrowsingHistory?: boolean;
+    hideGrades?: boolean;
+
+    avatarMediaId?: string | null;
 };
 
 export function useCurrentProfile() {
@@ -32,8 +54,9 @@ export function useCurrentProfile() {
             setLoading(true);
 
             try {
-                const res = await fetch("/api/gw/users/me", {
+                const res = await fetch("/api/gw/users/me/profile", {
                     credentials: "include",
+                    cache: "no-store",
                 });
 
                 if (!res.ok) {
@@ -65,9 +88,7 @@ export function useCurrentProfile() {
     }, [user]);
 
     const hasAdminAccess =
-        !!profile?.roles?.some(
-            (r) => r === "admin" || r === "moderator"
-        );
+        !!profile?.roles?.some((r) => r === "admin" || r === "moderator");
 
     return { profile, loading, hasAdminAccess };
 }
