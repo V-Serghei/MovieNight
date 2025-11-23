@@ -17,5 +17,7 @@ public record CreateMovieRequest(
     string Budget,
     string GrossWorldwide,
     string Language,
-    List<string> Genre
+    List<string> Genre,
+    List<MovieCardRequest> Cards,
+    List<MovieFactRequest> Facts
 );

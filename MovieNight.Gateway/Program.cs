@@ -45,6 +45,12 @@ builder.Services.AddHttpClient("media", (sp, c) =>
     var url = cfg["Services:Media"] ?? throw new InvalidOperationException("Services:media not configured");
     c.BaseAddress = new Uri(url, UriKind.Absolute);
 });
+builder.Services.AddHttpClient("people", (sp, c) =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var url = cfg["Services:People"] ?? throw new InvalidOperationException("Services:People not configured");
+    c.BaseAddress = new Uri(url, UriKind.Absolute);
+});
 
 
 // === Access Proxy (Proxy pattern + cache) ===
@@ -112,7 +118,8 @@ string[] aclSkipPrefixes =
     "/auth",
     "/openapi", "/scalar",
     "/health", "/debug", "/cinema/films",
-    "/movies/","/movies", "/users/me", "/access","/_internal/access", "/_internal", "/media"
+    "/movies/","/movies", "/users/me", "/access","/_internal/access", "/_internal", "/media",
+    "/people" ,  "/people/" 
 };
 
 app.Use(async (HttpContext ctx, Func<Task> next) =>
@@ -171,5 +178,6 @@ app.MapAuthProxy();
 app.MapMoviesProxy();
 app.MapUsersPublic();
 app.MapMediaProxy();
+app.MapPeopleProxy();
 
 app.Run();
