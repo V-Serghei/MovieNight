@@ -55,6 +55,11 @@ public static class UserEndpoints
             return user is null ? Results.NotFound() : Results.Ok(UserView.From(user));
         });
 
+        g.MapGet("/", async (IUserRepository repo, CancellationToken ct) =>
+        {
+            var user = await repo.GetAllAsync(ct);
+            return user is null ? Results.NotFound() : Results.Ok(user.Select(u=>UserView.From(u)));
+        });
 
         return app;
     }

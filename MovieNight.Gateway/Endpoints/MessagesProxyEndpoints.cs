@@ -6,7 +6,7 @@ namespace MovieNight.Gateway.Endpoints;
 
 public static class MessagesProxyEndpoints
 {
-    public static IEndpointRouteBuilder MapMessagesProxyEndpoints(this IEndpointRouteBuilder routes)
+    public static IEndpointRouteBuilder MapMessagesProxy(this IEndpointRouteBuilder routes)
     {
         var g = routes.MapGroup("/messages").WithTags("Messages");
 
@@ -31,10 +31,7 @@ public static class MessagesProxyEndpoints
 
         return routes;
     }
-
-    // ===========================
-    // PROXY: GET /
-    // ===========================
+    
     private static async Task ListProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("messages");
@@ -51,10 +48,7 @@ public static class MessagesProxyEndpoints
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
         await ProxyCopyResponse(ctx, resp, ct);
     }
-
-    // ===========================
-    // PROXY: GET /{id}
-    // ===========================
+    
     private static async Task GetByIdProxy(HttpContext ctx, IHttpClientFactory http, Guid id, CancellationToken ct)
     {
         var client = http.CreateClient("messages");
@@ -65,10 +59,7 @@ public static class MessagesProxyEndpoints
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
         await ProxyCopyResponse(ctx, resp, ct);
     }
-
-    // ===========================
-    // PROXY: GET /by-receiver/{receiverId}
-    // ===========================
+    
     private static async Task GetByReceiverIdProxy(HttpContext ctx, IHttpClientFactory http, string receiverId, CancellationToken ct)
     {
         var client = http.CreateClient("messages");
@@ -79,10 +70,7 @@ public static class MessagesProxyEndpoints
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
         await ProxyCopyResponse(ctx, resp, ct);
     }
-
-    // ===========================
-    // PROXY: POST /
-    // ===========================
+    
     private static async Task CreateProxy(HttpContext ctx, IHttpClientFactory http, MessagesRequest messagesRequest, CancellationToken ct)
     {
         var client = http.CreateClient("messages");
@@ -97,10 +85,7 @@ public static class MessagesProxyEndpoints
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
         await ProxyCopyResponse(ctx, resp, ct);
     }
-
-    // ===========================
-    // PROXY ANY (fallback)
-    // ===========================
+    
     private static async Task ProxyAny(HttpContext ctx, IHttpClientFactory http, string path, CancellationToken ct)
     {
         var client = http.CreateClient("messages");
@@ -116,8 +101,7 @@ public static class MessagesProxyEndpoints
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
         await ProxyCopyResponse(ctx, resp, ct);
     }
-
-    // === utils ===
+    
     private static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Authorization", out var auth))

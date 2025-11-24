@@ -1,9 +1,9 @@
-﻿namespace Friends.API.DTO;
+﻿using Friends.Domain.Enums;
 
-public class FriendsDTO
-{
-    public Guid Id { get; set; } = Guid.NewGuid();
-    string IdUser { get; set; }
-    string IdFriend { get; set; }
-    
-}
+namespace Friends.API.DTO;
+
+public record FriendsDTO(
+    string IdUser,
+    string IdFriend, 
+    Friendship KindOfFriendship
+);

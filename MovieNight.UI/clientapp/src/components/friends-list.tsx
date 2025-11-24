@@ -1,31 +1,104 @@
 ﻿"use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Search, UserPlus, Mail, User, UserMinus, Users } from "lucide-react"
-import { mockFriends } from "@/lib/mock-data"
 import { AddFriendsDialog } from "@/components/add-friends-dialog"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
+import { useCurrentProfile } from "@/lib/use-current-profile"
+
+type FriendItem = {
+    id: string
+    name: string
+    email: string
+}
 
 export function FriendsList() {
-    const [friends, setFriends] = useState(mockFriends)
+    const [friends, setFriends] = useState<FriendItem[]>([])
     const [searchQuery, setSearchQuery] = useState("")
     const [addDialogOpen, setAddDialogOpen] = useState(false)
+    const [loading, setLoading] = useState(false)
+
     const router = useRouter()
     const { toast } = useToast()
+    const { profile, loading: profileLoading } = useCurrentProfile()
 
-    const filteredFriends = friends.filter((friend) => friend.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    // грузим друзей текущего пользователя
+    const loadFriends = async (userId: string) => {
+        try {
+            setLoading(true)
+
+            // Gateway → FriendsProxyEndpoints → Friends API: GET /friends/{userId}
+            const res = await fetch(`/api/gw/friends/${userId}`, {
+                credentials: "include",
+            })
+
+            if (res.status === 404) {
+                setFriends([])
+                return
+            }
+
+            if (!res.ok) {
+                throw new Error(`Failed to load friends. Status ${res.status}`)
+            }
+
+            const data = await res.json()
+
+            // маппим ответ API под UI
+            const mapped: FriendItem[] = data.map((f: any) => ({
+                id: f.idFriend ?? f.id ?? "",
+                name: f.friendName ?? f.name ?? f.idFriend ?? "Unknown user",
+                email: f.friendEmail ?? f.email ?? "",
+            }))
+
+            setFriends(mapped)
+        } catch (err) {
+            console.error(err)
+            toast({
+                title: "Error",
+                description: "Failed to load your friends list.",
+                variant: "destructive",
+            })
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    // первый загруз друзей, когда известен текущий пользователь
+    useEffect(() => {
+        if (profile?.id) {
+            loadFriends(profile.id)
+        }
+    }, [profile?.id])
+
+    // после закрытия AddFriendsDialog — перезагрузить друзей
+    useEffect(() => {
+        if (!addDialogOpen && profile?.id) {
+            loadFriends(profile.id)
+        }
+    }, [addDialogOpen, profile?.id])
+
+    const filteredFriends = friends.filter((friend) =>
+        friend.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
 
     const handleRemoveFriend = (id: string, name: string) => {
+        // Сейчас только локально. Когда сделаешь DELETE /friends,
+        // сюда можно будет добавить вызов:
+        // await fetch(`/friends/${id}`, { method: "DELETE", ... })
         setFriends((prev) => prev.filter((f) => f.id !== id))
         toast({
             title: "Friend removed",
             description: `${name} has been removed from your friends list.`,
         })
+    }
+
+    if (profileLoading || loading) {
+        return <p className="text-muted-foreground">Loading friends...</p>
     }
 
     return (
@@ -113,7 +186,16 @@ export function FriendsList() {
                 </div>
             )}
 
-            <AddFriendsDialog open={addDialogOpen} onOpenChange={setAddDialogOpen} />
+            {/* Диалог, в котором уже должны дергаться: 
+                - GET /users  (список пользователей)
+                - POST /friends (добавление в друзья через FriendsProxyEndpoints) */}
+            <AddFriendsDialog
+                open={addDialogOpen}
+                onOpenChange={setAddDialogOpen}
+                friends={friends}            
+                currentUserId={profile?.id}  
+            />
+
         </div>
     )
 }
