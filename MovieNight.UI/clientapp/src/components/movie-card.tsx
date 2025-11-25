@@ -1,46 +1,54 @@
-﻿"use client"
+﻿"use client";
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Play, Bookmark, BookmarkCheck, Star } from "lucide-react"
-import type { Movie } from "@/lib/types"
-import { useBookmarks } from "@/lib/bookmarks-context"
-import { useToast } from "@/hooks/use-toast"
-import {UIMovie} from "@/lib/types/movie/movie";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Play, Bookmark, BookmarkCheck, Star } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useBookmarks } from "@/lib/bookmarks-context";
+import { useToast } from "@/hooks/use-toast";
+import { UIMovie } from "@/lib/types/movie/movie";
 
 interface MovieCardProps {
-    movie: UIMovie
+    movie: UIMovie;
 }
 
 export function MovieCard({ movie }: MovieCardProps) {
-    const { bookmarks, addBookmark, removeBookmark } = useBookmarks()
-    const { toast } = useToast()
-    const isBookmarked = bookmarks.some((b) => b.id === movie.id)
+    const router = useRouter();
+    const { bookmarks, addBookmark, removeBookmark } = useBookmarks();
+    const { toast } = useToast();
+    const isBookmarked = bookmarks.some((b) => b.id === movie.id);
 
     const handleBookmark = () => {
         if (isBookmarked) {
-            removeBookmark(movie.id)
+            removeBookmark(movie.id);
             toast({
                 title: "Removed from bookmarks",
                 description: `${movie.title} has been removed from your bookmarks.`,
-            })
+            });
         } else {
-            addBookmark(movie)
+            addBookmark(movie);
             toast({
                 title: "Added to bookmarks",
                 description: `${movie.title} has been added to your bookmarks.`,
-            })
+            });
         }
-    }
+    };
+
+    const openDetails = () => {
+        router.push(`/cinema/${movie.id}`);
+    };
 
     return (
         <Card className="overflow-hidden bg-card/50 backdrop-blur border-border hover:border-primary/50 transition-all group">
-            <div className="aspect-[2/3] relative overflow-hidden bg-muted">
+            <div
+                className="aspect-[2/3] relative overflow-hidden bg-muted cursor-pointer"
+                onClick={openDetails}
+            >
                 <img
                     src={`/api/gw${movie.posterImage}`}
                     alt={movie.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                 />
                 <div className="absolute top-2 right-2">
                     <Badge variant="secondary" className="bg-background/80 backdrop-blur">
@@ -49,27 +57,48 @@ export function MovieCard({ movie }: MovieCardProps) {
                     </Badge>
                 </div>
             </div>
-            <CardContent className="p-4">
-                <h3 className="font-semibold text-lg text-balance leading-tight mb-1">{movie.title}</h3>
+
+            <CardContent
+                className="p-4 cursor-pointer"
+                onClick={openDetails}
+            >
+                <h3 className="font-semibold text-lg text-balance leading-tight mb-1">
+                    {movie.title}
+                </h3>
                 <p className="text-sm text-muted-foreground">
                     {movie.year} • {movie.duration}
                 </p>
             </CardContent>
+
             <CardFooter className="p-4 pt-0 gap-2">
-                <Button className="flex-1 gap-2" size="sm">
+                <Button
+                    className="flex-1 gap-2"
+                    size="sm"
+                    type="button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        // TODO: тут потом подключишь Player
+                    }}
+                >
                     <Play className="h-4 w-4" />
                     Watch
                 </Button>
                 <Button
                     variant={isBookmarked ? "default" : "outline"}
                     size="icon"
-                    onClick={handleBookmark}
+                    type="button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleBookmark();
+                    }}
                     className={isBookmarked ? "bg-primary text-primary-foreground" : ""}
                 >
                     {isBookmarked ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
-                    <span className="sr-only">{isBookmarked ? "Remove from bookmarks" : "Add to bookmarks"}</span>
+                    <span className="sr-only">
+                        {isBookmarked ? "Remove from bookmarks" : "Add to bookmarks"}
+                    </span>
                 </Button>
             </CardFooter>
         </Card>
-    )
+    );
 }

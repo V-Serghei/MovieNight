@@ -45,6 +45,12 @@ builder.Services.AddHttpClient("media", (sp, c) =>
     var url = cfg["Services:Media"] ?? throw new InvalidOperationException("Services:media not configured");
     c.BaseAddress = new Uri(url, UriKind.Absolute);
 });
+builder.Services.AddHttpClient("people", (sp, c) =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var url = cfg["Services:People"] ?? throw new InvalidOperationException("Services:People not configured");
+    c.BaseAddress = new Uri(url, UriKind.Absolute);
+});
 
 builder.Services.AddHttpClient("friends", (sp, c) =>
 {
@@ -132,7 +138,9 @@ string[] aclSkipPrefixes =
     "/auth",
     "/openapi", "/scalar",
     "/health", "/debug", "/cinema/films",
-    "/movies/", "/users/me", "/access","/_internal/access", "/_internal", "/media",
+    "/movies/","/movies", "/users/me", "/access","/_internal/access", "/_internal", "/media",
+    "/people" ,  "/people/",
+    "/users/me", "/access","/_internal/access", "/_internal", "/media",
     "/friends","/friends/",
     "/users", "users/id",
     "/messages","messages/compose","/messages/sent/","/messages/"
@@ -194,6 +202,7 @@ app.MapAuthProxy();
 app.MapMoviesProxy();
 app.MapUsersPublic();
 app.MapMediaProxy();
+app.MapPeopleProxy();
 app.MapFriendsProxy();
 app.MapMessagesProxy();
 

@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, } from "@/components/ui/sheet";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -60,9 +60,18 @@ export function TopBar() {
                                     <Menu className="h-5 w-5" />
                                     <span className="sr-only">Open menu</span>
                                 </Button>
+                                
                             </SheetTrigger>
                             <SheetContent side="left" className="w-72 p-0">
-                                <SideNav />
+                                <SheetHeader className="px-4 py-3 border-b">
+                                    <SheetTitle className="text-base">
+                                        Navigation
+                                    </SheetTitle>
+                                </SheetHeader>
+                                <div className="p-2">
+                                    <SideNav />
+                                </div>
+                                
                             </SheetContent>
                         </Sheet>
 
