@@ -20,8 +20,7 @@ public static class MessagesProxyEndpoints
         g.MapGet("/by-receiver/{receiverId}", GetByReceiverIdProxy).WithOpenApi();
 
         // === POST /messages ===
-        g.MapPost("/", CreateProxy)
-            .Accepts<MessagesRequest>("application/json")
+        g.MapPost("/compose", CreateProxy)
             .WithOpenApi();
 
         // Проксирование любых других путей, если захочешь
@@ -40,7 +39,9 @@ public static class MessagesProxyEndpoints
 
         var url = "/messages";
         if (!string.IsNullOrWhiteSpace(senderId))
-            url += $"?senderId={senderId}";
+        {
+            url += $"/sent/{senderId}";
+        }
 
         using var msg = new HttpRequestMessage(HttpMethod.Get, url);
         CopyAuthOrCookie(ctx, msg);
@@ -64,27 +65,36 @@ public static class MessagesProxyEndpoints
     {
         var client = http.CreateClient("messages");
 
-        using var msg = new HttpRequestMessage(HttpMethod.Get, $"/messages/{receiverId}");
+        using var msg = new HttpRequestMessage(HttpMethod.Get, $"/messages/by-receiver/{receiverId}");
         CopyAuthOrCookie(ctx, msg);
 
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
         await ProxyCopyResponse(ctx, resp, ct);
     }
     
-    private static async Task CreateProxy(HttpContext ctx, IHttpClientFactory http, MessagesRequest messagesRequest, CancellationToken ct)
+    private static async Task CreateProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("messages");
-
-        var json = JsonSerializer.Serialize(messagesRequest);
-        using var msg = new HttpRequestMessage(HttpMethod.Post, "/messages")
-        {
-            Content = new StringContent(json, Encoding.UTF8, "application/json")
-        };
+        
+        using var msg = new HttpRequestMessage(HttpMethod.Post, "/messages/compose");
         CopyAuthOrCookie(ctx, msg);
+        
+        msg.Content = new StreamContent(ctx.Request.Body);
+        
+        var contentType = ctx.Request.ContentType;
+        if (!string.IsNullOrWhiteSpace(contentType))
+        {
+            msg.Content.Headers.TryAddWithoutValidation("Content-Type", contentType);
+        }
+        else
+        {
+            msg.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
+        }
 
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
         await ProxyCopyResponse(ctx, resp, ct);
     }
+
     
     private static async Task ProxyAny(HttpContext ctx, IHttpClientFactory http, string path, CancellationToken ct)
     {

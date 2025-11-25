@@ -12,7 +12,7 @@ public static class ReviewEndpoints
     {
         var g = routes.MapGroup("/reviews").WithTags("Reviews");
         //Получить все отзывы по фильму
-        g.MapGet("/{id:guid}", async (string filmId, IReviewRepository repo, CancellationToken ct) =>
+        g.MapGet("/{filmId}", async (string filmId, IReviewRepository repo, CancellationToken ct) =>
         {
             var reviews = await repo.FindByFilmIdAsync(filmId, ct);
             return reviews is not null ? Results.Ok(reviews) : Results.NotFound();

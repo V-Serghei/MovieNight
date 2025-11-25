@@ -60,6 +60,13 @@ builder.Services.AddHttpClient("messages", (sp, c) =>
     c.BaseAddress = new Uri(url, UriKind.Absolute);
 });
 
+builder.Services.AddHttpClient("review", (sp, c) =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var url = cfg["Services:Review"] ?? throw new InvalidOperationException("Services:messages not configured");
+    c.BaseAddress = new Uri(url, UriKind.Absolute);
+});
+
 // === Access Proxy (Proxy pattern + cache) ===
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient<IAclClient, AclClientHttp>((sp, c) =>
@@ -128,7 +135,7 @@ string[] aclSkipPrefixes =
     "/movies/", "/users/me", "/access","/_internal/access", "/_internal", "/media",
     "/friends","/friends/",
     "/users", "users/id",
-    "/messages","messages/compose"
+    "/messages","messages/compose","/messages/sent/","/messages/"
 };
 
 app.Use(async (HttpContext ctx, Func<Task> next) =>
