@@ -13,7 +13,7 @@ REM start "Bookmark.API" cmd /k "cd /d Services\Bookmark\Bookmark.API && dotnet 
 start "Friends.API" cmd /k "cd /d Services\Friends\Friends.API && dotnet run --launch-profile http"
 start "Messages.API" cmd /k "cd /d Services\Messages\Messages.API && dotnet run --launch-profile http"
 start "MoviePlayer.API" cmd /k "cd /d Services\MoviePlayer\MoviePlayer.API && dotnet run --launch-profile http"
-REM start "Review.API" cmd /k "cd /d Services\Review\Review.API && dotnet run --launch-profile http"
+start "Review.API" cmd /k "cd /d Services\Review\Review.API && dotnet run --launch-profile http"
 start "Users.API" cmd /k "cd /d Services\User\Users.API && dotnet run --launch-profile http"
 start "Media.API" cmd /k "cd /d Services\Media\Media.API && dotnet run --launch-profile http"
 

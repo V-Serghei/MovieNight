@@ -1,15 +1,18 @@
-﻿namespace MovieNight.Gateway.Endpoints;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+
+namespace MovieNight.Gateway.Endpoints;
 
 public static class ReviewProxyEndpoints
 {
      public static IEndpointRouteBuilder MapReviewsProxy(this IEndpointRouteBuilder routes)
     {
-        var g = routes.MapGroup("/reviews").WithTags("Reviews");
+        var g = routes.MapGroup("/review").WithTags("Review");
 
-        // === GET /reviews/{filmId} ===
+        // === GET /review/{filmId} ===
         g.MapGet("/{filmId}", GetByFilmIdProxy).WithOpenApi();
 
-        // === POST /reviews ===
+        // === POST /review ===
         g.MapPost("/", CreateReviewProxy)
             .WithOpenApi();
 
@@ -27,10 +30,11 @@ public static class ReviewProxyEndpoints
         string filmId,
         CancellationToken ct)
     {
-        var client = http.CreateClient("reviews");
+        var client = http.CreateClient("review");
 
-        using var msg = new HttpRequestMessage(HttpMethod.Get, $"/reviews/{filmId}");
+        using var msg = new HttpRequestMessage(HttpMethod.Get, $"/review/{filmId}");
         CopyAuthOrCookie(ctx, msg);
+        AddUserHeaders(ctx, msg);
 
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
         await ProxyCopyResponse(ctx, resp, ct);
@@ -41,10 +45,11 @@ public static class ReviewProxyEndpoints
         IHttpClientFactory http,
         CancellationToken ct)
     {
-        var client = http.CreateClient("reviews");
+        var client = http.CreateClient("review");
 
-        using var msg = new HttpRequestMessage(HttpMethod.Post, "/reviews");
+        using var msg = new HttpRequestMessage(HttpMethod.Post, "/review");
         CopyAuthOrCookie(ctx, msg);
+        AddUserHeaders(ctx, msg);
 
         // Проксируем тело как есть
         msg.Content = new StreamContent(ctx.Request.Body);
@@ -69,12 +74,13 @@ public static class ReviewProxyEndpoints
         string path,
         CancellationToken ct)
     {
-        var client = http.CreateClient("reviews");
+        var client = http.CreateClient("review");
 
-        var uri = $"/reviews/{path}{ctx.Request.QueryString}";
+        var uri = $"/review/{path}{ctx.Request.QueryString}";
         using var msg = new HttpRequestMessage(new HttpMethod(ctx.Request.Method), uri);
 
         CopyAuthOrCookie(ctx, msg);
+        AddUserHeaders(ctx, msg);
 
         if (ctx.Request.ContentLength > 0)
             msg.Content = new StreamContent(ctx.Request.Body);
@@ -109,5 +115,23 @@ public static class ReviewProxyEndpoints
         ctx.Response.Headers.Remove("transfer-encoding");
 
         await resp.Content.CopyToAsync(ctx.Response.Body, ct);
+    }
+    
+    private static void AddUserHeaders(HttpContext ctx, HttpRequestMessage msg)
+    {
+        var user = ctx.User;
+        var idStr = user.FindFirstValue(ClaimTypes.NameIdentifier)
+                    ?? user.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+        if (!string.IsNullOrWhiteSpace(idStr))
+            msg.Headers.TryAddWithoutValidation("X-UserId", idStr);
+
+        var role = user.FindFirstValue(ClaimTypes.Role);
+        if (!string.IsNullOrWhiteSpace(role))
+            msg.Headers.TryAddWithoutValidation("X-UserRole", role);
+        var userName = user.FindFirstValue(ClaimTypes.Name)
+                       ?? user.FindFirstValue(ClaimTypes.Email);
+        if (!string.IsNullOrWhiteSpace(userName))
+            msg.Headers.TryAddWithoutValidation("X-UserName", userName);
     }
 }

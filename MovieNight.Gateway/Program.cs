@@ -143,7 +143,8 @@ string[] aclSkipPrefixes =
     "/users/me", "/access","/_internal/access", "/_internal", "/media",
     "/friends","/friends/",
     "/users", "users/id",
-    "/messages","messages/compose","/messages/sent/","/messages/"
+    "/messages","messages/compose","/messages/sent/","/messages/",
+    "/review","/review/"
 };
 
 app.Use(async (HttpContext ctx, Func<Task> next) =>
@@ -205,5 +206,6 @@ app.MapMediaProxy();
 app.MapPeopleProxy();
 app.MapFriendsProxy();
 app.MapMessagesProxy();
+app.MapReviewsProxy();
 
 app.Run();

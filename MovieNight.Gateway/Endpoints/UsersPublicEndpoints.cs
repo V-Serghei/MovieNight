@@ -18,7 +18,7 @@ public static class UsersPublicEndpoints
         g.MapGet("/{userId:guid}/profile", GetUserProfileFull).WithOpenApi();
 
         // Requires valid auth cookie or Authorization header
-        g.MapGet("/me", UsersMe).WithOpenApi();
+        //g.MapGet("/me", UsersMe).WithOpenApi();
         g.MapGet("/", Users).WithOpenApi();
         return routes;
     }

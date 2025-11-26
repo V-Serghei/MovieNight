@@ -10,7 +10,8 @@ import { ArrowLeft, Bookmark, BookmarkCheck, Play } from "lucide-react";
 import { useBookmarks } from "@/lib/bookmarks-context";
 import { useToast } from "@/hooks/use-toast";
 import type { UIMovie } from "@/lib/types/movie/movie";
-
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 type MovieCardDetails = {
     title?: string;
@@ -57,6 +58,15 @@ type MovieDetails = {
     credits: MovieCreditView[];
 };
 
+type MovieReview = {
+    id: string;
+    filmId?: string;
+    userId?: string;
+    userName?: string;
+    createdAt?: string;
+    text: string;
+};
+
 const creditRoleNumberToName: Record<number, CreditRole> = {
     1: "Actor",
     2: "Director",
@@ -79,15 +89,57 @@ const normalizeCreditRole = (role: any): CreditRole => {
     return "Other";
 };
 
+const mapReviewFromApi = (r: any): MovieReview | null => {
+    const id = r.id ?? r.reviewId ?? r.reviewID ?? null;
+    const text = r.text ?? r.comment ?? r.body ?? "";
+
+    if (!id || !text) return null;
+
+    const filmId = r.filmId ?? r.movieId ?? r.filmID ?? r.movieID ?? undefined;
+    const userId = r.userId ?? r.authorId ?? r.createdById ?? undefined;
+    const userName =
+        r.userName ??
+        r.authorName ??
+        r.createdByName ??
+        r.createdBy ??
+        undefined;
+
+    const createdAtRaw =
+        r.createdAt ?? r.createdOn ?? r.created ?? r.insertedAt ?? r.timestamp;
+
+    let createdAt: string | undefined;
+    if (createdAtRaw) {
+        try {
+            createdAt = new Date(createdAtRaw).toISOString();
+        } catch {
+            createdAt = undefined;
+        }
+    }
+
+    return {
+        id: String(id),
+        filmId,
+        userId,
+        userName,
+        createdAt,
+        text: String(text),
+    };
+};
+
 export default function FilmDetailsPage() {
     const params = useParams() as { id: string };
     const router = useRouter();
-    const { bookmarks, addBookmark, removeBookmark } = useBookmarks();
-    const { toast } = useToast();
+    const {bookmarks, addBookmark, removeBookmark} = useBookmarks();
+    const {toast} = useToast();
 
     const [movie, setMovie] = useState<MovieDetails | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const [reviews, setReviews] = useState<MovieReview[]>([]);
+    const [reviewsError, setReviewsError] = useState<string | null>(null);
+    const [newReview, setNewReview] = useState("");
+    const [postingReview, setPostingReview] = useState(false);
 
     const isBookmarked = movie && bookmarks.some((b) => b.id === movie.id);
 
@@ -107,12 +159,16 @@ export default function FilmDetailsPage() {
             try {
                 setLoading(true);
                 setError(null);
+                setReviewsError(null);
 
-                const [movieResp, creditsResp] = await Promise.all([
+                const [movieResp, creditsResp, reviewsResp] = await Promise.all([
                     fetch(`/api/gw/movies/${params.id}`, {
                         credentials: "include",
                     }),
                     fetch(`/api/gw/people/movies/${params.id}/credits`, {
+                        credentials: "include",
+                    }),
+                    fetch(`/api/gw/review/${params.id}`, {
                         credentials: "include",
                     }),
                 ]);
@@ -228,6 +284,20 @@ export default function FilmDetailsPage() {
                     credits,
                 };
 
+                let mappedReviews: MovieReview[] = [];
+                if (reviewsResp.ok) {
+                    const rawReviews = await reviewsResp.json();
+                    if (Array.isArray(rawReviews)) {
+                        mappedReviews = rawReviews
+                            .map(mapReviewFromApi)
+                            .filter((x): x is MovieReview => x !== null);
+                    }
+                } else {
+                    setReviewsError(
+                        `Failed to load reviews (${reviewsResp.status})`,
+                    );
+                }
+
                 if (!cancelled) {
                     setMovie(mapped);
                 }
@@ -266,6 +336,64 @@ export default function FilmDetailsPage() {
             });
         }
     };
+
+    const handleSubmitReview = async () => {
+        if (!movie) return;
+
+        const text = newReview.trim();
+        if (!text) return;
+
+        try {
+            setPostingReview(true);
+            setReviewsError(null);
+
+            const resp = await fetch("/api/gw/review", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    // под это заточен ReviewRequest на бэке
+                    filmId: movie.id,
+                    film: movie.title,
+                    // TODO: сюда можно подставить реальные данные из авторизации
+                    userId: "", // e.g. currentUser.id
+                    text,
+                    user: "",   // e.g. currentUser.userName / email
+                    date: new Date().toISOString(),
+                }),
+            });
+
+            if (!resp.ok) {
+                const txt = await resp.text();
+                throw new Error(txt || `Failed to post review (${resp.status})`);
+            }
+
+            const created = await resp.json();
+            const mapped = mapReviewFromApi(created);
+
+            setNewReview("");
+            if (mapped) {
+                setReviews((prev) => [mapped, ...prev]);
+            }
+
+            toast({
+                title: "Review added",
+                description: "Thanks for your feedback!",
+            });
+        } catch (err: any) {
+            setReviewsError(err.message ?? "Failed to post review");
+            toast({
+                title: "Error",
+                description: err.message ?? "Failed to post review",
+                variant: "destructive",
+            });
+        } finally {
+            setPostingReview(false);
+        }
+    };
+
     const directors = movie
         ? movie.credits
             .filter((c) => c.role === "Director")
@@ -291,7 +419,7 @@ export default function FilmDetailsPage() {
     if (error || !movie) {
         return (
             <div className="min-h-screen">
-                <TopBar />
+                <TopBar/>
                 <main className="container mx-auto px-4 pt-24 pb-12 space-y-4">
                     <Button
                         variant="ghost"
@@ -299,7 +427,7 @@ export default function FilmDetailsPage() {
                         type="button"
                         onClick={() => router.back()}
                     >
-                        <ArrowLeft className="h-4 w-4" />
+                        <ArrowLeft className="h-4 w-4"/>
                         Back
                     </Button>
                     <p className="text-destructive">
@@ -312,7 +440,7 @@ export default function FilmDetailsPage() {
 
     return (
         <div className="min-h-screen">
-            <TopBar />
+            <TopBar/>
             <main className="container mx-auto px-4 pt-24 pb-12">
                 <Button
                     variant="ghost"
@@ -320,7 +448,7 @@ export default function FilmDetailsPage() {
                     type="button"
                     onClick={() => router.back()}
                 >
-                    <ArrowLeft className="h-4 w-4" />
+                    <ArrowLeft className="h-4 w-4"/>
                     Back
                 </Button>
 
@@ -335,7 +463,8 @@ export default function FilmDetailsPage() {
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
+                                <div
+                                    className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
                                     No poster
                                 </div>
                             )}
@@ -354,7 +483,7 @@ export default function FilmDetailsPage() {
 
                         <div className="flex gap-3">
                             <Button className="flex-1 gap-2" size="lg">
-                                <Play className="h-4 w-4" />
+                                <Play className="h-4 w-4"/>
                                 Watch
                             </Button>
                             <Button
@@ -369,9 +498,9 @@ export default function FilmDetailsPage() {
                                 }
                             >
                                 {isBookmarked ? (
-                                    <BookmarkCheck className="h-5 w-5" />
+                                    <BookmarkCheck className="h-5 w-5"/>
                                 ) : (
-                                    <Bookmark className="h-5 w-5" />
+                                    <Bookmark className="h-5 w-5"/>
                                 )}
                             </Button>
                         </div>
@@ -471,7 +600,7 @@ export default function FilmDetailsPage() {
                                         {movie.budget && (
                                             <>
                                                 Budget: {movie.budget}
-                                                <br />
+                                                <br/>
                                             </>
                                         )}
                                         {movie.grossWorldwide && (
@@ -519,7 +648,8 @@ export default function FilmDetailsPage() {
                                             key={c.id || `${c.fullName}-${c.order}`}
                                             className="flex items-center gap-3 border border-border rounded-md px-3 py-2 bg-card/30"
                                         >
-                                            <div className="w-10 h-10 rounded-full bg-muted overflow-hidden flex items-center justify-center text-xs flex-shrink-0">
+                                            <div
+                                                className="w-10 h-10 rounded-full bg-muted overflow-hidden flex items-center justify-center text-xs flex-shrink-0">
                                                 {"profileImagePath" in c && c.profileImagePath ? (
                                                     <img
                                                         src={`/api/gw${(c as any).profileImagePath}`}
@@ -626,6 +756,71 @@ export default function FilmDetailsPage() {
                                 </div>
                             </div>
                         )}
+                        <div className="mt-8 space-y-4 border-t border-border pt-6">
+                            <h2 className="text-lg font-semibold">Reviews</h2>
+
+                            {reviewsError && (
+                                <p className="text-xs text-destructive">
+                                    {reviewsError}
+                                </p>
+                            )}
+
+                            {reviews.length === 0 && !reviewsError && (
+                                <p className="text-sm text-muted-foreground">
+                                    No reviews yet. Be the first to write one!
+                                </p>
+                            )}
+
+                            {reviews.length > 0 && (
+                                <div className="space-y-3">
+                                    {reviews.map((r) => (
+                                        <div
+                                            key={r.id}
+                                            className="border border-border rounded-md p-3 bg-card/40 space-y-1"
+                                        >
+                                            <p className="text-xs text-muted-foreground">
+                                                {r.userName || "Anonymous"}
+                                                {r.createdAt && (
+                                                    <>
+                                                        {" "}
+                                                        •{" "}
+                                                        {new Date(
+                                                            r.createdAt,
+                                                        ).toLocaleString()}
+                                                    </>
+                                                )}
+                                            </p>
+                                            <p className="text-sm whitespace-pre-line">
+                                                {r.text}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            <div className="space-y-2">
+                                <Label htmlFor="new-review">Your review</Label>
+                                <Textarea
+                                    id="new-review"
+                                    rows={3}
+                                    placeholder="Share what you think about this movie..."
+                                    value={newReview}
+                                    onChange={(e) => setNewReview(e.target.value)}
+                                />
+                                <div className="flex justify-end">
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        onClick={handleSubmitReview}
+                                        disabled={
+                                            postingReview || newReview.trim().length === 0
+                                        }
+                                    >
+                                        {postingReview ? "Sending..." : "Post review"}
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>

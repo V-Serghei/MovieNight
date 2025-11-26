@@ -13,6 +13,9 @@ public class ReviewRepository(ReviewDbContext db) : IReviewRepository
         => db.Reviews.AddAsync(review, ct).AsTask();
     Task IReviewRepository.SaveChangesAsync(CancellationToken ct)
         => db.SaveChangesAsync(ct);
-    Task<Domain.Entities.Review?> IReviewRepository.FindByFilmIdAsync(string filmId, CancellationToken ct = default)
-        => db.Reviews.SingleOrDefaultAsync(m => m.FilmId == filmId, ct);
+    public Task<List<Domain.Entities.Review>> FindByFilmIdAsync(string filmId, CancellationToken ct = default)
+        => db.Reviews
+            .Where(r => r.FilmId == filmId)
+            .OrderByDescending(r => r.Date)
+            .ToListAsync(ct);
 }
