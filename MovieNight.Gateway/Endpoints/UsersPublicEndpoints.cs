@@ -17,6 +17,9 @@ public static class UsersPublicEndpoints
 
         g.MapGet("/{userId:guid}/profile", GetUserProfileFull).WithOpenApi();
 
+        // Requires valid auth cookie or Authorization header
+        //g.MapGet("/me", UsersMe).WithOpenApi();
+        g.MapGet("/", Users).WithOpenApi();
         return routes;
     }
 
@@ -319,6 +322,21 @@ public static class UsersPublicEndpoints
 
         w.WriteEndObject();
         await w.FlushAsync();
+    }
+
+    private static async Task Users(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    {
+        // var users = http.CreateClient("users");
+        // using var userResp = await users.GetAsync($"/users", ct);
+        // if (userResp.IsSuccessStatusCode)
+        //     await ProxyCopyResponse(ctx, userResp, ct);
+        var client = http.CreateClient("users");
+
+        using var msg = new HttpRequestMessage(HttpMethod.Get, "/users");
+        CopyAuthOrCookie(ctx, msg);
+
+        using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
+        await ProxyCopyResponse(ctx, resp, ct);
     }
 
     private static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)

@@ -17,9 +17,9 @@ public class MessagesRepository(MessagesDbContext db) : IMessagesRepository
     
     Task<List<Domain.Entities.Messages>> IMessagesRepository.FindBySenderIdAsync(string senderId, CancellationToken ct)
         => db.Messages.Where(
-            m => m.SenderId == senderId).ToListAsync<Domain.Entities.Messages>(ct);
+            m => m.SenderId == senderId).ToListAsync(ct);
     
-    public Task<Domain.Entities.Messages?> FindByReceiverIdAsync(string receiverId, CancellationToken ct = default)
-        => db.Messages.SingleOrDefaultAsync(
-            m => m.RecipientId == receiverId, ct);
+    public Task<List<Domain.Entities.Messages>> FindByReceiverIdAsync(string receiverId, CancellationToken ct = default)
+        => db.Messages.Where(
+            m => m.RecipientId == receiverId).ToListAsync(ct);
 }

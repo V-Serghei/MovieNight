@@ -18,6 +18,11 @@ public class UserRepository(UsersDbContext db) : IUserRepository
     public Task<User?> GetByIdAsync(Guid id, CancellationToken ct = default)
         => db.Users.SingleOrDefaultAsync(u => u.Id == id, ct);
 
+    public Task<List<User>?> GetAllAsync(CancellationToken ct = default)
+    {
+        return db.Users.ToListAsync(ct)!;
+    }
+
 
     public Task AddAsync(User user, CancellationToken ct = default)
         => db.Users.AddAsync(user, ct).AsTask();
