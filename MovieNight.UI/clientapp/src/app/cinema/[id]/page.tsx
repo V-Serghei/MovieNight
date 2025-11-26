@@ -6,11 +6,11 @@ import { TopBar } from "@/components/top-bar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { useBookmarks } from "@/lib/bookmarks-context";
 import { useToast } from "@/hooks/use-toast";
 import type { UIMovie } from "@/lib/types/movie/movie";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { RatingStars } from "@/components/rating-stars";
 import { getMovieRating } from "@/lib/api/ratings";
 import {
@@ -143,25 +143,17 @@ export default function FilmDetailsPage() {
     const params = useParams() as { id: string };
     const router = useRouter();
     const { bookmarks, addBookmark, removeBookmark } = useBookmarks();
-    const {bookmarks, addBookmark, removeBookmark} = useBookmarks();
-    const {toast} = useToast();
+    const { toast } = useToast();
 
     const [movie, setMovie] = useState<MovieDetails | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const [reviews, setReviews] = useState<MovieReview[]>([]);
-    const [reviewsError, setReviewsError] = useState<string | null>(null);
-    const [newReview, setNewReview] = useState("");
-    const [postingReview, setPostingReview] = useState(false);
-
-    const isBookmarked = movie && bookmarks.some((b) => b.id === movie.id);
+    // watched / temp
     const [watched, setWatched] = useState(false);
     const [tempBookmarked, setTempBookmarked] = useState(false);
 
-    const isBookmarked =
-        !!movie && bookmarks.some((b) => b.movieId === movie.id);
-
+    // рейтинг
     const [ratingSummary, setRatingSummary] = useState<{
         averageRating: number | null;
         ratingsCount: number;
@@ -170,7 +162,18 @@ export default function FilmDetailsPage() {
     const [ratingLoading, setRatingLoading] = useState(false);
     const [ratingError, setRatingError] = useState<string | null>(null);
 
-    const { toast } = useToast();
+    // отзывы
+    const [reviews, setReviews] = useState<MovieReview[]>([]);
+    const [reviewsError, setReviewsError] = useState<string | null>(null);
+    const [newReview, setNewReview] = useState("");
+    const [postingReview, setPostingReview] = useState(false);
+
+    // !!! тут проверь структуру BookmarkItem и поправь под себя
+    const isBookmarked =
+        !!movie &&
+        bookmarks.some(
+            (b: any) => b.movieId === movie.id || b.id === movie.id,
+        );
 
     const toUiMovie = (m: MovieDetails): UIMovie => ({
         id: m.id,
@@ -181,6 +184,7 @@ export default function FilmDetailsPage() {
         rating: 0,
     });
 
+    // загрузка фильма + кредитов + отзывов
     useEffect(() => {
         let cancelled = false;
 
@@ -210,7 +214,6 @@ export default function FilmDetailsPage() {
                 const raw = await movieResp.json();
                 if (cancelled) return;
 
-                // --- genres ---
                 const genres: string[] = Array.isArray(raw.genres)
                     ? raw.genres
                         .map((g: any) =>
@@ -219,7 +222,6 @@ export default function FilmDetailsPage() {
                         .filter(Boolean)
                     : [];
 
-                // --- cards ---
                 const rawCards = raw.movieCards ?? raw.cards ?? [];
                 const cards: MovieCardDetails[] = Array.isArray(rawCards)
                     ? rawCards
@@ -231,7 +233,6 @@ export default function FilmDetailsPage() {
                         .filter((c) => c.imageUrl)
                     : [];
 
-                // --- facts ---
                 const rawFacts = raw.interestingFacts ?? raw.facts ?? [];
                 const facts: MovieFactDetails[] = Array.isArray(rawFacts)
                     ? rawFacts
@@ -242,7 +243,6 @@ export default function FilmDetailsPage() {
                         .filter((f) => f.factName)
                     : [];
 
-                // --- credits (cast & crew) ---
                 let credits: MovieCreditView[] = [];
                 if (creditsResp.ok) {
                     const rawCredits = await creditsResp.json();
@@ -329,6 +329,7 @@ export default function FilmDetailsPage() {
 
                 if (!cancelled) {
                     setMovie(mapped);
+                    setReviews(mappedReviews);
                 }
             } catch (err: any) {
                 if (!cancelled) {
@@ -348,6 +349,7 @@ export default function FilmDetailsPage() {
         };
     }, [params.id]);
 
+    // загрузка рейтинга
     useEffect(() => {
         let cancelled = false;
 
@@ -398,86 +400,6 @@ export default function FilmDetailsPage() {
             });
         }
     };
-
-    const handleSubmitReview = async () => {
-        if (!movie) return;
-
-        const text = newReview.trim();
-        if (!text) return;
-
-        try {
-            setPostingReview(true);
-            setReviewsError(null);
-
-            const resp = await fetch("/api/gw/review", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    // под это заточен ReviewRequest на бэке
-                    filmId: movie.id,
-                    film: movie.title,
-                    // TODO: сюда можно подставить реальные данные из авторизации
-                    userId: "", // e.g. currentUser.id
-                    text,
-                    user: "",   // e.g. currentUser.userName / email
-                    date: new Date().toISOString(),
-                }),
-            });
-
-            if (!resp.ok) {
-                const txt = await resp.text();
-                throw new Error(txt || `Failed to post review (${resp.status})`);
-            }
-
-            const created = await resp.json();
-            const mapped = mapReviewFromApi(created);
-
-            setNewReview("");
-            if (mapped) {
-                setReviews((prev) => [mapped, ...prev]);
-            }
-
-            toast({
-                title: "Review added",
-                description: "Thanks for your feedback!",
-            });
-        } catch (err: any) {
-            setReviewsError(err.message ?? "Failed to post review");
-            toast({
-                title: "Error",
-                description: err.message ?? "Failed to post review",
-                variant: "destructive",
-            });
-        } finally {
-            setPostingReview(false);
-        }
-    };
-
-
-    const directors = movie
-        ? movie.credits
-            .filter((c) => c.role === "Director")
-            .slice()
-            .sort((a, b) => {
-                if (a.order && b.order && a.order !== b.order) return a.order - b.order;
-                return a.fullName.localeCompare(b.fullName);
-            })
-        : [];
-
-    const actors = movie
-        ? movie.credits
-            .filter((c) => c.role === "Actor")
-            .slice()
-            .sort((a, b) => {
-                if (a.order && b.order && a.order !== b.order) return a.order - b.order;
-                return a.fullName.localeCompare(b.fullName);
-            })
-        : [];
-
-    const topCast = [...directors, ...actors].slice(0, 5);
 
     const handleMarkWatched = async () => {
         if (!movie) return;
@@ -533,28 +455,6 @@ export default function FilmDetailsPage() {
         }
     };
 
-    if (error || !movie) {
-        return (
-            <div className="min-h-screen">
-                <TopBar/>
-                <main className="container mx-auto px-4 pt-24 pb-12 space-y-4">
-                    <Button
-                        variant="ghost"
-                        className="gap-2"
-                        type="button"
-                        onClick={() => router.back()}
-                    >
-                        <ArrowLeft className="h-4 w-4"/>
-                        Back
-                    </Button>
-                    <p className="text-destructive">
-                        {error ?? "Movie not found"}
-                    </p>
-                </main>
-            </div>
-        );
-    }
-
     const handleSetRating = async (score: number) => {
         if (!movie) return;
         try {
@@ -607,9 +507,119 @@ export default function FilmDetailsPage() {
         }
     };
 
+    const handleSubmitReview = async () => {
+        if (!movie) return;
+
+        const text = newReview.trim();
+        if (!text) return;
+
+        try {
+            setPostingReview(true);
+            setReviewsError(null);
+
+            const resp = await fetch("/api/gw/review", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    filmId: movie.id,
+                    film: movie.title,
+                    userId: "", // TODO: сюда подставь currentUser.id
+                    text,
+                    user: "",   // TODO: currentUser.userName / email
+                    date: new Date().toISOString(),
+                }),
+            });
+
+            if (!resp.ok) {
+                const txt = await resp.text();
+                throw new Error(txt || `Failed to post review (${resp.status})`);
+            }
+
+            const created = await resp.json();
+            const mapped = mapReviewFromApi(created);
+
+            setNewReview("");
+            if (mapped) {
+                setReviews((prev) => [mapped, ...prev]);
+            }
+
+            toast({
+                title: "Review added",
+                description: "Thanks for your feedback!",
+            });
+        } catch (err: any) {
+            setReviewsError(err.message ?? "Failed to post review");
+            toast({
+                title: "Error",
+                description: err.message ?? "Failed to post review",
+                variant: "destructive",
+            });
+        } finally {
+            setPostingReview(false);
+        }
+    };
+
+    const directors = movie
+        ? movie.credits
+            .filter((c) => c.role === "Director")
+            .slice()
+            .sort((a, b) => {
+                if (a.order && b.order && a.order !== b.order) return a.order - b.order;
+                return a.fullName.localeCompare(b.fullName);
+            })
+        : [];
+
+    const actors = movie
+        ? movie.credits
+            .filter((c) => c.role === "Actor")
+            .slice()
+            .sort((a, b) => {
+                if (a.order && b.order && a.order !== b.order) return a.order - b.order;
+                return a.fullName.localeCompare(b.fullName);
+            })
+        : [];
+
+    const topCast = [...directors, ...actors].slice(0, 5);
+
+    if (loading && !movie && !error) {
+        return (
+            <div className="min-h-screen">
+                <TopBar />
+                <main className="container mx-auto px-4 pt-24 pb-12">
+                    <p className="text-sm text-muted-foreground">Loading…</p>
+                </main>
+            </div>
+        );
+    }
+
+    if (error || !movie) {
+        return (
+            <div className="min-h-screen">
+                <TopBar />
+                <main className="container mx-auto px-4 pt-24 pb-12 space-y-4">
+                    <Button
+                        variant="ghost"
+                        className="gap-2"
+                        type="button"
+                        onClick={() => router.back()}
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                        Back
+                    </Button>
+                    <p className="text-destructive">
+                        {error ?? "Movie not found"}
+                    </p>
+                </main>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen">
-            <TopBar/>
+            <TopBar />
             <main className="container mx-auto px-4 pt-24 pb-12">
                 <Button
                     variant="ghost"
@@ -617,7 +627,7 @@ export default function FilmDetailsPage() {
                     type="button"
                     onClick={() => router.back()}
                 >
-                    <ArrowLeft className="h-4 w-4"/>
+                    <ArrowLeft className="h-4 w-4" />
                     Back
                 </Button>
 
@@ -632,8 +642,7 @@ export default function FilmDetailsPage() {
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <div
-                                    className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
+                                <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
                                     No poster
                                 </div>
                             )}
@@ -652,7 +661,7 @@ export default function FilmDetailsPage() {
 
                         <div className="flex gap-3 flex-wrap">
                             <Button className="flex-1 gap-2" size="lg">
-                                <Play className="h-4 w-4"/>
+                                <Play className="h-4 w-4" />
                                 Watch
                             </Button>
 
@@ -668,9 +677,9 @@ export default function FilmDetailsPage() {
                                 }
                             >
                                 {isBookmarked ? (
-                                    <BookmarkCheck className="h-5 w-5"/>
+                                    <BookmarkCheck className="h-5 w-5" />
                                 ) : (
-                                    <Bookmark className="h-5 w-5"/>
+                                    <Bookmark className="h-5 w-5" />
                                 )}
                             </Button>
 
@@ -698,6 +707,7 @@ export default function FilmDetailsPage() {
                         </div>
                     </div>
 
+                    {/* Правая колонка */}
                     <div className="space-y-6">
                         <div className="space-y-2">
                             <h1 className="text-3xl md:text-4xl font-serif font-bold">
@@ -792,7 +802,7 @@ export default function FilmDetailsPage() {
                                         {movie.budget && (
                                             <>
                                                 Budget: {movie.budget}
-                                                <br/>
+                                                <br />
                                             </>
                                         )}
                                         {movie.grossWorldwide && (
@@ -841,11 +851,10 @@ export default function FilmDetailsPage() {
                                             key={c.id || `${c.fullName}-${c.order}`}
                                             className="flex items-center gap-3 border border-border rounded-md px-3 py-2 bg-card/30"
                                         >
-                                            <div
-                                                className="w-10 h-10 rounded-full bg-muted overflow-hidden flex items-center justify-center text-xs flex-shrink-0">
-                                                {"profileImagePath" in c && c.profileImagePath ? (
+                                            <div className="w-10 h-10 rounded-full bg-muted overflow-hidden flex items-center justify-center text-xs flex-shrink-0">
+                                                {c.profileImagePath ? (
                                                     <img
-                                                        src={`/api/gw${(c as any).profileImagePath}`}
+                                                        src={`/api/gw${c.profileImagePath}`}
                                                         alt={c.fullName}
                                                         className="w-full h-full object-cover"
                                                     />
@@ -950,7 +959,7 @@ export default function FilmDetailsPage() {
                             </div>
                         )}
 
-                        {/* Rating section */}
+                        {/* Rating */}
                         <div className="space-y-2">
                             <h2 className="text-lg font-semibold">Rating</h2>
                             {ratingLoading && (
@@ -1013,8 +1022,10 @@ export default function FilmDetailsPage() {
                                         )}
                                     </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
+
+                        {/* Reviews */}
                         <div className="mt-8 space-y-4 border-t border-border pt-6">
                             <h2 className="text-lg font-semibold">Reviews</h2>
 
@@ -1079,8 +1090,6 @@ export default function FilmDetailsPage() {
                                     </Button>
                                 </div>
                             </div>
-                        </div>
-                            )}
                         </div>
                     </div>
                 </div>

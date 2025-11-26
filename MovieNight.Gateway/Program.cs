@@ -155,7 +155,7 @@ string[] aclSkipPrefixes =
     "/movies/","/movies", "/users/me", "/access","/_internal/access", "/_internal", "/media",
     "/people" ,  "/people/" ,
     "/bookmarks", "/bookmarks/",
-    "/ratings", "/ratings/"
+    "/ratings", "/ratings/",
     "/people" ,  "/people/",
     "/users/me", "/access","/_internal/access", "/_internal", "/media",
     "/friends","/friends/",
