@@ -30,6 +30,8 @@ import { LoginDialog } from "@/components/login-dialog";
 import { RegisterDialog } from "@/components/register-dialog";
 import { useRouter } from "next/navigation";
 import { useCurrentProfile } from "@/lib/use-current-profile";
+import { Timer } from "lucide-react";
+import { TempBookmarksDropdown } from "@/components/ui/temp-bookmarks-dropdown";
 
 export function TopBar() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -136,6 +138,8 @@ export function TopBar() {
                                 </Button>
                             </>
                         )}
+                        
+                        <TempBookmarksDropdown />
                         <Button
                             variant="ghost"
                             size="icon"
@@ -147,6 +151,7 @@ export function TopBar() {
                                 <span className="sr-only">Bookmarks</span>
                             </Link>
                         </Button>
+
 
                         {/* Auth area */}
                         {isLoading ? (

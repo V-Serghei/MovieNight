@@ -24,6 +24,11 @@ public static class MoviesProxyEndpoints
             .WithOpenApi();
 
         g.MapGet("/films",       FilmsAliasProxy).WithOpenApi();
+        g.MapGet("/cartoons",       CartonAliasProxy).WithOpenApi();
+        g.MapGet("/anime",       AnimeAliasProxy).WithOpenApi();
+        g.MapGet("/serial",       SerialAliasProxy).WithOpenApi();
+        
+        
         g.Map("/{**path}", ProxyAny).WithMetadata(new HttpMethodMetadata(new[] { "GET", "POST", "PUT", "DELETE", "PATCH" }));
 
         return routes;
@@ -108,6 +113,36 @@ public static class MoviesProxyEndpoints
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
         await ProxyCopyResponse(ctx, resp, ct);
     }
+    private static async Task CartonAliasProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    {
+        var client = http.CreateClient("movies");
+        var url = "/movies/by-category/Cartoon";
+        using var msg = new HttpRequestMessage(HttpMethod.Get, url);
+        //CopyAuthOrCookie(ctx, msg);
+
+        using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
+        await ProxyCopyResponse(ctx, resp, ct);
+    }
+    private static async Task AnimeAliasProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    {
+        var client = http.CreateClient("movies");
+        var url = "/movies/by-category/Anime";
+        using var msg = new HttpRequestMessage(HttpMethod.Get, url);
+        //CopyAuthOrCookie(ctx, msg);
+
+        using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
+        await ProxyCopyResponse(ctx, resp, ct);
+    }
+    private static async Task SerialAliasProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    {
+        var client = http.CreateClient("movies");
+        var url = "/movies/by-category/Serial";
+        using var msg = new HttpRequestMessage(HttpMethod.Get, url);
+        //CopyAuthOrCookie(ctx, msg);
+
+        using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
+        await ProxyCopyResponse(ctx, resp, ct);
+    }
 
     private static async Task ProxyAny(
         [FromRoute] string? path,
@@ -119,7 +154,6 @@ public static class MoviesProxyEndpoints
         var client = http.CreateClient("movies");
 
         using var msg = new HttpRequestMessage(new HttpMethod(ctx.Request.Method), target + ctx.Request.QueryString);
-        // перенести тело, заголовки и т.п.
         if (ctx.Request.ContentLength > 0 || ctx.Request.Headers.ContainsKey("Content-Type"))
         {
             using var sr = new StreamReader(ctx.Request.Body, Encoding.UTF8, leaveOpen: true);

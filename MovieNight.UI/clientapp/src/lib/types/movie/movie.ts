@@ -6,5 +6,6 @@ export type UIMovie = {
     year: number;
     duration: string;
     posterImage: string;
-    rating: number;
+    rating: number;              
+    userRating?: number | null;  
 };

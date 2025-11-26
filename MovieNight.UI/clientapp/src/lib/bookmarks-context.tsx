@@ -1,55 +1,89 @@
-﻿"use client"
+﻿// src/lib/bookmarks-context.tsx
+"use client";
 
-import type React from "react"
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+    type ReactNode,
+} from "react";
+import type { BookmarkItem } from "@/lib/types/bookmarks";
+import type { UIMovie } from "@/lib/types/movie/movie";
+import {
+    getBookmarks as apiGetBookmarks,
+    addBookmark as apiAddBookmark,
+    removeBookmark as apiRemoveBookmark,
+} from "@/lib/api/bookmarks";
 
-import { createContext, useContext, useState, useEffect } from "react"
-import type { Movie } from "@/lib/types"
-import {UIMovie} from "@/lib/types/movie/movie";
+type BookmarksContextValue = {
+    bookmarks: BookmarkItem[];
+    loading: boolean;
+    error: string | null;
+    refresh: () => Promise<void>;
+    addBookmark: (movie: UIMovie) => Promise<void>;
+    removeBookmark: (movieId: string) => Promise<void>;
+};
 
-interface BookmarksContextType {
-    bookmarks: UIMovie[]
-    addBookmark: (movie: UIMovie) => void
-    removeBookmark: (id: string) => void
-}
+const BookmarksContext = createContext<BookmarksContextValue | undefined>(
+    undefined,
+);
 
-const BookmarksContext = createContext<BookmarksContextType | undefined>(undefined)
+export function BookmarksProvider({ children }: { children: ReactNode }) {
+    const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-export function BookmarksProvider({ children }: { children: React.ReactNode }) {
-    const [bookmarks, setBookmarks] = useState<UIMovie[]>([])
+    const load = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const data = await apiGetBookmarks();
+            setBookmarks(data);
+        } catch (e: any) {
+            setError(e?.message ?? "Failed to load bookmarks");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        // Load bookmarks from localStorage on mount
-        const savedBookmarks = localStorage.getItem("movie-night-bookmarks")
-        if (savedBookmarks) {
-            setBookmarks(JSON.parse(savedBookmarks))
-        }
-    }, [])
+        void load();
+    }, []);
 
-    const addBookmark = (movie: UIMovie) => {
+    const addBookmark = async (movie: UIMovie) => {
+        const created = await apiAddBookmark(movie);
         setBookmarks((prev) => {
-            const updated = [...prev, movie]
-            localStorage.setItem("movie-night-bookmarks", JSON.stringify(updated))
-            return updated
-        })
-    }
+            if (prev.some((b) => b.movieId === movie.id)) return prev;
+            return [...prev, created];
+        });
+    };
 
-    const removeBookmark = (id: string) => {
-        setBookmarks((prev) => {
-            const updated = prev.filter((m) => m.id !== id)
-            localStorage.setItem("movie-night-bookmarks", JSON.stringify(updated))
-            return updated
-        })
-    }
+    const removeBookmark = async (movieId: string) => {
+        await apiRemoveBookmark(movieId);
+        setBookmarks((prev) => prev.filter((b) => b.movieId !== movieId));
+    };
+
+    const value: BookmarksContextValue = {
+        bookmarks,
+        loading,
+        error,
+        refresh: load,
+        addBookmark,
+        removeBookmark,
+    };
 
     return (
-        <BookmarksContext.Provider value={{ bookmarks, addBookmark, removeBookmark }}>{children}</BookmarksContext.Provider>
-    )
+        <BookmarksContext.Provider value={value}>
+            {children}
+        </BookmarksContext.Provider>
+    );
 }
 
-export function useBookmarks() {
-    const context = useContext(BookmarksContext)
-    if (context === undefined) {
-        throw new Error("useBookmarks must be used within a BookmarksProvider")
+export function useBookmarks(): BookmarksContextValue {
+    const ctx = useContext(BookmarksContext);
+    if (!ctx) {
+        throw new Error("useBookmarks must be used within BookmarksProvider");
     }
-    return context
+    return ctx;
 }

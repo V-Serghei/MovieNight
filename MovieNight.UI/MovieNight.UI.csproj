@@ -7,4 +7,10 @@
         <RootNamespace>MovieNight.UI</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <None Update="clientapp\src\components\friends-list.tsx">
+        <DependentUpon>compose-message.tsx</DependentUpon>
+      </None>
+    </ItemGroup>
+
 </Project>
