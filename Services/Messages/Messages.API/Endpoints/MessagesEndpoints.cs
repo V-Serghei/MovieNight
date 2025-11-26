@@ -10,7 +10,7 @@ public static class MessagesEndpoints
     {
         var g = routes.MapGroup("/messages").WithTags("Messages");
         
-        g.MapGet("/", async (string senderId, IMessagesRepository repo, CancellationToken ct) =>
+        g.MapGet("/sent/{senderId}", async (string senderId, IMessagesRepository repo, CancellationToken ct) =>
         {
             var all = await repo.FindBySenderIdAsync(senderId);
             return Results.Ok(all);
@@ -22,29 +22,29 @@ public static class MessagesEndpoints
             return movie is not null ? Results.Ok(movie) : Results.NotFound();
         });
         
-        g.MapGet("/{receiverId}", async (string receiverId, IMessagesRepository repo, CancellationToken ct) =>
+        g.MapGet("/by-receiver/{receiverId}", async (string receiverId, IMessagesRepository repo, CancellationToken ct) =>
         {
-            var movie = await repo.FindByReceiverIdAsync(receiverId, ct);
-            return movie is not null ? Results.Ok(movie) : Results.NotFound();
+            var messages = await repo.FindByReceiverIdAsync(receiverId, ct);
+            return Results.Ok(messages);
         });
         
-        g.MapPost("/", async (MessagesDTO movieDto, IMessagesRepository repo, CancellationToken ct) =>
+        g.MapPost("/compose", async (MessagesDTO messagesDto, IMessagesRepository repo, CancellationToken ct) =>
         {
-            var movie = new Domain.Entities.Messages
+            var messages = new Domain.Entities.Messages
             {
                 IsChecked = false,
-                SenderName = movieDto.SenderName,
-                SenderId = movieDto.SenderId,
-                RecipientName = movieDto.RecipientName,
-                RecipientId = movieDto.RecipientId,
-                Date = movieDto.Date,
-                Message = movieDto.Message,
-                Theme = movieDto.Theme,
+                SenderName = messagesDto.SenderName,
+                SenderId = messagesDto.SenderId,
+                RecipientName = messagesDto.RecipientName,
+                RecipientId = messagesDto.RecipientId,
+                Date = messagesDto.Date,
+                Message = messagesDto.Message,
+                Theme = messagesDto.Theme,
                 IsStarred = false
             };
-            await repo.AddAsync(movie, ct);
+            await repo.AddAsync(messages, ct);
             await repo.SaveChangesAsync(ct);
-            return Results.Created($"/movies/{movie.Id}", movie);
+            return Results.Created($"/messages/{messages.Id}", messagesDto);
         });
         return routes;
     }

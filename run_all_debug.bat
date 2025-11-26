@@ -10,7 +10,7 @@ start "Access.API (watch)" cmd /k "cd /d Services\Access\Access.API && dotnet wa
 start "Achievements.API (watch)" cmd /k "cd /d Services\Achievements\Achievements.API && dotnet watch run --launch-profile http"
 start "Auth.API (watch)" cmd /k "cd /d Services\Auth\Auth.API && dotnet watch run --launch-profile http"
 REM start "Bookmark.API (watch)" cmd /k "cd /d Services\Bookmark\Bookmark.API && dotnet watch run --launch-profile http"
-REM start "Friends.API (watch)" cmd /k "cd /d Services\Friends\Friends.API && dotnet watch run --launch-profile http"
+start "Friends.API (watch)" cmd /k "cd /d Services\Friends\Friends.API && dotnet watch run --launch-profile http"
 REM start "Messages.API (watch)" cmd /k "cd /d Services\Messages\Messages.API && dotnet watch run --launch-profile http"
 start "MoviePlayer.API (watch)" cmd /k "cd /d Services\MoviePlayer\MoviePlayer.API && dotnet watch run --launch-profile http"
 REM start "Review.API (watch)" cmd /k "cd /d Services\Review\Review.API && dotnet watch run --launch-profile http"
