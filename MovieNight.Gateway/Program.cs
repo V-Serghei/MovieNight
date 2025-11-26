@@ -51,6 +51,20 @@ builder.Services.AddHttpClient("people", (sp, c) =>
     var url = cfg["Services:People"] ?? throw new InvalidOperationException("Services:People not configured");
     c.BaseAddress = new Uri(url, UriKind.Absolute);
 });
+builder.Services.AddHttpClient("bookmarks", (sp, c) =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var url = cfg["Services:Bookmarks"] 
+              ?? throw new InvalidOperationException("Services:Bookmarks not configured");
+    c.BaseAddress = new Uri(url, UriKind.Absolute);
+});
+builder.Services.AddHttpClient("ratings", (sp, c) =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var url = cfg["Services:Ratings"] 
+              ?? throw new InvalidOperationException("Services:Ratings not configured");
+    c.BaseAddress = new Uri(url, UriKind.Absolute);
+});
 
 builder.Services.AddHttpClient("friends", (sp, c) =>
 {
@@ -137,8 +151,11 @@ string[] aclSkipPrefixes =
 {
     "/auth",
     "/openapi", "/scalar",
-    "/health", "/debug", "/cinema/films",
+    "/health", "/debug", "/cinema/films", "/cinema/", "/cinema/cartoons",
     "/movies/","/movies", "/users/me", "/access","/_internal/access", "/_internal", "/media",
+    "/people" ,  "/people/" ,
+    "/bookmarks", "/bookmarks/",
+    "/ratings", "/ratings/",
     "/people" ,  "/people/",
     "/users/me", "/access","/_internal/access", "/_internal", "/media",
     "/friends","/friends/",
@@ -207,5 +224,7 @@ app.MapPeopleProxy();
 app.MapFriendsProxy();
 app.MapMessagesProxy();
 app.MapReviewsProxy();
+app.MapBookmarksProxy();
+app.MapRatingsProxy();
 
 app.Run();

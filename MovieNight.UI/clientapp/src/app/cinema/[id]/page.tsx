@@ -6,12 +6,25 @@ import { TopBar } from "@/components/top-bar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Bookmark, BookmarkCheck, Play } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { useBookmarks } from "@/lib/bookmarks-context";
 import { useToast } from "@/hooks/use-toast";
 import type { UIMovie } from "@/lib/types/movie/movie";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { RatingStars } from "@/components/rating-stars";
+import { getMovieRating } from "@/lib/api/ratings";
+import {
+    rateMovieWithWatched,
+    removeRatingAndCleanup,
+} from "@/lib/api/rating-bookmarks-orchestrator";
+import {
+    ArrowLeft,
+    Bookmark,
+    BookmarkCheck,
+    Play,
+    Eye,
+    Clock,
+} from "lucide-react";
 
 type MovieCardDetails = {
     title?: string;
@@ -33,7 +46,7 @@ type MovieCreditView = {
     role: CreditRole;
     characterName?: string;
     order: number;
-    profileImagePath?: string;   
+    profileImagePath?: string;
 };
 
 type MovieDetails = {
@@ -129,19 +142,38 @@ const mapReviewFromApi = (r: any): MovieReview | null => {
 export default function FilmDetailsPage() {
     const params = useParams() as { id: string };
     const router = useRouter();
-    const {bookmarks, addBookmark, removeBookmark} = useBookmarks();
-    const {toast} = useToast();
+    const { bookmarks, addBookmark, removeBookmark } = useBookmarks();
+    const { toast } = useToast();
 
     const [movie, setMovie] = useState<MovieDetails | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    // watched / temp
+    const [watched, setWatched] = useState(false);
+    const [tempBookmarked, setTempBookmarked] = useState(false);
+
+    // рейтинг
+    const [ratingSummary, setRatingSummary] = useState<{
+        averageRating: number | null;
+        ratingsCount: number;
+        userRating: number | null;
+    } | null>(null);
+    const [ratingLoading, setRatingLoading] = useState(false);
+    const [ratingError, setRatingError] = useState<string | null>(null);
+
+    // отзывы
     const [reviews, setReviews] = useState<MovieReview[]>([]);
     const [reviewsError, setReviewsError] = useState<string | null>(null);
     const [newReview, setNewReview] = useState("");
     const [postingReview, setPostingReview] = useState(false);
 
-    const isBookmarked = movie && bookmarks.some((b) => b.id === movie.id);
+    // !!! тут проверь структуру BookmarkItem и поправь под себя
+    const isBookmarked =
+        !!movie &&
+        bookmarks.some(
+            (b: any) => b.movieId === movie.id || b.id === movie.id,
+        );
 
     const toUiMovie = (m: MovieDetails): UIMovie => ({
         id: m.id,
@@ -152,6 +184,7 @@ export default function FilmDetailsPage() {
         rating: 0,
     });
 
+    // загрузка фильма + кредитов + отзывов
     useEffect(() => {
         let cancelled = false;
 
@@ -181,7 +214,6 @@ export default function FilmDetailsPage() {
                 const raw = await movieResp.json();
                 if (cancelled) return;
 
-                // --- genres ---
                 const genres: string[] = Array.isArray(raw.genres)
                     ? raw.genres
                         .map((g: any) =>
@@ -190,7 +222,6 @@ export default function FilmDetailsPage() {
                         .filter(Boolean)
                     : [];
 
-                // --- cards ---
                 const rawCards = raw.movieCards ?? raw.cards ?? [];
                 const cards: MovieCardDetails[] = Array.isArray(rawCards)
                     ? rawCards
@@ -202,7 +233,6 @@ export default function FilmDetailsPage() {
                         .filter((c) => c.imageUrl)
                     : [];
 
-                // --- facts ---
                 const rawFacts = raw.interestingFacts ?? raw.facts ?? [];
                 const facts: MovieFactDetails[] = Array.isArray(rawFacts)
                     ? rawFacts
@@ -213,7 +243,6 @@ export default function FilmDetailsPage() {
                         .filter((f) => f.factName)
                     : [];
 
-                // --- credits (cast & crew)
                 let credits: MovieCreditView[] = [];
                 if (creditsResp.ok) {
                     const rawCredits = await creditsResp.json();
@@ -300,6 +329,7 @@ export default function FilmDetailsPage() {
 
                 if (!cancelled) {
                     setMovie(mapped);
+                    setReviews(mappedReviews);
                 }
             } catch (err: any) {
                 if (!cancelled) {
@@ -319,6 +349,40 @@ export default function FilmDetailsPage() {
         };
     }, [params.id]);
 
+    // загрузка рейтинга
+    useEffect(() => {
+        let cancelled = false;
+
+        async function loadRating() {
+            if (!movie) return;
+            try {
+                setRatingLoading(true);
+                setRatingError(null);
+                const summary = await getMovieRating(movie.id);
+                if (cancelled) return;
+                setRatingSummary({
+                    averageRating: summary.averageRating,
+                    ratingsCount: summary.ratingsCount,
+                    userRating: summary.userRating,
+                });
+            } catch (e: any) {
+                if (!cancelled) {
+                    setRatingError(e?.message ?? "Failed to load rating");
+                }
+            } finally {
+                if (!cancelled) {
+                    setRatingLoading(false);
+                }
+            }
+        }
+
+        loadRating();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [movie?.id]);
+
     const handleBookmark = () => {
         if (!movie) return;
 
@@ -334,6 +398,112 @@ export default function FilmDetailsPage() {
                 title: "Added to bookmarks",
                 description: `${movie.title} has been added to your bookmarks.`,
             });
+        }
+    };
+
+    const handleMarkWatched = async () => {
+        if (!movie) return;
+        const uiMovie = toUiMovie(movie);
+        try {
+            await fetch("/api/gw/bookmarks/watched", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    movie: uiMovie,
+                    watchedAt: new Date().toISOString(),
+                }),
+            });
+            setWatched(true);
+            toast({
+                title: "Marked as watched",
+                description: `"${movie.title}" has been added to your watched list.`,
+            });
+        } catch (e: any) {
+            toast({
+                title: "Error",
+                description: e?.message ?? "Failed to mark as watched",
+                variant: "destructive",
+            });
+        }
+    };
+
+    const handleTempBookmark = async () => {
+        if (!movie) return;
+        const uiMovie = toUiMovie(movie);
+        try {
+            await fetch("/api/gw/bookmarks/temp", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    movie: uiMovie,
+                    ttlMinutes: 60,
+                }),
+            });
+            setTempBookmarked(true);
+            toast({
+                title: "Temporary bookmark added",
+                description: `"${movie.title}" added to temporary bookmarks.`,
+            });
+        } catch (e: any) {
+            toast({
+                title: "Error",
+                description: e?.message ?? "Failed to add temp bookmark",
+                variant: "destructive",
+            });
+        }
+    };
+
+    const handleSetRating = async (score: number) => {
+        if (!movie) return;
+        try {
+            setRatingLoading(true);
+            const uiMovie = toUiMovie(movie);
+            const summary = await rateMovieWithWatched(uiMovie, score);
+            setRatingSummary({
+                averageRating: summary.averageRating,
+                ratingsCount: summary.ratingsCount,
+                userRating: summary.userRating,
+            });
+            toast({
+                title: "Rating saved",
+                description: `You rated "${movie.title}" with ${score}/10.`,
+            });
+        } catch (e: any) {
+            toast({
+                title: "Error",
+                description: e?.message ?? "Failed to set rating",
+                variant: "destructive",
+            });
+        } finally {
+            setRatingLoading(false);
+        }
+    };
+
+    const handleDeleteRating = async () => {
+        if (!movie) return;
+        try {
+            setRatingLoading(true);
+            const uiMovie = toUiMovie(movie);
+            const summary = await removeRatingAndCleanup(uiMovie);
+            setRatingSummary({
+                averageRating: summary.averageRating,
+                ratingsCount: summary.ratingsCount,
+                userRating: summary.userRating,
+            });
+            toast({
+                title: "Rating removed",
+                description: `Your rating for "${movie.title}" has been removed, and history was cleaned up.`,
+            });
+        } catch (e: any) {
+            toast({
+                title: "Error",
+                description: e?.message ?? "Failed to remove rating",
+                variant: "destructive",
+            });
+        } finally {
+            setRatingLoading(false);
         }
     };
 
@@ -354,13 +524,11 @@ export default function FilmDetailsPage() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    // под это заточен ReviewRequest на бэке
                     filmId: movie.id,
                     film: movie.title,
-                    // TODO: сюда можно подставить реальные данные из авторизации
-                    userId: "", // e.g. currentUser.id
+                    userId: "", // TODO: сюда подставь currentUser.id
                     text,
-                    user: "",   // e.g. currentUser.userName / email
+                    user: "",   // TODO: currentUser.userName / email
                     date: new Date().toISOString(),
                 }),
             });
@@ -416,10 +584,21 @@ export default function FilmDetailsPage() {
 
     const topCast = [...directors, ...actors].slice(0, 5);
 
+    if (loading && !movie && !error) {
+        return (
+            <div className="min-h-screen">
+                <TopBar />
+                <main className="container mx-auto px-4 pt-24 pb-12">
+                    <p className="text-sm text-muted-foreground">Loading…</p>
+                </main>
+            </div>
+        );
+    }
+
     if (error || !movie) {
         return (
             <div className="min-h-screen">
-                <TopBar/>
+                <TopBar />
                 <main className="container mx-auto px-4 pt-24 pb-12 space-y-4">
                     <Button
                         variant="ghost"
@@ -427,7 +606,7 @@ export default function FilmDetailsPage() {
                         type="button"
                         onClick={() => router.back()}
                     >
-                        <ArrowLeft className="h-4 w-4"/>
+                        <ArrowLeft className="h-4 w-4" />
                         Back
                     </Button>
                     <p className="text-destructive">
@@ -440,7 +619,7 @@ export default function FilmDetailsPage() {
 
     return (
         <div className="min-h-screen">
-            <TopBar/>
+            <TopBar />
             <main className="container mx-auto px-4 pt-24 pb-12">
                 <Button
                     variant="ghost"
@@ -448,7 +627,7 @@ export default function FilmDetailsPage() {
                     type="button"
                     onClick={() => router.back()}
                 >
-                    <ArrowLeft className="h-4 w-4"/>
+                    <ArrowLeft className="h-4 w-4" />
                     Back
                 </Button>
 
@@ -463,8 +642,7 @@ export default function FilmDetailsPage() {
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <div
-                                    className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
+                                <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
                                     No poster
                                 </div>
                             )}
@@ -481,11 +659,12 @@ export default function FilmDetailsPage() {
                             </div>
                         </div>
 
-                        <div className="flex gap-3">
+                        <div className="flex gap-3 flex-wrap">
                             <Button className="flex-1 gap-2" size="lg">
-                                <Play className="h-4 w-4"/>
+                                <Play className="h-4 w-4" />
                                 Watch
                             </Button>
+
                             <Button
                                 variant={isBookmarked ? "default" : "outline"}
                                 size="icon"
@@ -498,14 +677,37 @@ export default function FilmDetailsPage() {
                                 }
                             >
                                 {isBookmarked ? (
-                                    <BookmarkCheck className="h-5 w-5"/>
+                                    <BookmarkCheck className="h-5 w-5" />
                                 ) : (
-                                    <Bookmark className="h-5 w-5"/>
+                                    <Bookmark className="h-5 w-5" />
                                 )}
+                            </Button>
+
+                            <Button
+                                variant={watched ? "default" : "outline"}
+                                size="sm"
+                                type="button"
+                                onClick={handleMarkWatched}
+                                className="flex items-center gap-2"
+                            >
+                                <Eye className="h-4 w-4" />
+                                Mark as watched
+                            </Button>
+
+                            <Button
+                                variant={tempBookmarked ? "default" : "outline"}
+                                size="sm"
+                                type="button"
+                                onClick={handleTempBookmark}
+                                className="flex items-center gap-2"
+                            >
+                                <Clock className="h-4 w-4" />
+                                Temp bookmark
                             </Button>
                         </div>
                     </div>
 
+                    {/* Правая колонка */}
                     <div className="space-y-6">
                         <div className="space-y-2">
                             <h1 className="text-3xl md:text-4xl font-serif font-bold">
@@ -600,7 +802,7 @@ export default function FilmDetailsPage() {
                                         {movie.budget && (
                                             <>
                                                 Budget: {movie.budget}
-                                                <br/>
+                                                <br />
                                             </>
                                         )}
                                         {movie.grossWorldwide && (
@@ -610,7 +812,6 @@ export default function FilmDetailsPage() {
                                 </div>
                             )}
                         </div>
-
 
                         {/* Genres */}
                         {movie.genres.length > 0 && (
@@ -636,7 +837,9 @@ export default function FilmDetailsPage() {
                                             type="button"
                                             variant="ghost"
                                             size="sm"
-                                            onClick={() => router.push(`/cinema/${movie.id}/cast`)}
+                                            onClick={() =>
+                                                router.push(`/cinema/${movie.id}/cast`)
+                                            }
                                         >
                                             Show all cast
                                         </Button>
@@ -648,45 +851,44 @@ export default function FilmDetailsPage() {
                                             key={c.id || `${c.fullName}-${c.order}`}
                                             className="flex items-center gap-3 border border-border rounded-md px-3 py-2 bg-card/30"
                                         >
-                                            <div
-                                                className="w-10 h-10 rounded-full bg-muted overflow-hidden flex items-center justify-center text-xs flex-shrink-0">
-                                                {"profileImagePath" in c && c.profileImagePath ? (
+                                            <div className="w-10 h-10 rounded-full bg-muted overflow-hidden flex items-center justify-center text-xs flex-shrink-0">
+                                                {c.profileImagePath ? (
                                                     <img
-                                                        src={`/api/gw${(c as any).profileImagePath}`}
+                                                        src={`/api/gw${c.profileImagePath}`}
                                                         alt={c.fullName}
                                                         className="w-full h-full object-cover"
                                                     />
                                                 ) : (
                                                     <span className="text-muted-foreground">
-                                {c.fullName
-                                    .split(" ")
-                                    .map((x) => x[0])
-                                    .join("")
-                                    .slice(0, 2)
-                                    .toUpperCase()}
-                            </span>
+                                                        {c.fullName
+                                                            .split(" ")
+                                                            .map((x) => x[0])
+                                                            .join("")
+                                                            .slice(0, 2)
+                                                            .toUpperCase()}
+                                                    </span>
                                                 )}
                                             </div>
                                             <div className="flex-1">
                                                 <p className="text-sm font-semibold">
                                                     {c.fullName}
                                                     <span className="ml-2 text-xs text-muted-foreground">
-                                {c.role}
-                            </span>
+                                                        {c.role}
+                                                    </span>
                                                 </p>
                                                 {c.characterName && (
                                                     <p className="text-xs text-muted-foreground">
                                                         as{" "}
                                                         <span className="italic">
-                                    {c.characterName}
-                                </span>
+                                                            {c.characterName}
+                                                        </span>
                                                     </p>
                                                 )}
                                             </div>
                                             {c.order > 0 && (
                                                 <span className="text-[11px] text-muted-foreground">
-                            #{c.order}
-                        </span>
+                                                    #{c.order}
+                                                </span>
                                             )}
                                         </div>
                                     ))}
@@ -756,6 +958,74 @@ export default function FilmDetailsPage() {
                                 </div>
                             </div>
                         )}
+
+                        {/* Rating */}
+                        <div className="space-y-2">
+                            <h2 className="text-lg font-semibold">Rating</h2>
+                            {ratingLoading && (
+                                <p className="text-sm text-muted-foreground">
+                                    Loading rating…
+                                </p>
+                            )}
+                            {ratingError && (
+                                <p className="text-sm text-destructive">
+                                    {ratingError}
+                                </p>
+                            )}
+
+                            {ratingSummary && (
+                                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                                    <div className="space-y-1">
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-2xl font-bold">
+                                                {ratingSummary.averageRating !== null
+                                                    ? ratingSummary.averageRating.toFixed(1)
+                                                    : "—"}
+                                            </span>
+                                            <span className="text-xs uppercase text-muted-foreground">
+                                                global
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-muted-foreground">
+                                            {ratingSummary.ratingsCount}{" "}
+                                            {ratingSummary.ratingsCount === 1
+                                                ? "vote"
+                                                : "votes"}
+                                        </p>
+                                    </div>
+
+                                    <div className="flex flex-col items-start gap-1">
+                                        <div className="flex items-center gap-2">
+                                            <RatingStars
+                                                max={10}
+                                                value={ratingSummary.userRating ?? null}
+                                                onChange={handleSetRating}
+                                                size="sm"
+                                            />
+                                            <span className="text-xs text-muted-foreground">
+                                                Your rating:{" "}
+                                                {ratingSummary.userRating
+                                                    ? `${ratingSummary.userRating}/10`
+                                                    : "—"}
+                                            </span>
+                                        </div>
+
+                                        {ratingSummary.userRating && (
+                                            <button
+                                                type="button"
+                                                onClick={handleDeleteRating}
+                                                className="text-xs text-muted-foreground underline-offset-2 hover:underline"
+                                                disabled={ratingLoading}
+                                            >
+                                                Remove rating &amp; clear history
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Reviews */}
                         <div className="mt-8 space-y-4 border-t border-border pt-6">
                             <h2 className="text-lg font-semibold">Reviews</h2>
 

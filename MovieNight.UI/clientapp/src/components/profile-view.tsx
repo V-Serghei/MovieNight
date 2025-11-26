@@ -6,7 +6,15 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Mail, Calendar, Phone, MapPin, Quote, User as UserIcon } from "lucide-react";
+import {
+    Mail,
+    Calendar,
+    Phone,
+    MapPin,
+    Quote,
+    User as UserIcon,
+    Eye,
+} from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { useBookmarks } from "@/lib/bookmarks-context";
 import { useCurrentProfile } from "@/lib/use-current-profile";
@@ -44,7 +52,11 @@ export function ProfileView() {
     }
 
     const displayName =
-        profile.userName || profile.displayName || user.name || profile.email || user.email;
+        profile.userName ||
+        profile.displayName ||
+        user.name ||
+        profile.email ||
+        user.email;
 
     const fullName = useMemo(() => {
         const parts = [profile.firstName, profile.lastName].filter(Boolean);
@@ -70,18 +82,26 @@ export function ProfileView() {
 
     const avatarUrl =
         profile.avatarMediaId && profile.avatarMediaId.length > 0
-            ? `/api/gw/media/${profile.avatarMediaId}` // предполагаемый урл из media-сервиса
+            ? `/api/gw/media/${profile.avatarMediaId}`
             : profile.avatarUrl ?? null;
 
     return (
         <div className="max-w-6xl mx-auto space-y-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <h1 className="text-4xl md:text-5xl font-serif font-bold">Profile</h1>
-                <div className="flex gap-3">
+                <h1 className="text-4xl md:text-5xl font-serif font-bold">
+                    Profile
+                </h1>
+                <div className="flex gap-3 flex-wrap">
                     <Link href="/profile/edit">
                         <Button variant="outline">
                             <UserIcon className="h-4 w-4 mr-2" />
                             Edit profile
+                        </Button>
+                    </Link>
+                    <Link href="/cinema/watched">
+                        <Button variant="outline">
+                            <Eye className="h-4 w-4 mr-2" />
+                            Watched list
                         </Button>
                     </Link>
                 </div>
@@ -93,7 +113,12 @@ export function ProfileView() {
                     <Card className="bg-card/60 backdrop-blur border-border">
                         <CardHeader className="flex flex-col items-center text-center gap-4">
                             <Avatar className="h-28 w-28">
-                                {avatarUrl && <AvatarImage src={avatarUrl} alt={displayName ?? ""} />}
+                                {avatarUrl && (
+                                    <AvatarImage
+                                        src={avatarUrl}
+                                        alt={displayName ?? ""}
+                                    />
+                                )}
                                 <AvatarFallback className="bg-primary text-primary-foreground text-3xl">
                                     {displayName?.charAt(0)?.toUpperCase()}
                                 </AvatarFallback>
@@ -101,9 +126,15 @@ export function ProfileView() {
 
                             <div>
                                 <div className="text-sm text-muted-foreground mb-1">
-                                    @{profile.userName || user.name || profile.email || user.email}
+                                    @
+                                    {profile.userName ||
+                                        user.name ||
+                                        profile.email ||
+                                        user.email}
                                 </div>
-                                <h2 className="text-2xl font-serif font-bold">{displayName}</h2>
+                                <h2 className="text-2xl font-serif font-bold">
+                                    {displayName}
+                                </h2>
 
                                 {profile.quote && (
                                     <p className="mt-3 text-sm text-muted-foreground flex items-center justify-center gap-2">
@@ -223,7 +254,6 @@ export function ProfileView() {
                                 </div>
                             )}
 
-                            {/* Настройки приватности (read-only отображение) */}
                             <div className="space-y-1 pt-2 border-t border-border/60 text-xs text-muted-foreground">
                                 <div className="font-semibold text-[11px] uppercase tracking-wide">
                                     Privacy
@@ -232,26 +262,32 @@ export function ProfileView() {
                                     <li>
                                         Personal info visible only to friends:{" "}
                                         <span className="font-medium">
-                      {profile.personalInfoFriendsOnly ? "Yes" : "No"}
-                    </span>
+                                            {profile.personalInfoFriendsOnly
+                                                ? "Yes"
+                                                : "No"}
+                                        </span>
                                     </li>
                                     <li>
                                         Show only basic info to others:{" "}
                                         <span className="font-medium">
-                      {profile.showOnlyBasicInfo ? "Yes" : "No"}
-                    </span>
+                                            {profile.showOnlyBasicInfo
+                                                ? "Yes"
+                                                : "No"}
+                                        </span>
                                     </li>
                                     <li>
                                         Hide browsing history:{" "}
                                         <span className="font-medium">
-                      {profile.hideBrowsingHistory ? "Yes" : "No"}
-                    </span>
+                                            {profile.hideBrowsingHistory
+                                                ? "Yes"
+                                                : "No"}
+                                        </span>
                                     </li>
                                     <li>
                                         Hide grades:{" "}
                                         <span className="font-medium">
-                      {profile.hideGrades ? "Yes" : "No"}
-                    </span>
+                                            {profile.hideGrades ? "Yes" : "No"}
+                                        </span>
                                     </li>
                                 </ul>
                             </div>
@@ -269,14 +305,18 @@ export function ProfileView() {
                                 <div className="text-xs uppercase text-muted-foreground mb-1">
                                     Member since
                                 </div>
-                                <div className="text-base font-medium">{memberSince}</div>
+                                <div className="text-base font-medium">
+                                    {memberSince}
+                                </div>
                             </div>
 
                             <div className="p-3 rounded-lg bg-muted/40 border border-border">
                                 <div className="text-xs uppercase text-muted-foreground mb-1">
                                     Bookmarks
                                 </div>
-                                <div className="text-2xl font-bold">{bookmarks.length}</div>
+                                <div className="text-2xl font-bold">
+                                    {bookmarks.length}
+                                </div>
                             </div>
 
                             <div className="p-3 rounded-lg bg-muted/40 border border-border">
@@ -298,23 +338,25 @@ export function ProfileView() {
 
                     <Card className="bg-card/60 backdrop-blur border-border">
                         <CardHeader>
-                            <h3 className="text-lg font-semibold">Activity & stats</h3>
+                            <h3 className="text-lg font-semibold">
+                                Activity &amp; stats
+                            </h3>
                         </CardHeader>
                         <CardContent className="text-sm text-muted-foreground space-y-2">
-                            <p>
-                                Here you can later plug in:
-                            </p>
+                            <p>Here you can later plug in:</p>
                             <ul className="list-disc list-inside space-y-1">
                                 <li>Viewing history (timeline, last viewed)</li>
                                 <li>“In the plans” / bookmarks list</li>
                                 <li>Achievements with progress</li>
-                                <li>Category stats (Anime/Films/Serials/Cartoons)</li>
+                                <li>
+                                    Category stats (Anime/Films/Serials/Cartoons)
+                                </li>
                             </ul>
                             <p>
-                                // Literal (word-for-word) translation:
-                                // For this, a separate service (history/stats/achievements) will be useful, but
-                                // the storage of the main profile has already been moved to Users and is available via
-                                // /api/gw/users/me/profile.
+                                For this a separate service (history/stats/achievements)
+                                will be useful, but the storage of the main profile has
+                                already been moved to Users and is available via
+                                /api/gw/users/me/profile.
                             </p>
                         </CardContent>
                     </Card>
