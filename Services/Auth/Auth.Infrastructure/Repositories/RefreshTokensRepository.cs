@@ -20,8 +20,20 @@ public class RefreshTokenRepository(AuthDbContext db) : IRefreshTokensRepository
     }
 
     public Task RevokeAllForUserAsync(Guid userId, CancellationToken ct = default)
-        => db.RefreshTokens.Where(x => x.UserId == userId && !x.Revoked)
+    {
+        if (db.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory")
+        {
+            var tokens = db.RefreshTokens.Where(x => x.UserId == userId && !x.Revoked).ToList();
+            foreach (var t in tokens)
+                t.Revoked = true;
+
+            return Task.CompletedTask;
+        }
+
+        return db.RefreshTokens
+            .Where(x => x.UserId == userId && !x.Revoked)
             .ExecuteUpdateAsync(s => s.SetProperty(p => p.Revoked, true), ct);
+    }
 
     public Task SaveChangesAsync(CancellationToken ct = default) => db.SaveChangesAsync(ct);
 }

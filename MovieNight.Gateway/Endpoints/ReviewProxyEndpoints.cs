@@ -15,8 +15,7 @@ public static class ReviewProxyEndpoints
         // === POST /review ===
         g.MapPost("/", CreateReviewProxy)
             .WithOpenApi();
-
-        // Проксирование любых других путей, если вдруг понадобится
+        
         g.Map("/{**path}", ProxyAny)
             .WithMetadata(new HttpMethodMetadata(
                 new[] { "GET", "POST", "PUT", "DELETE", "PATCH" }));
@@ -24,7 +23,7 @@ public static class ReviewProxyEndpoints
         return routes;
     }
     
-    private static async Task GetByFilmIdProxy(
+    internal static async Task GetByFilmIdProxy(
         HttpContext ctx,
         IHttpClientFactory http,
         string filmId,
@@ -40,7 +39,7 @@ public static class ReviewProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
     
-    private static async Task CreateReviewProxy(
+    internal static async Task CreateReviewProxy(
         HttpContext ctx,
         IHttpClientFactory http,
         CancellationToken ct)
@@ -50,8 +49,7 @@ public static class ReviewProxyEndpoints
         using var msg = new HttpRequestMessage(HttpMethod.Post, "/review");
         CopyAuthOrCookie(ctx, msg);
         AddUserHeaders(ctx, msg);
-
-        // Проксируем тело как есть
+        
         msg.Content = new StreamContent(ctx.Request.Body);
 
         var contentType = ctx.Request.ContentType;
@@ -68,7 +66,7 @@ public static class ReviewProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
     
-    private static async Task ProxyAny(
+    internal static async Task ProxyAny(
         HttpContext ctx,
         IHttpClientFactory http,
         string path,
@@ -89,7 +87,7 @@ public static class ReviewProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    private static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Authorization", out var auth))
             msg.Headers.TryAddWithoutValidation("Authorization", (string)auth);
@@ -99,7 +97,7 @@ public static class ReviewProxyEndpoints
             msg.Headers.TryAddWithoutValidation("Cookie", (string?)cookie!);
     }
 
-    private static async Task ProxyCopyResponse(
+    internal static async Task ProxyCopyResponse(
         HttpContext ctx,
         HttpResponseMessage resp,
         CancellationToken ct)
@@ -117,7 +115,7 @@ public static class ReviewProxyEndpoints
         await resp.Content.CopyToAsync(ctx.Response.Body, ct);
     }
     
-    private static void AddUserHeaders(HttpContext ctx, HttpRequestMessage msg)
+    internal static void AddUserHeaders(HttpContext ctx, HttpRequestMessage msg)
     {
         var user = ctx.User;
         var idStr = user.FindFirstValue(ClaimTypes.NameIdentifier)

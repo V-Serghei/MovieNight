@@ -26,13 +26,11 @@ export function FriendsList() {
     const router = useRouter()
     const { toast } = useToast()
     const { profile, loading: profileLoading } = useCurrentProfile()
-
-    // грузим друзей текущего пользователя
+    
     const loadFriends = async (userId: string) => {
         try {
             setLoading(true)
-
-            // Gateway → FriendsProxyEndpoints → Friends API: GET /friends/{userId}
+            
             const res = await fetch(`/api/gw/friends/${userId}`, {
                 credentials: "include",
             })

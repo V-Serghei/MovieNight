@@ -9,13 +9,15 @@ REM === APIs ===
 start "Access.API" cmd /k "cd /d Services\Access\Access.API && dotnet run --launch-profile http"
 start "Achievements.API" cmd /k "cd /d Services\Achievements\Achievements.API && dotnet run --launch-profile http"
 start "Auth.API" cmd /k "cd /d Services\Auth\Auth.API && dotnet run --launch-profile http"
-REM start "Bookmark.API" cmd /k "cd /d Services\Bookmark\Bookmark.API && dotnet run --launch-profile http"
+start "Bookmark.API" cmd /k "cd /d Services\Bookmark\Bookmark.API && dotnet run --launch-profile http"
 start "Friends.API" cmd /k "cd /d Services\Friends\Friends.API && dotnet run --launch-profile http"
 start "Messages.API" cmd /k "cd /d Services\Messages\Messages.API && dotnet run --launch-profile http"
 start "MoviePlayer.API" cmd /k "cd /d Services\MoviePlayer\MoviePlayer.API && dotnet run --launch-profile http"
 start "Review.API" cmd /k "cd /d Services\Review\Review.API && dotnet run --launch-profile http"
 start "Users.API" cmd /k "cd /d Services\User\Users.API && dotnet run --launch-profile http"
 start "Media.API" cmd /k "cd /d Services\Media\Media.API && dotnet run --launch-profile http"
+start "People.API" cmd /k "cd /d Services\People\People.API && dotnet run --launch-profile http"
+start "MovieRatings.API" cmd /k "cd /d Services\MovieRatings\MovieRatings.API && dotnet run --launch-profile http"
 
 echo ================================
 echo  Starting Gateway...

@@ -25,7 +25,7 @@ public static class UsersPublicEndpoints
 
     // ---------- /users/me ----------
 
-    private static async Task GetMeBasic(
+    internal static async Task GetMeBasic(
         HttpContext ctx,
         IHttpClientFactory http,
         CancellationToken ct)
@@ -119,7 +119,7 @@ public static class UsersPublicEndpoints
 
     // ---------- /users/me/profile (GET) ----------
 
-    private static async Task GetMyProfileFull(
+    internal static async Task GetMyProfileFull(
         HttpContext ctx,
         IHttpClientFactory http,
         CancellationToken ct)
@@ -154,7 +154,7 @@ public static class UsersPublicEndpoints
 
     // ---------- /users/me/profile (PUT) ----------
 
-    private static async Task UpdateMyProfileFull(
+    internal static async Task UpdateMyProfileFull(
         HttpContext ctx,
         IHttpClientFactory http,
         CancellationToken ct)
@@ -205,7 +205,7 @@ public static class UsersPublicEndpoints
 
     // ---------- /users/{userId}/profile (GET) ----------
 
-    private static async Task GetUserProfileFull(
+    internal static async Task GetUserProfileFull(
         Guid userId,
         HttpContext ctx,
         IHttpClientFactory http,
@@ -215,7 +215,7 @@ public static class UsersPublicEndpoints
     }
 
 
-    private static async Task WriteUserProfileResponse(
+    internal static async Task WriteUserProfileResponse(
         HttpContext ctx,
         IHttpClientFactory http,
         Guid userId,
@@ -324,7 +324,7 @@ public static class UsersPublicEndpoints
         await w.FlushAsync();
     }
 
-    private static async Task Users(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task Users(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
     {
         // var users = http.CreateClient("users");
         // using var userResp = await users.GetAsync($"/users", ct);
@@ -339,7 +339,7 @@ public static class UsersPublicEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    private static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Authorization", out var auth))
             msg.Headers.TryAddWithoutValidation("Authorization", auth.ToArray());
@@ -347,7 +347,7 @@ public static class UsersPublicEndpoints
             msg.Headers.TryAddWithoutValidation("Cookie", cookie.ToArray());
     }
 
-    private static async Task ProxyCopyResponse(
+    internal static async Task ProxyCopyResponse(
         HttpContext ctx,
         HttpResponseMessage resp,
         CancellationToken ct)
@@ -361,7 +361,7 @@ public static class UsersPublicEndpoints
         await resp.Content.CopyToAsync(ctx.Response.Body, ct);
     }
 
-    private static void WriteStringIfExists(
+    internal static void WriteStringIfExists(
         Utf8JsonWriter w,
         JsonElement root,
         string sourceName,
@@ -380,7 +380,7 @@ public static class UsersPublicEndpoints
             w.WriteStringValue(v.GetString());
     }
 
-    private static void WriteBoolIfExists(
+    internal static void WriteBoolIfExists(
         Utf8JsonWriter w,
         JsonElement root,
         string sourceName,
