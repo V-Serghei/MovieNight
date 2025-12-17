@@ -2,15 +2,14 @@
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY [" MovieNight.UI/MovieNight.UI.csproj", " MovieNight.UI/"]
-RUN dotnet restore " MovieNight.UI/MovieNight.UI.csproj"
+COPY [" MovieNight.UI/MovieNight.UI.csproj", "MovieNight.UI/"]
+RUN dotnet restore "MovieNight.UI/MovieNight.UI.csproj"
 COPY . .
-WORKDIR "/src/ MovieNight.UI"
+WORKDIR "/src/MovieNight.UI"
 RUN dotnet build "./MovieNight.UI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

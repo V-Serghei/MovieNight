@@ -27,7 +27,7 @@ public static class AuthProxyEndpoints
     }
 
     // Tokens.Service
-    private static async Task LoginProxy(HttpContext ctx, [FromBody] LoginRequest body, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task LoginProxy(HttpContext ctx, [FromBody] LoginRequest body, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("auth");
         using var msg = new HttpRequestMessage(HttpMethod.Post, "/auth/login")
@@ -39,7 +39,7 @@ public static class AuthProxyEndpoints
     }
 
     // Users.Service
-    private static async Task RegisterProxy(
+    internal static async Task RegisterProxy(
         HttpContext ctx,
         [FromBody] RegisterRequest body,
         IHttpClientFactory http,
@@ -88,7 +88,7 @@ public static class AuthProxyEndpoints
     }
 
     // Tokens.Service
-    private static async Task RefreshProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task RefreshProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("auth");
         using var msg = new HttpRequestMessage(HttpMethod.Post, "/auth/refresh");
@@ -97,7 +97,7 @@ public static class AuthProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    private static async Task LogoutProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task LogoutProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("auth");
         using var msg = new HttpRequestMessage(HttpMethod.Post, "/auth/logout");
@@ -106,7 +106,7 @@ public static class AuthProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    private static async Task MeProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task MeProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("auth");
         using var msg = new HttpRequestMessage(HttpMethod.Get, "/auth/me");
@@ -129,13 +129,13 @@ public static class AuthProxyEndpoints
         await resp.Content.CopyToAsync(ctx.Response.Body, ct);
     }
 
-    private static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Cookie", out var cookie))
             msg.Headers.TryAddWithoutValidation("Cookie", cookie.ToArray());
     }
 
-    private static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Authorization", out var auth))
             msg.Headers.TryAddWithoutValidation("Authorization", auth.ToArray());
@@ -143,7 +143,7 @@ public static class AuthProxyEndpoints
             CopyCookie(ctx, msg);
     }
 
-    private static async Task ProxyCopyResponse(HttpContext ctx, HttpResponseMessage resp, CancellationToken ct)
+    internal static async Task ProxyCopyResponse(HttpContext ctx, HttpResponseMessage resp, CancellationToken ct)
     {
         ctx.Response.StatusCode = (int)resp.StatusCode;
         foreach (var h in resp.Headers)

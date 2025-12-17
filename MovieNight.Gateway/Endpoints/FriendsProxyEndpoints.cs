@@ -24,7 +24,7 @@ public static class FriendsProxyEndpoints
     }
 
     // GET /friends/{userId}
-    private static async Task GetByUserIdProxy(
+    internal static async Task GetByUserIdProxy(
         HttpContext ctx,
         [FromRoute] string userId,
         IHttpClientFactory http,
@@ -40,7 +40,7 @@ public static class FriendsProxyEndpoints
     }
 
     // POST /friends
-    private static async Task CreateFriendProxy(
+    internal static async Task CreateFriendProxy(
         HttpContext ctx,
         [FromBody] object body,
         IHttpClientFactory http,
@@ -60,7 +60,7 @@ public static class FriendsProxyEndpoints
     }
 
     // === UNIVERSAL passthrough /friends/**
-    private static async Task ProxyAny(
+    internal static async Task ProxyAny(
         [FromRoute] string? path,
         HttpContext ctx,
         IHttpClientFactory http,
@@ -100,13 +100,13 @@ public static class FriendsProxyEndpoints
 
     // ===== helpers =====
 
-    private static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Cookie", out var cookie))
             msg.Headers.TryAddWithoutValidation("Cookie", cookie.ToArray());
     }
 
-    private static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Authorization", out var auth))
             msg.Headers.TryAddWithoutValidation("Authorization", auth.ToArray());
@@ -114,7 +114,7 @@ public static class FriendsProxyEndpoints
             CopyCookie(ctx, msg);
     }
 
-    private static async Task ProxyCopyResponse(
+    internal static async Task ProxyCopyResponse(
         HttpContext ctx,
         HttpResponseMessage resp,
         CancellationToken ct)

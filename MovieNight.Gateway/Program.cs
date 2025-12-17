@@ -228,3 +228,7 @@ app.MapBookmarksProxy();
 app.MapRatingsProxy();
 
 app.Run();
+
+public partial class Program
+{
+}

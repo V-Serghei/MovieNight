@@ -28,7 +28,7 @@ public static class BookmarksProxyEndpoints
         return routes;
     }
 
-    private static async Task ProxyPassthrough(
+    internal static async Task ProxyPassthrough(
         HttpContext ctx,
         IHttpClientFactory http,
         CancellationToken ct)
@@ -50,7 +50,7 @@ public static class BookmarksProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    private static async Task ProxyWithBody(
+    internal static async Task ProxyWithBody(
         HttpContext ctx,
         IHttpClientFactory http,
         CancellationToken ct)
@@ -69,13 +69,13 @@ public static class BookmarksProxyEndpoints
 
         await CommonProxy.CopyBack(ctx, resp, ct);
     }
-    private static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Cookie", out var cookie))
             msg.Headers.TryAddWithoutValidation("Cookie", cookie.ToArray());
     }
 
-    private static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Authorization", out var auth))
             msg.Headers.TryAddWithoutValidation("Authorization", auth.ToArray());
@@ -83,7 +83,7 @@ public static class BookmarksProxyEndpoints
             CopyCookie(ctx, msg);
     }
 
-    private static async Task ProxyCopyResponse(
+    internal static async Task ProxyCopyResponse(
         HttpContext ctx,
         HttpResponseMessage resp,
         CancellationToken ct)
@@ -102,7 +102,7 @@ public static class BookmarksProxyEndpoints
             await resp.Content.CopyToAsync(ctx.Response.Body, ct);
         }
     }
-    private static void AddUserHeaders(HttpContext ctx, HttpRequestMessage msg)
+    internal static void AddUserHeaders(HttpContext ctx, HttpRequestMessage msg)
     {
         var user = ctx.User;
         var idStr = user.FindFirstValue(ClaimTypes.NameIdentifier)

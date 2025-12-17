@@ -18,7 +18,7 @@ public static class MediaProxyEndpoints
     }
 
     // POST /media  -> Media.API /media
-    private static async Task UploadProxy(
+    internal static async Task UploadProxy(
         HttpContext ctx,
         IHttpClientFactory http,
         CancellationToken ct)
@@ -33,7 +33,7 @@ public static class MediaProxyEndpoints
 
 
     // GET /media/{id}
-    private static async Task DownloadProxy(
+    internal static async Task DownloadProxy(
         HttpContext ctx,
         [FromRoute] Guid id,
         IHttpClientFactory http,
@@ -48,7 +48,7 @@ public static class MediaProxyEndpoints
     }
 
     // GET /media/{id}/info
-    private static async Task InfoProxy(
+    internal static async Task InfoProxy(
         HttpContext ctx,
         [FromRoute] Guid id,
         IHttpClientFactory http,
@@ -63,7 +63,7 @@ public static class MediaProxyEndpoints
     }
 
     // DELETE /media/{id}
-    private static async Task DeleteProxy(
+    internal static async Task DeleteProxy(
         HttpContext ctx,
         [FromRoute] Guid id,
         IHttpClientFactory http,
@@ -77,13 +77,13 @@ public static class MediaProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    private static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Cookie", out var cookie))
             msg.Headers.TryAddWithoutValidation("Cookie", cookie.ToArray());
     }
 
-    private static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Authorization", out var auth))
             msg.Headers.TryAddWithoutValidation("Authorization", auth.ToArray());
@@ -91,7 +91,7 @@ public static class MediaProxyEndpoints
             CopyCookie(ctx, msg);
     }
 
-    private static async Task ProxyCopyResponse(
+    internal static async Task ProxyCopyResponse(
         HttpContext ctx,
         HttpResponseMessage resp,
         CancellationToken ct)

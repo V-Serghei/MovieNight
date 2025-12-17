@@ -22,7 +22,7 @@ public static class RatingsProxyEndpoints
         return routes;
     }
 
-    private static async Task ProxyPassthrough(
+    internal static async Task ProxyPassthrough(
         HttpContext ctx,
         IHttpClientFactory http,
         CancellationToken ct)
@@ -43,14 +43,14 @@ public static class RatingsProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    private static async Task ProxyWithBody(
+    internal static async Task ProxyWithBody(
         HttpContext ctx,
         IHttpClientFactory http,
         CancellationToken ct)
     {
         var client = http.CreateClient("ratings");
 
-        using var msg = CommonProxy.BuildOutgoingMessage(ctx, ctx.Request.Path + ctx.Request.QueryString);
+        using var msg = CommonProxy.BuildOutgoingMessage(ctx, ctx.Request.Path);
         AddUserHeaders(ctx, msg);
 
         using var resp = await client.SendAsync(
@@ -61,13 +61,13 @@ public static class RatingsProxyEndpoints
         await CommonProxy.CopyBack(ctx, resp, ct);
     }
 
-    private static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Cookie", out var cookie))
             msg.Headers.TryAddWithoutValidation("Cookie", cookie.ToArray());
     }
 
-    private static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Authorization", out var auth))
         {
@@ -84,7 +84,7 @@ public static class RatingsProxyEndpoints
         }
     }
 
-    private static async Task ProxyCopyResponse(
+    internal static async Task ProxyCopyResponse(
         HttpContext ctx,
         HttpResponseMessage resp,
         CancellationToken ct)
@@ -103,7 +103,7 @@ public static class RatingsProxyEndpoints
             await resp.Content.CopyToAsync(ctx.Response.Body, ct);
         }
     }
-    private static void AddUserHeaders(HttpContext ctx, HttpRequestMessage msg)
+    internal static void AddUserHeaders(HttpContext ctx, HttpRequestMessage msg)
     {
         var user = ctx.User;
         var idStr = user.FindFirstValue(ClaimTypes.NameIdentifier)

@@ -20,7 +20,7 @@ public static class PeopleProxyEndpoints
         return routes;
     }
 
-    private static async Task CreatePersonProxy(
+    internal static async Task CreatePersonProxy(
         HttpContext ctx,
         [FromBody] object body,
         IHttpClientFactory http,
@@ -36,7 +36,7 @@ public static class PeopleProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    private static async Task GetPersonByIdProxy(
+    internal static async Task GetPersonByIdProxy(
         HttpContext ctx,
         [FromRoute] Guid id,
         IHttpClientFactory http,
@@ -49,7 +49,7 @@ public static class PeopleProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    private static async Task SearchPeopleProxy(
+    internal static async Task SearchPeopleProxy(
         HttpContext ctx,
         [FromQuery] string name,
         IHttpClientFactory http,
@@ -63,7 +63,7 @@ public static class PeopleProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    private static async Task CreateCreditProxy(
+    internal static async Task CreateCreditProxy(
         HttpContext ctx,
         [FromBody] object body,
         IHttpClientFactory http,
@@ -79,7 +79,7 @@ public static class PeopleProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    private static async Task GetCreditsForMovieProxy(
+    internal static async Task GetCreditsForMovieProxy(
         HttpContext ctx,
         [FromRoute] Guid movieId,
         IHttpClientFactory http,
@@ -92,13 +92,13 @@ public static class PeopleProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    private static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Cookie", out var cookie))
             msg.Headers.TryAddWithoutValidation("Cookie", cookie.ToArray());
     }
 
-    private static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Authorization", out var auth))
             msg.Headers.TryAddWithoutValidation("Authorization", auth.ToArray());
@@ -106,7 +106,7 @@ public static class PeopleProxyEndpoints
             CopyCookie(ctx, msg);
     }
 
-    private static async Task ProxyCopyResponse(HttpContext ctx, HttpResponseMessage resp, CancellationToken ct)
+    internal static async Task ProxyCopyResponse(HttpContext ctx, HttpResponseMessage resp, CancellationToken ct)
     {
         ctx.Response.StatusCode = (int)resp.StatusCode;
 

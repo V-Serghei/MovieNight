@@ -35,7 +35,7 @@ public static class MoviesProxyEndpoints
     }
     
     // GET /movies
-    private static async Task ListProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task ListProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("movies");
         var qs = ctx.Request.QueryString.HasValue ? ctx.Request.QueryString.Value : "";
@@ -47,7 +47,7 @@ public static class MoviesProxyEndpoints
     }
 
     // GET /movies/{id}
-    private static async Task GetByIdProxy(HttpContext ctx, [FromRoute] Guid id, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task GetByIdProxy(HttpContext ctx, [FromRoute] Guid id, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("movies");
         using var msg = new HttpRequestMessage(HttpMethod.Get, $"/movies/{id}");
@@ -58,7 +58,7 @@ public static class MoviesProxyEndpoints
     }
 
     // GET /movies/search?title=&year=&director=
-    private static async Task SearchProxy(
+    internal static async Task SearchProxy(
         HttpContext ctx,
         [FromQuery] string title,
         [FromQuery] int year,
@@ -76,7 +76,7 @@ public static class MoviesProxyEndpoints
     }
 
     // POST /movies
-    private static async Task CreateProxy(HttpContext ctx, [FromBody] CreateMovieRequest body, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task CreateProxy(HttpContext ctx, [FromBody] CreateMovieRequest body, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("movies");
         using var msg = new HttpRequestMessage(HttpMethod.Post, "/movies")
@@ -90,7 +90,7 @@ public static class MoviesProxyEndpoints
     }
 
     // POST /movies/seed
-    private static async Task SeedProxy(HttpContext ctx, [FromBody] SeedMoviesRequest body, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task SeedProxy(HttpContext ctx, [FromBody] SeedMoviesRequest body, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("movies");
         using var msg = new HttpRequestMessage(HttpMethod.Post, "/movies/seed")
@@ -103,7 +103,7 @@ public static class MoviesProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
     
-    private static async Task FilmsAliasProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task FilmsAliasProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("movies");
         var url = "/movies/by-category/Film";
@@ -113,7 +113,7 @@ public static class MoviesProxyEndpoints
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
         await ProxyCopyResponse(ctx, resp, ct);
     }
-    private static async Task CartonAliasProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task CartonAliasProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("movies");
         var url = "/movies/by-category/Cartoon";
@@ -123,7 +123,7 @@ public static class MoviesProxyEndpoints
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
         await ProxyCopyResponse(ctx, resp, ct);
     }
-    private static async Task AnimeAliasProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task AnimeAliasProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("movies");
         var url = "/movies/by-category/Anime";
@@ -133,7 +133,7 @@ public static class MoviesProxyEndpoints
         using var resp = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, ct);
         await ProxyCopyResponse(ctx, resp, ct);
     }
-    private static async Task SerialAliasProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task SerialAliasProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("movies");
         var url = "/movies/by-category/Serial";
@@ -144,7 +144,7 @@ public static class MoviesProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
 
-    private static async Task ProxyAny(
+    internal static async Task ProxyAny(
         [FromRoute] string? path,
         HttpContext ctx,
         IHttpClientFactory http,
@@ -175,13 +175,13 @@ public static class MoviesProxyEndpoints
     }
 
     // ===== helpers (как в AuthProxyEndpoints) =====
-    private static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Cookie", out var cookie))
             msg.Headers.TryAddWithoutValidation("Cookie", cookie.ToArray());
     }
 
-    private static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Authorization", out var auth))
             msg.Headers.TryAddWithoutValidation("Authorization", auth.ToArray());
@@ -189,7 +189,7 @@ public static class MoviesProxyEndpoints
             CopyCookie(ctx, msg);
     }
 
-    private static async Task ProxyCopyResponse(HttpContext ctx, HttpResponseMessage resp, CancellationToken ct)
+    internal static async Task ProxyCopyResponse(HttpContext ctx, HttpResponseMessage resp, CancellationToken ct)
     {
         ctx.Response.StatusCode = (int)resp.StatusCode;
 

@@ -31,7 +31,7 @@ public static class MessagesProxyEndpoints
         return routes;
     }
     
-    private static async Task ListProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task ListProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("messages");
 
@@ -50,7 +50,7 @@ public static class MessagesProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
     
-    private static async Task GetByIdProxy(HttpContext ctx, IHttpClientFactory http, Guid id, CancellationToken ct)
+    internal static async Task GetByIdProxy(HttpContext ctx, IHttpClientFactory http, Guid id, CancellationToken ct)
     {
         var client = http.CreateClient("messages");
 
@@ -61,7 +61,7 @@ public static class MessagesProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
     
-    private static async Task GetByReceiverIdProxy(HttpContext ctx, IHttpClientFactory http, string receiverId, CancellationToken ct)
+    internal static async Task GetByReceiverIdProxy(HttpContext ctx, IHttpClientFactory http, string receiverId, CancellationToken ct)
     {
         var client = http.CreateClient("messages");
 
@@ -72,7 +72,7 @@ public static class MessagesProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
     
-    private static async Task CreateProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
+    internal static async Task CreateProxy(HttpContext ctx, IHttpClientFactory http, CancellationToken ct)
     {
         var client = http.CreateClient("messages");
         
@@ -96,7 +96,7 @@ public static class MessagesProxyEndpoints
     }
 
     
-    private static async Task ProxyAny(HttpContext ctx, IHttpClientFactory http, string path, CancellationToken ct)
+    internal static async Task ProxyAny(HttpContext ctx, IHttpClientFactory http, string path, CancellationToken ct)
     {
         var client = http.CreateClient("messages");
 
@@ -112,7 +112,7 @@ public static class MessagesProxyEndpoints
         await ProxyCopyResponse(ctx, resp, ct);
     }
     
-    private static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
+    internal static void CopyAuthOrCookie(HttpContext ctx, HttpRequestMessage msg)
     {
         if (ctx.Request.Headers.TryGetValue("Authorization", out var auth))
             msg.Headers.TryAddWithoutValidation("Authorization", (string)auth);
@@ -122,7 +122,7 @@ public static class MessagesProxyEndpoints
             msg.Headers.TryAddWithoutValidation("Cookie", (string?)cookie!);
     }
 
-    private static async Task ProxyCopyResponse(HttpContext ctx, HttpResponseMessage resp, CancellationToken ct)
+    internal static async Task ProxyCopyResponse(HttpContext ctx, HttpResponseMessage resp, CancellationToken ct)
     {
         ctx.Response.StatusCode = (int)resp.StatusCode;
 
