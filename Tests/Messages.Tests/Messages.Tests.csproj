@@ -22,9 +22,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <!-- Ссылки на проекты домена и инфраструктуры -->
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\Messages\Messages.Domain\Messages.Domain.csproj" />
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\Messages\Messages.Infrastructure\Messages.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\Services\Messages\Messages.Domain\Messages.Domain.csproj" />
+        <ProjectReference Include="..\..\Services\Messages\Messages.Infrastructure\Messages.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

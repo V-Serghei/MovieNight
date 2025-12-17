@@ -22,9 +22,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\Auth\Auth.Core\Auth.Core.csproj" />
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\Auth\Auth.Domain\Auth.Domain.csproj" />
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\Auth\Auth.Infrastructure\Auth.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\Services\Auth\Auth.Core\Auth.Core.csproj" />
+        <ProjectReference Include="..\..\Services\Auth\Auth.Domain\Auth.Domain.csproj" />
+        <ProjectReference Include="..\..\Services\Auth\Auth.Infrastructure\Auth.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

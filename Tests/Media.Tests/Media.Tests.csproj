@@ -22,9 +22,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\Media\Media.Core\Media.Core.csproj" />
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\Media\Media.Domain\Media.Domain.csproj" />
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\Media\Media.Infrastructure\Media.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\Services\Media\Media.Core\Media.Core.csproj" />
+        <ProjectReference Include="..\..\Services\Media\Media.Domain\Media.Domain.csproj" />
+        <ProjectReference Include="..\..\Services\Media\Media.Infrastructure\Media.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

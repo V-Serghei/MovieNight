@@ -22,8 +22,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\Access\Access.Core\Access.Core.csproj" />
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\Access\Access.Infrastructure\Access.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\Services\Access\Access.Core\Access.Core.csproj" />
+        <ProjectReference Include="..\..\Services\Access\Access.Infrastructure\Access.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

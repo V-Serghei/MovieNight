@@ -20,8 +20,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\People\People.Domain\People.Domain.csproj" />
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\People\People.Infrastructure\People.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\Services\People\People.Domain\People.Domain.csproj" />
+        <ProjectReference Include="..\..\Services\People\People.Infrastructure\People.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

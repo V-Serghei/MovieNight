@@ -25,8 +25,8 @@
 
     <ItemGroup>
         <!-- Ссылки на проекты домена и инфраструктуры -->
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\MoviePlayer\MoviePlayer.Domain\MoviePlayer.Domain.csproj" />
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\MoviePlayer\MoviePlayer.Infrastructure\MoviePlayer.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\Services\MoviePlayer\MoviePlayer.Domain\MoviePlayer.Domain.csproj" />
+        <ProjectReference Include="..\..\Services\MoviePlayer\MoviePlayer.Infrastructure\MoviePlayer.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

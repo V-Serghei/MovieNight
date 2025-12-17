@@ -22,8 +22,8 @@
 
     <ItemGroup>
         <!-- Ссылки на проекты домена и инфраструктуры -->
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\MovieRatings\MovieRatings.Domain\MovieRatings.Domain.csproj" />
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\MovieRatings\MovieRatings.Infrastructure\MovieRatings.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\Services\MovieRatings\MovieRatings.Domain\MovieRatings.Domain.csproj" />
+        <ProjectReference Include="..\..\Services\MovieRatings\MovieRatings.Infrastructure\MovieRatings.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

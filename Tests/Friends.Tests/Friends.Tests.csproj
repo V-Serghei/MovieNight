@@ -22,8 +22,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\Friends\Friends.Domain\Friends.Domain.csproj" />
-        <ProjectReference Include="D:\Projects\RiderProjects\MovieNight\Services\Friends\Friends.Infrastructure\Friends.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\Services\Friends\Friends.Domain\Friends.Domain.csproj" />
+        <ProjectReference Include="..\..\Services\Friends\Friends.Infrastructure\Friends.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
