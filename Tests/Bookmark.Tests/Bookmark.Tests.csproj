@@ -23,7 +23,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Services\Bookmark\Bookmark.Domain\Bookmark.Domain.csproj" />
-        <ProjectReference Include="..\..\Services\Services\Bookmark\Bookmark.Infrastructure\Bookmark.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\Services\Bookmark\Bookmark.Infrastructure\Bookmark.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
