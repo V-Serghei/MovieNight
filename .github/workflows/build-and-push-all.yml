@@ -109,24 +109,26 @@ jobs:
 
       - name: Pick namespace
         id: ns
-        shell: pwsh
+        shell: bash
         run: |
-          if ($env:GITHUB_REF_NAME -eq "develop") { "ns=movienight-dev" >> $env:GITHUB_OUTPUT }
-          else { "ns=movienight-prod" >> $env:GITHUB_OUTPUT }
+          if [[ "${GITHUB_REF_NAME}" == "develop" ]]; then
+            echo "ns=movienight-dev" >> "$GITHUB_OUTPUT"
+          else
+            echo "ns=movienight-prod" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Apply manifests
-        shell: pwsh
+        shell: bash
         run: |
-          $ns = "${{ steps.ns.outputs.ns }}"
-          kubectl get ns $ns | Out-Null
-          if ($LASTEXITCODE -ne 0) { kubectl create ns $ns }
-          kubectl apply -n $ns -f k8s/
+          ns="${{ steps.ns.outputs.ns }}"
+          kubectl get ns "$ns" >/dev/null 2>&1 || kubectl create ns "$ns"
+          kubectl apply -n "$ns" -f k8s/
 
       - name: Set gateway image to branch tag and restart
-        shell: pwsh
+        shell: bash
         run: |
-          $ns = "${{ steps.ns.outputs.ns }}"
-          $owner = "${{ github.repository_owner }}".ToLower()
-          $tag = "${{ github.ref_name }}"
-          kubectl set image -n $ns deployment/movienight-gateway gateway=ghcr.io/$owner/movienight-gateway:$tag
-          kubectl rollout status -n $ns deployment/movienight-gateway --timeout=120s
+          ns="${{ steps.ns.outputs.ns }}"
+          owner="$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')"
+          tag="${GITHUB_REF_NAME}"
+          kubectl set image -n "$ns" deployment/movienight-gateway gateway=ghcr.io/$owner/movienight-gateway:$tag
+          kubectl rollout status -n "$ns" deployment/movienight-gateway --timeout=120s
