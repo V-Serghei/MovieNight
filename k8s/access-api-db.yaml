@@ -1,0 +1,9 @@
+﻿apiVersion: v1
+kind: Secret
+metadata:
+  name: access-api-db
+  namespace: movienight-dev
+type: Opaque
+stringData:
+  ConnectionStrings__Default: "Server=mssql,1433;Database=MN.Access;User Id=sa;Password=zaq1!xsw2@;TrustServerCertificate=True;Encrypt=False;IPAddressPreference=IPv4First;Connect Timeout=30;ConnectRetryCount=10;ConnectRetryInterval=3;"
+  ConnectionStrings__DefaultConnection: "Server=mssql,1433;Database=MN.Access;User Id=sa;Password=zaq1!xsw2@;TrustServerCertificate=True;Encrypt=False;IPAddressPreference=IPv4First;Connect Timeout=30;ConnectRetryCount=10;ConnectRetryInterval=3;"

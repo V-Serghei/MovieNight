@@ -16,6 +16,9 @@ spec:
         - name: gateway
           image: ghcr.io/v-serghei/movienight-gateway:develop
           imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: movienight-db
           ports:
             - containerPort: 8080
           env:
