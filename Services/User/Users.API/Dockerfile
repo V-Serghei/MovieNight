@@ -7,15 +7,9 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-COPY MovieNight.sln ./
-COPY NuGet.config ./
-COPY Directory.Build.props ./
-COPY Directory.Packages.props ./
-
 COPY Services/User/Users.API/Users.API.csproj Services/User/Users.API/
 COPY Services/User/Users.Core/Users.Core.csproj Services/User/Users.Core/
 COPY Services/User/Users.Infrastructure/Users.Infrastructure.csproj Services/User/Users.Infrastructure/
-COPY Services/Common/SharedKernel/SharedKernel.csproj Services/Common/SharedKernel/
 
 RUN dotnet restore Services/User/Users.API/Users.API.csproj
 
