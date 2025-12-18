@@ -12,10 +12,31 @@ spec:
       labels:
         app: auth-api
     spec:
+      initContainers:
+        - name: wait-for-mssql
+          image: mcr.microsoft.com/mssql-tools
+          env:
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mssql-secret
+                  key: SA_PASSWORD
+          command:
+            - sh
+            - -c
+            - |
+              echo "waiting for MSSQL to accept queries..."
+              until /opt/mssql-tools/bin/sqlcmd -S mssql,1433 -U sa -P "$SA_PASSWORD" -Q "SELECT 1" >/dev/null 2>&1; do
+                echo "still waiting..."
+                sleep 3
+              done
       containers:
         - name: auth
           image: ghcr.io/v-serghei/auth-api:develop
           imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: auth-api-db
           ports:
             - containerPort: 8080
           env:

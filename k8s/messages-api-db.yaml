@@ -1,0 +1,9 @@
+﻿apiVersion: v1
+kind: Secret
+metadata:
+  name: messages-api-db
+  namespace: movienight-dev
+type: Opaque
+stringData:
+  ConnectionStrings__Default: "Server=mssql,1433;Database=MessagesDB;User Id=sa;Password=zaq1!xsw2@;TrustServerCertificate=True;Encrypt=False;"
+  ConnectionStrings__DefaultConnection: "Server=mssql,1433;Database=MessagesDB;User Id=sa;Password=zaq1!xsw2@;TrustServerCertificate=True;Encrypt=False;"
