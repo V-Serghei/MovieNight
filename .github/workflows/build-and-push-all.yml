@@ -1,0 +1,105 @@
+﻿name: Build & Push (all services)
+
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+          include-prerelease: true
+
+      - name: Test
+        run: dotnet test --configuration Release
+
+  docker:
+    needs: test
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - name: movienight-gateway
+            dockerfile: MovieNight.Gateway/Dockerfile
+
+          - name: users-api
+            dockerfile: Services/User/Users.API/Dockerfile
+
+          - name: auth-api
+            dockerfile: Services/Auth/Auth.API/Dockerfile
+
+          - name: access-api
+            dockerfile: Services/Access/Access.API/Dockerfile
+
+          - name: review-api
+            dockerfile: Services/Review/Review.API/Dockerfile
+
+          - name: movieplayer-api
+            dockerfile: Services/MoviePlayer/MoviePlayer.API/Dockerfile
+
+          - name: messages-api
+            dockerfile: Services/Messages/Messages.API/Dockerfile
+
+          - name: friends-api
+            dockerfile: Services/Friends/Friends.API/Dockerfile
+
+          - name: bookmark-api
+            dockerfile: Services/Bookmark/Bookmark.API/Dockerfile
+
+          - name: media-api
+            dockerfile: Services/Media/Media.API/Dockerfile
+
+          - name: movieratings-api
+            dockerfile: Services/MovieRatings/MovieRatings.API/Dockerfile
+            
+          - name: people-api
+            dockerfile: Services/People/People.API/Dockerfile                
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set image name
+        id: vars
+        run: |
+          OWNER="$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')"
+          IMAGE="ghcr.io/${OWNER}/${{ matrix.service.name }}"
+          echo "image=${IMAGE}" >> $GITHUB_OUTPUT
+
+      - name: Login to GHCR
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build image (SHA)
+        run: |
+          docker build \
+            -f "${{ matrix.service.dockerfile }}" \
+            -t "${{ steps.vars.outputs.image }}:${{ github.sha }}" \
+            .
+
+      - name: Push image (SHA)
+        if: github.event_name == 'push'
+        run: |
+          docker push "${{ steps.vars.outputs.image }}:${{ github.sha }}"
+
+      - name: Tag & push :main
+        if: github.event_name == 'push'
+        run: |
+          docker tag "${{ steps.vars.outputs.image }}:${{ github.sha }}" "${{ steps.vars.outputs.image }}:main"
+          docker push "${{ steps.vars.outputs.image }}:main"
