@@ -23,7 +23,6 @@ jobs:
   docker:
     needs: test
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
@@ -34,37 +33,26 @@ jobs:
         service:
           - name: movienight-gateway
             dockerfile: MovieNight.Gateway/Dockerfile
-
           - name: users-api
             dockerfile: Services/User/Users.API/Dockerfile
-
           - name: auth-api
             dockerfile: Services/Auth/Auth.API/Dockerfile
-
           - name: access-api
             dockerfile: Services/Access/Access.API/Dockerfile
-
           - name: review-api
             dockerfile: Services/Review/Review.API/Dockerfile
-
           - name: movieplayer-api
             dockerfile: Services/MoviePlayer/MoviePlayer.API/Dockerfile
-
           - name: messages-api
             dockerfile: Services/Messages/Messages.API/Dockerfile
-
           - name: friends-api
             dockerfile: Services/Friends/Friends.API/Dockerfile
-
           - name: bookmark-api
             dockerfile: Services/Bookmark/Bookmark.API/Dockerfile
-
           - name: media-api
             dockerfile: Services/Media/Media.API/Dockerfile
-
           - name: movieratings-api
             dockerfile: Services/MovieRatings/MovieRatings.API/Dockerfile
-
           - name: people-api
             dockerfile: Services/People/People.API/Dockerfile
 
@@ -91,15 +79,12 @@ jobs:
 
       - name: Build image
         run: |
-          docker build \
-            -f "${{ matrix.service.dockerfile }}" \
-            -t "${{ steps.vars.outputs.image }}:${{ steps.vars.outputs.sha_tag }}" \
-            .
+          docker build -f "${{ matrix.service.dockerfile }}" \
+            -t "${{ steps.vars.outputs.image }}:${{ steps.vars.outputs.sha_tag }}" .
 
       - name: Push image (SHA)
         if: github.event_name == 'push'
-        run: |
-          docker push "${{ steps.vars.outputs.image }}:${{ steps.vars.outputs.sha_tag }}"
+        run: docker push "${{ steps.vars.outputs.image }}:${{ steps.vars.outputs.sha_tag }}"
 
       - name: Tag & push branch tag (main/develop only)
         if: github.event_name == 'push'
@@ -113,3 +98,35 @@ jobs:
           else
             echo "Skip branch tag for $BRANCH"
           fi
+
+  deploy:
+    needs: docker
+    if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'main')
+    runs-on: [self-hosted, Windows, X64, k8s-local]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pick namespace
+        id: ns
+        shell: pwsh
+        run: |
+          if ($env:GITHUB_REF_NAME -eq "develop") { "ns=movienight-dev" >> $env:GITHUB_OUTPUT }
+          else { "ns=movienight-prod" >> $env:GITHUB_OUTPUT }
+
+      - name: Apply manifests
+        shell: pwsh
+        run: |
+          $ns = "${{ steps.ns.outputs.ns }}"
+          kubectl get ns $ns | Out-Null
+          if ($LASTEXITCODE -ne 0) { kubectl create ns $ns }
+          kubectl apply -n $ns -f k8s/
+
+      - name: Set gateway image to branch tag and restart
+        shell: pwsh
+        run: |
+          $ns = "${{ steps.ns.outputs.ns }}"
+          $owner = "${{ github.repository_owner }}".ToLower()
+          $tag = "${{ github.ref_name }}"
+          kubectl set image -n $ns deployment/movienight-gateway gateway=ghcr.io/$owner/movienight-gateway:$tag
+          kubectl rollout status -n $ns deployment/movienight-gateway --timeout=120s
