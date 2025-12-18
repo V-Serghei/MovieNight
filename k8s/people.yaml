@@ -1,0 +1,36 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: people-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: people-api
+  template:
+    metadata:
+      labels:
+        app: people-api
+    spec:
+      containers:
+        - name: people
+          image: ghcr.io/v-serghei/people-api:develop
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://0.0.0.0:8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: people-api
+spec:
+  selector:
+    app: people-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: ClusterIP

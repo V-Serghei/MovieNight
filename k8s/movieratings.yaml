@@ -1,0 +1,36 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movieratings-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: movieratings-api
+  template:
+    metadata:
+      labels:
+        app: movieratings-api
+    spec:
+      containers:
+        - name: movieratings
+          image: ghcr.io/v-serghei/movieratings-api:develop
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://0.0.0.0:8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: movieratings-api
+spec:
+  selector:
+    app: movieratings-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: ClusterIP

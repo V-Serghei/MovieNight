@@ -1,0 +1,36 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: media-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: media-api
+  template:
+    metadata:
+      labels:
+        app: media-api
+    spec:
+      containers:
+        - name: media
+          image: ghcr.io/v-serghei/media-api:develop
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://0.0.0.0:8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: media-api
+spec:
+  selector:
+    app: media-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
