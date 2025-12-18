@@ -10,6 +10,7 @@ WORKDIR /src
 COPY Services/MoviePlayer/MoviePlayer.API/MoviePlayer.API.csproj Services/MoviePlayer/MoviePlayer.API/
 COPY Services/MoviePlayer/MoviePlayer.Domain/MoviePlayer.Domain.csproj Services/MoviePlayer/MoviePlayer.Domain/
 COPY Services/MoviePlayer/MoviePlayer.Infrastructure/MoviePlayer.Infrastructure.csproj Services/MoviePlayer/MoviePlayer.Infrastructure/
+COPY Services/MoviePlayer/MoviePlayer.Core/MoviePlayer.Core.csproj Services/MoviePlayer/MoviePlayer.Core/
 
 RUN dotnet restore Services/MoviePlayer/MoviePlayer.API/MoviePlayer.API.csproj
 
