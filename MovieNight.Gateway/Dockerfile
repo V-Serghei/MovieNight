@@ -7,11 +7,6 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-COPY MovieNight.sln ./
-COPY NuGet.config ./
-COPY Directory.Build.props ./
-COPY Directory.Packages.props ./
-
 COPY MovieNight.Gateway/MovieNight.Gateway.csproj MovieNight.Gateway/
 RUN dotnet restore MovieNight.Gateway/MovieNight.Gateway.csproj
 

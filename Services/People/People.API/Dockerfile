@@ -7,11 +7,6 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-COPY MovieNight.sln ./
-COPY NuGet.config ./
-COPY Directory.Build.props ./
-COPY Directory.Packages.props ./
-
 COPY Services/People/People.API/People.API.csproj Services/People/People.API/
 COPY Services/People/People.Core/People.Core.csproj Services/People/People.Core/
 COPY Services/People/People.Infrastructure/People.Infrastructure.csproj Services/People/People.Infrastructure/

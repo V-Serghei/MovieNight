@@ -7,13 +7,12 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# csproj (до restore) + зависимости
 COPY Services/MoviePlayer/MoviePlayer.API/MoviePlayer.API.csproj Services/MoviePlayer/MoviePlayer.API/
 COPY Services/MoviePlayer/MoviePlayer.Domain/MoviePlayer.Domain.csproj Services/MoviePlayer/MoviePlayer.Domain/
+COPY Services/MoviePlayer/MoviePlayer.Infrastructure/MoviePlayer.Infrastructure.csproj Services/MoviePlayer/MoviePlayer.Infrastructure/
 
 RUN dotnet restore Services/MoviePlayer/MoviePlayer.API/MoviePlayer.API.csproj
 
-# весь код
 COPY . .
 
 WORKDIR /src/Services/MoviePlayer/MoviePlayer.API
