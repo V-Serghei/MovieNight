@@ -102,33 +102,34 @@ jobs:
   deploy:
     needs: docker
     if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'main')
-    runs-on: [self-hosted, Windows, X64, k8s-local]
+    runs-on: [ self-hosted, Windows, X64, k8s-local ]
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Pick namespace
         id: ns
-        shell: bash
+        shell: powershell
         run: |
-          if [[ "${GITHUB_REF_NAME}" == "develop" ]]; then
-            echo "ns=movienight-dev" >> "$GITHUB_OUTPUT"
-          else
-            echo "ns=movienight-prod" >> "$GITHUB_OUTPUT"
-          fi
+          if ($env:GITHUB_REF_NAME -eq "develop") {
+            "ns=movienight-dev" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          } else {
+            "ns=movienight-prod" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          }
 
       - name: Apply manifests
-        shell: bash
+        shell: powershell
         run: |
-          ns="${{ steps.ns.outputs.ns }}"
-          kubectl get ns "$ns" >/dev/null 2>&1 || kubectl create ns "$ns"
-          kubectl apply -n "$ns" -f k8s/
+          $ns = "${{ steps.ns.outputs.ns }}"
+          kubectl get ns $ns *> $null
+          if ($LASTEXITCODE -ne 0) { kubectl create ns $ns }
+          kubectl apply -n $ns -f k8s/
 
       - name: Set gateway image to branch tag and restart
-        shell: bash
+        shell: powershell
         run: |
-          ns="${{ steps.ns.outputs.ns }}"
-          owner="$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')"
-          tag="${GITHUB_REF_NAME}"
-          kubectl set image -n "$ns" deployment/movienight-gateway gateway=ghcr.io/$owner/movienight-gateway:$tag
-          kubectl rollout status -n "$ns" deployment/movienight-gateway --timeout=120s
+          $ns = "${{ steps.ns.outputs.ns }}"
+          $owner = "${{ github.repository_owner }}".ToLower()
+          $tag = "${{ github.ref_name }}"
+          kubectl set image -n $ns deployment/movienight-gateway gateway=ghcr.io/$owner/movienight-gateway:$tag
+          kubectl rollout status -n $ns deployment/movienight-gateway --timeout=120s
