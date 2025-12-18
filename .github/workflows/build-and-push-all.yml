@@ -64,19 +64,22 @@ jobs:
 
           - name: movieratings-api
             dockerfile: Services/MovieRatings/MovieRatings.API/Dockerfile
-            
+
           - name: people-api
-            dockerfile: Services/People/People.API/Dockerfile                
+            dockerfile: Services/People/People.API/Dockerfile
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set image name
+      - name: Compute image vars
         id: vars
+        shell: bash
         run: |
           OWNER="$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')"
           IMAGE="ghcr.io/${OWNER}/${{ matrix.service.name }}"
           echo "image=${IMAGE}" >> $GITHUB_OUTPUT
+          echo "sha_tag=${{ github.sha }}" >> $GITHUB_OUTPUT
+          echo "branch_tag=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
 
       - name: Login to GHCR
         if: github.event_name == 'push'
@@ -86,20 +89,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build image (SHA)
+      - name: Build image
         run: |
           docker build \
             -f "${{ matrix.service.dockerfile }}" \
-            -t "${{ steps.vars.outputs.image }}:${{ github.sha }}" \
+            -t "${{ steps.vars.outputs.image }}:${{ steps.vars.outputs.sha_tag }}" \
             .
 
       - name: Push image (SHA)
         if: github.event_name == 'push'
         run: |
-          docker push "${{ steps.vars.outputs.image }}:${{ github.sha }}"
+          docker push "${{ steps.vars.outputs.image }}:${{ steps.vars.outputs.sha_tag }}"
 
-      - name: Tag & push :main
+      - name: Tag & push branch tag (main/develop only)
         if: github.event_name == 'push'
+        shell: bash
         run: |
-          docker tag "${{ steps.vars.outputs.image }}:${{ github.sha }}" "${{ steps.vars.outputs.image }}:main"
-          docker push "${{ steps.vars.outputs.image }}:main"
+          BRANCH="${GITHUB_REF_NAME}"
+          if [[ "$BRANCH" == "main" || "$BRANCH" == "develop" ]]; then
+            docker tag "${{ steps.vars.outputs.image }}:${{ steps.vars.outputs.sha_tag }}" \
+                       "${{ steps.vars.outputs.image }}:${BRANCH}"
+            docker push "${{ steps.vars.outputs.image }}:${BRANCH}"
+          else
+            echo "Skip branch tag for $BRANCH"
+          fi
