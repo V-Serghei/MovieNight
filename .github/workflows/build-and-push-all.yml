@@ -100,12 +100,22 @@ jobs:
           fi
 
   deploy:
-    needs: docker
-    if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'main')
+    needs: [ test, docker ]
     runs-on: [ self-hosted, Windows, X64, k8s-local ]
+    env:
+      BRANCH: ${{ github.ref_name }}
+      OWNER: ${{ github.repository_owner }}
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Write kubeconfig
+        shell: powershell
+        run: |
+          mkdir $HOME\.kube -Force
+          Set-Content -Path $HOME\.kube\config -Value $Env:KUBE_CONFIG
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
 
       - name: Pick namespace
         id: ns
@@ -117,13 +127,18 @@ jobs:
             "ns=movienight-prod" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           }
 
-      - name: Apply manifests
+      - name: Ensure namespace exists
         shell: powershell
         run: |
           $ns = "${{ steps.ns.outputs.ns }}"
           kubectl get ns $ns *> $null
           if ($LASTEXITCODE -ne 0) { kubectl create ns $ns }
-          kubectl apply -n $ns -f k8s/
+
+      - name: Apply manifests
+        shell: powershell
+        run: |
+          $ns = "${{ steps.ns.outputs.ns }}"
+          kubectl apply -n $ns -f k8s\
 
       - name: Set gateway image to branch tag and restart
         shell: powershell
@@ -132,4 +147,4 @@ jobs:
           $owner = "${{ github.repository_owner }}".ToLower()
           $tag = "${{ github.ref_name }}"
           kubectl set image -n $ns deployment/movienight-gateway gateway=ghcr.io/$owner/movienight-gateway:$tag
-          kubectl rollout status -n $ns deployment/movienight-gateway --timeout=120s
+          kubectl rollout status -n $ns deployment/movienight-gateway --timeout=180s
