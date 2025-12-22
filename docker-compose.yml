@@ -1,0 +1,147 @@
+﻿name: movienight
+
+x-dotnet-env: &dotnet-env
+  ASPNETCORE_ENVIRONMENT: "${ASPNETCORE_ENVIRONMENT}"
+  ConnectionStrings__Default: "${CONNSTR}"
+  ConnectionStrings__DefaultConnection: "${CONNSTR}"
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${SA_PASSWORD}"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    healthcheck:
+      # просто проверяем что порт поднялся (почти всегда достаточно, т.к. сервисы у тебя и так ретраят миграции)
+      test: ["CMD-SHELL", "bash -c 'cat < /dev/null > /dev/tcp/127.0.0.1/1433'"]
+      interval: 5s
+      timeout: 3s
+      retries: 60
+
+  movienight-gateway:
+    build:
+      context: .
+      dockerfile: MovieNight.Gateway/Dockerfile
+    environment:
+      <<: *dotnet-env
+      # если гейтвей читает адреса сервисов из конфига — эти переменные часто “в тему”
+      Services__Access: "http://access-api:8080"
+      Services__Achievements: "http://achievements-api:8080"
+      Services__Auth: "http://auth-api:8080"
+      Services__Bookmark: "http://bookmark-api:8080"
+      Services__Friends: "http://friends-api:8080"
+      Services__Media: "http://media-api:8080"
+      Services__Messages: "http://messages-api:8080"
+      Services__MoviePlayer: "http://movieplayer-api:8080"
+      Services__MovieRatings: "http://movieratings-api:8080"
+      Services__People: "http://people-api:8080"
+      Services__Review: "http://review-api:8080"
+      Services__Users: "http://users-api:8080"
+    depends_on:
+      mssql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  access-api:
+    build:
+      context: .
+      dockerfile: Services/Access/Access.API/Dockerfile
+    environment: { <<: *dotnet-env }
+    depends_on: { mssql: { condition: service_healthy } }
+
+  achievements-api:
+    build:
+      context: .
+      dockerfile: Services/Achievements/Achievements.API/Dockerfile
+    environment: { <<: *dotnet-env }
+    depends_on: { mssql: { condition: service_healthy } }
+
+  auth-api:
+    build:
+      context: .
+      dockerfile: Services/Auth/Auth.API/Dockerfile
+    environment: { <<: *dotnet-env }
+    depends_on: { mssql: { condition: service_healthy } }
+
+  bookmark-api:
+    build:
+      context: .
+      dockerfile: Services/Bookmark/Bookmark.API/Dockerfile
+    environment: { <<: *dotnet-env }
+    depends_on: { mssql: { condition: service_healthy } }
+
+  friends-api:
+    build:
+      context: .
+      dockerfile: Services/Friends/Friends.API/Dockerfile
+    environment: { <<: *dotnet-env }
+    depends_on: { mssql: { condition: service_healthy } }
+
+  media-api:
+    build:
+      context: .
+      dockerfile: Services/Media/Media.API/Dockerfile
+    environment: { <<: *dotnet-env }
+    depends_on: { mssql: { condition: service_healthy } }
+
+  messages-api:
+    build:
+      context: .
+      dockerfile: Services/Messages/Messages.API/Dockerfile
+    environment: { <<: *dotnet-env }
+    depends_on: { mssql: { condition: service_healthy } }
+
+  movieplayer-api:
+    build:
+      context: .
+      dockerfile: Services/MoviePlayer/MoviePlayer.API/Dockerfile
+    environment: { <<: *dotnet-env }
+    depends_on: { mssql: { condition: service_healthy } }
+
+  movieratings-api:
+    build:
+      context: .
+      dockerfile: Services/MovieRatings/MovieRatings.API/Dockerfile
+    environment: { <<: *dotnet-env }
+    depends_on: { mssql: { condition: service_healthy } }
+
+  people-api:
+    build:
+      context: .
+      dockerfile: Services/People/People.API/Dockerfile
+    environment: { <<: *dotnet-env }
+    depends_on: { mssql: { condition: service_healthy } }
+
+  review-api:
+    build:
+      context: .
+      dockerfile: Services/Review/Review.API/Dockerfile
+    environment: { <<: *dotnet-env }
+    depends_on: { mssql: { condition: service_healthy } }
+
+  users-api:
+    build:
+      context: .
+      dockerfile: Services/User/Users.API/Dockerfile
+    environment: { <<: *dotnet-env }
+    depends_on: { mssql: { condition: service_healthy } }
+
+ ui:
+   build:
+     context: MovieNight.UI/clientapp
+     dockerfile: Dockerfile
+   environment:
+     NODE_ENV: production
+     NEXT_PUBLIC_API_URL: "http://localhost:8080"
+   depends_on:
+     - movienight-gateway
+   ports:
+     - "3000:3000"
+
+volumes:
+  mssql_data:

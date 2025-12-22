@@ -1,6 +1,6 @@
 ﻿export const dynamic = 'force-dynamic';
 
-const GATEWAY = process.env.GATEWAY_URL ?? 'http://localhost:7000';
+const GATEWAY = process.env.GATEWAY_URL ?? 'http://movienight.localtest.me';
 
 function buildTargetUrl(req: Request, pathParts?: string[]) {
     const url = new URL(req.url);
