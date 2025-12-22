@@ -1,0 +1,57 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messages-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: messages-api
+  template:
+    metadata:
+      labels:
+        app: messages-api
+    spec:
+      initContainers:
+        - name: wait-for-mssql
+          image: mcr.microsoft.com/mssql-tools
+          env:
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mssql-secret
+                  key: SA_PASSWORD
+          command:
+            - sh
+            - -c
+            - |
+              echo "waiting for MSSQL to accept queries..."
+              until /opt/mssql-tools/bin/sqlcmd -S mssql,1433 -U sa -P "$SA_PASSWORD" -Q "SELECT 1" >/dev/null 2>&1; do
+                echo "still waiting..."
+                sleep 3
+              done
+      containers:
+        - name: messages
+          image: ghcr.io/v-serghei/messages-api:develop
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: messages-api-db
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://0.0.0.0:8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: messages-api
+spec:
+  selector:
+    app: messages-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: ClusterIP

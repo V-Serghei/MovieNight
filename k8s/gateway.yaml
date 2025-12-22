@@ -1,0 +1,61 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movienight-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: movienight-gateway
+  template:
+    metadata:
+      labels:
+        app: movienight-gateway
+    spec:
+      containers:
+        - name: gateway
+          image: ghcr.io/v-serghei/movienight-gateway:develop
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: movienight-db
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://0.0.0.0:8080"
+            - name: Users__BaseUrl
+              value: "http://users-api"
+            - name: Auth__BaseUrl
+              value: "http://auth-api"
+            - name: Access__BaseUrl
+              value: "http://access-api"
+            - name: Review__BaseUrl
+              value: "http://review-api"
+            - name: MoviePlayer__BaseUrl
+              value: "http://movieplayer-api"
+            - name: Messages__BaseUrl
+              value: "http://messages-api"
+            - name: Friends__BaseUrl
+              value: "http://friends-api"
+            - name: Bookmark__BaseUrl
+              value: "http://bookmark-api"
+            - name: Media__BaseUrl
+              value: "http://media-api"
+            - name: MovieRatings__BaseUrl
+              value: "http://movieratings-api"
+            - name: People__BaseUrl
+              value: "http://people-api"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: movienight-gateway
+spec:
+  selector:
+    app: movienight-gateway
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: ClusterIP

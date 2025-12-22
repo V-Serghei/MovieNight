@@ -1,0 +1,6 @@
+@Bookmark.API_HostAddress = http://localhost:5133
+
+GET {{Bookmark.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

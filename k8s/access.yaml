@@ -1,0 +1,57 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: access-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: access-api
+  template:
+    metadata:
+      labels:
+        app: access-api
+    spec:
+      initContainers:
+        - name: wait-for-mssql
+          image: mcr.microsoft.com/mssql-tools
+          env:
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mssql-secret
+                  key: SA_PASSWORD
+          command:
+            - sh
+            - -c
+            - |
+              echo "waiting for MSSQL to accept queries..."
+              until /opt/mssql-tools/bin/sqlcmd -S mssql,1433 -U sa -P "$SA_PASSWORD" -Q "SELECT 1" >/dev/null 2>&1; do
+                echo "still waiting..."
+                sleep 3
+              done
+      containers:
+        - name: access
+          image: ghcr.io/v-serghei/access-api:develop
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: access-api-db
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://0.0.0.0:8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: access-api
+spec:
+  selector:
+    app: access-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: ClusterIP

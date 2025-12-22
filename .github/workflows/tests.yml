@@ -1,0 +1,29 @@
+﻿name: CI - MovieNight tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore MovieNight.sln
+
+      - name: Build
+        run: dotnet build MovieNight.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test MovieNight.sln --configuration Release --no-build --logger trx --results-directory TestResults

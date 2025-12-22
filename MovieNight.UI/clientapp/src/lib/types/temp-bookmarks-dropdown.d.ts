@@ -1,0 +1,1 @@
+﻿declare module "@/components/temp-bookmarks-dropdown";
