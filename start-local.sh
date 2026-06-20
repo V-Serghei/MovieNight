@@ -127,6 +127,19 @@ write_appsettings "$ROOT/MovieNight.Gateway/appsettings.Development.json" \
   "AUTH_JWT_ISSUER": "MovieNight.Auth",
   "AUTH_JWT_AUDIENCE": "MovieNight.Client",
   "AUTH_JWT_SECRET": "'"$JWT_SECRET"'",
+  "Services": {
+    "Auth": "http://localhost:7010",
+    "Users": "http://localhost:7001",
+    "Media": "http://localhost:7002",
+    "Access": "http://localhost:7003",
+    "Friends": "http://localhost:7004",
+    "MoviePlayer": "http://localhost:7005",
+    "People": "http://localhost:7006",
+    "Bookmarks": "http://localhost:7007",
+    "Ratings": "http://localhost:7008",
+    "Review": "http://localhost:7011",
+    "Messages": "http://localhost:7020"
+  },
   "Gateway": { "InternalSecret": "'"$GATEWAY_INTERNAL_SECRET"'" }
 }'
 
@@ -315,28 +328,49 @@ section "Stop existing services"
 stop_existing() {
   info "Killing any previously running .NET services..."
 
-  # Kill by PID files
+  # PID files can be stale on Windows after a crash, so do not blindly kill
+  # those IDs. The verified command-line scan below does the actual cleanup.
   if ls "$RUNTIME_DIR"/*.pid &>/dev/null 2>&1; then
-    for pidfile in "$RUNTIME_DIR"/*.pid; do
-      pid=$(cat "$pidfile" 2>/dev/null || true)
-      if [ -n "$pid" ]; then
-        powershell.exe -NoProfile -Command "
-          try { Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue } catch {}
-        " &>/dev/null 2>&1 || true
-      fi
-      rm -f "$pidfile"
-    done
-    ok "Stopped processes from .pid files"
+    rm -f "$RUNTIME_DIR"/*.pid
+    ok "Removed stale .pid files"
   fi
 
-  # Also kill by dotnet process command lines containing service paths
+  # Also kill orphaned service processes from this workspace. This covers
+  # direct apphost launches such as Auth.API.exe, not only dotnet.exe.
   powershell.exe -NoProfile -Command "
-    Get-WmiObject Win32_Process -Filter \"Name='dotnet.exe'\" | ForEach-Object {
-      \$cmd = \$_.CommandLine
-      if (\$cmd -match 'Access\.API|Auth\.API|Bookmark\.API|Friends\.API|Media\.API|Messages\.API|MoviePlayer\.API|MovieRatings\.API|People\.API|Review\.API|Users\.API|Achievements\.API|MovieNight\.Gateway') {
-        Stop-Process -Id \$_.ProcessId -Force -ErrorAction SilentlyContinue
+    \$root = [regex]::Escape('$ROOT_WIN')
+    \$serviceNames = @(
+      'Access.API.exe',
+      'Auth.API.exe',
+      'Achievements.API.exe',
+      'Bookmark.API.exe',
+      'Friends.API.exe',
+      'Media.API.exe',
+      'Messages.API.exe',
+      'MoviePlayer.API.exe',
+      'MovieRatings.API.exe',
+      'People.API.exe',
+      'Review.API.exe',
+      'Users.API.exe',
+      'MovieNight.Gateway.exe'
+    )
+    \$servicePattern = 'Access\.API|Auth\.API|Bookmark\.API|Friends\.API|Media\.API|Messages\.API|MoviePlayer\.API|MovieRatings\.API|People\.API|Review\.API|Users\.API|Achievements\.API|MovieNight\.Gateway'
+    Get-CimInstance Win32_Process -ErrorAction SilentlyContinue | ForEach-Object {
+      if (\$_.CommandLine -match \$root -and (
+          \$serviceNames -contains \$_.Name -or
+          (\$_.Name -eq 'dotnet.exe' -and \$_.CommandLine -match \$servicePattern)
+        )) {
+          Stop-Process -Id \$_.ProcessId -Force -ErrorAction SilentlyContinue
       }
     }
+  " &>/dev/null 2>&1 || true
+
+  powershell.exe -NoProfile -Command "
+    \$root = [regex]::Escape('$ROOT_WIN')
+    \$rootUnix = [regex]::Escape('$ROOT')
+    Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
+      Where-Object { \$_.Name -eq 'tail.exe' -and (\$_.CommandLine -match \$root -or \$_.CommandLine -match \$rootUnix) } |
+      ForEach-Object { Stop-Process -Id \$_.ProcessId -Force -ErrorAction SilentlyContinue }
   " &>/dev/null 2>&1 || true
 
   # Clean up only this project's orphaned Next.js frontend processes.
@@ -403,23 +437,33 @@ start_service() {
   bat_file_win="$(winpath "$bat_file")"
   log_file_win="$(winpath "$log_file")"
 
-  # Find the built DLL (net10.0 Debug)
+  # Prefer the Windows apphost .exe; fall back to dotnet DLL only if needed.
+  local exe_path
   local dll_path
+  exe_path="$project_path/bin/Debug/net10.0/${name}.exe"
+  if [ "$name" = "Gateway" ]; then
+    exe_path="$project_path/bin/Debug/net10.0/MovieNight.Gateway.exe"
+  fi
   dll_path=$(find "$project_path/bin/Debug/net10.0" -maxdepth 1 -name "*.dll" \
     ! -name "*.Views.dll" ! -name "*.resources.dll" 2>/dev/null | head -1)
-  if [ -z "$dll_path" ]; then
-    err "No DLL found for $name in $project_path/bin/Debug/net10.0 — did the build succeed?"
+  if [ ! -f "$exe_path" ] && [ -z "$dll_path" ]; then
+    err "No executable found for $name in $project_path/bin/Debug/net10.0 — did the build succeed?"
   fi
-  local dll_path_win
-  dll_path_win="$(winpath "$dll_path")"
+  local run_command
+  if [ -f "$exe_path" ]; then
+    run_command="\"$(winpath "$exe_path")\""
+  else
+    run_command="dotnet \"$(winpath "$dll_path")\""
+  fi
 
-  # Write wrapper bat — run DLL directly so env vars are applied reliably
+  # Write wrapper bat.
   cat > "$bat_file" <<BATEOF
 @echo off
+cd /d "$project_path_win"
 set ASPNETCORE_ENVIRONMENT=Development
 set DOTNET_ENVIRONMENT=Development
 set ASPNETCORE_URLS=http://localhost:$port
-dotnet "$dll_path_win" >> "$log_file_win" 2>&1
+$run_command > "$log_file_win" 2>&1
 BATEOF
 
   # Launch hidden window via PowerShell, capture PID of the cmd.exe process
@@ -464,7 +508,7 @@ FRONTEND_LOG_WIN="$(winpath "$FRONTEND_LOG")"
 cat > "$FRONTEND_BAT" <<BATEOF
 @echo off
 cd /d "$CLIENTAPP_WIN"
-npm run dev >> "$FRONTEND_LOG_WIN" 2>&1
+npm run dev > "$FRONTEND_LOG_WIN" 2>&1
 BATEOF
 
 FRONTEND_PID_VAL=$(powershell.exe -NoProfile -Command "
