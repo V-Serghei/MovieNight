@@ -59,6 +59,9 @@
     "tailwindcss-animate": "^1.0.7",
     "zod": "3.25.76"
   },
+  "overrides": {
+    "postcss": "$postcss"
+  },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",

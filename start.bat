@@ -8,14 +8,14 @@
 setlocal
 
 :: Find Git Bash — check common install locations
-set BASH=
-if exist "C:\Program Files\Git\bin\bash.exe"       set BASH=C:\Program Files\Git\bin\bash.exe
-if exist "C:\Program Files (x86)\Git\bin\bash.exe" set BASH=C:\Program Files (x86)\Git\bin\bash.exe
+set "BASH="
+if exist "C:\Program Files\Git\bin\bash.exe"       set "BASH=C:\Program Files\Git\bin\bash.exe"
+if exist "C:\Program Files (x86)\Git\bin\bash.exe" set "BASH=C:\Program Files (x86)\Git\bin\bash.exe"
 
 :: Also check PATH for git, then derive bash location from it
 if "%BASH%"=="" (
     for /f "delims=" %%i in ('where git 2^>nul') do (
-        if "%BASH%"=="" set BASH=%%~dpi..\bin\bash.exe
+        if "%BASH%"=="" set "BASH=%%~dpi..\bin\bash.exe"
     )
 )
 
@@ -28,4 +28,5 @@ if "%BASH%"=="" (
     exit /b 1
 )
 
-"%BASH%" --login "%~dp0start-local.sh"
+call "%BASH%" --noprofile --norc "%~dp0start-local.sh"
+exit /b %ERRORLEVEL%

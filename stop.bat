@@ -7,13 +7,13 @@
 
 setlocal
 
-set BASH=
-if exist "C:\Program Files\Git\bin\bash.exe"       set BASH=C:\Program Files\Git\bin\bash.exe
-if exist "C:\Program Files (x86)\Git\bin\bash.exe" set BASH=C:\Program Files (x86)\Git\bin\bash.exe
+set "BASH="
+if exist "C:\Program Files\Git\bin\bash.exe"       set "BASH=C:\Program Files\Git\bin\bash.exe"
+if exist "C:\Program Files (x86)\Git\bin\bash.exe" set "BASH=C:\Program Files (x86)\Git\bin\bash.exe"
 
 if "%BASH%"=="" (
     for /f "delims=" %%i in ('where git 2^>nul') do (
-        if "%BASH%"=="" set BASH=%%~dpi..\bin\bash.exe
+        if "%BASH%"=="" set "BASH=%%~dpi..\bin\bash.exe"
     )
 )
 
@@ -29,7 +29,8 @@ if "%BASH%"=="" (
 :: By default stop everything including Docker container
 :: Pass --keep-db to leave the container running
 if "%1"=="--keep-db" (
-    "%BASH%" --login "%~dp0stop-local.sh"
+    call "%BASH%" --noprofile --norc "%~dp0stop-local.sh"
 ) else (
-    "%BASH%" --login "%~dp0stop-local.sh" --docker
+    call "%BASH%" --noprofile --norc "%~dp0stop-local.sh" --docker
 )
+exit /b %ERRORLEVEL%
