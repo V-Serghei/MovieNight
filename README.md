@@ -29,7 +29,7 @@ Browser (Next.js :3000)
 **Stack:**
 - **Backend:** .NET 10, ASP.NET Core, Entity Framework Core (code-first migrations run on startup)
 - **Database:** SQL Server 2022 (Docker), one database per service
-- **Frontend:** Next.js 15, TypeScript, Tailwind CSS, shadcn/ui
+- **Frontend:** Next.js 16, TypeScript, Tailwind CSS, shadcn/ui
 - **Infrastructure:** Docker (SQL Server), Kubernetes manifests included for production
 
 ---
@@ -43,7 +43,7 @@ Browser (Next.js :3000)
 | Node.js | 18+ | https://nodejs.org |
 | Git Bash | Any | Included with Git for Windows |
 
-> **Windows users:** the shell scripts (`start-local.sh`, `stop-local.sh`) are written for Git Bash. Run them from a Git Bash terminal, not PowerShell or cmd.
+> **Windows users:** use `start.bat` / `stop.bat` (double-click or run from cmd/PowerShell) — they find Git Bash automatically. Alternatively open a Git Bash terminal and run `./start-local.sh` directly. Do **not** run the `.sh` files from PowerShell or WSL.
 
 ---
 
@@ -53,8 +53,15 @@ Browser (Next.js :3000)
 # Clone
 git clone <repo-url>
 cd MovieNight
+```
 
-# Start everything (Git Bash)
+**Windows** — double-click `start.bat`, or from cmd/PowerShell:
+```
+start.bat
+```
+
+**Git Bash / Linux / macOS:**
+```bash
 ./start-local.sh
 ```
 
@@ -99,12 +106,22 @@ Once it finishes, open **http://localhost:3000**.
 
 ## Stop Services
 
+Press **Ctrl+C** in the terminal where `start-local.sh` is running — it stops everything cleanly.
+
+Or run separately:
+
 ```bash
-# Stop all .NET services and the frontend (leave SQL Server running)
+# Git Bash — stop services, leave SQL Server running
 ./stop-local.sh
 
 # Also stop and remove the SQL Server Docker container
 ./stop-local.sh --docker
+```
+
+```
+# Windows cmd/PowerShell
+stop.bat
+stop.bat --docker
 ```
 
 ---
@@ -115,15 +132,21 @@ If you prefer to start services individually without the script, follow these st
 
 ### 1. Create `.secrets.local`
 
-Create the file at the project root with the following format:
+Copy the provided template and fill in your values:
 
+```bash
+cp .env.example .secrets.local
+# then edit .secrets.local with your values
+```
+
+Format:
 ```
 SA_PASSWORD=YourStrong!Passw0rd
 JWT_SECRET=your-base64url-encoded-secret-at-least-32-chars
 GATEWAY_INTERNAL_SECRET=another-random-secret
 ```
 
-> `.secrets.local` is listed in `.gitignore` and will never be committed.
+> `.secrets.local` is gitignored and will never be committed. The `start-local.sh` script generates it automatically with random values on first run.
 
 ### 2. Start SQL Server (Docker)
 
@@ -268,6 +291,79 @@ MovieNight/
 ├── stop-local.sh                # Graceful shutdown
 └── MovieNight.sln
 ```
+
+---
+
+## API Reference
+
+All API calls from the frontend go through a Next.js server-side proxy at `/api/gw/*` which forwards to the Gateway at `http://localhost:7000`.
+
+### How the request flows
+
+```
+Browser  →  Next.js /api/gw/*  →  Gateway :7000  →  Microservice
+```
+
+### Gateway routes (all accessible via `/api/gw/...` from the browser)
+
+| Group | Method | Path | Description |
+|-------|--------|------|-------------|
+| **Auth** | POST | `/auth/login` | Login, returns JWT cookie |
+| | POST | `/auth/register` | Register new user |
+| | POST | `/auth/refresh` | Refresh access token |
+| | POST | `/auth/logout` | Logout, clears cookie |
+| | GET | `/auth/me` | Current user info |
+| **Users** | GET | `/users/me` | Basic current user |
+| | GET | `/users/me/profile` | Full current user profile |
+| | PUT | `/users/me/profile` | Update current user profile |
+| | GET | `/users/{userId}/profile` | Public user profile |
+| | GET | `/users` | List users |
+| **Movies** | GET | `/movies` | List all movies |
+| | GET | `/movies/{id}` | Movie by ID |
+| | GET | `/movies/search` | Search movies |
+| | GET | `/movies/films` | Filter: films only |
+| | GET | `/movies/cartoons` | Filter: cartoons only |
+| | GET | `/movies/anime` | Filter: anime only |
+| | GET | `/movies/serial` | Filter: series only |
+| | POST | `/movies` | Create movie (admin) |
+| **People** | GET | `/people/{id}` | Person by ID (cast/crew) |
+| | GET | `/people/search` | Search people |
+| | POST | `/people` | Create person (admin) |
+| | POST | `/people/credits` | Add credit |
+| | GET | `/people/movies/{movieId}/credits` | Credits for a movie |
+| **Media** | POST | `/media` | Upload file |
+| | GET | `/media/{id}` | Download file |
+| | GET | `/media/{id}/info` | File metadata |
+| | DELETE | `/media/{id}` | Delete file |
+| **Bookmarks** | GET | `/bookmarks` | User's watchlist |
+| | GET | `/bookmarks/temp` | Temporary list |
+| | GET | `/bookmarks/watched` | Watched list |
+| | POST | `/bookmarks` | Add to watchlist |
+| | DELETE | `/bookmarks/{movieId}` | Remove bookmark |
+| **Ratings** | GET | `/ratings/movies/{movieId}` | Rating for a movie |
+| | GET | `/ratings/movies` | All user ratings |
+| | PUT | `/ratings/movies/{movieId}` | Set rating |
+| | DELETE | `/ratings/movies/{movieId}` | Remove rating |
+| **Reviews** | GET | `/review/{filmId}` | Reviews for a film |
+| | POST | `/review` | Post a review |
+| **Friends** | GET | `/friends/{userId}` | Friends of user |
+| | POST | `/friends` | Send friend request |
+| **Messages** | GET | `/messages` | Inbox |
+| | GET | `/messages/{id}` | Message by ID |
+| | GET | `/messages/by-receiver/{receiverId}` | Messages to receiver |
+| | POST | `/messages/compose` | Send a message |
+| **Infra** | GET | `/healthz` | Health check |
+| | GET | `/readyz` | Readiness check |
+| | GET | `/debug/echo` | Echo request (debug) |
+
+### Frontend env variables
+
+| Variable | Used in | Default |
+|----------|---------|---------|
+| `GATEWAY_URL` | Next.js server-side `/api/gw` proxy | `http://movienight.localtest.me` |
+
+> `GATEWAY_URL` is **server-side only** (no `NEXT_PUBLIC_` prefix). Set it in `.env.local`.  
+> The script writes `GATEWAY_URL=http://localhost:7000` automatically.
 
 ---
 

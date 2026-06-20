@@ -12,6 +12,7 @@ section() { echo -e "\n${BOLD}${BLUE}── $1 ──${NC}"; }
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RUNTIME_DIR="$ROOT/.runtime"
 CONTAINER="movienight_mssql"
+CLIENTAPP_WIN="$(cygpath -w "$ROOT/MovieNight.UI/clientapp")"
 
 STOP_DOCKER=false
 if [[ "${1:-}" == "--docker" || "${1:-}" == "-d" ]]; then
@@ -30,14 +31,17 @@ if [ -d "$RUNTIME_DIR" ] && ls "$RUNTIME_DIR"/*.pid &>/dev/null 2>&1; then
     name="$(basename "$pidfile" .pid)"
     pid=$(cat "$pidfile" 2>/dev/null | tr -d '[:space:]' || true)
     if [ -n "$pid" ]; then
-      # Stop the cmd.exe wrapper and its dotnet child tree
+      bat_win="$(cygpath -w "$RUNTIME_DIR/${name}.bat")"
       powershell.exe -NoProfile -Command "
-        function Stop-Tree(\$id) {
-          Get-WmiObject Win32_Process -Filter \"ParentProcessId=\$id\" |
-            ForEach-Object { Stop-Tree \$_.ProcessId }
-          try { Stop-Process -Id \$id -Force -ErrorAction SilentlyContinue } catch {}
+        function Stop-Tree([int]\$id) {
+          Get-CimInstance Win32_Process -Filter \"ParentProcessId=\$id\" -ErrorAction SilentlyContinue |
+            ForEach-Object { Stop-Tree ([int]\$_.ProcessId) }
+          Stop-Process -Id \$id -Force -ErrorAction SilentlyContinue
         }
-        Stop-Tree $pid
+        \$proc = Get-CimInstance Win32_Process -Filter \"ProcessId=$pid\" -ErrorAction SilentlyContinue
+        if (\$proc -and \$proc.CommandLine -match [regex]::Escape('$bat_win')) {
+          Stop-Tree $pid
+        }
       " &>/dev/null 2>&1 || true
       STOPPED=$((STOPPED + 1))
       echo -e "  ${GREEN}✓${NC} Stopped $name (PID $pid)"
@@ -91,35 +95,54 @@ else
   ok "Killed $KILLED leftover process(es)"
 fi
 
-# ── Kill node/npm (frontend) by port 3000 ──
 section "Stopping frontend"
 
-info "Looking for process on port 3000..."
-PORT3000=$(powershell.exe -NoProfile -Command "
-  \$conn = Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue
-  if (\$conn) { \$conn[0].OwningProcess } else { '' }
-" 2>/dev/null | tr -d '\r\n ' || true)
-
-if [ -n "$PORT3000" ] && [ "$PORT3000" != "0" ]; then
-  powershell.exe -NoProfile -Command "
-    function Stop-Tree(\$id) {
-      Get-WmiObject Win32_Process -Filter \"ParentProcessId=\$id\" |
-        ForEach-Object { Stop-Tree \$_.ProcessId }
-      try { Stop-Process -Id \$id -Force -ErrorAction SilentlyContinue } catch {}
-    }
-    Stop-Tree $PORT3000
-  " &>/dev/null 2>&1 || true
-  ok "Stopped frontend process tree (root PID $PORT3000)"
+FRONTEND_PID_FILE="$RUNTIME_DIR/Frontend.pid"
+if [ -f "$FRONTEND_PID_FILE" ]; then
+  FRONTEND_PID=$(cat "$FRONTEND_PID_FILE" 2>/dev/null | tr -d '[:space:]' || true)
+  if [ -n "$FRONTEND_PID" ]; then
+    powershell.exe -NoProfile -Command "
+      function Stop-Tree([int]\$id) {
+        Get-CimInstance Win32_Process -Filter \"ParentProcessId=\$id\" -ErrorAction SilentlyContinue |
+          ForEach-Object { Stop-Tree ([int]\$_.ProcessId) }
+        Stop-Process -Id \$id -Force -ErrorAction SilentlyContinue
+      }
+      \$proc = Get-CimInstance Win32_Process -Filter \"ProcessId=$FRONTEND_PID\" -ErrorAction SilentlyContinue
+      if (\$proc -and \$proc.CommandLine -match [regex]::Escape('Frontend.bat')) {
+        Stop-Tree $FRONTEND_PID
+      }
+    " &>/dev/null 2>&1 || true
+    ok "Stopped frontend process (PID $FRONTEND_PID)"
+  fi
 else
-  info "No process found on port 3000"
+  info "No Frontend.pid found"
 fi
 
 # ── Optionally stop Docker container ──
+info "Scanning for leftover MovieNight frontend processes..."
+FRONTEND_KILLED=$(powershell.exe -NoProfile -Command "
+  function Stop-Tree([int]\$id) {
+    Get-CimInstance Win32_Process -Filter \"ParentProcessId=\$id\" -ErrorAction SilentlyContinue |
+      ForEach-Object { Stop-Tree ([int]\$_.ProcessId) }
+    Stop-Process -Id \$id -Force -ErrorAction SilentlyContinue
+  }
+  \$client = [regex]::Escape('$CLIENTAPP_WIN')
+  \$procs = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
+    Where-Object { \$_.Name -in @('node.exe','cmd.exe') -and \$_.CommandLine -match \$client }
+  foreach (\$proc in \$procs) { Stop-Tree ([int]\$proc.ProcessId) }
+  if (\$procs) { \$procs.Count } else { 0 }
+" 2>/dev/null | tr -d '\r\n ' || echo "0")
+if [ "$FRONTEND_KILLED" -gt 0 ]; then
+  ok "Stopped $FRONTEND_KILLED leftover frontend process tree(s)"
+else
+  ok "No leftover frontend processes found"
+fi
+
 if $STOP_DOCKER; then
   section "Stopping SQL Server Docker container"
   if docker inspect "$CONTAINER" &>/dev/null; then
-    docker stop "$CONTAINER" &>/dev/null && docker rm "$CONTAINER" &>/dev/null || true
-    ok "Stopped and removed container '$CONTAINER'"
+    docker stop "$CONTAINER" &>/dev/null || true
+    ok "Stopped container '$CONTAINER' (data preserved — run 'docker rm movienight_mssql' to delete)"
   else
     info "Container '$CONTAINER' not found — nothing to stop"
   fi
