@@ -1,6 +1,23 @@
 # MovieNight
 
-A microservices-based movie social platform. Users can discover films and TV series, rate and review them, build watchlists, manage friends, and send messages — all through a single Next.js frontend backed by a .NET 10 API Gateway and a suite of independent services.
+**A microservices-based movie social platform.** Users can discover films and TV series, rate and review them, build watchlists, manage friends, and send messages — all through a single Next.js frontend backed by a .NET 10 API Gateway and a suite of independent services.
+
+![GitHub Release](https://img.shields.io/github/v/release/V-Serghei/MovieNight?label=GitHub%20Release&color=4c1)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Platform](https://img.shields.io/badge/platform-Web-lightgrey?logo=googlechrome&logoColor=white)
+![.NET](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-manifests-326CE5?logo=kubernetes&logoColor=white)
+![Services](https://img.shields.io/badge/microservices-12-orange)
+
+---
+
+## Screenshots
+
+| Home | — |
+|------|---|
+| ![Home](docs/screenshots/home.png) | *More screenshots coming soon* |
 
 ---
 
@@ -48,12 +65,6 @@ Browser (Next.js :3000)
 ---
 
 ## Quick Start
-
-```bash
-# Clone
-git clone <repo-url>
-cd MovieNight
-```
 
 **Windows** — double-click `start.bat`, or from cmd/PowerShell:
 ```
